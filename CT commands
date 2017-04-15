@@ -26,3 +26,6 @@ conrep –s –f /root/xxxx.dat
 Pdsh –w –node[x-xx] conrep –l –f /root/bin/Ford_tools/static_high.xml 
 #     pdsh: parallel device share with nodes x-xx conrep: system config scan -l: load -f: file at directory /root/bin/Ford_tools/ file: static_high.xml
 
+tail -f /var/log/messages
+#     tail: show you the last 10 lines of a document
+#     -f: follows; output follows are file grows
