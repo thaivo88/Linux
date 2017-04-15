@@ -23,3 +23,6 @@ conrep –s –f /root/xxxx.dat
 #     The CONREP utility uses the data in the generated file to configure the target server hardware.
 #     conrep: read server configuration and -s: save the -f: file to directoy: /root/ file name: xxxx.dat or xxxx.xml
 
+Pdsh –w –node[x-xx] conrep –l –f /root/bin/Ford_tools/static_high.xml 
+#     pdsh: parallel device share with nodes x-xx conrep: system config scan -l: load -f: file at directory /root/bin/Ford_tools/ file: static_high.xml
+
