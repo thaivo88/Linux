@@ -29,3 +29,8 @@ Pdsh –w –node[x-xx] conrep –l –f /root/bin/Ford_tools/static_high.xml
 tail -f /var/log/messages
 #     tail: show you the last 10 lines of a document
 #     -f: follows; output follows are file grows
+
+pdsh -w node[x-xx] ssacli ctrl all show config |grep logical| dshbak -c
+#     |grep logical|: grep search for logical key word
+#     ssacli is a controller utility: asking it to show all the configuration of all nodes from x-xx 
+#     and roll out the command to all the nodes x-xx with pdsh
