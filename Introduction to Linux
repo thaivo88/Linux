@@ -1,0 +1,2 @@
+'ls' list all files in the directory
+'ls -a' list all files including all hidden files in the directory. All hidden files will be denoted by '.' in front of the file name.
