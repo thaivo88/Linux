@@ -1,2 +1,17 @@
-'ls' list all files in the directory
-'ls -a' list all files including all hidden files in the directory. All hidden files will be denoted by '.' in front of the file name.
+'ls'          
+list all files in the directory
+
+'ls -a'       
+list all files including all hidden files in the directory. All hidden files will be denoted by '.' in front of the file name.
+
+'ls -l'       
+detail of directory (permision, date, user, ect)
+
+'ls -F' 	
+lists files and subdirectories
+
+'ls -R' 	
+lists the chain of directories starting from the current directory
+
+'ls -s' 	
+lists the name and size of each file in a directory
