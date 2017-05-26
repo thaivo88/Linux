@@ -5,7 +5,14 @@ list all files in the directory
 list all files including all hidden files in the directory. All hidden files will be denoted by '.' in front of the file name.
 
 'ls -l'       
-detail of directory (permision, date, user, ect)
+detail of directory (permision, date, user, size, ect)
+
+'ls -lh'
+detail of directory (permision, date, user, size, ect) changing the size in byte into kilobyte
+
+'ls -t'
+'ls -lt'
+list all the file/directory in order of newest to oldest
 
 'ls -F' 	
 lists files and subdirectories
