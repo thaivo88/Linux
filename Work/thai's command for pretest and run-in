@@ -1,0 +1,23 @@
+thai's command for pretest and run-in
+•hp (TAB) 
+•ipmitool sel elist 
+•ls /dev/sd*                                        list usb device
+•hpssacli (enter) ctrl all show config              Show all hdd
+•cat /proc/partitions                               Show all partitions registered on the system
+•grep MemTotal /proc/meminfo                        Show RAM total seen by the system 
+•grep "model name" /proc/cpuinfo                    Show CPU(s) info Show kernel version and system architecture
+•uname –a 
+•tail -f /var/log/messages                          Monitor messages in a log file
+•free –m                                            show free memory
+•lspci –tv                                          show pci
+•badblocks –s /dev/sd()                             show bad sectors
+•hdparm -tT /dev/sd()                               does read test for usb
+•cd support (enter) more expected.ini               show all info (must be in a failed state)
+•tail -F tracking.log                               show what’s loading
+•vi support/act_cfg.xml 
+•hpasmcli -s 'show server'                          show server info 
+•hwinfo --short                                     show a short list of hardware installed 
+•ethtool -p eth0                                    check eth connection
+•more dimm.log  or  vi dimm.log                     check defective DIMM Location
+•more /opt/hp/hpdiags/surveybase.xml | egrep "SPD|spdm|spdS" /temp.xml   or   more /temp.xml          To display all defective SPD DIMM To check log files for load test failures.
+•vi /opt/hp/SystemFaultMonitor/fmiProgress.xml 
