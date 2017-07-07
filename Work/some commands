@@ -1,0 +1,39 @@
+Commands
+//wipe out image on harddrive
+do dd if=/dev/zero of=/dev/sd$X bs=512 count=20;
+//unable to wipe image
+For X in {z..a}; do dd if=/dev/zero of=/dev/sd$X bs=512 count=20; done
+
+// means comments
+- start of new line command
+
+//reset ilo
+-hponcfg -r
+-hponcfg –f /opt/clustertest/bin/smartscripts/Reset_RIB.xml  
+
+//check the stat for ib connection
+-ibstat
+
+//show all connection info
+-ifconfig -a
+//or show connection info for eth
+-ifconfig eth#
+
+//turn hdd led on
+-hpssacli
+-ctrl slot=0 pd 1I:1:1 modify led=on
+
+//connecting to different node while one another node
+-ssh node#
+
+//changing nic speed
+(cisco)
+-config
+-int eth 1/44
+-speed 1000
+-exit
+-no spanning-tree vlan 1
+
+//Disable hyperthread
+pdsh -a hpasmcli -s disable HT
+
