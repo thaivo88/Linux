@@ -1,0 +1,34 @@
+changing boot mode using cluster
+
+vi /opt/clustertest/logs/.ct_config
+**opens the file so that you may edit it to protect eth IP
+scroll to the bottom**
+i
+PROTECTED_INTERFACES=eth1
+esc : x enther
+
+clsetup.pl
+**change total nodes in solution and nodes in group to total nodes plus 50 or so
+click on network and change head node and computing node to eth0**
+
+testnodes.pl
+**power cycle all computing node; excluding Head node**
+
+ssh node#
+**# pick a number that isnt the head node**
+
+conrep -s -f /root/Desktop/BIOS.xml
+**if conrep returen code = 0 there are no error, go to next step**
+
+vi /root/Desktop/BIOS.xml
+**search for Boot_Mode using / to search
+edit with I and change to UEFI_Mode**
+
+ssh node# conrep -l -f /root/Desktop/BIOS.xml
+**# any number beside headnode and the one we used before**
+
+ssh node# reboot
+**use the same # as step before this one
+once this node join cluster check to see the boot is saved then do the rest of the cluster**
+
+pdsh -a conrep -l -f /root/Desktop/BIOS.xml
