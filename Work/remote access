@@ -1,0 +1,17 @@
+remote access cluster test
+ifconfig -a
+vi /etc/sysconfig/network-scripts/ifcfg-eth3
+i
+DEVICE=eth3
+IPADDR=16.xx.xx.xx
+ONBOOT=yes
+NETMASK=255.255.0.0
+GATEWAY=16.xx.x.x
+BOOTPROTO=static
+esc
+:
+x
+enter
+service network restart
+
+ethtool -p eth#
