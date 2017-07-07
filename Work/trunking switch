@@ -1,0 +1,27 @@
+Trunk Switch 5900
+
+interface Bridge-Aggregation 1
+port link-type trunk
+port trunk permit vlan all
+#
+interface GigabitEthernet1/0/1
+port link-type trunk
+port trunk permit vlan all
+port link-aggregation group 1
+#
+interface GigabitEthernet1/0/2
+port link-type trunk
+port trunk permit vlan all
+port link-aggregation group 1
+
+Below are the ports for each Bridge-Aggregation group.
+
+Bridge-Aggregation 1:  ports 1 & 2
+Bridge-Aggregation 2:  ports 3 & 4
+Bridge-Aggregation 3:  ports 5 & 6
+Bridge-Aggregation 4:  ports 9 & 10
+Bridge-Aggregation 5:  ports 11 & 12
+Bridge-Aggregation 6:  ports 13 & 14
+Bridge-Aggregation 7:  ports 17 & 18
+Bridge-Aggregation 8:  ports 19 & 20
+Bridge-Aggregation 9:  ports 21 & 22
