@@ -16,3 +16,5 @@ Move two directory up from where you are now.
 cd ~
 Move to users home directory from anywhere.
 
+pwd
+print working directory - will print the directory path
