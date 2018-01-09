@@ -1,0 +1,28 @@
+mkdir
+#     make directory - to create a directory (folder)
+
+#     example:
+
+mkdir [directory name]
+#     or
+
+mkdir [directory path/directory name]
+#     to create a directory in a different directory (folder)
+
+mkdir -p [new directory path/directory name]
+#     adding the -p option allows to create a new directory path that does not exist yet
+
+mkdir -m777 [directory name]
+#     -m option appows permission to be added to the directory
+#     The first number is for the owner permissions, the second number is for the group permissions and the last number is for everyone else.
+#     4 stands for "read",
+#     2 stands for "write",
+#     1 stands for "execute", and
+#     0 stands for "no permission."
+#    
+#     the user can read, write, and execute it;
+#     members of your group can read and execute it; and
+#     others may only read it.
+#     7 = (4: read) + (2: write) + (1: execute)
+#     5 = (4: read) + (1: execute)
+#     4 = (4: read)
