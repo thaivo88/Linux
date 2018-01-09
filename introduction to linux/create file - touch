@@ -1,0 +1,5 @@
+The touch command is the easiest way to create new, empty files. 
+It is also used to change the timestamps (i.e., dates and times of the most recent access and modification) on existing files and directories.
+
+touch's syntax is
+touch [option] file_name(s)
