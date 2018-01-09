@@ -1,0 +1,18 @@
+Command Name : cd
+Stands for : Change Directory
+
+cd -
+Move one directory back from where you are now.
+
+cd ..
+Change Current directory to parent directory.
+
+cd --
+Show last working directory from where we moved (use ‘–‘ switch) as shown.
+
+cd ../ ../
+Move two directory up from where you are now.
+
+cd ~
+Move to users home directory from anywhere.
+
