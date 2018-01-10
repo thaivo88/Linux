@@ -3,3 +3,7 @@ It is also used to change the timestamps (i.e., dates and times of the most rece
 
 touch's syntax is
 touch [option] file_name(s)
+
+or
+
+touch [directory path/file_name]
