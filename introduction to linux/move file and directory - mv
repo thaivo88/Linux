@@ -1,0 +1,9 @@
+mv - move
+
+mv [source] [destination]
+
+mv -f 
+does not ask you to overwrite message
+
+mv -v
+show you the process
