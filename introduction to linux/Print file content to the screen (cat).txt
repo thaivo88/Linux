@@ -7,3 +7,6 @@ cat [directory path] [file name]
 
 create a file called test file with below command.
 cat > test
+
+copying the contain in passwrd into a new txt doc called passwrd.txt
+cat etc/passwrd > passwrd.txt
