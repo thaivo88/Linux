@@ -1,0 +1,9 @@
+The cat (short for “concatenate“) command
+cat command allows us to create single or multiple files, view contain of file, concatenate files and redirect output in terminal or files.
+
+cat [OPTION] [FILE]
+
+cat [directory path] [file name]
+
+create a file called test file with below command.
+cat > test
