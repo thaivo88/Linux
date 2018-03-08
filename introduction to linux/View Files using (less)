@@ -3,3 +3,4 @@ Also, less does not have to read the entire input file before starting
 
 less /etc/passwrd
 #bring the contain of the bin file passwrd to move to the next page use ctrl+F to go back use ctrl+B to search use /+[keyword}
+#q to quit
