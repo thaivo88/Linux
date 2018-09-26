@@ -21,3 +21,67 @@ thai's command for pretest and run-in
 •more dimm.log  or  vi dimm.log                     check defective DIMM Location
 •more /opt/hp/hpdiags/surveybase.xml | egrep "SPD|spdm|spdS" /temp.xml   or   more /temp.xml          To display all defective SPD DIMM To check log files for load test failures.
 •vi /opt/hp/SystemFaultMonitor/fmiProgress.xml 
+Delete raid 
+            Ctrl slot=0 id 1 delete 
+Reformat hdd 
+            Ctrl slot=0 pd 1I:1:1 modify erase 
+reset ilo 
+            hponcfg –r 
+LED HDD test 
+            hpssacli 
+            ctrl slot=0 pd 1I:1:1 modify led=on 
+changing nic speed 
+(cisco) 
+            config 
+            int eth 1/44 
+            speed 1000 
+            exit 
+            no spanning-tree vlan 1 
+changing nic 
+            ifconfig 
+            dhclient eh1 
+            ifconfig 
+
+show logical drive 
+            ctrl slot=0 ld all show 
+Cpu info 
+            Cat /proc/cpuinfo 
+            
+•last rebootShow system reboot history 
+•free -mShow amount of (remaining) RAM (-m displays in MB) 
+•watch -n.1 'cat /proc/interrupts'Watch changeable data continuously 
+•udevadm monitorMonitor udev events to help configure rules 
+*system information* (see also sysinfo 
+) ('#' means root access is required) 
+•uname -aShow kernel version and system architecture 
+•head -n1 /etc/issueShow name and version of distribution 
+•cat /proc/partitionsShow all partitions registered on the system 
+•grep MemTotal /proc/meminfoShow RAM total seen by the system 
+•grep "model name" /proc/cpuinfoShow CPU(s) info 
+•lspci -tvShow PCI info 
+•lsusb -tvShow USB info 
+•mount | column -tList mounted filesystems on the system (and align output) 
+•grep -F capacity: /proc/acpi/battery/BAT0/infoShow state of cells in laptop battery 
+#dmidecode -q | lessDisplay SMBIOS/DMI information 
+#smartctl -A /dev/sda | grep Power_On_HoursHow long has this disk (system) been powered on in total 
+#hdparm -i /dev/sdaShow info about disk sda 
+#hdparm -tT /dev/sdaDo a read speed test on disk sda 
+#badblocks -s /dev/sdaTest for unreadable blocks on disk sda
+
+•cat /proc/partitions                                       Show all partitions registered on the system 
+•grep MemTotal /proc/meminfo                        Show RAM total seen by the system 
+•grep "model name" /proc/cpuinfo                     Show CPU(s) info 
+•lspci -tv    Show PCI info 
+•uname -a                                                   Show kernel version and system architecture 
+•tail -f /var/log/messages                              Monitor messages in a log file 
+•free -m                                                        show free memory 
+•lspci -tv                                                        show pci 
+•badblocks -s/dev/sd()                              show bad sectors 
+•hdparm -tT /dev/sd()                              does read test 
+•hpasmcli (enter) clear iml                          clear error log 
+•ls dev/sd*   show usb 
+•mkfs.vfat -I -F 32 dev/sd()                              format usb 
+•cd support (enter) more expected.ini                     show all info 
+•tail -F tracking.log.                                   show whats happening 
+•vi support/act_cfg.xml    
+•/scripts/(name of scripts).pl
