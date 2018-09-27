@@ -1,3 +1,6 @@
+Older version directory @ /opt/hp/hpssacli/bin/hpssacli using the hpssacli syntax
+New version directory @ /opt/smartstorageadmin/ssacli/bin/ssacli using the ssacli syntax
+
 Show configuration
 ESXi 5.5 -> /opt/hp/hpssacli/bin/hpssacli ctrl all show config
 ESXi 6.5 -> /opt/smartstorageadmin/ssacli/bin/ssacli ctrl all show config
