@@ -1,9 +1,9 @@
-wipe drive:             dd if=/dev/zero of=/dev/sda bs=256
+•wipe drive:             dd if=/dev/zero of=/dev/sda bs=256
 
-iLO IP script:          mount 10.0.0.10:/admin /mnt; 
+•iLO IP script:          mount 10.0.0.10:/admin /mnt; 
                         cd /mnt/scripts/iLO;  
                         ./RUNME
-
+•ipmitool lan print      //show ilo ip
 •hp (TAB) 
 •ipmitool sel elist 
 •ls /dev/sd*                                        list usb device
