@@ -12,8 +12,9 @@ chmod 754 *
 #     0 stands for "no permission."
 #    
 #     the user can read, write, and execute it;
-#     members of your group can read and execute it; and
-#     others may only read it.
+#     members of your group can read and execute it; 
+#     and others may only read it.
+#     using above number 754
 #     7 = (4: read) + (2: write) + (1: execute)
 #     5 = (4: read) + (1: execute)
 #     4 = (4: read)
