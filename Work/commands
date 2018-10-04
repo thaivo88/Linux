@@ -1,3 +1,10 @@
+
+//show opa information
+# opainfo
+
+//show nvidia gpu information
+# nvidia-smi
+
 •wipe drive:             dd if=/dev/zero of=/dev/sda bs=256
 
 •iLO IP script:          mount 10.0.0.10:/admin /mnt; 
