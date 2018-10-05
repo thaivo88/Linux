@@ -1,3 +1,5 @@
+//turning on and off UID light
+# enable|disable UID
 
 //show opa information
 # opainfo
