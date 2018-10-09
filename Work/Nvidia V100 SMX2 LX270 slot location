@@ -1,0 +1,15 @@
+//lx270D Gen10 GPU slot location
+//b2:00.0 - slot 1
+//b3:00.0 - slot 3
+//89:00.0 - slot 2
+//8a:00.0 - slot 4
+//3a:00.0 - slot 5
+//3b:00.0 - slot 7
+//15:00.0 - slot 6
+//16:00.0 - slot 8
+
+//command to see gpu location
+# nvidia-smi
+
+//shorter list
+# nvidia-smi -L
