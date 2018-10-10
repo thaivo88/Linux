@@ -1,0 +1,62 @@
+//to show LED status
+show /system1/led1
+
+//to start the LED
+start /system1/led1
+
+//to view the firmware of the ilo
+show /map1/firmware1
+
+//show the list of users
+show /map1/accounts1
+
+//changing password of a user
+set /map1/accounts1/[username] password=[password]
+
+//create user
+create /map1/accounts1 username=[username] password=[password]
+
+//to view the assigned network of the blade
+show /map1/enetport1/lanendpt1/ipendpt1
+
+//to assign mamagement IP to the blade ilo passge
+set /map1/enetport1/lanedpt1/ipendpt1 IPv4Address=[xx.xx.xx.xx] SubnetMask=[xx.xx.xx.xx]
+
+//change or modify the gateway of the management ip
+set /map1/gateway1 AccessInfo=[xx.xx.xx.xx]
+
+//add DNS server
+set /map1/dnsserver1 AccessInfo=[xx.xx.xx.xx]
+
+//to vew the DHCP status of ilo
+show /map1/dhcpendpt1
+
+//enable or disable DHCP
+set /map1/dhcpendpt1 EnableState=[no|off]
+
+//show SNMP
+show /map1/snmp1
+
+//to configure SNMP
+set /map1/snmp1 accessinfo=[xx.xx.xx.xx]
+
+//set system location
+set /map1/snmp1/ oemhp_systemlocation="[location]"
+
+//set name of node
+set /map1/enetport1 systemname=[servername]
+
+//view boot order
+show /system1/bootconfig1
+
+//view boot order of all available boot source
+show -all /system1/bootconfig1
+
+//change boot order
+set /system1/bootconfig1/[bootsource#] [bootsource#]
+example: set /system1/bootconfig1/bootsource3 bootsource1
+
+//view CPU info
+show /system1/[cpu#] 
+example: show /system1/cpu2
+
