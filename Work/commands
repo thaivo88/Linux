@@ -1,3 +1,10 @@
+//searching for username ypcat = yellow page concatenate 
+//grep is a command-line utility for searching plain-text data sets for lines that match a regular expression.  
+# ypcat passwd | grep [username]
+
+//searching user email
+# grep [username] /etc/aliaes
+
 //turning on and off UID light
 # enable|disable UID
 
