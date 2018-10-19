@@ -1,0 +1,69 @@
+//HOW TO UPDATE INTEL FPGA ARRIA 10 TO DCP 1.2
+
+//Set the OPAE PLATFORM ROOT environment variable
+# export OPAE_PLATFORM_ROOT=/root/a10_gx_pac_1_2_alpha                         note: (_ias deleted)
+
+//Upgrade flash to dcp1.2.rpd ( this rpd file is in the directory specified below)
+# cd $OPAE_PLATFORM_ROOT/hw/blue_bits
+# fpgaflash user dcp_1_2.rpd
+
+//Disable AER on upstream PCIe root port. I have written a script for this, kept it in /root folder. You can use that.
+# cd /root
+# lspci -tv|grep -i 09c4
++-[0000:36]-+-00.0-[37]----00.0  Intel Corporation Device 09c4
+
+//In this case , the root port id is 36:00.0  and  Bus id is 37:00.0
+
+//edit script to input bus id
+#nano /root/set_pci_mask.sh 
+
+//Make sure that you put these values in line 2 of the script as the values for the “bus_ids” variable. 
+#!/bin/bash
+#bus_ids='36:00.0 37:00.0'
+#for bus_id in $bus_ids
+#do
+#        setpci -s $bus_id ECAP_AER+0x08.L=0xFFFFFFFF
+#        setpci -s $bus_id ECAP_AER+0x14.L=0xFFFFFFFF
+#done
+
+# source /root/set_pci_mask.sh
+
+Program BMC application code via USB (this programs a BMC image that supports remote
+update)
+# bwconfig --remove=0
+# bwconfig --scan=usb
+# bwconfig --add=usb --result=0
+# bwmonitor --dev=0 --upgrade --mode
+# bwdfu-programmer bittware_dfu flash --force --suppress-bootloader-mem --suppressvalidation/root/a10sa4-26889-fw.hex
+# shutdown now
+
+AC Power cycle host. A soft reboot IS NOT SUFFICIENT!
+Program BMC Bootloader over PCIe
+# fpgaflash bmc_bl /root/a10sa4_bootloader-26879-fw.hex
+# fpgainfo fme
+
+Set the I2C Slave address to CE
+# bwmonitor --dev=0 --shell ( This allows you to get into the BMC shell)
+# BMC>> [B8 00 62 18 7B 00 00 CE] (writes the I2C address to EEPROM)
+# BMC>> [B8 00 63 18 7B 00 00] (read back I2C address)
+# BMC>> exit
+
+Reprogram BMC Application over PCIe
+# fpgaflash bmc_app /root/a10sa4-26889-fw.hex
+
+check wheather the flash worked, value should be seen as below.
+# fpgainfo fme
+#Board Management Controller, microcontroller FW version 26889
+#Last Power Down Cause: POK_CORE
+#Last Reset Cause: External reset
+#Power-on-reset
+#Software reset
+#//****** FME ******//
+#Object Id                     : 0xF100000
+#PCIe s:b:d:f                  : 0000:37:00:0
+#Device Id                     : 0x09C4
+#Socket Id                     : 0x00
+#Ports Num                   : 01
+#Bitstream Id                 : 0x121000200000161
+#Bitstream Version        : 0x55AE00010201
+#Pr Interface Id              : 93abeb6a-30c8-5f77-8172-d828c3a699ca
