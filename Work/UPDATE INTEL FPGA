@@ -9,7 +9,7 @@
 
 //Disable AER on upstream PCIe root port. I have written a script for this, kept it in /root folder. You can use that.
 # cd /root
-# lspci -tv|grep -i 09c4
+# lspci -tv | grep -i 09c4
 +-[0000:36]-+-00.0-[37]----00.0  Intel Corporation Device 09c4
 
 //In this case , the root port id is 36:00.0  and  Bus id is 37:00.0
