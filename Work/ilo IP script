@@ -1,0 +1,5 @@
+//iLO IP script
+//all ilo ip in the cluster will config automatically          
+# mount 10.0.0.10:/admin /mnt; 
+# cd /mnt/scripts/iLO;  
+# ./RUNME
