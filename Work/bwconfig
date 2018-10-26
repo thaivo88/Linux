@@ -1,0 +1,6 @@
+Program BMC application code via USB (this programs a BMC image that supports remote
+update)
+# bwconfig --remove=0
+# bwconfig --scan=usb
+# bwconfig --add=usb --result=0
+# bwmonitor --dev=0 --upgrade-mode 
