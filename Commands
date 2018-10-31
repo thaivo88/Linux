@@ -1,5 +1,5 @@
-System Related Commands
-These commands are used to view and manage Linux system-related information.
+#System Related Commands
+#These commands are used to view and manage Linux system-related information.
 
 uname                   :  Displays linux system information. With -a switch you can view all the information, with -r switch you can view kernel release information and with -o you can view OS information
 cat /etc/redhat_release :  Shows which version of redhat installed 
@@ -14,8 +14,8 @@ finger user             :  Displays information about user
 reboot                  :  Reboots the system
 shutdown                :  Shuts down the system
 
-Hardware Related Commands
-These commands are used to view and manage hardware-related aspects of the Linux machine.
+#Hardware Related Commands
+#These commands are used to view and manage hardware-related aspects of the Linux machine.
 
 dmesg                     : Displays all the messages from Kernel ring buffer. With -k switch you can view kernel messages and with -u you can view userspace messages
 cat /proc/cpuinfo         : Displays information about processes and CPUs of the system
@@ -31,8 +31,8 @@ hdparm -i /dev/sda        : Shows info about disk sda
     hdparm -tT /dev/sda   : Performs a read speed test on disk sda
 badblocks -s /dev/sda     : Tests for unreadable blocks on disk sda
 
-Statistic Related Commands
-These set of commands are used to view various kinds of stats of the Linux system
+#Statistic Related Commands
+#These set of commands are used to view various kinds of stats of the Linux system
 
 mpstat 1                          : Displays processors related statistics
 vmstat 2                          : Displays virtual memory statistics
@@ -45,8 +45,8 @@ lsof                              : Lists all open files belonging to all active
 free -m                           : Shows RAM memory details
 watch df -h                       : Watches changeable disk usage continuously
 
-User-Related Commands
-These commands are used to manage Linux users
+#User-Related Commands
+#These commands are used to manage Linux users
 
 id                                      : Shows the active user and group information. With -G switch you can view the IDs of groups
 last                                    : Shows a list of last logins on the system. Using -a switch you can add the hostname to the last column of the output
@@ -58,8 +58,8 @@ adduser sam                             : Adds user "sam"
 usermod                                 : Modifies user information
 passwd user1                            : Changes the password of user1
 
-File Related Commands
-These commands are used to handle files and directories
+#File Related Commands
+#These commands are used to handle files and directories
 
 ls -al                                     : Displays all information about files/directories. This includes displaying all hidden files as well
 pwd                                        : Shows current directory path
@@ -90,8 +90,8 @@ dir                                        : Lists the content of the directory
 tee                                        : Command for chaining and redirection
 tr                                         : Command for translating characters
 
-Process Related Commands
-These commands are used to handle Linux processes
+#Process Related Commands
+#These commands are used to handle Linux processes
 
 ps                           : Displays your currently active processes
     ps aux | grep 'telnet'   : Displays all process ids related to telnet process
@@ -104,8 +104,8 @@ bg                           : Resumes suspended jobs without bringing them to f
 fg                           : Brings the most recent job to foreground
     fg n                     : Brings job n to the foreground
     
-File Permission Related Commands
-These commands are used to change permissions of the files
+#File Permission Related Commands
+#These commands are used to change permissions of the files
 
 chmod octal file-name      		               : Changes the permissions of file to octal
     chmod 777 /data/test.c                   : Sets rwx permission for owner , group and others
@@ -115,8 +115,8 @@ chown owner-user file                        : Changes owner of the file
     chown owner-user:owner-group directory   : Changes owner and group owner of the directory
 chgrp group1 file                            : Changes the group ownership of the file to group1
 
-Network Related Commands
-These commands are used to view and edit network configurations related aspects of the system
+#Network Related Commands
+#These commands are used to view and edit network configurations related aspects of the system
 
 ifconfig -a                          : Displays all network interface and set ip address
 ifconfig eth0                        : Displays eth0 ethernet port ip address and details
@@ -134,8 +134,8 @@ wget file                            : Downloads file
 netstat  -tupl                       : Lists all active listening ports
 nslookup                             : Resolves domain names to IP addresses
 
-Compression / Archive Related Commands
-These commands are used to compress and decompress files
+#Compression / Archive Related Commands
+#These commands are used to compress and decompress files
 
 tar cf home.tar  home             : Creates a tar named home.tar containing home/
     tar xf file.tar               : Extracts the files from file.tar
@@ -144,15 +144,15 @@ gzip file                         : Compresses file and renames it to file.gz
 bzip2 -z file                     : Compresses file and renames it to file.bz2
     bzip2 -d file.bz2             : Decompress the file
     
-Package Installation Related Commands
-These commands are used to manage Linux packages
+#Package Installation Related Commands
+#These commands are used to manage Linux packages
 
 rpm -i pkgname.rpm         : Installs rpm based package
     rpm -e pkgname         : Removes package
 make                       : Install from source file
 
-Search Related Commands
-These commands are used to search for files and patterns
+#Search Related Commands
+#These commands are used to search for files and patterns
 
 grep pattern files                  : Searches for pattern in files
     grep -r pattern dir             : Searches recursively for pattern in dir
@@ -160,15 +160,15 @@ locate file                         : Finds all instances of file
 find /home/tom -name 'index*'       : Finds file names that start with "index" inside /home/tom directory
     find /home -size +10000k        : Finds files larger than 10000k in /home
     
-Login Related Commands
-These commands are used to log into another host
+#Login Related Commands
+#These commands are used to log into another host
 
 ssh user@host                  : Securely connect to a host as user
     ssh -p port $ user@host    : Connects to host using specific port
 telnet host                    : Connects to the system using  telnet port
 
-File Transfer Related Commands
-These commands are used to copy files from one system to another system
+#File Transfer Related Commands
+#These commands are used to copy files from one system to another system
  
 scp file.txt   server2:/tmp                                : Secure copy file.txt to remote host  /tmp folder
     scp nixsavy@server2:/www/*.html /www/tmp               : Copies *.html files from remote host to current host /www/tmp folder
@@ -176,8 +176,8 @@ scp file.txt   server2:/tmp                                : Secure copy file.tx
 rsync -a /home/apps /backup/                               : Synchronizes source to destination
     rsync -avz /home/apps $ linoxide@192.168.10.1:/backup  : Synchronize files/directories between the local and remote system with compression enabled
 
-Disk Usage Related Commands
-These commands are used to view disk statistics
+#Disk Usage Related Commands
+#These commands are used to view disk statistics
 
 df -h                               : Shows free space on mounted filesystems
      df -i 	                        : Shows free inodes on mounted filesystems
@@ -187,8 +187,8 @@ du -ah                              : Displays disk usage in human readable form
 findmnt                             : Displays target mount point for all filesystems
 mount device-path mount-point       : Mounts a device to the device-path
 
-Directory Traverse Related Commands
-These commands are used to change the directory
+#Directory Traverse Related Commands
+#These commands are used to change the directory
 
 cd ..               : Goes up one level of the directory tree
      cd	            : Goes to $HOME directory
