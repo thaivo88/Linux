@@ -1,32 +1,33 @@
-HOW TO UPDATE INTEL FPGA ARRIA 10 TO DCP 1.2
+#HOW TO UPDATE INTEL FPGA ARRIA 10 TO DCP 1.2
 
-Set the OPAE PLATFORM ROOT environment variable
-# export OPAE_PLATFORM_ROOT=/root/a10_gx_pac_1_2_alpha                    
+#Set the OPAE PLATFORM ROOT environment variable
+  export OPAE_PLATFORM_ROOT=/root/a10_gx_pac_1_2_alpha                    
 
-Upgrade flash to dcp1.2.rpd ( this rpd file is in the directory specified below)
-# cd $OPAE_PLATFORM_ROOT/hw/blue_bits
-# fpgaflash user dcp_1_2.rpd
+#Upgrade flash to dcp1.2.rpd ( this rpd file is in the directory specified below)
+  cd $OPAE_PLATFORM_ROOT/hw/blue_bits
+  fpgaflash user dcp_1_2.rpd
 
-Disable AER on upstream PCIe root port. I have written a script for this, kept it in /root
-folder. You can use that.
-# cd /root
-# lspci -tv | grep -i 09c4
-+-[0000:36]-+-00.0-[37]----00.0  Intel Corporation Device 09c4
+#Disable AER on upstream PCIe root port. I have written a script for this, kept it in /root folder. You can use that.
+  cd /root
+  lspci -tv | grep -i 09c4
+#output: +-[0000:36]-+-00.0-[37]----00.0  Intel Corporation Device 09c4
 
-In this case , the root port id is 36:00.0  and
-                             Bus id is 37:00.0
+#In this case , the root port id is 36:00.0  and
+#                             Bus id is 37:00.0
 
-Make sure that you put these values in line 2 of the script as the values for the “bus_ids” variable. 
+#edit script: set_pci_mask.sh
+#Make sure that you put these values in line 2 of the script as the values for the “bus_ids” variable. 
 #!/bin/bash
-bus_ids='36:00.0 37:00.0'
-for bus_id in $bus_ids
-do
-        setpci -s $bus_id ECAP_AER+0x08.L=0xFFFFFFFF
-        setpci -s $bus_id ECAP_AER+0x14.L=0xFFFFFFFF
-done
+#bus_ids='36:00.0 37:00.0'
+#for bus_id in $bus_ids
+#do
+#        setpci -s $bus_id ECAP_AER+0x08.L=0xFFFFFFFF
+#        setpci -s $bus_id ECAP_AER+0x14.L=0xFFFFFFFF
+#done
 
-#nano /root/set_pci_mask.sh 
-# source /root/set_pci_mask.sh
+#use nano to edit script
+  nano /root/set_pci_mask.sh 
+  source /root/set_pci_mask.sh
 
 Program BMC application code via USB (this programs a BMC image that supports remote
 update)
