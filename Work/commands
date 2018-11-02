@@ -1,164 +1,171 @@
-//list of mount system file
-# cat /proc/mounts
+#Soft links, the following would create a soft link named link1 to a file named file1
+  ln -s {source-filename} {symbolic-filename}
+  ln -s file1 link1
 
-//checking disk file
-# df
+#list of mount system file
+  cat /proc/mounts
 
-//checking zeusn nodes GPU count Nvidia Tesla V100 SXM2 
-# sudo /admin/nodes/scripts/gpuCount
+#checking disk file
+  df
 
-//searching for username ypcat = yellow page concatenate 
-//grep is a command-line utility for searching plain-text data sets for lines that match a regular expression.  
-# ypcat passwd | grep [username]
+#checking zeusn nodes GPU count Nvidia Tesla V100 SXM2 
+ sudo /admin/nodes/scripts/gpuCount
 
-//searching user email
-# grep [username] /etc/aliaes
+#searching for username ypcat = yellow page concatenate 
+#grep is a command-line utility for searching plain-text data sets for lines that match a regular expression.  
+  ypcat passwd | grep [username]
 
-//turning on and off UID light
-# enable|disable UID
+#searching user email
+  grep [username] /etc/aliaes
 
-//show opa information
-# opainfo
+#turning on and off UID light
+  enable|disable UID
 
-//show nvidia gpu information
-# nvidia-smi
+#show opa information
+ opainfo
 
-//wipe drive:             
-# dd if=/dev/zero of=/dev/sda bs=256
+#show nvidia gpu information
+  nvidia-smi
 
-//iLO IP script:          
-# mount 10.0.0.10:/admin /mnt; 
-# cd /mnt/scripts/iLO;  
-# ./RUNME
+#wipe drive:             
+  dd if=/dev/zero of=/dev/sda bs=256
 
-//show ilo ip
-# ipmitool lan print   
+#iLO IP script:          
+  mount 10.0.0.10:/admin /mnt; 
+  cd /mnt/scripts/iLO;  
+  ./RUNME
 
-#ipmitool sel elist 
+#show ilo ip
+ ipmitool lan print   
 
-//list all usb device
-# ls /dev/sd*
+ ipmitool sel elist 
 
-//show all hard drive
-# hpssacli (enter) ctrl all show config    
+#list all usb device
+ ls /dev/sd*
 
-//Show all partitions registered on the system
-# cat /proc/partitions             
+#show all hard drive
+ hpssacli (enter) ctrl all show config    
 
-//Show RAM total seen by the system 
-# grep MemTotal /proc/meminfo 
+#Show all partitions registered on the system
+ cat /proc/partitions             
 
-//search model name of cpu
-# grep "model name" /proc/cpuinfo                   
+#Show RAM total seen by the system 
+ grep MemTotal /proc/meminfo 
 
-//Show kernel version and system architecture 
-# uname –a 
+#search model name of cpu
+ grep "model name" /proc/cpuinfo                   
 
-// reads the last bit of the file messages, the messages log file updates with on going processes
-# tail -f /var/log/messages  
+#Show kernel version and system architecture 
+ uname –a 
 
-//show free memory
-# free –m         
+#show distro
+ cat/etc/*release*
 
-//show pci device
-# lspci –tv                             
+#reads the last bit of the file messages, the messages log file updates with on going processes
+ tail -f /var/log/messages  
 
-//utitily that search for bad blocks
-# badblocks –s /dev/sd()             
+#show free memory
+ free –m         
 
-//read test for usb or hard
-#hdparm -tT /dev/sd()                             
+#show pci device
+ lspci –tv                             
 
-//show all info (must be in a failed state) HPE Pretest Diag
-# cd support (enter) more expected.ini         
+#utitily that search for bad blocks
+ badblocks –s /dev/sd()             
 
-//read and update last few lines of tracking log
-# tail -F tracking.log                              
+#read test for usb or hard
+ hdparm -tT /dev/sd()                             
 
-//show server info, Hpasmcli library must be loaded to use
-# hpasmcli -s 'show server'       
+#show all info (must be in a failed state) HPE Pretest Diag
+ cd support (enter) more expected.ini         
 
-//show a short list of hardware installed 
-# hwinfo --short        
+#read and update last few lines of tracking log
+ tail -F tracking.log                              
 
-//check eth connection
-# ethtool -p eth0  
+#show server info, Hpasmcli library must be loaded to use
+ hpasmcli -s 'show server'       
 
-//check defective DIMM Location
-# more dimm.log 
+#show a short list of hardware installed 
+ hwinfo --short        
 
-//To display all defective SPD DIMM To check log files for load test failures.
-# more /opt/hp/hpdiags/surveybase.xml | egrep "SPD|spdm|spdS" /temp.xml   or   more /temp.xml          
+#check eth connection
+ ethtool -p eth0  
+
+#check defective DIMM Location
+ more dimm.log 
+
+#To display all defective SPD DIMM To check log files for load test failures.
+ more /opt/hp/hpdiags/surveybase.xml | egrep "SPD|spdm|spdS" /temp.xml   or   more /temp.xml          
  
-//Delete raid 
-# hpssacli 
-# Ctrl slot=0 id 1 delete 
+#Delete raid 
+ hpssacli 
+ Ctrl slot=0 id 1 delete 
 
-//Reformat hdd 
-# hpssacli 
-# Ctrl slot=0 pd 1I:1:1 modify erase 
+#Reformat hdd 
+ hpssacli 
+ Ctrl slot=0 pd 1I:1:1 modify erase 
 
-//reset ilo 
-# hponcfg –r 
-//or
-# hponcfg –f /opt/clustertest/bin/smartscripts/Reset_RIB.xml 
+#reset ilo 
+ hponcfg –r 
+#or
+ hponcfg –f /opt/clustertest/bin/smartscripts/Reset_RIB.xml 
 
-//LED HDD test 
-# hpssacli 
-# ctrl slot=0 pd 1I:1:1 modify led=on 
+#LED HDD test 
+ hpssacli 
+ ctrl slot=0 pd 1I:1:1 modify led=on 
 
-//show logical drive 
-# ctrl slot=0 ld all show 
+#show logical drive 
+ ctrl slot=0 ld all show 
 
-//Cpu info 
-# Cat /proc/cpuinfo 
+#Cpu info 
+ Cat /proc/cpuinfo 
 
-//Show system reboot history 
-# last reboot
+#Show system reboot history 
+ last reboot
 
 
-//Show USB info
-# lsusb -tv
+#Show USB info
+ lsusb -tv
 
-//List mounted filesystems on the system (and align output) 
-# mount | column -t
+#List mounted filesystems on the system (and align output) 
+ mount | column -t
 
-//Show state of cells in laptop battery 
-# grep -F capacity: /proc/acpi/battery/BAT0/info
+#Show state of cells in laptop battery 
+ grep -F capacity: /proc/acpi/battery/BAT0/info
 
-//Display SMBIOS/DMI information
-#dmidecode -q | less
+#Display SMBIOS/DMI information
+ dmidecode -q | less
 
-//How long has this disk (system) been powered on in total 
-# smartctl -A /dev/sda | grep Power_On_Hours
+#How long has this disk (system) been powered on in total 
+ smartctl -A /dev/sda | grep Power_On_Hours
 
-//Show info about disk sda 
-# hdparm -i /dev/sda
+#Show info about disk sda 
+ hdparm -i /dev/sda
 
-//Do a read speed test on disk sda
-# hdparm -tT /dev/sda 
+#Do a read speed test on disk sda
+ hdparm -tT /dev/sda 
 
-//Test for unreadable blocks on disk sda
-# badblocks -s /dev/sda
+#Test for unreadable blocks on disk sda
+ badblocks -s /dev/sda
 
-//wipe out image on harddrive
-# do dd if=/dev/zero of=/dev/sd$X bs=512 count=20;
-//unable to wipe image
-# For X in {z..a}; do dd if=/dev/zero of=/dev/sd$X bs=512 count=20; done
+#wipe out image on harddrive
+ do dd if=/dev/zero of=/dev/sd$X bs=512 count=20;
+#unable to wipe image
+ For X in {z..a}; do dd if=/dev/zero of=/dev/sd$X bs=512 count=20; done
 
-//check the stat for ib connection
-# ibstat
+#check the stat for ib connection
+ ibstat
 
-//check opa stat
-# opainfo
+#check opa stat
+ opainfo
 
-//show all connection info
-# ifconfig -a
-//or show connection info for eth
-# ifconfig eth#
+#show all connection info
+ ifconfig -a
+#or show connection info for eth
+ ifconfig eth#
 
-//connecting to different node while one another node
-# ssh node#
+#connecting to different node while one another node
+ ssh node#
 
-//Disable hyperthread
-# pdsh -a hpasmcli -s disable HT
+#Disable hyperthread
+ pdsh -a hpasmcli -s disable HT
