@@ -1,3 +1,12 @@
+#For a list of users type:
+  cat /etc/passwd
+
+#and for a list of groups with the users that belong to each, type:
+  cat /etc/group
+
+#For access rights, you can use:
+  sudo find -user [USERNAME] /LOCATION
+
 #Soft links, the following would create a soft link named link1 to a file named file1
   ln -s {source-filename} {symbolic-filename}
   ln -s file1 link1
