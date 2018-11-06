@@ -1,0 +1,17 @@
+1)	/etc/sudoers, added user to enable sudo commands
+  a.	root,voth    ALL=(ALL) NOPASSWD: ALL
+2)	uncommented the following in /etc/fstab to allow /sw mount
+  a.	hpchost3-a:/sw /sw nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=32768,wsize=32768,nfsvers=3,mountvers=3 0 0
+3)	Modified /usr/share/Modules/init/.modulespath to include
+  a.	/sw/com/modulefiles
+
+
+pdsh -a cp /etc/fstab /etc/fstab.11.06.18 
+pdsh -a sed -i '/[/]sw/s/^#//g' /etc/fstab 
+#that uncomments the existing line that had /sw init that mark made
+
+pdsh -a mkdir /sw
+pdsh -a mount /sw
+pdsh -a 'echo "/sw/com/modulefiles" >> /usr/share/Modules/init/.modulespath' 
+#that adds the path for environment modules in /sw to the path that gets loaded when a user logs in
+
