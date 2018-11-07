@@ -4,3 +4,6 @@
  systemctl restart docker.service
  systemctl start docker.service
  systemctl stop docker.service
+
+#script location
+/admin/nodes/scripts/admindocker start 
