@@ -1,0 +1,14 @@
+#Modules is a software tool that allows you to set environment variable for a particular software package.
+#if a software is need to be installed first does this software needed on a cluster or a single node
+#if no install on the node itself
+#if yes install in /sw (mounted  hpchost3-a: /sw)
+
+#show all module
+ module avail
+
+#show module loaded
+ module list
+
+#load module
+ module load [module]
+ module unload [module] 
