@@ -1,0 +1,6 @@
+#If docker daemon does not start and in a failed state check metadata file at : /var/lib/docker/devicemapper/devicemapper/metadata
+#If the file has symbols delete docker directory : /var/lib/docker
+ rm -rf /var/lib/docker
+ systemctl restart docker.service
+ systemctl start docker.service
+ systemctl stop docker.service
