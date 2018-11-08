@@ -2,8 +2,18 @@
 #If the file has symbols delete docker directory : /var/lib/docker
  rm -rf /var/lib/docker
  systemctl restart docker.service
+ 
+#if deleting the docker dir did not start docker
+cd /etc/docker/
+vi daemon.json
+#delete the file and input only: {}
+ 
+ #if docker was started too often force to start:
+ systemctl reset-failed docker.service
  systemctl start docker.service
- systemctl stop docker.service
-
+ 
 #script location
 /admin/nodes/scripts/admindocker start 
+
+#other commands
+ systemctl stop docker.service
