@@ -1,0 +1,15 @@
+sudo git clone https://github.com/HackerShackOfficial/Smart-Mirror.git
+cd Smart-Mirror/
+sudo pip install -r requirements.txt
+sudo apt-get install python-imaging-tk
+
+#install vim aka vi to edit text file
+sudo apt-get install vim
+#create account with forecast.io to get the API tokken
+vim smartmirror.py
+#input API tokken
+#input ip address using whatismyipaddress.org
+#edit latitude and longitude by google city
+
+python smart-mirror.py
+#to start the smart mirror
