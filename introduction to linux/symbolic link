@@ -1,0 +1,10 @@
+#symbolic link is like a short cut in windows
+#symbolic link can also make a link of data into different file name
+#ln : link
+##-f Force existing destination pathnames to be removed to allow the link.
+#-L For each source_file operand that names a file that is a symbolic link, create a hard link to the file referenced by the symbolic link.
+#-P For each source_file operand that names a file that is a symbolic link, create a (hard) link to the symbolic link itself.
+#-s Create symbolic links instead of hard links. If the -s option is specified, the -L and -P options are silently ignored.
+#If more than one of the mutually-exclusive options -L and -P is specified the last option specified determines the behavior of the utility.
+#If the -s option is not specified and neither a -L nor a -P option is specified, the implementation defines which of the -L and -P options will be used as the default.
+  ln -s [file1] [link1]
