@@ -1,6 +1,0 @@
-Two Type of Default Shell in Linux:
-Default System Shell and Default Interactive Shell
-
-Default Interactive Shell: is the shell program a user uses to enter commands, run programs from the command line, run shell scripts, and so on.
-System Shell: is used by the Linux system to run system to run system shell scripts, typically at startup.
-
