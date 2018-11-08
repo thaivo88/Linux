@@ -1,0 +1,9 @@
+#auto install everything
+curl -sL https://raw.githubusercontent.com/MichMich/MagicMirror/master/installers/raspberry.sh | bash
+
+#manually install
+git clone https://github.com/MichMich/MagicMirror
+sudo apt-get install npm
+cd MagicMirror
+npm install
+git pull && npm install
