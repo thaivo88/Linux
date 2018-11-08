@@ -1,2 +1,7 @@
+#When updating license make a back copy incase
+
 #management center
 /ansys_inc/shared_files/licensing/lic_admin/anslic_admin
+
+#scripts to start and stop ansys
+/hpcsw/isv/Ansys/shared_files/licensing
