@@ -1,9 +1,44 @@
 #auto install everything
-curl -sL https://raw.githubusercontent.com/MichMich/MagicMirror/master/installers/raspberry.sh | bash
+  curl -sL https://raw.githubusercontent.com/MichMich/MagicMirror/master/installers/raspberry.sh | bash
 
 #manually install
-git clone https://github.com/MichMich/MagicMirror
-sudo apt-get install npm
-cd MagicMirror
-npm install
-git pull && npm install
+  git clone https://github.com/MichMich/MagicMirror
+  sudo apt-get install npm
+  cd MagicMirror
+  npm install
+  git pull && npm install
+
+#installing setup spotify module
+  git clone https://github.com/raywo/MMM-NowPlayingOnSpotify.git
+  cd MMM-NowPlayingOnSpotify
+  npm install
+
+#The module provides you with a special app which describes all the necessary steps and which guides you through the whole process. 
+#To use this app change into the authorization folder and start the app by typing node app.
+  cd authorization
+  node app
+
+#When the app is running you can access it by opening localhost:8888 in your browser. 
+#Provided you are doing this directly on your Raspberry Pi. 
+#If you want to access the app remotely just type the ip address or the name of your Raspberry like so for instance: http://raspi:8888. 
+#Then you should see the authorisation app like below.
+
+#Go to the module’s folder inside MagicMirror modules folder and pull the latest version from GitHub and install:
+  git pull
+  npm install
+
+#edit the config.conf file with youre information
+#Here is an example for an entry in config.js
+
+{
+    module: "MMM-NowPlayingOnSpotify",
+    position: "top_right",
+
+    config: {
+        showCoverArt: false,
+        clientID: "<YOUR_CLIENT_ID>",
+        clientSecret: "<YOUR_CLIENT_SECRET>",
+        accessToken: "<YOUR_ACCESS_TOKEN>",
+        refreshToken: "<YOUR_REFRESH_TOKEN>"
+    }
+}
