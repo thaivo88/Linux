@@ -1,7 +1,16 @@
 #When updating license make a back copy incase
+#the process is stop the current license server
+#modify the license file after you make a copy.
+#then start the license server with the command
+  /hpcsw/isv/Ansys/shared_files/licensing/linx64/lmgrd -c 
+  /hpcsw/isv/Ansys/shared_files/licensing/license_files -l 
+  /hpcsw/isv/Ansys/shared_files/licensing/license.log 
 
 #management center
-/ansys_inc/shared_files/licensing/lic_admin/anslic_admin
+  /ansys_inc/shared_files/licensing/lic_admin/anslic_admin
 
 #scripts to start and stop ansys
-/hpcsw/isv/Ansys/shared_files/licensing
+  /hpcsw/isv/Ansys/shared_files/licensing
+
+#check to see if ansys is running correctly
+ps -df | grep -i ansys
