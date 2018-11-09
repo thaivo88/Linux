@@ -1,46 +1,132 @@
-#Install aiy voice from aiy project with google: aiyprojects.withgoogle.com
-#create a project at https://console.developers.google.com/ enable API, search for google assistant
-#create credentials oAuth client
-#save key and rename it assistant then move it into pi directory
+# edit config file for audio
+  sudo nano /boot/config.txt
+  
+################################################### CODE for config ###################################33
+      # For more options and information see
+      # http://rpf.io/configtxt
+      # Some settings may impact device functionality. See link above for details
 
-#auto install everything
+      # uncomment if you get no picture on HDMI for a default "safe" mode
+      #hdmi_safe=1
+
+      # uncomment this if your display has a black border of unused pixels visible
+      # and your display can output without overscan
+      #disable_overscan=1
+
+      # uncomment the following to adjust overscan. Use positive numbers if console
+      # goes off screen, and negative if there is too much border
+      #overscan_left=16
+      #overscan_right=16
+      #overscan_top=16
+      #overscan_bottom=16
+
+      # uncomment to force a console size. By default it will be display's size minus
+      # overscan.
+      #framebuffer_width=1280
+      #framebuffer_height=720
+
+      # uncomment if hdmi display is not detected and composite is being output
+      #hdmi_force_hotplug=1
+
+      # uncomment to force a specific HDMI mode (this will force VGA)
+      #hdmi_group=1
+      #hdmi_mode=1
+
+      # uncomment to force a HDMI mode rather than DVI. This can make audio work in
+      # DMT (computer monitor) modes
+      #hdmi_drive=2
+
+      # uncomment to increase signal to HDMI, if you have interference, blanking, or
+      # no display
+      #config_hdmi_boost=4
+
+      # uncomment for composite PAL
+      #sdtv_mode=2
+
+      #uncomment to overclock the arm. 700 MHz is the default.
+      #arm_freq=800
+
+      # Uncomment some or all of these to enable the optional hardware interfaces
+      dtparam=i2c_arm=on
+      #dtparam=i2s=on
+      dtparam=spi=on
+
+      # Uncomment this to enable the lirc-rpi module
+      #dtoverlay=lirc-rpi
+
+      # Additional overlays and parameters are documented /boot/overlays/README
+
+      # Enable audio (loads snd_bcm2835)
+      dtparam=audio=on
+      # dtoverlay=dwc2
+      start_x=1
+      gpu_mem=128
+      # dtoverlay=googlevoicehat-soundcard
+      enable_uart=1
+      dtoverlay=w1-gpio
+####################################################################
+
+# uncomment below:
+      dtparam=audio=on
+      start_x=1
+      gpu_mem=128
+      enable_uart=1
+      dtoverlay=w1-gpio
+      
+########################################################
+
+# Install aiy voice from aiy project with google: aiyprojects.withgoogle.com
+# create a project at https://console.developers.google.com/ enable API, search for google assistant
+# create credentials oAuth client
+# save key and rename it assistant then move it into pi directory
+
+# auto install everything
   sudo curl -sL https://raw.githubusercontent.com/MichMich/MagicMirror/master/installers/raspberry.sh | bash
 
-#manually install
-  sudo git clone https://github.com/MichMich/MagicMirror
-  sudo apt-get install npm
-  cd MagicMirror
-  sudo npm install
-  sudo git pull && npm install
+                ##### manually install #####
+                sudo git clone https://github.com/MichMich/MagicMirror
+                sudo apt-get install npm
+                cd MagicMirror
+                sudo npm install
+                sudo git pull && npm install
   
-#create an account with openweathermap.org/api
-#copy the API key
+######################################
+
+# create an account with openweathermap.org/api
+# copy the API key
   cd MagicMirror/config
   sudo nano config.js
-#input your openweathermap key into appid=""
-#city id for houston: 4699066
+# input your openweathermap key into appid=""
+# city id for houston: 4699066
 
-#installing setup spotify module
+########################################
+
+# installing setup spotify module
   sudo git clone https://github.com/raywo/MMM-NowPlayingOnSpotify.git
   cd MMM-NowPlayingOnSpotify
   sudo npm install
 
-#The module provides you with a special app which describes all the necessary steps and which guides you through the whole process. 
-#To use this app change into the authorization folder and start the app by typing node app.
+# The module provides you with a special app which describes all the necessary steps and which guides you through the whole process. 
+# To use this app change into the authorization folder and start the app by typing node app.
   cd authorization
   sudo node app
 
-#When the app is running you can access it by opening localhost:8888 in your browser. 
-#Provided you are doing this directly on your Raspberry Pi. 
-#If you want to access the app remotely just type the ip address or the name of your Raspberry like so for instance: http://raspi:8888. 
-#Then you should see the authorisation app like below.
+########################################
 
-#Go to the module’s folder inside MagicMirror modules folder and pull the latest version from GitHub and install:
+# create a spotify developer project: developer.spotify.com/dashboard
+# copy the client ID and client Secret
+
+# When the app is running you can access it by opening localhost:8888 in your browser. 
+# Provided you are doing this directly on your Raspberry Pi. 
+# If you want to access the app remotely just type the ip address or the name of your Raspberry like so for instance: http://raspi:8888. 
+# Input your spotify client ID and client Secret
+
+# Go to the module’s folder inside MagicMirror modules folder and pull the latest version from GitHub and install:
   sudo git pull
   sudo npm install
 
-#edit the config.conf file with youre information
-#Here is an example for an entry in config.js
+# edit the config.conf file with you're information from the browser localhost:8888
+# Here is an example for an entry in config.js
 
 {
     module: "MMM-NowPlayingOnSpotify",
@@ -54,3 +140,56 @@
         refreshToken: "<YOUR_REFRESH_TOKEN>"
     }
 }
+
+# install raspotify which allow you to play music on your magic mirror and control with your phone
+  curl -sL https://dtcooper.github.io/raspotify/install.sh | sh
+  sudo nano /etc/default/raspotify
+  
+####################### CODE from raspotify #####################  
+      # /etc/default/raspotify -- Arguments/configuration for librespot
+
+      # Device name on Spotify Connect
+      #DEVICE_NAME="raspotify"
+
+      # Bitrate, one of 96 (low quality), 160 (default quality), or 320 (high quality)
+      #BITRATE="160"
+
+      # Additional command line arguments for librespot can be set below.
+      # See `librespot -h` for more info. Make sure whatever arguments you specify
+      # aren't already covered by other variables in this file. (See the daemon's
+      # config at `/lib/systemd/system/raspotify.service` for more technical details.)
+      #
+      # To make your device visible on Spotify Connect across the Internet add your
+      # username and password which can be set via "Set device password", on your
+      # account settings, use `--username` and `--password`.
+      #
+      # To choose a different output device (ie a USB audio dongle or HDMI audio out),
+      # use `--device` with something like `--device hw:0,1`. Your mileage may vary.
+      #
+      #OPTIONS="--username <USERNAME> --password <PASSWORD>"
+
+      # Uncomment to use a cache for downloaded audio files. Cache is disabled by
+      # default. It's best to leave this as-is if you want to use it, since
+      # permissions are properly set on the directory `/var/cache/raspotify'.
+      #CACHE_ARGS="--cache /var/cache/raspotify"
+
+      # By default, the volume normalization is enabled, add alternative volume
+      # arguments here if you'd like, but these should be fine.
+      #VOLUME_ARGS="--enable-volume-normalisation --linear-volume --initial-volume=100"
+
+      # Backend could be set to pipe here, but it's for very advanced use cases of
+      # librespot, so you shouldn't need to change this under normal circumstances.
+      #BACKEND_ARGS="--backend alsa"
+
+##################################################################
+
+# input your username and password by replacing <USERNAME> for username and <PASSWORD> for password.
+
+# to start your magicmirror
+# clt+q to quit
+  cd /home/pi/MagicMirror
+  npm start
+# this command with start your magicmirror
+# clt+q to quit but will reopen in 10sec unless you force close
+  pm2 start MagicMirror
+  pm2 stop MagicMirror
