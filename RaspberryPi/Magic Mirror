@@ -1,3 +1,8 @@
+#Install aiy voice from aiy project with google: aiyprojects.withgoogle.com
+#create a project at https://console.developers.google.com/ enable API, search for google assistant
+#create credentials oAuth client
+#save key and rename it assistant then move it into pi directory
+
 #auto install everything
   sudo curl -sL https://raw.githubusercontent.com/MichMich/MagicMirror/master/installers/raspberry.sh | bash
 
@@ -7,6 +12,13 @@
   cd MagicMirror
   sudo npm install
   sudo git pull && npm install
+  
+#create an account with openweathermap.org/api
+#copy the API key
+  cd MagicMirror/config
+  sudo nano config.js
+#input your openweathermap key into appid=""
+#city id for houston: 4699066
 
 #installing setup spotify module
   sudo git clone https://github.com/raywo/MMM-NowPlayingOnSpotify.git
