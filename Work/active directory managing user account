@@ -1,23 +1,23 @@
-#Active Directory; Managing User Account
+######### Active Directory: Managing User Account ########
 
-#Partner Lab Environment System
-#hpcgate     SLURM for HPC Partner Lab  UNIX
-#plabgate1   Partner Lab gateserver     WIN
+## Partner Lab Environment System: ##
+# hpcgate     SLURM for HPC Partner Lab  UNIX
+# plabgate1   Partner Lab gateserver     WIN
 
-#HPC Lab Environment System
-#hpchost1    SLURM for HPCHOST NIS      UNIX
-#hpcg3       Accelerators gateserver    WIN
-#hpcg4       Cluster Test gateserver    WIN
-#hpcg5       Fabrics, CLuster Stack & Setuip Tools gateserver   WIN
-#hpcg6       Benchmarkers, CMU sinssand Other gateserver        WIN
+### HPC Lab Environment System ###
+# hpchost1    SLURM for HPCHOST NIS      UNIX
+# hpcg3       Accelerators gateserver    WIN
+# hpcg4       Cluster Test gateserver    WIN
+# hpcg5       Fabrics, CLuster Stack & Setuip Tools gateserver   WIN
+# hpcg6       Benchmarkers, CMU sinssand Other gateserver        WIN
 
-#mops; HPCDAdmin email address == System Admin
-#When someone request an account for any environment above, an email will be sent to mops when they fill out the request form.
-#In that request email a command will be posted, copy and paste into that given Unix environment
+# mops; HPCDAdmin email address == System Admin
+# When someone request an account for any environment above, an email will be sent to mops when they fill out the request form.
+# In that request email a command will be posted, copy and paste into that given Unix environment
 
-#Command structure:
-#/admin/cronjobs/BuildAccount -a [yes/no] -e [email] -n [environment] -i [employee ID] -l "[location]" -r "[name]" -R "[requestor]" -m "[manager]" -t [employee type] -u [username] 
-#option def:
+# Command structure:
+# /admin/cronjobs/BuildAccount -a [yes/no] -e [email] -n [environment] -i [employee ID] -l "[location]" -r "[name]" -R "[requestor]" -m "[manager]" -t [employee type] -u [username] 
+# option def:
      d) set
      D) debug
      a) agree
@@ -31,24 +31,24 @@
      R) requestor
      t) employee type: contractor contingency | employee | external
      u) username
-#All scripts to manage users: /admin/cronjobs/
+# Scripts directory to manage users: /admin/cronjobs/
 
-----------------------------------------------------------------
+##########################################################################
 
-#To check Expire Remaining days to all users
-  cd /admin/crontjobs/
-  ./printuserdays
-######example output:#####
+# To check Expire Remaining days to all users
+     > cd /admin/crontjobs/
+     > ./printuserdays
+###### Example output: #####
 #USER: voth           EXPIRE: 180  REMAINING: 115
 #USER: thvo           EXPIRE: 180  REMAINING: -115
 #User thvo has been unactive for 115 days since their password expire, email user before deleting user. (sometime the system doesn't update the Remaining day)
 
-#to search a user username or if they have an account
-  ypcat passwd | grep [username|name]
-#example
-  ypcat passwd | grep voth
-#####output:#####
-voth:SIS.5HAX3Q.pU:30501:100:Thai Vo, HOUSTON:/usr6/voth:/bin/bash
+# To search a user username or if they have an account
+     > ypcat passwd | grep [username|name]
+# Example
+     > ypcat passwd | grep voth
+##### Output: #####
+     > voth:SIS.5HAX3Q.pU:30501:100:Thai Vo, HOUSTON:/usr6/voth:/bin/bash
 
 
 
