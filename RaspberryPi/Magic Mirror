@@ -200,6 +200,16 @@
 # input your username and password by replacing <USERNAME> for username and <PASSWORD> for password.
 ###########################################################################
 ###########################################################################
+######################### Install Alexa #########################
+# Install the MMM-Alexa module in your Magic Mirror installation
+# Clone this repository with:
+  sudo git clone https://github.com/boghammar/MMM-AlexaSkill.git
+# Install dependencies by: 
+  cd MMM-AlexaSkill 
+#  and then 
+  sudo npm install
+
+###########################################################################
 ######################### Control Magic Mirror #########################
 # to start your magicmirror
 # clt+q to quit
