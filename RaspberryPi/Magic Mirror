@@ -1,7 +1,12 @@
+######################### Set up Google OS | Raspberry Pi #########################
+# head to: https://aiyprojects.withgoogle.com/voice/#meet-your-kit
+# check your kit version: click the link for earlier verison
+# get voice kit sdk (https://dl.google.com/dl/aiyprojects/aiyprojects-latest.img.xz)
+######################### Set up Audio #########################
 # edit config file for audio
   sudo nano /boot/config.txt
   
-################################################### CODE for config ###################################33
+######################### CODE for config #########################
       # For more options and information see
       # http://rpf.io/configtxt
       # Some settings may impact device functionality. See link above for details
@@ -64,7 +69,7 @@
       # dtoverlay=googlevoicehat-soundcard
       enable_uart=1
       dtoverlay=w1-gpio
-####################################################################
+######################### End of Code for config #########################
 
 # uncomment below:
       dtparam=audio=on
@@ -73,14 +78,23 @@
       enable_uart=1
       dtoverlay=w1-gpio
       
-########################################################
-
+###########################################################################
+###########################################################################
+######################### Set up Google API #########################
 # Install aiy voice from aiy project with google: aiyprojects.withgoogle.com
+# scroll down to older version, click the link then search for active control
+# enable:
+#   -voice and audio
+#   -web & App Activity
+#   -device information
 # create a project at https://console.developers.google.com/ enable API, search for google assistant
 # create credentials oAuth client
 # save key and rename it assistant then move it into pi directory
 
-# auto install everything
+###########################################################################
+###########################################################################
+######################### Set up Magic Mirror #########################
+# auto install Magic Mirror
   sudo curl -sL https://raw.githubusercontent.com/MichMich/MagicMirror/master/installers/raspberry.sh | bash
 
                 ##### manually install #####
@@ -90,8 +104,8 @@
                 sudo npm install
                 sudo git pull && npm install
   
-######################################
-
+###########################################################################
+######################### Set up weather forcast #########################
 # create an account with openweathermap.org/api
 # copy the API key
   cd MagicMirror/config
@@ -99,8 +113,8 @@
 # input your openweathermap key into appid=""
 # city id for houston: 4699066
 
-########################################
-
+###########################################################################
+######################### Set up Spotify #########################
 # installing setup spotify module
   sudo git clone https://github.com/raywo/MMM-NowPlayingOnSpotify.git
   cd MMM-NowPlayingOnSpotify
@@ -127,7 +141,7 @@
 
 # edit the config.conf file with you're information from the browser localhost:8888
 # Here is an example for an entry in config.js
-
+######################### code generated from localhost:8888 #########################
 {
     module: "MMM-NowPlayingOnSpotify",
     position: "top_right",
@@ -140,12 +154,13 @@
         refreshToken: "<YOUR_REFRESH_TOKEN>"
     }
 }
+######################### End of code #########################
 
 # install raspotify which allow you to play music on your magic mirror and control with your phone
   curl -sL https://dtcooper.github.io/raspotify/install.sh | sh
   sudo nano /etc/default/raspotify
   
-####################### CODE from raspotify #####################  
+######################### CODE from raspotify #########################  
       # /etc/default/raspotify -- Arguments/configuration for librespot
 
       # Device name on Spotify Connect
@@ -180,11 +195,12 @@
       # Backend could be set to pipe here, but it's for very advanced use cases of
       # librespot, so you shouldn't need to change this under normal circumstances.
       #BACKEND_ARGS="--backend alsa"
-
-##################################################################
+######################### end of raspotify code #########################
 
 # input your username and password by replacing <USERNAME> for username and <PASSWORD> for password.
-
+###########################################################################
+###########################################################################
+######################### Control Magic Mirror #########################
 # to start your magicmirror
 # clt+q to quit
   cd /home/pi/MagicMirror
