@@ -52,3 +52,9 @@
 
 
 
+
+/etc/group
+/etc/gshadow
+/etc/aliases
+/etc/netgroup
+
