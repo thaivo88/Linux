@@ -1,0 +1,21 @@
+# set root ssh keys
+/bin/echo "Configuring root ssh keys"
+/bin/mkdir -p /root/.ssh
+/usr/bin/ssh-keygen -q -t rsa -N '' -f /root/.ssh/id_rsa
+/bin/cat >> /root/.ssh/authorized_keys <<EOF
+#REPLACE WITH CORRECT ssh-rsa key from head node here
+#for example
+#ssh-rsa xxxxxxxxxxxxxxxxxxxxxxxxx root@link.ccc.xx.com
+
+EOF	
+	
+/bin/cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
+/bin/chmod go-rwx /root/.ssh/authorized_keys
+/bin/ln -s /apps/.ssh/authorized_keys2 /root/.ssh/authorized_keys2
+	
+#	
+# update /etc/passwd, /etc/group 
+/bin/echo "Modifying /etc/passwd & /etc/group"
+/bin/echo "+::::::/bin/false" >> /etc/passwd
+/bin/cp -f /etc/passwd /etc/passwd.sav
+/bin/echo "+" >> /etc/group
