@@ -1,3 +1,6 @@
+#ssh debug
+  ssh -v [node]
+
 #For a list of users type:
   cat /etc/passwd
 
