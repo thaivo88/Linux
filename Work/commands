@@ -1,5 +1,9 @@
+#broadcast message to computing nodes
+  wall
+  [message]
+
 #ssh debug
-  ssh -v [node]
+  ssh -vv [node]
 
 #For a list of users type:
   cat /etc/passwd
