@@ -1,0 +1,14 @@
+systemctl status nfs-server.service
+systemctl restart nfs-config
+
+cat /var/logs/message | grep NFS
+#reads any error message filtering NFS
+
+cat /etc/fstab
+# List of NFS  Mounts
+#
+#hpcgate-ib:/apps /apps nfs rsize=131072,wsize=131072,intr,bg,vers=3 0 0
+#hpcgate-ib:/home /home nfs rsize=131072,wsize=131072,intr,bg,vers=3 0 0
+#hpcgate-ib:/mops /mops nfs rsize=131072,wsize=131072,intr,vers=3 0 0
+#hpcgate-ib:/ml /ml nfs rsize=131072,wsize=131072,intr,bg,vers=3 0 0
+#hpcgate-ib:/scratch /scratch nfs rsize=131072,wsize=131072,intr,bg,vers=3 0 0
