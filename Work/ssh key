@@ -19,3 +19,10 @@ EOF
 /bin/echo "+::::::/bin/false" >> /etc/passwd
 /bin/cp -f /etc/passwd /etc/passwd.sav
 /bin/echo "+" >> /etc/group
+
+#############################################
+#/home/[username]/.ssh/known_hosts. You can delete the fingerprint automatically by running:
+	ssh-keygen -R hostname
+#Make sure you replace hostname with your droplet's IP address or domain name (whichever you use to ssh in).
+#list of all rsa key
+ cat /root/.ssh/authorized_keys
