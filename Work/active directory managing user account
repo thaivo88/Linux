@@ -58,3 +58,5 @@
 /etc/aliases
 /etc/netgroup
 
+#both rsa key should look the same
+(ypcat passwd | grep $USER) = (getent shadow $USER)
