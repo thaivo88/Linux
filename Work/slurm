@@ -55,3 +55,36 @@ is used to set, get or view event triggers. Event triggers include things such a
 
 sview 
 is a graphical user interface to get and update state information for jobs, partitions, and nodes managed by Slurm.
+
+
+
+hpcgate
+slurm
+The path has:
+/opt/slurm/custom
+/opt/slurm/bin
+/opt/slurm/sbin
+/apps/slurm/custom
+/apps/slurm/bin
+/apps/slurm/sbin 
+But /opt/slurm/custom -> /apps/slurm/custom
+
+##############################
+cat /etc/profile.d/slurm
+
+#OG:
+[root@hpcgate opt]# cat /etc/profile.d/slurm.sh
+# SLURM initialization script (sh)
+if [ -e /optlocal/slurm/custom/slurm.sh ]
+then
+  . /optlocal/slurm/custom/slurm.sh
+fi
+
+#NEW:
+# SLURM initialization script (sh)
+if [ -e /optlocal/aislurm/custom/slurm.sh ]
+then
+  . /optlocal/aislurm/custom/slurm.sh
+fi
+############################
+
