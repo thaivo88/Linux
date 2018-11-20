@@ -1,0 +1,8 @@
+ls /yum-repo/
+#finding the correct baseurl file
+
+cd /etc/yum.repos.d/
+nano local.repo
+#comment out baseurl
+#add new baseurl
+baseurl=file:///yum-repo/RH7.5_x86_64
