@@ -17,3 +17,9 @@ vi daemon.json
 
 #other commands
  systemctl stop docker.service
+
+docker pull nvcr.io/nvidia/tensorflow-18.09-py3
+docker images
+nvidia-docker run -ti --rm nvcr.io/nvidia/tensorflow-18.09-py3 /bin/bash
+#ti terminal interactive rm remove the container instaint
+exit
