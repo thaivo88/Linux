@@ -1,0 +1,21 @@
+#mdadm is a Linux utility used to manage and monitor software RAID devices
+
+####### nodes not connecting mounting point: /dev/md0 #########
+#Accessible filesystems at /etc/fstab
+#check filesystem for /dev/md0
+  cat /etc/fstab
+#check the status of management device (md)
+  cat /proc/mdstat
+#stop management device admin at device id: md0
+  mdadm --stop /dev/md0
+##check the status of management device (md) again
+  cat /proc/mdstat
+#management device admin create raid 0 on device id called md0 at device sda5 partition
+  mdadm --create --verbose /dev/md0 --level=0 --raid-devices=2 /dev/sda5 /dev/sdb5
+#scanning and copying the detail information from management device admin into mdadm.conf file
+  mdadm --detail --scan > /etc/mdadm.conf
+#build the NFS point md0
+  mdadm --assemble /dev/md0
+#making file system into xfs for device md0
+  mkfs.xfs -f /dev/md0
+  reboot
