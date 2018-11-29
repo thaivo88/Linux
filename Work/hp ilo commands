@@ -1,3 +1,5 @@
+//connect to ilo cli
+
 //to show LED status
 show /system1/led1
 
