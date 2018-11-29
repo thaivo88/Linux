@@ -1,5 +1,0 @@
-# when slurm isnt working correctly, the passwd from hpcgate doesnt get generated into the nodes
-# copy the user info from hpcgate at /etc/passwd 
-  ypcat passwd | grep [username]
-#paste it into the node they need access to
- vi /etc/passwd
