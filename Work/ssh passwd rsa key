@@ -26,3 +26,10 @@ EOF
 #Make sure you replace hostname with your droplet's IP address or domain name (whichever you use to ssh in).
 #list of all rsa key
  cat /root/.ssh/authorized_keys
+ 
+############################################
+# when slurm isnt working correctly, the passwd from hpcgate doesnt get generated into the nodes
+# copy the user info from hpcgate at /etc/passwd 
+  ypcat passwd | grep [username]
+#paste it into the node they need access to
+ vi /etc/passwd
