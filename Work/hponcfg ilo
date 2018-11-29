@@ -1,0 +1,35 @@
+hponcfg -?
+hponcfg -h
+hponcfg -m minFw
+hponcfg -r [-m minFw ]
+hponcfg [—a] w filename [-m minFw]
+hponcfg -g [-m minFw]
+hponcfg -f filename [-l filename] [-s namevaluepair] [-v] [-m minFw]
+hponcfg -i [-l filename] [-s namevaluepair] [-v] [-m minFw]
+
+Display the help page
+-h | --help | –?
+Reset the Management Processor to factory default values
+-r | --reset
+Reboots the Management Processor without changing any settings.
+-b | --reboot
+Sets and receives the Management Processor configuration from the information given in the XML input file that has name filename
+-f filename | --file filename
+Sets and receives Management Processor configuration from XML input received through the standard input stream 
+-i filename | --input filename
+Writes the Management Processor configuration obtained from the device to the XML output file named filename
+-w filename | --writeconfig filename
+Capture the complete configuration of the Management Processor to a file. Must be used with -w command line parameter.
+-a |  --all
+Logs replies to the text log file that has name filename
+-l filename | --log filename
+Display all the responses from the Management Processor.
+-v | --xmlverbose
+Substitutes variables present in the input config file with values specified in
+namevaluepair
+-s namevaluepair | --substitute namevaluepair
+Receives the host information. Returns the server name and server serial number
+-g | --get_hostinfo
+Indicates the minimum firmware level that should be present in the management device to execute the RIBCL script. 
+If at least this level of firmware is not present, HPONCFG returns an error without performing any additional action
+-m |  --minfwlevel
