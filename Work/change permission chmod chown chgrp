@@ -1,0 +1,27 @@
+#Chown is used to change the owner (or user subject). Its syntax is:
+  chown [OWNER] [FILE]
+  chown [OWNER:GROUP] [FILE]
+#chgrp changes file’s group. 
+  chgrp [GROUP] [FILE]
+  
+#chmod is used to change the permissions of the three subjects: user;group;others
+  chmod [PERMISSION] [FILE]
+  chmod 754 
+#     permissions: 
+#     [r w x] or [4 2 1]
+#     chmod: change mode
+#     4 stands for "read",
+#     2 stands for "write",
+#     1 stands for "execute", and
+#     0 stands for "no permission."
+#    
+#     the user can read, write, and execute it;
+#     members of your group can read and execute it; 
+#     and others may only read it.
+#     using above number 754
+#     7 = (4: read) + (2: write) + (1: execute)
+#     5 = (4: read) + (1: execute)
+#     4 = (4: read)
+
+
+
