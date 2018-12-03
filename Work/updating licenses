@@ -1,4 +1,9 @@
+#updating licenses
 #When updating license make a back copy incase
+
+###########################################
+Ansys License
+ansys pwd: /hpcsw/isv/Ansys /shared_files/licensing/license_files/license-ansys_hybrid_05312018_112447_831_AM.txt
 #the process is stop the current license server
 #modify the license file after you make a copy.
 #then start the license server with the command
@@ -14,3 +19,16 @@
 
 #check to see if ansys is running correctly
 ps -df | grep -i ansys
+
+
+#############################################
+Abaquslm License
+Abaquslm pwd: /hpcsw/isv/abaqus/abaqus_licensing_FlexLM/
+#copy and paste new license into the old file after making a backup of the old license
+
+#############################################
+pam_lmd
+ansyslmd
+lstc
+abaqus
+cadence command to restart cd /apps/cadence/licensing && ./tools/bin/lmutil lmreread -c license.dat
