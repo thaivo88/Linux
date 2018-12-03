@@ -1,0 +1,22 @@
+#Nproc is defined at OS level to limit the number of processes per user
+#Changing nproc limitl
+
+vi|cat /etc/security/limits.conf
+############################################
+#<domain>      <type>  <item>         <value>
+#*               soft    core            0
+#*               hard    rss             10000
+#@student        hard    nproc           20
+#@faculty        soft    nproc           20
+#@faculty        hard    nproc           50
+#ftp             hard    nproc           0
+#@student        -       maxlogins       4
+#@users          hard    nproc           100000
+
+# End of file
+*   soft   memlock  unlimited
+*   hard   memlock  unlimited
+*   soft   stack  unlimited
+*   hard   stack  unlimited
+*   soft   nofile 51200
+*   hard   nofile 51200
