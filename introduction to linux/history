@@ -1,0 +1,11 @@
+history command
+ctrl+P [up] and ctrl+N [down]
+ctrl+R [backware search]
+ctrl+S [search] causes your terminal to hang, press ctrl+Q [quit] use (stty -ixon) command to stop hang before using ctrl+s
+ctrl+G to terminate search
+ctrl+A [move cursor to the start] ctrl+E [move to the end]
+ctrl+B [move backward within a line] ctrl+F [forward]
+ctrl+D [delete character under the cursor]
+ctrl+T [transposes: move the character before the cursor]
+ESC + U [change characters to uppercase]
+ctrl+X or ctrl+E invoke and editor
