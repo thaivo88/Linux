@@ -1,0 +1,7 @@
+environment variables are like programming variables
+The variables only stays per login session unless you export the variable: using export syntax
+example: PS1="MY NEW PROMPT: " 
+MY NEW PROMPT$
+you can remove the variable using the unset syntax
+unset PS1
+To see all the variables use the env syntax
