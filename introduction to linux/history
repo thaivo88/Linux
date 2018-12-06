@@ -1,4 +1,6 @@
 history command
+stored in the .bash_history file in your home direcotry
+
 ctrl+P [up] and ctrl+N [down]
 ctrl+R [backware search]
 ctrl+S [search] causes your terminal to hang, press ctrl+Q [quit] use (stty -ixon) command to stop hang before using ctrl+s
@@ -9,3 +11,7 @@ ctrl+D [delete character under the cursor]
 ctrl+T [transposes: move the character before the cursor]
 ESC + U [change characters to uppercase]
 ctrl+X or ctrl+E invoke and editor
+!! [retrieve the last command and execute it]
+![number] example !35 (will execute the 35 command in the history log list)
+
+
