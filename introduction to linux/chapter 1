@@ -1,0 +1,61 @@
+5 key functions in a computer system:
+  1     application platform
+  2     hardware moderator
+  3     data storage
+  4     security
+  5     connectivity
+
+Linux OS is composed of the following componets:
+  -The Linux Kernel: Fullfills the key operating system
+  -Libraries: Prewritten code elements that application programmers can use in their programs
+  -Utilities: Wide variety of utilities to maintain the OS
+  -GUI (Graphical User Interface)
+  
+When a computer start up it loads a small code called the bootloader.
+The bootloader's job is to load the Kernel and get it started than transfer control.
+  Power on PC > Bootloader Code > Linux Kernel > Linux OS
+  
+Bash - A command-line interface
+gcc - A C++ compiler (GNU C Compiler)
+
+Software developed under GNU is referred to as free software
+A variation on free software concept is called open source software
+
+GPL (GNU General Public Licence)
+
+Before deploying a Linux Distro you need to conduct a Need Assessment
+A Need Assessment is a process of determining why the deployment is being undertaken, what outcomes are expected, and when it is expected to be completed.
+  -What are the goals of the deployment?
+  -Who are the stakeholders?
+  -When is the system needed?
+  
+Afer gathering your Need Assessment you can define your installiation plan:
+  -The project scope
+  -What to do
+  -When to do it
+  -Who will do it
+  
+HCL (Hardware Compatibility list)
+
+Linux OS roles:
+  -Using Linux on the Desktop
+  -Using Linux on the Server
+  -Embedding Linux in Firmware
+  -Using Linux for Virtualization
+  -Using Linux with Cloud Computing
+  
+Linux can assume a variety of server roles:
+  -File Server: NFS (Network File System) or Samba Services.
+      -Config to provide network storage of user's files
+      -NFS is great for Linux & Unix
+      -Samba is for Window Client system
+      -Using Samba on a Linux can be config as a functional window domain controller.
+  -Print Server: Using Common Unix Printing System (CUPS) and Samba Services together
+      -Linux can be config to provide shared printing for network users.
+  -Database Server: Config as a powerful database server
+  -Web Server
+  -E-Mail Server
+  -Virtualization: A pool of multiple OS instance onto the same physical hardware and allows them to run concurrently.
+      -Uses a Mediator called a Hypervisor to manage access to system resources.
+      -Each OS instence is installed into a virtual machine instead of onto a phyiscal hardware.
+ <img src="https://www.cloudpassage.com/wp-content/uploads/sites/2/2011/07/virtualization1.png">
