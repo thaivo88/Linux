@@ -68,4 +68,36 @@ Different type of source of commands:
   When the current task has run a sufficient amount of time, the CPU pause the task so that another may run. This is called Pre-emptive Multitasking.
     -Pre-emptive Multitasking means that the kernel is deciding when to switch focus between task.
     
+  Boot Menu is managed by the GRUB or GRUB2 bootloader; on older distro use the LILO bootloader.
+    config boot menu display: 
+        /etc/grub.conf
+        /etc/grub/menu.lst
+        
+ Linux are config to boot into a graphical environment called runlevel5
+    Runlevel3 : text base environment CLI
+    Runlevel5 : Graphical environment GUi
+        To switch environment use the command:
+            init[runlevel_number]
+            example: init 3
+            switches from GUI to CLI
   
+  Command to shut system down
+      init 0 : switch the system to runlevel0 ; which halts the system
+      init 6 : switch to runlevel6 ; reboot the system
+      halt : shutdown the system
+      reboot : reboot the system
+      shutdown : shutdown the system
+          shutdown +m -h|-r message
+            +m option specifies the amount of time (in minutes) before shutting down or replace it with a time hh:mm
+            -h|-r option = halt | reboot
+            example: shutdown 12:00 -r please save all work, system shut down at noon
+            shutdown -c (cancel shutdown)
+      
+ Runlevel = init
+      init 0 = runlevel0 : halts
+      init 1 = runlevel1 : single-user mode (mode for administrative task)
+      init 2 = runlevel2 : multi-user mode (does not config network interface and does not export networks services)
+      init 3 = runlevel3 : text base environment CLI
+      init 4 = runlevel4 : not used/user-definable (for special purpose)
+      init 5 = runlevel5 : graphical environemnt GUI
+      init 6 = runlevel6 : reboot
