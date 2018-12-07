@@ -1,0 +1,29 @@
+man command is short for manual. if you want to learn more about the shell commands you would type man [command]
+to quit press Q
+default the manual is displayed using less pager
+ues the -P option to use more pager
+use the -K option if you can't remember the exact name of the command: man -k [keyword/command]
+if you get no resuts from a man utility keyword search, its most likely due to a missing whatis database.
+The whatis database contains a short description of each man page.
+to create it or update it, type makewhatis at the prompt.
+
+man is organized into several sections
+1     exectable programs and shell commands
+2     system calls provided by the kernel
+3     library calls provided by program libraries
+4     device files (usually stored in /dev)
+5     file formats
+6     games
+7     miscellaneous (macro packages, coventions, and so on)
+8     system administration commands (programs run mostly or exclusively)
+9     kernal routines
+
+some commands are in multiple sections; man returns the entry in the lowest-numbered section
+man [number of section] [command] ; man 5 passwd (return file formats manual instead of exectable programs; passwd is listed in section 1 and 5)
+
+some programs are moving away from man pages to info pages
+info pagges use hypertext format (info pages is the same as that for man pages)
+info [command]
+
+help is another reference tool for built-in commands
+help [command]

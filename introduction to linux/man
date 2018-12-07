@@ -1,8 +1,0 @@
-man command is short for manual. if you want to learn more about the shell commands you would type man [command]
-to quit press Q
-default the manual is displayed using less pager
-ues the -P option to use more pager
-use the -K option if you can't remember the exact name of the command: man -k [keyword/command]
-if you get no resuts from a man utility keyword search, its most likely due to a missing whatis database.
-The whatis database contains a short description of each man page.
-to create it or update it, type makewhatis at the prompt.
