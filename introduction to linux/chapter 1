@@ -58,4 +58,4 @@ Linux can assume a variety of server roles:
   -Virtualization: A pool of multiple OS instance onto the same physical hardware and allows them to run concurrently.
       -Uses a Mediator called a Hypervisor to manage access to system resources.
       -Each OS instence is installed into a virtual machine instead of onto a phyiscal hardware.
- <img src="https://www.cloudpassage.com/wp-content/uploads/sites/2/2011/07/virtualization1.png">
+![alt text](https://www.cloudpassage.com/wp-content/uploads/sites/2/2011/07/virtualization1.png)
