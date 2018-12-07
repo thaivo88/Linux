@@ -58,4 +58,14 @@ Linux can assume a variety of server roles:
   -Virtualization: A pool of multiple OS instance onto the same physical hardware and allows them to run concurrently.
       -Uses a Mediator called a Hypervisor to manage access to system resources.
       -Each OS instence is installed into a virtual machine instead of onto a phyiscal hardware.
-![alt text](https://www.cloudpassage.com/wp-content/uploads/sites/2/2011/07/virtualization1.png)
+
+Different type of source of commands:
+  -Commands built-in to the shell itself
+  -Commands that are stored in files that are searched by the shell
+  -Aliases: using aliases to shortcut a command
+  -Function
+  
+  When the current task has run a sufficient amount of time, the CPU pause the task so that another may run. This is called Pre-emptive Multitasking.
+    -Pre-emptive Multitasking means that the kernel is deciding when to switch focus between task.
+    
+  
