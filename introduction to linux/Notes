@@ -101,3 +101,28 @@ Different type of source of commands:
       init 4 = runlevel4 : not used/user-definable (for special purpose)
       init 5 = runlevel5 : graphical environemnt GUI
       init 6 = runlevel6 : reboot
+
+Linux GUI is modular: its composed of several different pieces that work together.
+    -X Server : is the component that draws windows graphically on the display. It also is responsible for managing your mouse and keyboard.
+        2 Different X Server:
+            -X.org-X11 : default used by modern linux distro.
+            -XFree86 : up until 2004 was the default X Server but licensing issue drive Linux commiunity to adopt X.org-X11.
+                X Window : client
+                X Server : server
+                  Config file:
+                      /etc/X11/xorg.conf
+                      /etc/X11/XF86Config
+    -Window Manager : While X Server creates window within the GUI, Window Manager's job is to customize how the window look and behave.
+        Different Window Managers:
+            -TWM (Tab Window Manager) [basic]
+            -WMaker (Window Maker) [basic]
+            -FVWM (F virtual Window Manager) [basic]
+            -Enlightenment (GNOME desktop environment) [complex]
+            -KWIN (KDE) [complex]
+            -Sawfish (GNOME) [complex]
+   -Desktop Environment : (modular) leverages the look and feel, created by the Window Manager and adds a series of tools and utilities. 
+     (Desktop Environment is optional but recommended)
+        -Different Desktop Environments:
+            -KDE
+            -GNOME
+            
