@@ -1,1 +1,14 @@
-
+Standard Bash Files Descriptors:
+  -Stdin: standard input represended by a 0
+  -Stdout: standard output represented by a 1
+  -Stderr: standard error represented by a 2
+  __________________________________________________
+  |                            >> output (stdout 1)  |
+  |input (stdin 0) >> command <                      |
+  |                            >> error (stderr 1)   |
+  |__________________________________________________|
+  
+  Stdout and Stderr send to the same output device but sometime you may want to redirect Stderr into a text file to log all error message.
+  
+  Redirecting Input and Output
+  
