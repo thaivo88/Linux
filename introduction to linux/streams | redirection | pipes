@@ -21,7 +21,9 @@ Redirection operator
     &>    Creates a new file containing both standard output and standard error. If file exists it will be overwritten.
     <     Sends the contents of the specified file to be used as standard input.
     <<    Add text on the following lines as standard input.
+              Called the "home document" commonly used in a script to pass data to an interactive program.
     <>    Causes the specified file to be used for both standard input and standard output.
+    
     
 Example:  (you can use the descriptors or without)
     Without Descriptor              With Descriptor
