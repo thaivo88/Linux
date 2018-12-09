@@ -4,11 +4,29 @@ Standard Bash Files Descriptors:
   -Stderr: standard error represented by a 2
   __________________________________________________
   |                            >> output (stdout 1)  |
-  |input (stdin 0) >> command <                      |
+  |input (stdin 0) >> command =                      |
   |                            >> error (stderr 1)   |
   |__________________________________________________|
   
   Stdout and Stderr send to the same output device but sometime you may want to redirect Stderr into a text file to log all error message.
   
-  Redirecting Input and Output
+Redirecting Input and Output
+  Using > you can redirect the output into a file instead on the screen.
   
+Redirection operator 
+    >     Creates a new file containing standard output. If file exists it will be overwritten.
+    >>    Add standard output to the exisiting file. If file doesn't exists it will create one.
+    2>    Creates a new file containing standard error. If file exists it will be overwritten.
+    2>>   Add standard error to the exisiting file. If file doesn't exists it will create one.
+    &>    Creates a new file containing both standard output and standard error. If file exists it will be overwritten.
+    <     Sends the contents of the specified file to be used as standard input.
+    <<    Add text on the following lines as standard input.
+    <>    Causes the specified file to be used for both standard input and standard output.
+    
+Example:  (you can use the descriptors or without)
+    Without Descriptor              With Descriptor
+    $ echo pwd > path.txt           $ echo pwd 1> path.txt
+    $ cat path.txt                  $ cat path.txt
+    /home/thai/Documents            /home/thai/Documents
+    
+    
