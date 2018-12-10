@@ -1,0 +1,44 @@
+#Run level 0 is matched by poweroff.target (and runlevel0.target is a symbolic link to poweroff.target).
+#Run level 1 is matched by rescue.target (and runlevel1.target is a symbolic link to rescue.target).
+#Run level 3 is emulated by multi-user.target (and runlevel3.target is a symbolic link to multi-user.target).
+#Run level 5 is emulated by graphical.target (and runlevel5.target is a symbolic link to graphical.target).
+3Run level 6 is emulated by reboot.target (and runlevel6.target is a symbolic link to reboot.target).
+#Emergency is matched by emergency.target.
+
+#To view the default target, type the command below.
+  systemctl get-default 
+#To set the default target, run the command below.
+  systemctl set-default multi-user.target 
+#To switch to runlevel 3, run the following command.
+  systemctl isolate multi-user.target 
+#To change the system to runlevel 5, type the command below.
+  systemctl isolate graphical.target
+  
+#  Linux are config to boot into a graphical environment called runlevel5
+#    Runlevel3 : text base environment CLI
+#    Runlevel5 : Graphical environment GUi
+#        To switch environment use the command:
+            init[runlevel_number]
+#            example: init 3
+#            switches from GUI to CLI
+  
+#  Command to shut system down
+#      init 0 : switch the system to runlevel0 ; which halts the system
+#      init 6 : switch to runlevel6 ; reboot the system
+#      halt : shutdown the system
+#      reboot : reboot the system
+#      shutdown : shutdown the system
+#          shutdown +m -h|-r message
+#            +m option specifies the amount of time (in minutes) before shutting down or replace it with a time hh:mm
+#            -h|-r option = halt | reboot
+#            example: shutdown 12:00 -r please save all work, system shut down at noon
+#            shutdown -c (cancel shutdown)
+      
+# Runlevel = init
+#      init 0 = runlevel0 : halts
+#      init 1 = runlevel1 : single-user mode (mode for administrative task)
+#      init 2 = runlevel2 : multi-user mode (does not config network interface and does not export networks services)
+#      init 3 = runlevel3 : text base environment CLI
+#      init 4 = runlevel4 : not used/user-definable (for special purpose)
+#      init 5 = runlevel5 : graphical environemnt GUI
+#      init 6 = runlevel6 : reboot
