@@ -1,0 +1,3 @@
+# list all attached disk and their UUID
+  cd /dev/disk/by-uuid/
+  ll
