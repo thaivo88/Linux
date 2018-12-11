@@ -11,6 +11,12 @@
 #command to see gpu location
   nvidia-smi
 
+#locate serial number for GPU
+  nvidia-smi -q | grep Serial
+  
+#get bios info
+  nvidia-smi -q | grep vbios
+
 #shorter list
   nvidia-smi -L
 
