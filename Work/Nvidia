@@ -8,6 +8,9 @@
 #15:00.0 - slot 6
 #16:00.0 - slot 8
 
+#show cuda version
+  cat /usr/local/cuda/version.txt 
+
 #command to see gpu location
   nvidia-smi
 
