@@ -5,7 +5,7 @@ Standard Bash Files Descriptors:
   __________________________________________________
   |                            >> output (stdout 1)  |
   |input (stdin 0) >> command =                      |
-  |                            >> error (stderr 1)   |
+  |                            >> error (stderr 2)   |
   |__________________________________________________|
   
   Stdout and Stderr send to the same output device but sometime you may want to redirect Stderr into a text file to log all error message.
