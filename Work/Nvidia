@@ -11,6 +11,9 @@
 #command to see gpu location
   nvidia-smi
 
+nvidia-smi -q | grep Driver
+#show driver version
+
 #locate serial number for GPU
   nvidia-smi -q | grep Serial
   
@@ -19,6 +22,13 @@
 
 #shorter list
   nvidia-smi -L
+  
+#list all nvidia processes
+  lsof /dev/nvidia*
+# OR
+  top | grep nvidia
+#kill process
+  kill -9 [PID]
   
 #nvidia persistenced
   systemctl status nvidia-persistenced
@@ -29,8 +39,17 @@
 #checking zeusn nodes GPU count Nvidia Tesla V100 SXM2 
  sudo /admin/nodes/scripts/gpuCount
 
-nvidia-smi -q | grep Driver
-#show driver version
+#list all rpm that are installed
+  rpm -qa | grep nvidia
+  
+#unloading nvidia module   
+  rmmod nvidia-drm
+  rmmod nvidia-modeset
+  rmmod nvidia-uvm
+  rmmod nvidia-nvidia
+  
+#quitting nvidia cuda
+  nvidia-cuda-mps-control -quit
 
 #install nvidia tensorflow
 docker pull nvcr.io/nvidia/tensorflow-18.09-py3
