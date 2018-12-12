@@ -1,9 +1,12 @@
-#systemctl start|restart|status docker.service (docker daemon)
-#which nvidia-docker
-#nvidia-docker  --version
-#docker info
-#nvidia-docker verison (more detail)
-#docker images (list of reposittory)
+#controlling docker daemon
+ systemctl start|restart|status docker.service (docker daemon)
+#information for nvidia docker
+ which nvidia-docker
+ nvidia-docker  --version
+ docker info
+ nvidia-docker verison (more detail)
+#list of repository
+ docker images 
 #install docker
  sudo yum -y install docker-engine
 #install nvidia docker
@@ -11,6 +14,8 @@
 #install nvidia container 
  yum list installed nvidia-container-runtime
 
+ docker load -i tf18.08.tar
+ docker tag [image id] [repositoy name]:[tag]
 
 
 #If docker daemon does not start and in a failed state check metadata file at : /var/lib/docker/devicemapper/devicemapper/metadata
