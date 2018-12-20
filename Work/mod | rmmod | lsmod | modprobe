@@ -1,0 +1,86 @@
+WHAT IS LINUX KERNEL?
+The kernel is just a piece of code. A kernel is a central part of computer operating system which acts as a mediator between system 
+hardware and applications installed in the system. The Kernel converts program’s instructions to machine understandable language and 
+passes them through device drivers.
+
+WHAT ARE TYPES OF KERNEL?
+We have two types of Kernels are there.
+    Monolithic kernel
+    Modular kernel
+
+
+WHAT IS A KERNEL MODULE?
+A kernel module is a part of the kernel which can do some work. Say for example Linux Kernel will not support all types of hardware, 
+So programmers will write some kernel modules and distribute them along with their software. Whenever you want to make this 
+hardware to work, we have to load this piece of software into the kernel so that your system understands it. 
+This software is nothing but Kernel module. The modules also referred to as device drivers are specialized pieces of software 
+which power or control access to a peripheral. They are loaded into or unloaded from the running kernel without the need of a reboot.
+
+WHAT IS A MONOLITHIC KERNEL?
+A monolithic kernel is where the entire operating system works in kernel space. There is no such space called User space 
+where you can load/remove kernel modules from userspace. In other words, entire device drivers, Filesystem, and 
+IPC will work in kernel space.
+
+WHAT IS A MODULAR KERNEL?
+A modular kernel is where only a particular part of OS is loaded into kernel space. In this way, we will reduce the burden on the system 
+as we can load kernel modules into kernel where and whenever it is required. And the services will run complete isolation from 
+Kernel space.
+
+The /proc/devices file contains a mapping of the device major numbers and device types broadly classified as character and block devices.
+The kernel gains access to these devices through the corresponding module provided that it has been loaded correctly. 
+Given below is a snippet of the content contained in this file.
+
+    [root@linuxnix ~]# head /proc/devices
+    Character devices:
+      1 mem
+      4 /dev/vc/0
+      4 tty
+      4 ttyS
+      5 /dev/tty
+      5 /dev/console
+      5 /dev/ptmx
+      7 vcs
+      10 misc
+      
+The number on the left is the primary number of the module which is used internally by the kernel to identify the peripheral type and 
+the names to the right of the number represent the device type.
+
+The /proc/modules file contains a list of currently loaded modules. Here’s a snippet from the file:
+
+    [root@linuxnix ~]# head /proc/modules
+      ebtable_filter 12827 0 - Live 0xffffffffa0657000
+      ebtables 35009 1 ebtable_filter, Live 0xffffffffa0649000
+      ip6table_filter 12815 0 - Live 0xffffffffa048a000
+      ip6_tables 26901 1 ip6table_filter, Live 0xffffffffa0641000
+      iptable_filter 12810 0 - Live 0xffffffffa048f000
+      vmw_vsock_vmci_transport 30577 0 - Live 0xffffffffa0481000
+      vsock 34855 3 vmw_vsock_vmci_transport, Live 0xffffffffa0463000
+      snd_seq_midi 13565 0 - Live 0xffffffffa05f0000
+      snd_seq_midi_event 14899 1 snd_seq_midi, Live 0xffffffffa063c000
+      intel_powerclamp 14419 0 - Live 0xffffffffa0631000
+      
+The name in the leftmost/first column in the file represents the module name.
+We could go to /sys/module/<module_name> directory to view the files that hold the settings for the driver.
+
+Example 1: To view the corresponding files for the SCSI disk driver represented by sd_mod module, 
+I could head to the /sys/module/sd_mod directory.
+
+    [root@linuxnix ~]# cd /sys/module/sd_mod
+    [root@linuxnix sd_mod]# ls
+      coresize  holders  initsize  initstate  notes  refcnt  rhelversion  sections  srcversion  taint  uevent
+      
+HOW TO SEE MODULE LOADED INTO THE KERNEL?
+Example 2: If we open the initstate and rhelversion files they show that the module is loaded indicated by “live” and 
+the OS for which it’s been loaded is 7.3
+
+    [root@linuxnix sd_mod]# cat initstate
+      live
+    [root@linuxnix sd_mod]#
+    [root@linuxnix sd_mod]# cat rhelversion
+      7.3
+To manage kernel modules, we use the lsmod and modprobe commands.
+We can add specific options to the modules to customize external access. These options can be configured in the /etc/modprobe.d directory.
+    
+    lsmod
+    lsmod | grep [keyword]
+    rmmod [mod name]
