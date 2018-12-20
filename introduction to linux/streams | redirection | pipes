@@ -31,4 +31,27 @@ Example:  (you can use the descriptors or without)
     $ cat path.txt                  $ cat path.txt
     /home/thai/Documents            /home/thai/Documents
     
-    
+################################
+
+Generating Command Lines
+
+  xargs command builds a command from its standard input
+  xargs [options] [command [initial-arguments]]
+
+When you run the xargs command, it runs command once for every word passed to it on standard input, 
+adding that word to the argument list for command.
+
+  find / -user Christine | xargs -d "\n" rm
+first part (find / -user Christine) finds all files in the (/) directory belonging to Christine.
+This list is then piped to xargs, which adds each input value to its own rm command.
+The -d "\n" option tells xargs to use onlhy newlines as delimiters.
+
+Backtick:` *character to the left of the 1 key
+Text within backticks is treated as a separate command whose results are substituted on the command line.
+  rm `find ./ -user Christine`
+rm each instance of the find command that finds a file belonging to Christine.
+
+Backtick:` = $()
+  rm `find ./ -user Christine == rm $(find ./ -user Christine)
+backtick is falling out of favor because it is often confused with single quotation mark.
+
