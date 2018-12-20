@@ -36,7 +36,11 @@
 
 #searching user email
   grep [username] /etc/aliaes
-
+  
+#searching two things
+  [command] | grep ' [keyword1] \| [keyword2] '
+  nvidia-smi -q | grep 'GPU\|Serial' 
+  
 #turning on and off UID light
   enable|disable UID
 
