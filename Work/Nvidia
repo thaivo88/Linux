@@ -60,3 +60,17 @@ docker images
 nvidia-docker run -ti --rm nvcr.io/nvidia/tensorflow-18.09-py3 /bin/bash
 #ti terminal interactive rm remove the container instaint
 exit
+
+################################################
+download nvidia driver for v100
+rpm -i [driver]
+yum clean all
+yum install -y nvidia
+yum install -y nvidia-driver.x86_64
+yum install -y nvidia-driver-cuda.x86_64
+
+download cuda 10 toolkit
+rpm -i [cuda 10]
+yum install -y cuda
+yum install -y cuda-libraries-10-0
+
