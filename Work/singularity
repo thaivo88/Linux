@@ -1,0 +1,9 @@
+# singularity scripts dirctory: voth@hpchost1:~/scripts/singularity
+#    01_install_package_deps.sh  (skip if OS is not Ubuntu)
+#    02_set_go_env.sh  
+#    03_clone_singularity.sh  (if error: log off and log back in; rerun script)
+#    04_compile_singularity.sh  
+#    go1.11.2.linux-amd64.tar.gz
+# run scripts in order using bash
+# Example:
+>bash 01_install_package_deps.sh
