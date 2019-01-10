@@ -1,6 +1,0 @@
-cp copy
-
-to copy a directory use the -r option
-
-cp [option] [file] [directory path]
-cp -r [directory] [directory path]

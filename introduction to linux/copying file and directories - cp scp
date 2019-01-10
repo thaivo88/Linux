@@ -1,0 +1,11 @@
+cp copy
+
+to copy a directory use the -r option
+
+cp [option] [file] [directory path]
+cp -r [directory] [directory path]
+
+scp secure copy
+scp [location of file] [destination of file]
+scp /tmp/text.txt \username@hostname:/[directory where files will be place]
+scp /tmp/text.txt \root@node01:/tmp
