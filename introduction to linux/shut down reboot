@@ -1,0 +1,11 @@
+  Command to shut system down
+      init 0 : switch the system to runlevel0 ; which halts the system
+      init 6 : switch to runlevel6 ; reboot the system
+      halt : shutdown the system
+      reboot : reboot the system
+      shutdown : shutdown the system
+          shutdown +m -h|-r message
+            +m option specifies the amount of time (in minutes) before shutting down or replace it with a time hh:mm
+            -h|-r option = halt | reboot
+            example: shutdown 12:00 -r please save all work, system shut down at noon
+            shutdown -c (cancel shutdown)
