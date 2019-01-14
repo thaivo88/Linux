@@ -47,3 +47,8 @@ Text-filtering commands
        Tom   55  9/16   Tom  9/16 M
        Lisa  22  5/21   Lisa 5/21 F
        Bob   31  12/6   Bob  12/6 M
+       
+  expand
+    convert tabs to space
+    by default, expand assumes a tab stop every 8 characters.
+    Changing the default spacing using -t [number] or --tabs=[number] option
