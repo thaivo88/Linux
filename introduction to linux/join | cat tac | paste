@@ -42,4 +42,8 @@ Text-filtering commands
     |16/6 Bob   31 M|
     
   paste
-    
+    paste command merges files line by line, separating the lines from each file with tabs
+    paste age.txt gender.txt
+       Tom   55  9/16   Tom  9/16 M
+       Lisa  22  5/21   Lisa 5/21 F
+       Bob   31  12/6   Bob  12/6 M
