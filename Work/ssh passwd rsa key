@@ -36,3 +36,18 @@ EOF
  
 ########################
 if ssh isnt connecting check /root/.ssh/authorized_keys, /etc/passwd, /etc/group
+to test ssh daemon use the command: 
+	sshd -t
+	
+if you see this error:
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@         WARNING: UNPROTECTED PRIVATE KEY FILE!          @
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#Permissions 0640 for '/etc/ssh/ssh_host_rsa_key' are too open.
+#It is required that your private key files are NOT accessible by others.
+#This private key will be ignored.
+#key_load_private: bad permissions
+#Could not load host key: /etc/ssh/ssh_host_rsa_key
+
+change the permission to 600 with this command:
+	chmod 600 [file]
