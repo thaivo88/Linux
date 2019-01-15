@@ -33,3 +33,6 @@ EOF
   ypcat passwd | grep [username]
 #paste it into the node they need access to
  vi /etc/passwd
+ 
+########################
+if ssh isnt connecting check /root/.ssh/authorized_keys, /etc/passwd, /etc/group
