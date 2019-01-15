@@ -51,3 +51,14 @@ if you see this error:
 
 change the permission to 600 with this command:
 	chmod 600 [file]
+
+#########################################
+
+ssh daemon
+
+systemctl status sshd.service
+systemctl stop sshd.service
+systemctl start sshd.service
+
+# test ssh daemon connection
+sshd -t 
