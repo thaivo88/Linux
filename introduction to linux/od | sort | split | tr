@@ -1,0 +1,11 @@
+Displaying files in Octal with od
+          od (octal dump)
+some files aren't easily displayed in ASCII (graphics, audio, and non-ASCII files); it looks gibberish!
+od display files in an octal (base 8) format by default.
+the first field on each line (you can look at it as like the first column) as an index, 
+the remaining number on each line represent the bytes in the file.
+    od test.txt
+    0000000 0456581 0682975 0346671 0246619
+    0000020 0754499 0118455 0457747 0225478
+    
+Sorting files with sort
