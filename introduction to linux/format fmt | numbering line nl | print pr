@@ -25,3 +25,21 @@ Numbering lines with nl
       rn right justified, no leading zeros
       rz right justified with leading zeros
       
+Preparing a file for printing with pr
+Printing a plain-text file, you may want to prepare it with headers, footers. page breaks, and so on.
+By default, pr creates output that includes the original text with headers, which lists the current date and time, 
+the original filename, and the page number.
+    Generate multicolumn output: creates output with numcols columns. 
+    pr doesn't reformat text; if lines are too long, they're truncated or run over into multiple columsn.
+      -numcols or --columns=numcols
+    Generate double-spaced output: output double spacing instead of single spaced
+      -d or --double-space
+    Use form feeds
+    Ordinarily, pr separates pages by using a fixed number of blank lines. 
+    If the printer doesn't use the same number of lines that pr expects, use form feed chatacter between pages.
+      -F or -f or --form-feed
+    Set page length: sets the length of the page in lines.
+      -l [lines] or --length=[lines]
+      
+    
+    
