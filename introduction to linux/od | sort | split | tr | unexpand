@@ -1,0 +1,57 @@
+Displaying files in Octal with od
+          od (octal dump)
+    od [file]
+some files aren't easily displayed in ASCII (graphics, audio, and non-ASCII files); it looks gibberish!
+od display files in an octal (base 8) format by default.
+the first field on each line (you can look at it as like the first column) as an index, 
+the remaining number on each line represent the bytes in the file.
+    od test.txt
+    0000000 0456581 0682975 0346671 0246619
+    0000020 0754499 0118455 0457747 0225478
+    
+Sorting files with sort
+    sort [option] [file]
+          -f or --ignore-case : ingnore case      
+          -M or --month-sort : sort by three-letter month abbreviation example (JAN)
+          -n or --numeric-sort : sort b number
+          -r or --reverse : sorts in reverse order
+          -k [field] or --key=[field] : sort by field column; to use more than one field, separated the fields by commas
+                    example: sort -k 3 listing.txt
+          
+Breaking a file into pieces with split
+     split -[option] [file] [new_output_file]
+          -b [size] or --bytes=size : breaks the input file into pieces of size bytes.
+                    This option can have undesirable consequence of splitting the file mid-lines.
+          -C=[size] or --line-bytes=[size] : split by bytes in line-sized chunks   
+          -l [lines] or --lines=[lines] : splits the file into chunks with no more than the specified number of lines.
+                    example: split -l 2 listing.txt number 
+                    (splitting the listing.txt by two line into a new doc called numberaa and numberab)
+          *By default split output files into 1,000-line chunks with names beginning with x 
+          (xaa, xab, xac.... (depending out big the file needs to be split into))*
+          
+Translating charaters with tr
+     tr [options] [SET1] [SET2]
+          tr command changes individual characters from standard input.
+          SET1 : characters you want replaced in a group
+          SET2 : characters you wanted them to be replaced as a second group
+          (each character in set1 is replaced with the one at the equivalent position in SET2)
+                    example: tr BCJ bc < listing.txt
+                    listing.txt
+                    555-2456 beckett, barry
+                    555-2833 carter, Gertrude
+                    555-0938 cones, Theresa
+                    555-3384 Orwell, Samuel
+                    (All the cap letters are translated into lower case(B into b ; C into c)
+                    In SET2 there is no 3rd set in that group so will revert into the last group in SET2 = c
+                    The cap letter J will turn into lower case c)
+          -t or --truncate-set1 : truncate SET1 to the size of SET2 instead.
+          -d : delete the characters from SET1 (with -d option you omit SET2)          
+                    
+Converting spaces to tabs with unexpand
+          
+
+                    listing.txt
+                    555-2456 Beckett, Barry
+                    555-2833 Carter, Gertrude
+                    555-0938 Jones, Theresa
+                    555-3384 Orwell, Samuel
