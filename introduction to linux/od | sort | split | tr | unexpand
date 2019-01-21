@@ -48,9 +48,27 @@ Translating charaters with tr
           -d : delete the characters from SET1 (with -d option you omit SET2)          
                     
 Converting spaces to tabs with unexpand
+      unexpand [option] [number] [file]
+      converts multiple spaces to tabs which help compress the size of files that contain many spaces
+          -t [number] or --tabs=[number] : which sets the tab spacng to once every [number] characters.
+          If you omit this option the command defaults a tab stop every 8 characters.
           
-
-                    listing.txt
+Deleting Duplicate lines with uniq
+      uniq command removes duplicate lines.
+                    example: sort shakespeare.txt | uniq
+                    be                                      | cat shakespeare.txt
+                    is                                      | to be or not to be. that is the question
+                    not                                     | be
+                    or                                      | or
+                    question                                | not
+                    that                                    | to
+                    the                                     | be.          
+                    to                                      | that
+                                                            | is
+                                                            | the
+                                                            | question
+                                                                                                                        
+                    listing.txt                                       
                     555-2456 Beckett, Barry
                     555-2833 Carter, Gertrude
                     555-0938 Jones, Theresa
