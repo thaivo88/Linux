@@ -4,4 +4,24 @@ Reformatting paragraphs with fmt
       -w [width] or --width=[width] : set the line length to with characters.
       
 Numbering lines with nl
-  numbering the lines of a file
+  numbering the lines of a file; more complex line numbering than cat -n
+    -b [style] or --body-numbering=[style] : set the numbering style for the bulk of the lines
+    style is a style format code
+  If the text is formatted for printing and has headers or footers, you can set the style for the elements with:  
+    -h [style] or --header-number=[style] 
+    -f [style] or --footer-number=[style] 
+        style code:
+          t   default behavior is to number lines that aren't empty
+          a   causes all lines to be numbered, including empty lines
+          n   causes all line numbers to be omitted, which may be desirable for headers or footers
+          pREGEXP   causes only lines that match the specified regular expression (REGEXP) to be numbered.
+    -d=[code] or --section-delimiter=[code] : Numbering schemes reset the line numbers for each page, this option help identify a new page.
+    code is a code for the character that identifies the new page.
+    -p or --no-renumber : nl begins numbering each new page with line 1; it doesn't reset the line number with a new page.
+    -n [format] or --number-format=[format] : specify the numbering format
+      format 
+      default left justified with leading zeros
+      ln left justified, no leading zeros
+      rn right justified, no leading zeros
+      rz right justified with leading zeros
+      
