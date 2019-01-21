@@ -1,0 +1,7 @@
+Reformatting paragraphs with fmt
+  fmt attempts to clean up paragraphs, which it assumes are delimited by two or more blank lines or by changes in indentation.
+  New paragraph formatting defaults to paragraphs that are no more than 75 characters wide.
+      -w [width] or --width=[width] : set the line length to with characters.
+      
+Numbering lines with nl
+  numbering the lines of a file
