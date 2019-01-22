@@ -1,0 +1,13 @@
+# newer image use eno for ethernet interface
+# detail of that interface
+      ethtool eno[#]
+      ethtool eth[#]
+# enable that interface
+      ifup eth[#]
+      ifup eno[#]
+# disable that interface
+ifdown eth[#]
+      ifdown eno[#]
+# Display Ethernet Driver Settings 
+      ethtool -i eth[#]
+      ethtool -i eno[#]
