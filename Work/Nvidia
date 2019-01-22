@@ -45,6 +45,9 @@ nvidia-smi -q | grep Driver
 #list all rpm that are installed
   rpm -qa | grep nvidia
   
+#slot location with serial number matching  
+  nvidia-smi -q | grep 'GPU\|Serial' 
+  
 #list all module with nvidia
   lsmod | grep nvidia
 #unloading nvidia module   
