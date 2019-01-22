@@ -40,6 +40,12 @@ the original filename, and the page number.
       -F or -f or --form-feed
     Set page length: sets the length of the page in lines.
       -l [lines] or --length=[lines]
+    Set the header text :    sets the text to be displayed in the header, replacing the filename.
+    Multi-word string; enclose it in quotes
+      -h [text] or --header=[text]
+      -t 0r --omit header : omits the header entirely
+    Set left margin and page width : margin size is added to the page width, which default to 72 characters
+      -o [chars] or --indent=[chars] : sets the left margin to [chars] characters.    
+      -w [chars] or width [chars]
       
-    
     
