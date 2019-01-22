@@ -1,0 +1,21 @@
+Head
+Viewing the start of files with head
+With head command the default output is 10 lines of the first beginning of files to be printed out.
+    Specify the number of bytes: tells head command to display [num] bytes
+        -c [num] or --bytes=num
+    Specify the number of lines: tells head command to display [num] of lines
+        -n [num] or --line=[num]
+        
+Tail
+Viewing the ends of files with tail
+With tail command the default output is 10 lines of the last end of files to be printed out.
+    Specify the number of bytes: tells tail command to display [num] bytes
+        -c [num] or --bytes=num
+    Specify the number of lines: tells tail command to display [num] of lines
+        -n [num] or --line=[num]    
+    Track a file: Follow; keep the file open and to display new lines as they're added.
+        -f or --follow
+    Stop tracking on program termination: terminate tracking once the process with a PID 
+        -pid=[PID]
+        
+Less
