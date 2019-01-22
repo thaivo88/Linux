@@ -1,5 +1,14 @@
 # list all attached disk and their UUID
   cd /dev/disk/by-uuid/
   ll
+  # or
+  cd /dev/disk/by-uuid/ && ll
+
 # or 
   blkid
+
+# check all mount
+  df
+  
+# display message or driver message, searching for UUID input
+  dmesg | grep UUID
