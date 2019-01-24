@@ -19,3 +19,15 @@ With tail command the default output is 10 lines of the last end of files to be 
         -pid=[PID]
         
 Less
+more complex version of more; joking name because "less is more"
+    spacebar : move forward a file a screen at a time
+    ESC + V : moves backward through the file a screen at a time
+    Up and Down : move up or down through the file a line at a time.
+    / : search function
+        n : repeat the search forward
+        N : repeat the search backward
+    ? : search backward
+    g[number] : jump to the specific line number
+    q : exit
+    
+    
