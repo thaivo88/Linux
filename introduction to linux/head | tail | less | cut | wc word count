@@ -30,4 +30,16 @@ more complex version of more; joking name because "less is more"
     g[number] : jump to the specific line number
     q : exit
     
+Extracting text with cut
+    -b [list] or --bytes=[list] : cuts the specified list of bytes from the input file.
+    -c [list] or --characters=[list] : cuts the specified list of characters from the input file.
+    -f [list] or --fields=[list] : cuts the specified list of fields from the input file.
+    -d [char] or --delim=[char] or --delimiter=[char] : where [char] is the character you want to use to delimit fields.
+    -s or --only-delimited : changes this behavior so that the program doesn't echo lines that don't contain the delimiter character.
     
+Obtaining a word count with wc
+wc count words, lines, and byte
+    -l or --lines : count lines
+    -w or --words : count words
+    -c or --bytes : count bytes
+    -m or --chars : count characters
