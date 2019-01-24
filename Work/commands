@@ -1,3 +1,7 @@
+#check last login
+  last
+  last | grep [username]
+
 #checking opa fabric for slower links than expected 
   opareport -o slowlinks -d 3
 
