@@ -47,6 +47,11 @@ nvidia-smi -q | grep Driver
   
 #slot location with serial number matching  
   nvidia-smi -q | grep 'GPU\|Serial' 
+
+#nv_peer_mem module
+  service nv_peer_mem start
+  service nv_peer_mem status
+  service nv_peer_mem stop
   
 #list all module with nvidia
   lsmod | grep nvidia
