@@ -1,3 +1,12 @@
+reconfig slurm
+  systemctl stop slurmd
+  systemctl status slurmd
+  #steps to get slurm running on node
+  systemctl restart slurmd
+  scontrol update nodename=[node hostname] state=idle
+  scontrol reconfig 
+
+
 all the AI/PLAB IPs are in /etc/hosts
 wasup                       (shows job/queue information)
 scontrol show job <JOBID>         (show jobs)
