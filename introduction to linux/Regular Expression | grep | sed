@@ -1,3 +1,4 @@
+Regular Expressions: [regexp]
 Regular expressions are similar in principle to the wildcard; tools for describing or matching patterns in text.
   Two forms of regular expression are common:
     1: basic
@@ -15,7 +16,46 @@ Regular expressions are similar in principle to the wildcard; tools for describi
       The dot . represents any single character execpt a newline.
         example: a.z              match: a[0-9 or a-z]z
     -Start and End of Line
+      The carat ^ represents the start of a line, and the dollar sign $ denotes the end of the line.
     -Repetition Operators:
+      A full or partial regular expression may be followed by a special symbol to denote how many times a matching item must exist.
+        -Asterisk * : zero or more ocurrences
+        -Plus sign + : matches one or more occurrences
+        -Question Mark ? : specifies zero or one match
+        -Plus sign and Asterisk .* : specify a match with any substring
     -Multiple Possible Strings
+        -Vertical bar | : separates two possible matches
     -Parentheses
+        -() : ensure that the words are treated as a group
     -Escaping
+        -backslash \ : if you want to match a special character you have to escape it
+          example: google\.com      match: google.com
+  Extended Regular Expression
+    The special characters must use escape to apply: using \| instead of |
+ 
+ 
+ Using grep
+ grep searchesa for files that contain a specified string and returns the name of the file and a line of context for that string.
+ grep [options] regexp [files]
+     Count Matching Lines 
+        -c or --count : displays the number of lines that match the specified pattern
+     Specify a pattern input file
+        -f [file] or --file=[file] : takes pattern input from the specified file
+     Ignore Case
+        -i or --ignore-case : search that isn't case sensitive
+     Search Recursively
+        rgrep
+        -r or --recursive : searches in the specified directory and all subdirectories
+     Use a fixed strings pattern
+        fgrep
+        -F or --fixed-strings : turn off the grep command's use of regular expression
+              example: $ is treated literally as a $ character not a regular expression
+     Use an extended regular expression
+        egrep
+        -E or --extended-regexp : to use extended regular expression instead of regular expression
+        
+
+Using sed
+
+        
+ 
