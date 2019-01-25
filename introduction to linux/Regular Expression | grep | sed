@@ -1,1 +1,21 @@
-
+Regular expressions are similar in principle to the wildcard; tools for describing or matching patterns in text.
+  Two forms of regular expression are common:
+    1: basic
+    2: extended
+  Simplest type of regular expression is an alphabetic string. 
+  These regular expressions match any string of the same size or longer that contains the reular express.
+    -Bracket Expression:
+      Characters enclosed in square brackets [] constitute bracket expressions, which match any one character within the brackets.
+        example: b[aeiou]g        match the words: bag, beg, big, bog, and bug
+    -Range Expression:
+      Range expression is a variant of a bracket expression. Instead of listing every character that matches,
+      range expression list the start and end points separated by a dash -
+        example: a[2-4]z          match: a2z, a3z, and a4z
+    -Any Single Character:
+      The dot . represents any single character execpt a newline.
+        example: a.z              match: a[0-9 or a-z]z
+    -Start and End of Line
+    -Repetition Operators:
+    -Multiple Possible Strings
+    -Parentheses
+    -Escaping
