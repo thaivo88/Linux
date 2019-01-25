@@ -56,6 +56,19 @@ Regular expressions are similar in principle to the wildcard; tools for describi
         
 
 Using sed
-
-        
- 
+The sed command directly modifies a file's contents, sending the changed file to standard output.
+    sed [options] -f [script-file] [input-file]
+    sed [options] [script-file] [input-file]
+        [script-file] : is the set of commands you want to perform
+            =           0 or 1      display the current line number
+            a\text      0 or 1      append text to the file
+            i\text      0 or 1      insert text into the file
+            r filename  0 or 1      append text fro filename into the file
+            c\text      range       replace the selected range of lnes with the provided text
+            s/regexp    range       replace text that matches the regular expression
+            w filename  range       write the current pattern space to the specified file
+            q           0 or 1      immediately quit the script, but print the current pattern space
+            Q           0 or 1      immediately quit the script
+        If a single line may have more than one instance of the search string, you must perform a global search
+        by appending g to the command string.
+            example:    s/2012/2013/g
