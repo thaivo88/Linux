@@ -1,0 +1,24 @@
+InfiniBand Command
+To Display the Local Host’s IB Device Status
+  ibstat
+  ibv_devinfo
+  ibstatus
+
+To Check the Presence of an IB-QNEM
+Use the ibswitch command to verify that an IB-QNEM is installed in the shelf.
+  ibswitch
+  
+To List All IB Hosts in the IB Network
+Use the ibhosts command to list all hosts in the IB network.
+  ibhosts
+  
+To Display the Network Topology for the Shelf
+Use the iblinkinfo command to list the network topology for the shelf.
+  iblinkinfo.pl -R
+  
+To Query the Local Host’s IB Firmware
+Use the mst and flint commands display the host’s firmware information.
+  mst status
+  mst start
+  flint -d /dev/mst/mt26428_pci_cr0 q
+  
