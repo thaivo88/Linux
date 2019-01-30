@@ -1,0 +1,22 @@
+Linux package management tool.
+The foundation upon which all of these programs rely is the Linux kernel.
+A kernel is the lowest level of easily replaceable software that interfaces with the hardware in your computer. 
+It is responsible for interfacing all of your applications that are running in “user mode” down to the physical hardware, 
+and allowing processes, known as servers, to get information from each other using inter-process communication (IPC).
+
+Packages:
+The most basic information that package systems maintain is information about software packages-that is, collections of files that are
+installed on the computer. Packages are usually distributed as single files that are similar to tarballs 
+(archives created with the tar utility and usually compressed with gzip or bzip2) or zip files.
+Once installed, most packages consist of dozens or hundreds of files, and the package system tracks them all.
+
+Installed File Database:
+Package systems maintain a database of installed files. The database includes information about every file installed 
+via the package system, the name of the package to which each of theose files belongs, and associated additional information.
+
+Dependencies:
+One of the most important types of information maintained by the package system is dependency information-that is, 
+the requirements of packages for one another. 
+
+Checksums:
+The package system maintains checksums and assorted ancill
