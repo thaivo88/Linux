@@ -22,3 +22,21 @@ Use the mst and flint commands display the host’s firmware information.
   mst start
   flint -d /dev/mst/mt26428_pci_cr0 q
   
+Extract the vendor_part_id parameter
+  ibv_devinfo | grep vendor_part_id
+  
+Query the Host about ConnectX-4 adapters:
+  mlxconfig -d /dev/mst/mt4119_pciconf0 q 
+    # mt4119 is given by extracting the vendor part id
+
+Change the port type to Ethernet (LINK_TYPE = 2) | infiniband (LINK_TYPE =1)
+  mlxconfig -d /dev/mst/mt4119_pciconf0 set LINK_TYPE_P1=2 LINK_TYPE_P2=2
+    # Note that the LINK_TYPE_P1 and LINK_TYPE_P2 equal 1 (InfiniBand) by default.
+
+check that the port type    
+  ibdev2netdev
+  
+show OFED info  
+  ofed_info -s
+  
+  
