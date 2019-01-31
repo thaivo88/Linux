@@ -57,4 +57,4 @@ flashing HCA
   mst start
   ibv_devinfo | grep vendor_part_id                   #get the vendor part id
   mstflint -d /dev/mst/mt[vendor_part_id]_pci_cr0 q   #quey the bus id
-  mstflint -d mt[vendor_part_id]_pciconf0 -i \tmp\fw-ConnectX[filename].bin burn
+  mstflint -d [pci address] -i [file] burn
