@@ -54,8 +54,10 @@ show OFED info
 #######################
 flashing HCA
 
-  mst status                                          #get the bus id
-  mst start
-  ibv_devinfo | grep vendor_part_id                   #get the vendor part id
-  mstflint -d /dev/mst/mt[vendor_part_id]_pci_cr0 q   #quey the bus id
-  mstflint -d [pci address] -i [file] burn
+finding the bus id
+  lspci | grep Mellanox
+query the HCA card
+  mstflint -d 37:00.0 q
+upgrade firmware of the HCA card
+  mstflint -d [pci bus id] -i [file] burn
+  mstflint -d 37:00.0 -i /tmp/fw-ConnectX5-rel-16_23_1020-872725-B21_Ax-UEFI-14.16.17-FlexBoot-3.5.504.signed.bin burn
