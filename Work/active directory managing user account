@@ -80,6 +80,11 @@ WARNING: The number of days before password is to expire that user is warned tha
 INACTIVE: The number of days after password expires that account is disabled
 EXPIRE: days since Jan 1, 1970 that account is disabled i.e. an absolute date specifying when the login may no longer be used.
 
+
+Both "!" and "!!" being present in the password field mean an account is locked.
+"!!" in an account entry in shadow means the account of an user has been created, but not yet given a password. 
+Until being given an initial password by a sysadmin, it is locked by default.
+voth:!!$6$5lvfWcSW$BI5L9konFqcIRukmIsJ6X5uYY7pjXXdclx9.:17778:0:180:14:14::
 #############################################
 
 To change user password expiry information use the chage command on Linux as follows:
