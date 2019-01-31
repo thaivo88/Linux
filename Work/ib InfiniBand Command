@@ -30,7 +30,7 @@ To Query the Local Host’s IB Firmware
 Use the mst and flint commands display the host’s firmware information.
   mst status
   mst start
-  flint -d /dev/mst/mt26428_pci_cr0 q
+  flint -d /dev/mst/mt[vendor_part_id]_pci_cr0 q
   
 Extract the vendor_part_id parameter
   ibv_devinfo | grep vendor_part_id
@@ -50,3 +50,11 @@ show OFED info
   ofed_info -s
   
   
+#######################
+flashing HCA
+
+  mst start
+  mst status                                          #get the bus id
+  ibv_devinfo | grep vendor_part_id                   #get the vendor part id
+  mstflint -d /dev/mst/mt[vendor_part_id]_pci_cr0 q   #quey the bus id
+  mstflint -d mt[vendor_part_id]_pciconf0 -i C:\Temp\fw-ConnectX[filename].bin burn
