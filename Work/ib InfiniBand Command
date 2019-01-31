@@ -2,11 +2,12 @@ To check the board id  you can do this.
   cat /sys/class/infiniband/mlx5_0/board_id
   Example: HPE0000000008
   
-To find the serial number and part number: to find the bus id use mst status
-  lspci -s [bus id] -vvv
-  
 To find the bus id
-  mst status
+  lspci | grep Mellanox
+  Example: 37:00.0 Infiniband controller: Mellanox Technologies MT27800 Family  
+  
+To find the serial number and part number
+  lspci -s [bus id] -vvv
 
 InfiniBand Command
 To Display the Local Host’s IB Device Status
