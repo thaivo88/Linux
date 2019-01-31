@@ -57,7 +57,8 @@ flashing HCA
 finding the bus id
   lspci | grep Mellanox
 query the HCA card
+  mstflint -d [pci_bus_id] q
   mstflint -d 37:00.0 q
 upgrade firmware of the HCA card
-  mstflint -d [pci bus id] -i [file] burn
+  mstflint -d [pci_bus_id] -i [file] burn
   mstflint -d 37:00.0 -i /tmp/fw-ConnectX5-rel-16_23_1020-872725-B21_Ax-UEFI-14.16.17-FlexBoot-3.5.504.signed.bin burn
