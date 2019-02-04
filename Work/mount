@@ -1,0 +1,12 @@
+check or edit /etc/fstab for all network file system mounting point
+
+  mount [mount_point] [mount_directory]
+  umount [mount_directory]
+
+mount all file system in /etc/fstab
+  mount -a
+  
+When mounting a file system and run into this error: 
+"(for several filesystems (e.g. nfs, cifs) you might need a /sbin/mount. helper program)"
+install nfs-common to resolve this issue
+  sudo apt install nfs-common
