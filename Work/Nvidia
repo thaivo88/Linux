@@ -89,10 +89,9 @@ disable nouveau kernal driver to install nvidia driver
 create file: 
   nano /etc/modprobe.d/blacklist-nouveau.conf
 with the following contents:
-
   blacklist nouveau
   options nouveau modeset=0
-  Regenerate the kernel initramfs:
 
+Regenerate the kernel initramfs:
   sudo update-initramfs -u
   reboot
