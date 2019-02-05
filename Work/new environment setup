@@ -62,7 +62,7 @@ fi
 /bin/cat >> /root/.ssh/authorized_keys <<EOF
 #REPLACE WITH CORRECT ssh-rsa key from head node here
 #for example
-#ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAwz28HCa+9ljT606pWVGb6OcGDEcPhSWPu85noP/Dts5wwJWtw1ajEpRvkYP7mkIYPg0pWMQKSI25EMCwLBdt4jfPkWH7FW+7LjeA25XVasIDhQJmnZplDpf+x7dw5xA64hMeB4aJ5fgGXaEoCw8pt0GBogVxL/2LShZ23eYG46k72pIBkIZPrkGoe65VYvSm+jnUVBwExxxqrfSyPT9b1rHF+yViMAS5JTUTctU/l5dYDPL0v1VX151/a9bY43zLORDpwqITauj2SnFox30u5HkheKQSoN4bJtjLH4j4/LmO3MoBoz3q1sE5xJ6fW8q/R59r+h7///BDvHwgaiiFew== root@hpccmu.cce.hp.com
+#ssh-rsa AAJ6fW8q/R59r+h7///BDvHwgaiiFew== root@hpccmu.cce.hp.com
 
 EOF
 
