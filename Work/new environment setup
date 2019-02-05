@@ -1,0 +1,110 @@
+NEW ENV.
+!/bin/bash
+#
+#PLEASE MAKE SURE THAT YOUR /etc/hosts FILE IS UPDATED AND THE SAME IN ALL NODES
+#PLEASE MAKE SURE THE NTP SERVER IP IS 10.0.0.10
+#PLEASE MAKE SURE THE NIS SERVER IP IS 10.0.0.10
+#PLEASE MAKE SURE THE /etc/fstab from a working node reflects what is written in the NFS Mounts part.
+#SEE THE ssh PART AND UPDATE THE PUBLIC KEY OF THE HEAD NODE HERE.  IT IS USUALLY THE HPCHOST KEY.
+#IF YOU NEED TO UPDATE THE NSSWITCH STUFF, THEN UPDATE THE SECTION TO WHAT YOU WANT, IF NOT COMMENT IT OUT.
+
+# set /etc/ntpd
+/bin/echo "Configuring NTP"
+/bin/echo "server  10.0.0.10" > /etc/ntp.conf
+/bin/echo "driftfile /var/lib/ntp/drift" >> /etc/ntp.conf
+/sbin/chkconfig ntpd on
+/sbin/systemctl stop ntpd
+/sbin/systemctl start ntpdate
+/sbin/systemctl start ntpd
+#
+# update NIS
+/bin/echo "Configuring NIS"
+/usr/sbin/authconfig --enablenis --nisdomain HPCHOU --nisserver=10.0.0.10 --disableshadow --update
+
+# update /etc/fstab
+/bin/echo "Configuring NFS mounts"
+if [ `/bin/grep -c hpccmu /etc/fstab` -eq 0 ]; then
+
+/bin/cat >> /etc/fstab <<EOF
+# NFS  Mounts
+#
+hpchost1:/usr1  /usr1 nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=8192,wsize=8192,nfsvers=3,mountvers=3 0 0
+hpchost1:/usr2  /usr2 nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=8192,wsize=8192,nfsvers=3,mountvers=3 0 0
+hpchost1:/usr3  /usr3 nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=8192,wsize=8192,nfsvers=3,mountvers=3 0 0
+hpchost1:/usr4  /usr4 nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=8192,wsize=8192,nfsvers=3,mountvers=3 0 0
+hpchost1:/usr5  /usr5 nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=8192,wsize=8192,nfsvers=3,mountvers=3 0 0
+hpchost1:/hpcsw /hpcsw nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=8192,wsize=8192,nfsvers=3,mountvers=3 0 0
+hpchost1:/admin /admin nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=8192,wsize=8192,nfsvers=3,mountvers=3 0 0
+hpccmu:/apps    /apps       nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=8192,wsize=8192,nfsvers=3,mountvers=3 0 0
+EOF
+fi
+
+#
+# create directories 
+/bin/echo "Creating NFS directories"
+/bin/mkdir /usr1 /usr2 /usr3 /usr4 /usr5 /hpcsw /admin /apps
+
+#
+# mount NFS mounts
+/bin/echo "Mounting NFS directories"
+/bin/mount -a -t nfs
+
+#
+# create links
+/bin/echo "Creating links"
+/bin/ln -s /hpcsw/no_arch/intel /opt/intel
+
+#
+# set root ssh keys
+/bin/echo "Configuring root ssh keys"
+/bin/mkdir -p /root/.ssh
+/usr/bin/ssh-keygen -q -t rsa -N '' -f /root/.ssh/id_rsa
+/bin/cat >> /root/.ssh/authorized_keys <<EOF
+#REPLACE WITH CORRECT ssh-rsa key from head node here
+#for example
+#ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAwz28HCa+9ljT606pWVGb6OcGDEcPhSWPu85noP/Dts5wwJWtw1ajEpRvkYP7mkIYPg0pWMQKSI25EMCwLBdt4jfPkWH7FW+7LjeA25XVasIDhQJmnZplDpf+x7dw5xA64hMeB4aJ5fgGXaEoCw8pt0GBogVxL/2LShZ23eYG46k72pIBkIZPrkGoe65VYvSm+jnUVBwExxxqrfSyPT9b1rHF+yViMAS5JTUTctU/l5dYDPL0v1VX151/a9bY43zLORDpwqITauj2SnFox30u5HkheKQSoN4bJtjLH4j4/LmO3MoBoz3q1sE5xJ6fW8q/R59r+h7///BDvHwgaiiFew== root@hpccmu.cce.hp.com
+
+EOF
+
+/bin/cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
+/bin/chmod go-rwx /root/.ssh/authorized_keys
+/bin/ln -s /apps/.ssh/authorized_keys2 /root/.ssh/authorized_keys2
+
+#
+# update /etc/passwd, /etc/group 
+/bin/echo "Modifying /etc/passwd & /etc/group"
+/bin/echo "+::::::/bin/false" >> /etc/passwd
+/bin/cp -f /etc/passwd /etc/passwd.sav
+/bin/echo "+" >> /etc/group
+
+#
+#/etc/nsswitch.conf 
+/bin/echo "Configuring /etc/nsswitch.conf"
+/bin/cp -f /etc/nsswitch.conf /etc/nsswitch.conf.ORIGINAL
+/bin/grep "^#"  /etc/nsswitch.conf.ORIGINAL > /etc/nsswitch.conf
+/bin/cat >> /etc/nsswitch.conf <<EOF
+passwd:     compat files nis
+shadow:     compat files nis
+group:      files nis
+hosts:      files dns nis
+bootparams: nisplus [NOTFOUND=return] files
+ethers:     files
+netmasks:   files
+networks:   files
+protocols:  files nis
+rpc:        files
+services:   files
+netgroup:   files nis
+publickey:  nisplus
+automount:  files nis
+aliases:    files nis
+EOF
+
+#add DNS IP
+#/etc/resolv.conf
+/bin/echo "Configuring /etc/resolv.conf"
+/bin/cat >> /etc/resolv.conf <<EOF
+nameserver 16.xx.xx.xx
+nameserver 15.xx.xx.xx
+nameserver 15.xx.xx.xx
+EOF
