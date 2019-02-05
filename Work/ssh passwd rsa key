@@ -1,3 +1,7 @@
+#generate RSA key
+ssh-keygen -t rsa
+
+#####################################
 # set root ssh keys
 /bin/echo "Configuring root ssh keys"
 /bin/mkdir -p /root/.ssh
