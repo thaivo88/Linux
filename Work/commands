@@ -1,3 +1,6 @@
+#show storage device name, file system, size, mountpoint (if mounted), label
+  sudo lsblk -o NAME,FSTYPE,SIZE,MOUNTPOINT,LABEL
+
 #Verify DNS servers settings:	
   cat /etc/resolv.conf	 
 
