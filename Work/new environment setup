@@ -2,8 +2,8 @@ NEW ENV.
 !/bin/bash
 #
 #PLEASE MAKE SURE THAT YOUR /etc/hosts FILE IS UPDATED AND THE SAME IN ALL NODES
-#PLEASE MAKE SURE THE NTP SERVER IP IS 10.0.0.10
-#PLEASE MAKE SURE THE NIS SERVER IP IS 10.0.0.10
+#PLEASE MAKE SURE THE NTP SERVER IP IS 10.0.0.10/10.100.0.5
+#PLEASE MAKE SURE THE NIS SERVER IP IS 10.0.0.10/10.100.0.5
 #PLEASE MAKE SURE THE /etc/fstab from a working node reflects what is written in the NFS Mounts part.
 #SEE THE ssh PART AND UPDATE THE PUBLIC KEY OF THE HEAD NODE HERE.  IT IS USUALLY THE HPCHOST KEY.
 #IF YOU NEED TO UPDATE THE NSSWITCH STUFF, THEN UPDATE THE SECTION TO WHAT YOU WANT, IF NOT COMMENT IT OUT.
@@ -16,7 +16,13 @@ NEW ENV.
 /sbin/systemctl stop ntpd
 /sbin/systemctl start ntpdate
 /sbin/systemctl start ntpd
-#
+
+#install NIS
+apt install nis
+yum install nis
+#plab NIS domain: partner server: 10.100.0.5
+#host NIS domain: benchmark server: 10.0.0.10
+
 # update NIS
 /bin/echo "Configuring NIS"
 /usr/sbin/authconfig --enablenis --nisdomain HPCHOU --nisserver=10.0.0.10 --disableshadow --update
@@ -40,11 +46,13 @@ EOF
 fi
 
 #
-# create directories 
+# create directories for hpchost
 /bin/echo "Creating NFS directories"
 /bin/mkdir /usr1 /usr2 /usr3 /usr4 /usr5 /hpcsw /admin /apps
 
-#
+#install nfs-common
+yum install nfs-common
+apt install nfs-common
 # mount NFS mounts
 /bin/echo "Mounting NFS directories"
 /bin/mount -a -t nfs
