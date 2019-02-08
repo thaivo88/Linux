@@ -1,3 +1,10 @@
+#get the rsa key of your server:
+ssh-keyscan -t rsa [server_ip]
+server_ip ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAwH5EXZG...
+
+#and on the client, add this key to ~/.ssh/known_hosts:
+server_ip ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAwH5EXZG...
+
 #generate RSA key
 ssh-keygen -t rsa
 
