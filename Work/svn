@@ -1,0 +1,3 @@
+cd /srv/svn/repos/ClusterTest/conf
+vi passwd
+#add user email and password svn#####
