@@ -1,0 +1,147 @@
+This HOWTO does not discuss the RS-232 standard, which is formally known as ANSI/TIA/EIA-232-F-1997 
+Interface Between Data Terminal Equipment and Data Circuit-Terminating Equipment Employing Serial Data Interchange. 
+For an explanation of "bits per second", "start bits", "data bits", "parity", "stop bits" and "flow control" refer to the Serial-HOWTO 
+and the Modem-HOWTO.
+
+The description of the command syntax for setting the serial parameters in the kernel, boot loaders and login applications uses 
+the following variables which describe RS-232 parameters.
+
+<speed>
+
+    The speed of the serial link in bits per second.
+
+    The Linux kernel on a modern PC supports a serial console speeds of 1200, 2400, 4800, 9600, 19200, 38400, 57600 and 115200 bits per second.
+
+    The kernel supports a much wider range of serial bit rates when the serial interface is not being used as a serial console.[1]
+
+    Very recent Linux kernels can also offer a serial console using a USB serial dongle at speeds of: 
+    1200, 2400, 4800, 9600, 19200, 38400, 57600 and 115200 bits per second.
+
+    Most boot loaders only support a different range of speeds than are supported by the kernel. 
+    LILO 21.7.5 supports 110, 150, 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 56000, 57600 and 115200 bits per second. 
+    SYSLINUX 1.67 supports 75 to 56000 bits per second. GRUB 0.90 supports 2400, 4800, 9600, 19200, 38400, 57600 and 115200 bits per second.
+
+    You must chose the same speed for both the boot loader and for the Linux kernel. An operating system may use more than one boot loader. 
+    For example, Red Hat Linux uses SYSLINUX to install or upgrade the operating system; LILO as the boot loader for Red Hat Linux 7.1 and earlier; 
+    and GRUB as the boot loader for Red Hat Linux 7.2 and later.
+
+    If you are using a serial terminal or if you are using a dumb modem then the bit rate of the terminal or
+    dumb modem must also match the bit rate selected in the boot loader and kernel.
+
+    If the serial console is connected to a Hayes-style modem slower than 9600bps then configure the serial console with the 
+    same speed as the modem. Modems faster than 9600bps will generally automatically synchronize to the speed of the serial port.
+
+    The selected bit rate must also be supported by the serial port's UART semiconductor chip. Early UARTs without on-chip 
+    receive buffers could only reliably receive at up to 14400bps, this includes models 8250A, 82510, 16450 and 16550 (with no A). 
+    Recent UARTs with receive buffers will work at all serial console bit rates, this includes models 16550A, 16552, 16650, 16654, 16750, 16850 and 16950.
+
+    Unless you have good reason, use the popular bit rate of 9600 bits per second. This is the default bit rate of a great many devices.
+
+    The speeds that are supported by the kernel, the three common boot loaders, and all IBM PCs capable of running Linux are: 
+    2400, 4800, 9600 and 19200 bits per second. This is a depressingly small selection: not slow enough to support a call over an 
+    international phone circuit and not fast enough to upload large files. You may need to choose a speed that will result in a less 
+    robust software configuration.
+
+    Figure 2-2. Syntax for serial bits per second rate, in extended Backus-Naur form
+
+    <speed> ::=  <digits>
+    <digits> ::= <digit> | <digit><digits>
+    <digit> ::= 0 | 1 | … | 9
+<parity>
+
+    Number of parity bits and the interpretation of a parity bit if one is present.
+
+    Allowed values are n for no parity bit, e for one bit of even parity and o for one bit of odd parity.
+
+    Using no parity bit and eight data bits is recommended.
+
+    If parity is used then even parity is the common choice.
+
+    Parity is a simple form of error detection. Modern modems have much better error detection and correction. 
+    As a result the parity bit guards only the data on the cable between the modem and the serial port. 
+    If this cable has a low error rate, and it should, then the parity bit is not required.
+
+    Figure 2-3. Syntax for serial parity, in extended Backus-Naur form
+
+    <parity> ::= n | e | o
+<data>
+
+    The number of data bits per character.
+
+    Allowed values are 7 bits or 8 bits, as Linux uses the ASCII character set which requires at least seven bits.
+
+    Eight data bits are recommended. This allows the link to easily be used for file transfers and allows non-English text to be presented.
+
+    Figure 2-4. Syntax for serial data bits, in extended Backus-Naur form
+
+    <data> ::= 7 | 8
+<stop>
+
+    The number of stop bit-times.[2]
+
+    Allowed values are 1 or 2.
+
+    One stop bit-time is recommended.
+
+    If the RS-232 cable is very long then two stop bit-times may be needed.
+
+    You may occassionally see 1.5 stop bit-times. The intent is to gain 4% more data throughput when a link is too long for one stop 
+    bit-time but is too short to require two stop bit-times. 1.5 stop bit-times is now rare enough to be a hazard to use.
+
+    Figure 2-5. Syntax for serial stop bits, in extended Backus-Naur form
+
+    <stop> ::= 1 | 2
+<flow_control>
+
+    The type of flow control to use.
+
+    The Linux kernel allows no flow control and CTS/RTS flow control.
+
+    No flow control is the default, this is indicated by omitting <flow_control>.
+
+    CTS/RTS flow control is recommended, especially if login access is also provided to the serial port. This is indicated by a 
+    <flow_control> of r.
+
+    CTS/RTS flow control regulates the flow of chatacters. The computer does not send characters until Clear To Send is asserted 
+    by the modem. If the computer is has enough buffering to recieve characters from the modem the computer asserts Ready to Send. 
+    Thus neither the computer nor the modem's buffers are filled to overflowing.
+
+    Caution	
+
+    The kernel's CTS/RTS flow control is currently buggy. Machines can take a significant time to write console messages if 
+    flow control is enabled but CTS will never be asserted (as occurs when there is no call present on a modem or no session on a 
+    null modem cable or cable to a terminal server). As a result of the large number of kernel messages when the kernel is started 
+    a machine configured with the kernel's CTS/RTS flow control can take many minutes to reboot.
+
+    The kernel's CTS/RTS flow control cannot be recommended at this time. The HOWTO's author has a kernel patch available which he 
+    is seeking to have included in the mainstream kernel source code.
+
+    The CTS/RTS flow control in user-space applications does not share the kernel's bugs and CTS/RTS flow control is still recommended 
+    for getty.
+
+    Figure 2-6. Syntax for serial flow control, in extended Backus-Naur form
+
+    <flow_control> ::= <nil> | r
+
+At present the RS-232 status lines are ignored by the kernel. A kernel message will be printed even if Data Carrier Detect and Data Set 
+Ready are not asserted. This leads to the kernel messages being sent to a modem which is idle and in command mode.
+
+The console's slack interpretation of CTS, DSR and DCD makes it impossible to connect a serial console to an RS-232 multi-drop circuit. 
+Multi-drop circuits have more than two computers on the circuit; they are traditionally four-wire, satelite or wireless services.
+
+The Linux kernel uses the syntax in Figure 2-7 to describe the serial parameters. Many boot loaders use a variation of the syntax used 
+by the Linux kernel.
+
+Figure 2-7. Syntax for kernel serial parameters, in extended Backus-Naur form
+
+<mode> ::= <speed><parity><data><flow_control>
+
+Note that <mode> does not include <stop>. The kernel assumes the number of stop bits to be one. This shortcoming needs to be considered 
+when deploying long RS-232 cables.
+
+Most boot loaders default to 9600n8. A common default found on older terminals is 9600e7.
+
+Use 9600n8 if possible, as this is the default for most Linux software and modern devices.
+
+This HOWTO always configures the serial speed and parameters, even where not strictly necessary. This is so that people configuring 
+parameters other than the recommended and common default value 9600n8 will know what to alter.
