@@ -32,3 +32,9 @@ ansyslmd
 lstc
 abaqus
 cadence command to restart cd /apps/cadence/licensing && ./tools/bin/lmutil lmreread -c license.dat
+
+##########################################
+intel compiler parallel studio
+directory location for install package in gate server: hpcsw/linux/intel/
+directory for license in gate server: /hpcsw/linux/intel/licenses/COM_L___JCX2-69NRCMNR.lic
+just copy the product license file into /opt/intel/licenses of the node
