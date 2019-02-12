@@ -18,13 +18,19 @@ NEW ENV.
 /sbin/systemctl start ntpd
 
 #install NIS
-apt install nis
-yum install nis
+apt install nis     #rpm
+yum install nis     #dpgk
+#search and install ypblind and yp-tool 
+ypbind-1.37.1-9.el7.aarch64.rpm
+yp-tools-2.14-5.el7.aarch64.rpm 
+
 #plab NIS domain: partner server: 10.100.0.5
 #host NIS domain: benchmark server: 10.0.0.10
 domainname partner
+systemctl enable ypbind
+systemctl start ypbind
+systemctl status ypbind 
 service ypbind restart
-
 
 # update NIS
 /bin/echo "Configuring NIS"
