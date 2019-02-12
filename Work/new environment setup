@@ -26,6 +26,8 @@ yp-tools-2.14-5.el7.aarch64.rpm
 
 #plab NIS domain: partner server: 10.100.0.5
 #host NIS domain: benchmark server: 10.0.0.10
+vi /etc/defaultdomain     #NIS domain
+vi /etc/yp.conf           #NIS server ip
 domainname partner
 systemctl enable ypbind
 systemctl start ypbind
@@ -82,7 +84,7 @@ apt install nfs-common
 #ssh-rsa AAJ6fW8q/R59r+h7///BDvHwgaiiFew== root@hpccmu.cce.hp.com
 
 EOF
-
+/et
 /bin/cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
 /bin/chmod go-rwx /root/.ssh/authorized_keys
 /bin/ln -s /apps/.ssh/authorized_keys2 /root/.ssh/authorized_keys2
