@@ -22,6 +22,9 @@ apt install nis
 yum install nis
 #plab NIS domain: partner server: 10.100.0.5
 #host NIS domain: benchmark server: 10.0.0.10
+domainname partner
+service ypbind restart
+
 
 # update NIS
 /bin/echo "Configuring NIS"
