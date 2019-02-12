@@ -116,3 +116,10 @@ nameserver 16.xx.xx.xx
 nameserver 15.xx.xx.xx
 nameserver 15.xx.xx.xx
 EOF
+
+#if you run into an error when installing a package
+#delete the info in statoverride
+############# error ###############
+#dpkg: unrecoverable fatal error, aborting:
+#syntax error: unknown user 'user' in statoverride file
+/var/lib/dpkg/statoverride
