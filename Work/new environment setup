@@ -14,7 +14,8 @@ passwd root
 
   #Moving over HDD's UUID into fstab (NFS mount point)
 cat /etc/fstab.old >> /tmp/fstab    #the tmp fstab was copied over using scp command
-mv /tmp/fstab /etc/fstab
+mv /tmp/fstab /etc/fstab            
+vi /etc/fstab                       #delete old UUID
 
 #################### NFS MOUNTS #######################
 hpcgate:/apps /apps nfs rsize=131072,wsize=131072,intr,bg,vers=3 0 0
