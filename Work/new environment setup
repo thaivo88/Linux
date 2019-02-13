@@ -1,3 +1,120 @@
+  #On the gate server/CMU copy over group, hosts, fstab files
+scp /etc/group /etc/hosts /etc/fstab \[username]@[nodename]:/tmp
+
+  #On computing node rename orignal file to [file].old
+mv /etc/group /etc/group.old
+mv /etc/hosts /etc/hosts.old
+mv /etc/fstab /etc/fstab.old
+
+  #Moving over HDD's UUID into fstab (NFS mount point)
+cat /etc/fstab.old >> /tmp/fstab    #the tmp fstab was copied over using scp command
+mv /tmp/fstab /etc/fstab
+
+#################### NFS MOUNTS #######################
+hpcgate:/apps /apps nfs rsize=131072,wsize=131072,intr,bg,vers=3 0 0
+hpcgate:/home /home nfs rsize=131072,wsize=131072,intr,bg,vers=3 0 0
+hpcgate:/mops /mops nfs rsize=131072,wsize=131072,intr,bg,vers=3 0 0
+hpcgate:/ml /ml nfs rsize=131072,wsize=131072,intr,bg,vers=3 0 0
+
+hpchost3-a:/admin /admin nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=32768,wsize=32768,nfsvers=3,mountvers=3 0 0
+hpchost3-a:/hpcsw /hpcsw nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=32768,wsize=32768,nfsvers=3,mountvers=3 0 0
+hpchost3-a:/sw /sw nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=32768,wsize=32768,nfsvers=3,mountvers=3 0 0
+hpchost4-a:/usr1 /usr1 nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=32768,wsize=32768,nfsvers=3,mountvers=3 0 0
+hpchost4-a:/usr2 /usr2 nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=32768,wsize=32768,nfsvers=3,mountvers=3 0 0
+hpchost4-a:/usr3 /usr3 nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=32768,wsize=32768,nfsvers=3,mountvers=3 0 0
+hpchost4-a:/usr4 /usr4 nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=32768,wsize=32768,nfsvers=3,mountvers=3 0 0
+hpchost3-a:/usr5 /usr5 nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=32768,wsize=32768,nfsvers=3,mountvers=3 0 0
+hpchost3-a:/usr6 /usr6 nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=32768,wsize=32768,nfsvers=3,mountvers=3 0 0
+#-future-#hpchost4-a:/usr7 /usr7 nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=32768,wsize=32768,nfsvers=3,mountvers=3 0 0
+#-future-#hpchost4-a:/usr8 /usr8 nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=32768,wsize=32768,nfsvers=3,mountvers=3 0 0
+#-future-#hpchost3-a:/usr9 /usr9 nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=32768,wsize=32768,nfsvers=3,mountvers=3 0 0
+#######################################################
+
+
+  #Install package
+apt-get install nis           #NIS daemon
+yum install nis
+  #plab NIS domain: partner       server: 10.100.0.5
+  #host NIS domain: benchmark     server: 10.0.0.10
+vi /etc/defaultdomain     #NIS domain
+domainname partner        #command to set domainname to partner
+vi /etc/yp.conf           #NIS server ip
+ypserver 10.100.0.5       #input this file into yp.conf
+  #search and install ypblind and yp-tool 
+ypbind-1.37.1-9.el7.aarch64.rpm
+yp-tools-2.14-5.el7.aarch64.rpm 
+systemctl enable ypbind
+service ypbind restart
+
+apt-get install nsf-common    #system file to mount fstab
+yum install nsf-common
+
+
+  #if you run into an error when installing a package
+  #delete the info in statoverride file
+############# error ###############
+#dpkg: unrecoverable fatal error, aborting:
+#syntax error: unknown user 'user' in statoverride file
+##################################
+vi /var/lib/dpkg/statoverride
+
+  #create mount point for fstab
+mkdir /apps /home/ /mops /ml
+mount -a
+
+  #editing file so new users can ssh into the system
+echo "+::::::/bin/false" >> /etc/passwd
+echo "+::::::::" >> /etc/shadow
+echo "+" >> /etc/group
+
+  #add DNS IP
+vi /etc/resolv.conf
+  #add these domain ip address below
+nameserver 16.xx.xx.xx
+nameserver 15.xx.xx.xx
+nameserver 15.xx.xx.xx
+
+  #edit nsswitch file to config NIS
+vi /etc/nsswitch.conf 
+######################################
+passwd:     compat files nis
+shadow:     compat files nis
+group:      files nis
+hosts:      files dns nis
+bootparams: nisplus [NOTFOUND=return] files
+ethers:     files
+netmasks:   files
+networks:   files
+protocols:  files nis
+rpc:        files
+services:   files
+netgroup:   files nis
+publickey:  nisplus
+automount:  files nis
+aliases:    files nis
+#####################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###################################OLD WAY TO SETUP NEW ENV##################################################################
 NEW ENV.
 !/bin/bash
 #
