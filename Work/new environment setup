@@ -66,7 +66,7 @@ yum install nsf-common
 vi /var/lib/dpkg/statoverride
 
   #create mount point for fstab
-mkdir /apps /home/ /mops /ml
+mkdir /apps /home /scratch /mops /ml
 mount -a
 
   #editing file so new users can ssh into the system
