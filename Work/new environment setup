@@ -6,6 +6,12 @@ mv /etc/group /etc/group.old
 mv /etc/hosts /etc/hosts.old
 mv /etc/fstab /etc/fstab.old
 
+  #Add users to suoders
+vi /etc/suoders
+  #change root password if setup did not allow for root password
+passwd root
+  #enter password
+
   #Moving over HDD's UUID into fstab (NFS mount point)
 cat /etc/fstab.old >> /tmp/fstab    #the tmp fstab was copied over using scp command
 mv /tmp/fstab /etc/fstab
