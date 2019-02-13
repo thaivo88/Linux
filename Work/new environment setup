@@ -7,7 +7,7 @@ mv /etc/hosts /etc/hosts.old
 mv /etc/fstab /etc/fstab.old
 
   #Add users to suoders
-vi /etc/suoders
+vi /etc/sudoers
   #change root password if setup did not allow for root password
 passwd root
   #enter password
@@ -16,6 +16,9 @@ passwd root
 cat /etc/fstab.old >> /tmp/fstab    #the tmp fstab was copied over using scp command
 mv /tmp/fstab /etc/fstab            
 vi /etc/fstab                       #delete old UUID
+
+mv /tmp/group /etc/group
+mv /tmp/hosts /etc/hosts
 
 #################### NFS MOUNTS #######################
 hpcgate:/apps /apps nfs rsize=131072,wsize=131072,intr,bg,vers=3 0 0
@@ -53,7 +56,7 @@ yp-tools-2.14-5.el7.aarch64.rpm
 systemctl enable ypbind
 service ypbind restart
 
-apt-get install nsf-common    #system file to mount fstab
+apt-get install nfs-common    #system file to mount fstab
 yum install nsf-common
 
 
