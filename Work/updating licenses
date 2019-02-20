@@ -38,3 +38,10 @@ intel compiler parallel studio
 directory location for install package in gate server: hpcsw/linux/intel/
 directory for license in gate server: /hpcsw/linux/intel/licenses/COM_L___JCX2-69NRCMNR.lic
 just copy the product license file into /opt/intel/licenses of the node
+
+
+############################################
+
+/apps/license-servers/Altair 
+/apps/license-servers/Altair/licensing13.3 
+
