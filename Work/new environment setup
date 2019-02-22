@@ -56,6 +56,9 @@ yp-tools-2.14-5.el7.aarch64.rpm
 systemctl enable ypbind
 service ypbind restart
 
+#to makesure ypbind is working
+ypwhich 
+
 apt-get install nfs-common    #system file to mount fstab
 yum install nsf-common
 
