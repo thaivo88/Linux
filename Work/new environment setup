@@ -166,6 +166,7 @@ aliases:    files nis
   git clone https://github.com/singularityware/singularity.git
   echo 'export GOPATH=${HOME}/go' >> ~/.bashrc &&  echo 'export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin' >> ~/.bashrc &&   source ~/.bashrc
   mkdir -p ${GOPATH}/src/github.com/sylabs &&  cd ${GOPATH}/src/github.com/sylabs &&  git clone https://github.com/sylabs/singularity.git &&   cd singularity
+  apt install libssl-dev uuid-dev
   cd ${GOPATH}/src/github.com/sylabs/singularity &&  ./mconfig &&  cd ./builddir &&   make &&   make install
   apt-get install apt-transport-https  ca-certificates  curl  gnupg-agent   software-properties-common
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
