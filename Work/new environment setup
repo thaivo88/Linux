@@ -77,7 +77,7 @@ mount -a
 
   #editing file so new users can ssh into the system
 echo "+::::::/bin/false" >> /etc/passwd   # for rhel
-echo "+:::::: >> /etc/passwd              # for ubuntu
+echo "+::::::" >> /etc/passwd              # for ubuntu
 echo "+::::::::" >> /etc/shadow
 echo "+:::" >> /etc/group
 
