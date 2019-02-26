@@ -1,3 +1,8 @@
+#adding user
+#use their email and password will be svn[#####]
 cd /srv/svn/repos/ClusterTest/conf
 vi passwd
-#add user email and password svn#####
+
+#stop svn and restart the daemon
+killall -9 svnserve
+svnserve -d -r /var/repositories/
