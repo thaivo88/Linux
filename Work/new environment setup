@@ -114,154 +114,72 @@ aliases:    files nis
 
 
 
+######################################## Ubuntu Environment Config ##############################################################
+
+#tar file with packages in voth dir name u18setup.tar.gz
+  cd /home/hpcd/voth
+  scp u18setup.tar.gz \[username@hostname:/tmp 
+#disable nouveau kernal driver to install nvidia driver
+#create file: 
+  vi /etc/modprobe.d/blacklist-nouveau.conf
+#with the following contents:
+  blacklist nouveau
+  options nouveau modeset=0
+
+#Regenerate the kernel initramfs:
+  update-initramfs -u
+
+#Install GNU Compiler Collection for Nvidia driver
+  apt-get install gcc
+  reboot
+
+#move MLNX file to /root
+#move nv peer file to /root
+#tar both file
+#install mlnx then nv
+
+#skipping the firmware update due to nvidia symbol error
+  ./mlnxofedinstall --without-fw-update --without-mlnx-fw-updater 
+
+#finding the bus id for HCA
+  lspci | grep Mellanox
+#query the HCA card
+  mstflint -d [pci_bus_id] q
+  		#example: mstflint -d 37:00.0 q
+#upgrade firmware of the HCA card
+  mstflint -d [pci_bus_id] -i [file] burn
+  		#example: mstflint -d 37:00.0 -i /tmp/fw-ConnectX5-rel-16_23_1020-872725-B21_Ax-UEFI-14.16.17-FlexBoot-3.5.504.signed.bin burn
+  reboot
+
+#tar nv_peer_mem
+  tar cvfz nvidia-peer-memory_1.0.orig.tar.gz nv_peer_memory-master --owner=1000 --group=1000
+  cd nv_peer_mem
+  dpkg-buildpackage -us -uc
+  cd ..
+  dpkg -i nvidia-peer-memory-dkms_1.0-8_all.deb
+
+#install singularity then docker
+#singularity needs go language to install
+  apt-get install golang
+  git clone https://github.com/singularityware/singularity.git
+  echo 'export GOPATH=${HOME}/go' >> ~/.bashrc &&  echo 'export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin' >> ~/.bashrc &&   source ~/.bashrc
+  mkdir -p ${GOPATH}/src/github.com/sylabs &&  cd ${GOPATH}/src/github.com/sylabs &&  git clone https://github.com/sylabs/singularity.git &&   cd singularity
+  cd ${GOPATH}/src/github.com/sylabs/singularity &&  ./mconfig &&  cd ./builddir &&   make &&   make install
+  apt-get install apt-transport-https  ca-certificates  curl  gnupg-agent   software-properties-common
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  apt-key fingerprint 0EBFCD88
+  add-apt-repository    "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable nightly test"
+  apt-get install docker-ce docker-ce-cli containerd.io
+  docker run hello-world
+
+#enable root login
+  sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config 
+  systemctl restart sshd
+
+############################################ End of Config ###############################################################
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-###################################OLD WAY TO SETUP NEW ENV##################################################################
-NEW ENV.
-!/bin/bash
-#
-#PLEASE MAKE SURE THAT YOUR /etc/hosts FILE IS UPDATED AND THE SAME IN ALL NODES
-#PLEASE MAKE SURE THE NTP SERVER IP IS 10.0.0.10/10.100.0.5
-#PLEASE MAKE SURE THE NIS SERVER IP IS 10.0.0.10/10.100.0.5
-#PLEASE MAKE SURE THE /etc/fstab from a working node reflects what is written in the NFS Mounts part.
-#SEE THE ssh PART AND UPDATE THE PUBLIC KEY OF THE HEAD NODE HERE.  IT IS USUALLY THE HPCHOST KEY.
-#IF YOU NEED TO UPDATE THE NSSWITCH STUFF, THEN UPDATE THE SECTION TO WHAT YOU WANT, IF NOT COMMENT IT OUT.
-
-# set /etc/ntpd
-/bin/echo "Configuring NTP"
-/bin/echo "server  10.0.0.10" > /etc/ntp.conf
-/bin/echo "driftfile /var/lib/ntp/drift" >> /etc/ntp.conf
-/sbin/chkconfig ntpd on
-/sbin/systemctl stop ntpd
-/sbin/systemctl start ntpdate
-/sbin/systemctl start ntpd
-
-#install NIS
-apt install nis     #rpm
-yum install nis     #dpgk
-#search and install ypblind and yp-tool 
-ypbind-1.37.1-9.el7.aarch64.rpm
-yp-tools-2.14-5.el7.aarch64.rpm 
-
-#plab NIS domain: partner server: 10.100.0.5
-#host NIS domain: benchmark server: 10.0.0.10
-vi /etc/defaultdomain     #NIS domain
-vi /etc/yp.conf           #NIS server ip
-domainname partner
-systemctl enable ypbind
-systemctl start ypbind
-systemctl status ypbind 
-service ypbind restart
-
-# update NIS
-/bin/echo "Configuring NIS"
-/usr/sbin/authconfig --enablenis --nisdomain HPCHOU --nisserver=10.0.0.10 --disableshadow --update
-
-# update /etc/fstab
-/bin/echo "Configuring NFS mounts"
-if [ `/bin/grep -c hpccmu /etc/fstab` -eq 0 ]; then
-
-/bin/cat >> /etc/fstab <<EOF
-# NFS  Mounts
-#
-hpchost1:/usr1  /usr1 nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=8192,wsize=8192,nfsvers=3,mountvers=3 0 0
-hpchost1:/usr2  /usr2 nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=8192,wsize=8192,nfsvers=3,mountvers=3 0 0
-hpchost1:/usr3  /usr3 nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=8192,wsize=8192,nfsvers=3,mountvers=3 0 0
-hpchost1:/usr4  /usr4 nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=8192,wsize=8192,nfsvers=3,mountvers=3 0 0
-hpchost1:/usr5  /usr5 nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=8192,wsize=8192,nfsvers=3,mountvers=3 0 0
-hpchost1:/hpcsw /hpcsw nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=8192,wsize=8192,nfsvers=3,mountvers=3 0 0
-hpchost1:/admin /admin nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=8192,wsize=8192,nfsvers=3,mountvers=3 0 0
-hpccmu:/apps    /apps       nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=8192,wsize=8192,nfsvers=3,mountvers=3 0 0
-EOF
-fi
-
-#
-# create directories for hpchost
-/bin/echo "Creating NFS directories"
-/bin/mkdir /usr1 /usr2 /usr3 /usr4 /usr5 /hpcsw /admin /apps
-
-#install nfs-common
-yum install nfs-common
-apt install nfs-common
-# mount NFS mounts
-/bin/echo "Mounting NFS directories"
-/bin/mount -a -t nfs
-
-#
-# create links
-/bin/echo "Creating links"
-/bin/ln -s /hpcsw/no_arch/intel /opt/intel
-
-#
-# set root ssh keys
-/bin/echo "Configuring root ssh keys"
-/bin/mkdir -p /root/.ssh
-/usr/bin/ssh-keygen -q -t rsa -N '' -f /root/.ssh/id_rsa
-/bin/cat >> /root/.ssh/authorized_keys <<EOF
-#REPLACE WITH CORRECT ssh-rsa key from head node here
-#for example
-#ssh-rsa AAJ6fW8q/R59r+h7///BDvHwgaiiFew== root@hpccmu.cce.hp.com
-
-EOF
-/et
-/bin/cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
-/bin/chmod go-rwx /root/.ssh/authorized_keys
-/bin/ln -s /apps/.ssh/authorized_keys2 /root/.ssh/authorized_keys2
-
-#
-# update /etc/passwd, /etc/group 
-/bin/echo "Modifying /etc/passwd & /etc/group"
-/bin/echo "+::::::/bin/false" >> /etc/passwd
-/bin/cp -f /etc/passwd /etc/passwd.sav
-/bin/echo "+" >> /etc/group
-
-#
-#/etc/nsswitch.conf 
-/bin/echo "Configuring /etc/nsswitch.conf"
-/bin/cp -f /etc/nsswitch.conf /etc/nsswitch.conf.ORIGINAL
-/bin/grep "^#"  /etc/nsswitch.conf.ORIGINAL > /etc/nsswitch.conf
-/bin/cat >> /etc/nsswitch.conf <<EOF
-passwd:     compat files nis
-shadow:     compat files nis
-group:      files nis
-hosts:      files dns nis
-bootparams: nisplus [NOTFOUND=return] files
-ethers:     files
-netmasks:   files
-networks:   files
-protocols:  files nis
-rpc:        files
-services:   files
-netgroup:   files nis
-publickey:  nisplus
-automount:  files nis
-aliases:    files nis
-EOF
-
-#add DNS IP
-#/etc/resolv.conf
-/bin/echo "Configuring /etc/resolv.conf"
-/bin/cat >> /etc/resolv.conf <<EOF
-nameserver 16.xx.xx.xx
-nameserver 15.xx.xx.xx
-nameserver 15.xx.xx.xx
-EOF
-
-#if you run into an error when installing a package
-#delete the info in statoverride
-############# error ###############
-#dpkg: unrecoverable fatal error, aborting:
-#syntax error: unknown user 'user' in statoverride file
-/var/lib/dpkg/statoverride
