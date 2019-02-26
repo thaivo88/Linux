@@ -149,6 +149,8 @@ aliases:    files nis
 #upgrade firmware of the HCA card
   mstflint -d [pci_bus_id] -i [file] burn
   		#example: mstflint -d 37:00.0 -i /tmp/fw-ConnectX5-rel-16_23_1020-872725-B21_Ax-UEFI-14.16.17-FlexBoot-3.5.504.signed.bin burn
+  /etc/init.d/openibd restart
+#or
   reboot
 
 #tar nv_peer_mem
