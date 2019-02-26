@@ -131,7 +131,8 @@ aliases:    files nis
 
 #Install GNU Compiler Collection for Nvidia driver
   apt-get install gcc
-  reboot
+  chmod +x [nvidia_driver]
+  ./[nvidia_driver]
 
 #move MLNX file to /root
 #move nv peer file to /root
@@ -186,6 +187,14 @@ aliases:    files nis
 #if Nvidia-Docker2 run into a Docker version error, install the correct version
 	apt-get install docker-ce=<VERSION_STRING> docker-ce-cli=<VERSION_STRING> containerd.io
 		example: apt-get install docker-ce=5:18.09.2~3-0~ubuntu-bionic docker-ce-cli=5:18.09.2~3-0~ubuntu-bionic containerd.io
+
+#install cudnn
+	cd /root
+	dpkg -i [package_file]
+
+#create lvol dir add permission
+	mkdir /lvol
+	chmod 777 /lvol
 
 #enable root login
   sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config 
