@@ -182,7 +182,9 @@ aliases:    files nis
 	distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
 	curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list |  sudo tee /etc/apt/sources.list.d/nvidia-docker.list
 	sudo apt-get update
-
+#if Nvidia-Docker2 run into a Docker version error, install the correct version
+	apt-get install docker-ce=<VERSION_STRING> docker-ce-cli=<VERSION_STRING> containerd.io
+		example: apt-get install docker-ce=5:18.09.2~3-0~ubuntu-bionic docker-ce-cli=5:18.09.2~3-0~ubuntu-bionic containerd.io
 
 #enable root login
   sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config 
