@@ -187,6 +187,7 @@ aliases:    files nis
 #if Nvidia-Docker2 run into a Docker version error, install the correct version
 	apt-get install docker-ce=<VERSION_STRING> docker-ce-cli=<VERSION_STRING> containerd.io
 		example: apt-get install docker-ce=5:18.09.2~3-0~ubuntu-bionic docker-ce-cli=5:18.09.2~3-0~ubuntu-bionic containerd.io
+	apt-get install nvidia-docker2
 
 #install cudnn
 	cd /root
