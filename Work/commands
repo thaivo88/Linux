@@ -1,3 +1,6 @@
+#ls by uuid
+  ls -l /dev/disk/by-uuid 
+
 #show storage device name, file system, size, mountpoint (if mounted), label
   sudo lsblk -o NAME,FSTYPE,SIZE,MOUNTPOINT,LABEL
 
