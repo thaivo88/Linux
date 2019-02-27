@@ -143,4 +143,9 @@ example:
   slurmctld -Dvvv
   slurmd -Dcv
   
-  
+munge
+Slurm's default authentication and digital signature, each node in a cluster is configured with a munge key.
+munge generated credential:
+-user ID
+-group ID
+-time stamp
