@@ -1,4 +1,4 @@
-reconfig slurm
+#reconfig slurm
   systemctl stop slurmd
   systemctl status slurmd
   #steps to get slurm running on node
@@ -7,22 +7,32 @@ reconfig slurm
   scontrol reconfig 
 
 
-all the AI/PLAB IPs are in /etc/hosts
-wasup                       (shows job/queue information)
-scontrol show job <JOBID>         (show jobs)
-sinfo                     (information on the status of each computer on your local network.)
-bhosts                        (shows current status of nodes in the cluster)
-lshosts                       (shows host constraint/feature information)
-ssacli	                   HPE Command Line Smart Storage Administration Utility
-ssaducli	           HPE Command Line Smart Storage Administration Diagnostics
-ssa	                           HPE Array Smart Storage Administration Service
+#all the AI/PLAB IPs are in /etc/hosts
+  wasup                       (shows job/queue information)
+  scontrol show job <JOBID>         (show jobs)
+  sinfo                     (information on the status of each computer on your local network.)
+  bhosts                        (shows current status of nodes in the cluster)
+  lshosts                       (shows host constraint/feature information)
+  ssacli	                   HPE Command Line Smart Storage Administration Utility
+  ssaducli	           HPE Command Line Smart Storage Administration Diagnostics
+  ssa	                           HPE Array Smart Storage Administration Service
 
+############## accounting use ############
 sacct 
 is used to report job or job step accounting information about active or completed jobs.
+  sacct -u [username]
+
+sstat
+report accounting information about currently running jobs and job setps. (more detail than sacct)
+
+sreport
+report resources usage by cluster, partition, user, account
+################ end ##################
 
 salloc 
 is used to allocate resources for a job in real time. Typically this is used to allocate resources and spawn a shell. 
 The shell is then used to execute srun commands to launch parallel tasks.
+  salloc -ntasks=[#] -time=[#] bash
 
 sattach 
 is used to attach standard input, output, and error plus signal capabilities to a currently running job or job step. 
@@ -30,6 +40,7 @@ One can attach to and detach from jobs multiple times.
 
 sbatch 
 is used to submit a job script for later execution. The script will typically contain one or more srun commands to launch parallel tasks.
+  sbatch -ntasks=[#] -time=[#] [bash_script]
 
 sbcast 
 is used to transfer a file from local disk to local disk on the nodes allocated to a job. This can be used to effectively use diskless 
@@ -44,7 +55,9 @@ is the administrative tool used to view and/or modify Slurm state. Note that man
 
 sinfo 
 reports the state of partitions and nodes managed by Slurm. It has a wide variety of filtering, sorting, and formatting options.
-
+  sinfo --Node (report status in node-oriented form)
+  sinfo -p debug (report status of nodes in partition "debug")
+  
 smap 
 reports state information for jobs, partitions, and nodes managed by Slurm, but graphically displays the information to reflect 
 network topology.
@@ -52,12 +65,20 @@ network topology.
 squeue 
 reports the state of jobs or job steps. It has a wide variety of filtering, sorting, and formatting options. By default, 
 it reports the running jobs in priority order and then the pending jobs in priority order.
-
+  squeue -i60 (report status every 60 seconds)
+  squeue -u [username] -t all (report jobs for user in any state)
+  
 srun 
 is used to submit a job for execution or initiate job steps in real time. srun has a wide variety of options to specify resource 
 requirements, including: minimum and maximum node count, processor count, specific nodes to use or not use, and specific node 
 characteristics (so much memory, disk space, certain required features, etc.). A job can contain multiple job steps executing 
 sequentially or in parallel on independent or shared resources within the job's node allocation.
+  srun -ntasks[#] -[allocation]
+  srun -nnodes=[#] --exclusive -[allocation]
+  srun -label hostname
+  
+srun_cr
+ wrapper to srun for support of berkeley checkpoint/restart
 
 strigger 
 is used to set, get or view event triggers. Event triggers include things such as nodes going down or jobs approaching their time limit.
@@ -65,17 +86,28 @@ is used to set, get or view event triggers. Event triggers include things such a
 sview 
 is a graphical user interface to get and update state information for jobs, partitions, and nodes managed by Slurm.
 
+############### management control command ##############
+sacctmgr
+database management tool
+add/delete clusters, accounts, user
+get/set resource limits, fair-share allocation
 
+sprio
+view factors comprising a job's priority
+
+sshare
+view current hierarchical fair-share info
+################# end ####################
 
 hpcgate
 slurm
 The path has:
-/opt/slurm/custom
-/opt/slurm/bin
-/opt/slurm/sbin
-/apps/slurm/custom
-/apps/slurm/bin
-/apps/slurm/sbin 
+  /opt/slurm/custom
+  /opt/slurm/bin
+  /opt/slurm/sbin
+  /apps/slurm/custom
+  /apps/slurm/bin
+  /apps/slurm/sbin 
 But /opt/slurm/custom -> /apps/slurm/custom
 
 ##############################
@@ -95,5 +127,20 @@ if [ -e /optlocal/aislurm/custom/slurm.sh ]
 then
   . /optlocal/aislurm/custom/slurm.sh
 fi
-############################
+############ End ################
  
+############################## Daemon ###########################
+slurmctld - central controller (Monitors state of resources) (CMU)
+slurmd - compute node daemon
+slurmdbd - database daemon
+
+-c clear previous state, purge ALL JOB, set, partition state
+-C print the node's current configuration and exit (use with slurmd)
+-D run in the foreground, logs are written to stdout
+-v verbose error message (each "v" doubles volume of messages)
+
+example:  
+  slurmctld -Dvvv
+  slurmd -Dcv
+  
+  
