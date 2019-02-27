@@ -45,17 +45,18 @@
 
 # To search a user username or if they have an account
      > ypcat passwd | grep [username|name]
+     > cat /etc/passwd | grep [username|name]
 # Example
      > ypcat passwd | grep voth
 ##### Output: #####
      > voth:SIS.5HAX3Q.pU:30501:100:Thai Vo, HOUSTON:/usr6/voth:/bin/bash
 
 
-
-
-/etc/group
+#when creating an account for Plab search group to find the GID or default to Guest 10400 or 10300 for HPCD
+cat /etc/group | grep [group]
 /etc/gshadow
-/etc/aliases
+#to find user email address or name
+     cat /etc/aliases | grep -i [username] 
 /etc/netgroup
 
 #both rsa key should look the same
