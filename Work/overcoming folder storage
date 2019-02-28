@@ -1,0 +1,26 @@
+#if you're drive is getting full you can install a new drive and link a direcotry to extend the storage
+#install new drive
+#list drives
+  lsblk
+
+#get drive ID example sda
+#if the drive is not partition please go see parted file.
+#add new partiton to /ect/fstab
+  vi /etc/fstab
+  
+#add the following to the end of the file  
+################################
+#symbolic link /var/lib /dev/sdb3 (/media/newdrive)
+#
+/dev/sdb3 /media/newdrive       xfs     defaults        0       0
+##############################
+#change /dev/sdb3 to drive ID
+
+#create directory to mount new partition
+  mkdir /media/newdrive   [rename directory or relocate directory]
+
+#mounting all drive in fstab file
+  mount -a
+  
+#create symbolic link
+  ln -s /media/newdrive /svr/lib  [change mount point to the one you created above and change link to directory you need to link at]
