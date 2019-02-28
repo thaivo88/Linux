@@ -1,0 +1,38 @@
+#first install parted, if not yet install
+  sudo apt-get install parted           [On Debian/Ubuntu systems]
+  yum install parted                    [On RHEL/CentOS and Fedora]
+  dnf install parted                    [On Fedora 22+ versions]
+
+#start parted tool
+  parted
+
+#quit parted tool
+  quit
+  
+#once inside parted tool your entry now changed to : (parted)
+
+#to dispaly the hard disk information
+  print
+
+#to change hard disk
+  select
+
+#select which disk you would like to change to: formate [/dev/sd[a-z][1-9]]
+  /dev/sdb3           [example]
+ 
+#create partition
+  mkpart
+#######################
+you can set:
+  -name of the new partition
+  -starting block
+  -ending block
+  -system file
+  
+example of start and end block: creating a 10GB partition on a new drive starting at 1 and ending at 10000
+#######################
+
+#quit parted tool and format the new partition with a file system
+  mkfs.[ext3 | ext4 | xfs | nfs] [/dev/sd[a-z][1-9]]]
+  [example: mkfs.xfs /dev/sdb3]
+  
