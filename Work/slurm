@@ -131,6 +131,7 @@ fi
  
 ############################## Daemon ###########################
 slurmctld - central controller (Monitors state of resources) (CMU)
+  or /etc/init.d/slurm restart
 slurmd - compute node daemon
 slurmdbd - database daemon
 
