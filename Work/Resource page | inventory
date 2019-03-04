@@ -1,0 +1,62 @@
+PLab (hpcgate) Inventory (Resource Page)
+Directory Path: /mops/nodes/INVENTORY
+	/data : holds all collected data of nodes in this directory from the script: ./getNodeInfo | HOSTLIST | inventory.htm
+		(node's hostname need to be in HOSTLIST file to be generated in the Resource Page)
+	/sbin : holds all scipts related to Inventory
+		./getNodInfo : scipt that collects data from nodes in HOSTLIST, that data is then place into /data
+		./genInvPage : pull all html code to generate inventory page
+		
+
+-./getNodeInfo ran into code error:						# Path are not the same!	
+		No such file or directory:						# Changing code to match the correct Path
+			/apps/nodes/INVENTORY/sbin/functions
+			/apps/nodes/INVENTORY/data
+			/apps/nodes/INVNETORY/sbin/discovery		# copied getNodeInfo to
+		Command not found:								# getNodeInfo.backup
+			getOSname
+			getHDdata
+-updated HOSTLIST; added missing node (znode43-48)
+-updated getNodeInfo to have the correct path INVDIR=/mops/nodes/INVENTORY
+
+
+
+
+#############################################################
+
+
+hpchost Inventory (Resource Page)
+Directory Path: /admin/inventory/
+	/sbin : holds all scipts related to Inventory
+		./getNodInfo : scipt that collects data from nodes in HOSTLIST, that data is then place into /data directory
+		./genInvPage : pull all html code to generate inventory page
+	/data : holds all collected data of nodes in this directory from the script: ./getNodeInfo | HOSTLIST | inventory.htm
+		(node's hostname need to be in HOSTLIST file to be generated in the Resource Page)
+	./mkpage : collect all html code to generate inventory.htm then copy the file to /srv/www/htdocs/system
+Node must have ssaucli (aka hpssacli) install
+
+./getNodeInfo ran into code error: which hpssacli not found
+edited script to change hpssacli to ssaucli (utility name changed)
+-None of the new nodes are getting generated data files into /data directory
+-Updated HOSTLIST file; added missing node's hostname
+-/srv/www/htdocs/system/inventory.htm is updated with missing host name but still missing HW/SW information
+-Resource page not pulling updated data from /srv/www/htdocs/system/inventory.htm file
+
+########
+
+Another path for inventory (not linked)
+Directory Path: /admin/nodes/INVENTORY
+error: 
+	Cron <root@hpchost1> /admin/nodes/INVENTORY/sbin/INVENTORY
+	mv: cannot stat `inventory': No such file or directory
+/data path has all the nodes data file including the missing ones
+
+
+#########################
+hpchost fixed
+Directory Path: /admin/inventory
+update HOSTLIST
+run ./getNodeInfo && ./genInvPage
+./mkpage
+Directory Path: /admin/nodes/INVENTORY
+update HOSTLIST
+run ./getNodeInfo && ./getInvPage
