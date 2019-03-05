@@ -1,3 +1,19 @@
+#install ssacli (Ubuntu)
+#add this line below with the proper dist and project veriosn into /etc/apt/source.list && /etc/apt/source.list.d/mcp.list
+  deb http://downloads.linux.hpe.com/SDR/repo/mcp [dist/project_ver] non-free
+
+#Where:
+   #dist             bionic, xenial, trusty, precise, stretch, jessie, squeeze, wheezy
+   #project_ver      current, 11.21, 11.05, 10.80, 10.60, 10.50, 10.40, 9.50, 9.40, 9.25
+#add public key
+  curl http://downloads.linux.hpe.com/SDR/hpPublicKey1024.pub | apt-key add -
+  curl http://downloads.linux.hpe.com/SDR/hpPublicKey2048.pub | apt-key add -
+  curl http://downloads.linux.hpe.com/SDR/hpPublicKey2048_key1.pub | apt-key add -
+  curl http://downloads.linux.hpe.com/SDR/hpePublicKey2048_key1.pub | apt-key add -
+  apt-get update
+  apt-get install ssacli
+  
+###################################################
 Older version directory @ /opt/hp/hpssacli/bin/hpssacli using the hpssacli syntax
 New version directory @ /opt/smartstorageadmin/ssacli/bin/ssacli using the ssacli syntax
 
