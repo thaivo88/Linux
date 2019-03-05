@@ -200,6 +200,15 @@ aliases:    files nis
 #enable root login
   sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config 
   systemctl restart sshd
+  
+### ONLY for Ubuntu 18 and above ### 
+#Fix systemd-logind sandboxing issue with causes slow logins
+#Modify /lib/systemd/system/systemd-login.service to remove the "any" statement
+	#IPAddressDeny=any
+	IPAddressDeny=
+#Restart daemons
+	systemctl daemon-reload
+	systemctl restart systemd-logind 
 
 ############################################ End of Config ###############################################################
 
