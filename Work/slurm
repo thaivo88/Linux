@@ -150,3 +150,28 @@ munge generated credential:
 -user ID
 -group ID
 -time stamp
+
+#################################################
+Node are in DOWN state:
+
+1. Check the reason why the node is down using the command 
+  scontrol show node <host_name> 
+This will show the reason why the node was set down and the time when it happened. 
+If there is insufficient disk space, memory space, etc. compared to the parameters specified in the slurm.conf file 
+then either fix the node or change slurm.conf.
+
+2. If the reason is "Not responding", then check communications between the control machine and the DOWN node using the command 
+  ping <address>
+being sure to specify the NodeAddr values configured in slurm.conf. 
+If ping fails, then fix the network or addresses in slurm.conf.
+
+3. Next, login to a node tha. Slurm considers to be in a DOWN state and check if the slurmd daemon is running with the command 
+  ps -el | grep slurmd
+If slurmd is not running, restart it (typically as user root using the command "/etc/init.d/slurm start"). 
+You should check the log file (SlurmdLog in the slurm.conf file) for an indication of why it failed. 
+You can get the status of the running slurmd daemon by executing the command "scontrol show slurmd" on the node of interest. 
+Check the value of "Last slurmctld msg time" to determine if the slurmctld is able to communicate with the slurmd.
+
+4. If slurmd is running but not responding (a very rare situation), then kill and restart it (typically as user root using the 
+commands "/etc/init.d/slurm stop" and then "/etc/init.d/slurm start").
+##################################################
