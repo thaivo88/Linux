@@ -193,6 +193,17 @@ aliases:    files nis
 	cd /root
 	dpkg -i [package_file]
 
+#install cuda
+#download cuda toolkit deb or runfile if the driver didn't install cuda or you need another verison of cuda
+  dpkg -i [package_file]
+  ./[runfile]
+  ln -s cuda-10.1 cuda      #create symbolic link
+
+#install nccl
+  move nccl.txz to /usr/local/
+  untar nccl
+  ln -s nccl.txz nccl     #creating a symbolic link
+
 #create lvol dir add permission
 	mkdir /lvol
 	chmod 777 /lvol
@@ -210,10 +221,14 @@ aliases:    files nis
 	systemctl daemon-reload
 	systemctl restart systemd-logind 
 
+#infiniband ip address ubuntu >18
+
+/etc/netplan is the “new” place to set network settings
+commented out the entry for ib0 in /etc/network/interfaces
+Added  the following to /etc/netplan/50-cloud-init.yaml
+        ib0:
+            addresses:
+            - 192.168.0.147/16
+
+
 ############################################ End of Config ###############################################################
-
-
-
-
-
-
