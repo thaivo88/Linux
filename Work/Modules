@@ -12,3 +12,17 @@
 #load module
  module load [module]
  module unload [module] 
+
+
+############## install and config envirnoment module ##################
+
+ apt-get install environment-modules #ubuntu
+ yum install environment-modules     #rhel
+ 
+ ln -s /apps/sw /sw    #symlink /sw -> /apps/sw
+
+# add /sw/com/modulefiles to the end of /usr/share/modules/init/.modulespath
+# other distro may have the directory in a different location:
+# /usr/share/Modules/init/.modulespath
+ echo '/sw/com/modulefiles' >> /usr/share/modules/init/.modulespath
+############################### end #############################
