@@ -1,8 +1,0 @@
-infiniband ip address ubuntu >18
-
-/etc/netplan is the “new” place to set network settings
-commented out the entry for ib0 in /etc/network/interfaces
-Added  the following to /etc/netplan/50-cloud-init.yaml
-        ib0:
-            addresses:
-            - 192.168.0.147/16
