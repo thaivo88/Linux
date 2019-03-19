@@ -87,3 +87,9 @@ dmidecode --type 0 --type 13
 dmidecode --type 0,13
 dmidecode --type bios
 dmidecode --type BIOS
+
+####################################
+
+# finding the system model
+  dmidecode | grep -A3 '^System Information'
+
