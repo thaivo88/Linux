@@ -12,3 +12,7 @@ https://support.hpe.com/hpsc/doc/public/display?docId=c03334058
   </RIB_INFO>
  </LOGIN>
 </RIBCL> 
+
+# install hponcfg
+# copy file to node then run
+ hponcfg -f /[path_directory]
