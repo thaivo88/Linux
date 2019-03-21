@@ -1,0 +1,14 @@
+https://support.hpe.com/hpsc/doc/public/display?docId=c03334058
+
+<RIBCL version="2.21">
+ <LOGIN USER_LOGIN="adminname" PASSWORD="password">
+  <RIB_INFO MODE="WRITE" >
+   <MOD_NETWORK_SETTINGS>
+    <!-- Desired NIC:   Substitute:                                  -->
+    <!-- iLO NIC        <SHARED_NETWORK_PORT VALUE="N"/>             -->
+    <!-- Host NIC       <SHARED_NETWORK_PORT VALUE="Y"/>             -->
+    <SHARED_NETWORK_PORT VALUE="Y"/>
+   </MOD_NETWORK_SETTINGS>
+  </RIB_INFO>
+ </LOGIN>
+</RIBCL> 
