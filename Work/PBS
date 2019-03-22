@@ -1,0 +1,11 @@
+# give you a listing	
+  pbsnodes -l	 
+
+# will replinish	
+  pbsnodes -r rhean037   
+  	 	 
+# Will offline the node
+  pbsnodes -o  [hostname]
+ 
+# will list all node
+  pbsnodes -a
