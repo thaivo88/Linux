@@ -38,6 +38,8 @@ sattach
 is used to attach standard input, output, and error plus signal capabilities to a currently running job or job step. 
 One can attach to and detach from jobs multiple times.
 
+  scontrol update nodename=[hostname] state=[idle|down] 
+
 sbatch 
 is used to submit a job script for later execution. The script will typically contain one or more srun commands to launch parallel tasks.
   sbatch -ntasks=[#] -time=[#] [bash_script]
