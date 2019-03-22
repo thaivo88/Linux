@@ -1,8 +1,8 @@
-https://support.hpe.com/hpsc/doc/public/display?docId=c03334058
+# https://support.hpe.com/hpsc/doc/public/display?docId=c03334058
 
 # install hponcfg
 # copy file to node then run
- hponcfg -f /[path_directory]
+  hponcfg -f /[path_directory]
 
 ################## Set ilo Shared on and off ###################
 <!--         RIBCL Sample Script for HP Lights-Out Products          -->
@@ -57,6 +57,9 @@ https://support.hpe.com/hpsc/doc/public/display?docId=c03334058
 ##################### End #############################
 
 
+
+
+
 ####################### add license key ####################
 <!--         RIBCL Sample Script for HP Lights-Out Products          -->
 <!--Copyright (c) 2003,2008 Hewlett-Packard Development Company, L.P.-->
@@ -104,3 +107,83 @@ https://support.hpe.com/hpsc/doc/public/display?docId=c03334058
 </RIBCL>
 ############################## end #############################
 
+
+
+
+
+############### Get MAC address and interface ID ############
+#!/bin/bash
+
+echo -e "`hostname`\t`/root/bin/bin/getserial`\t`/root/bin/bin/getmpmac`\t`ifconfig eth0|grep ether|awk '{print $2}'`\t`ifconfig eth1|grep ether|awk '{print $2}'`\t`ifconfig eth2|grep ether|awk '{print $2}'`\t`ifconfig eth3|grep ether|awk '{print $2}'`"
+
+#!/bin/bash
+
+echo `dmidecode|grep -A5 "System Info"|grep "Serial"|awk '{print $NF}'`
+################### End ##################
+
+
+
+
+
+# run this script to set ilo ip
+# ./setILO [IP_Address] [Sub] [Gate]
+################## Set ilo ip ####################
+#!/bin/sh
+if [ $# == "1" ]; then
+        MASK="255.255.0.0"
+elif [ $# == "2" ]; then
+        MASK=$2
+        GATEWAY="0.0.0.0"
+elif [ $# == "3" ]; then
+        MASK=$2
+        GATEWAY=$3
+else 
+        echo "Usage setiLO IPAddress [Netmask]"
+        echo "Default netmask is 255.255.0.0"
+        exit 1
+fi
+
+echo "<RIBCL VERSION=\"2.21\">" > /tmp/`hostname`ilo.xml
+echo "  <LOGIN USER_LOGIN=\"adminname\" PASSWORD=\"password\">" >> /tmp/`hostname`ilo.xml
+echo "  <RIB_INFO MODE=\"write\">" >> /tmp/`hostname`ilo.xml
+echo "    <MOD_NETWORK_SETTINGS>" >> /tmp/`hostname`ilo.xml
+echo "      <IP_ADDRESS value=\""$1\""/>" >> /tmp/`hostname`ilo.xml
+echo "      <SUBNET_MASK value=\""$MASK\""/>" >> /tmp/`hostname`ilo.xml
+echo "      <GATEWAY_IP_ADDRESS value=\""$GATEWAY\""/>" >> /tmp/`hostname`ilo.xml
+echo "      <DHCP_ENABLE value = \"No\"/>" >> /tmp/`hostname`ilo.xml
+echo "    </MOD_NETWORK_SETTINGS>" >> /tmp/`hostname`ilo.xml
+echo "  </RIB_INFO>" >> /tmp/`hostname`ilo.xml
+echo "  </LOGIN>" >> /tmp/`hostname`ilo.xml
+echo "</RIBCL>" >> /tmp/`hostname`ilo.xml
+
+hponcfg -f /tmp/`hostname`ilo.xml
+################### End #########################
+
+
+
+
+
+################ Get MAC address script ##################
+#!/bin/sh
+#
+
+CMD=`echo $0|awk -F '/' '{print $NF}'`
+MODEL=`dmidecode|grep -m 1 "Product Name"|awk '{print $4}'`
+
+case "$MODEL" in 
+  XL170r | XL230a | DL380e | SL270s | DL380p | SL4540 | DL320s | DL360 | SL230s | DL360p | SL250s | DL365 | DL380 | DL380e | DL385 | DL580 | DL585 | BL20p | BL460c | BL465c | BL480c | BL680c | BL685c | BL260c | BL280c | BL2x220c )
+        hponcfg -f /root/bin/bin/smartscript/Get_Network.xml |grep MAC_ADDRESS|awk -F '"' '{print $2}'
+  ;;
+  DL140 | DL140 | DL145 | DL145 | DL160 | DL165 | DL180 | DL185 | DL170h)
+        ipmitool lan print 2|grep MAC|awk '{print $NF}'
+  ;;
+  rx1620 | rx2620 | rx4640 | rx7620 | rx7640)
+        hpbmc|grep MAC|awk '{print $NF}'|sed "s/-/:/g"
+  ;;
+  *)
+        echo "Model $MODEL not yet supported"
+        exit 1
+esac
+
+exit 0
+#################### end ######################
