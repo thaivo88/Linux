@@ -161,6 +161,18 @@ aliases:    files nis
   cd ..
   dpkg -i nvidia-peer-memory-dkms_1.0-8_all.deb
 
+#nv_peer_mem will disappear after reboot to fix this issue add config file
+  vi /etc/modprobe.d/nvidia.conf
+  # add
+  	options nvidia NVreg_RegistryDwords="PeerMappingOverride=1;"
+  #If the display driver is r387 or newer
+  	options nvidia NVreg_EnableStreamMemOPs=1 NVreg_RegistryDwords="PeerMappingOverride=1;"
+  vi /etc/infiniband/nv_peer_mem.conf
+  # add (include comment sign)
+  	# Load nv_peer_mem module upon boot 
+     	ONBOOT=yes 
+
+
 #install singularity
 #singularity needs go language to install
   apt-get install golang
