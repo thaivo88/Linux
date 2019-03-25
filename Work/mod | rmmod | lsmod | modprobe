@@ -84,3 +84,33 @@ We can add specific options to the modules to customize external access. These o
     lsmod
     lsmod | grep [keyword]
     rmmod [mod name]
+
+
+############ kernel module dissappearing after reboot ###############
+    lsmod | grep [module_name]
+# if you don't see the module you install after a reboot run modinfo
+    modinfo [module_name]
+        # example:
+             $modinfo nv_peer_mem 
+                filename:       /lib/modules/4.15.0-46-generic/updates/dkms/nv_peer_mem.ko
+                version:        1.0-8
+                license:        Dual BSD/GPL
+                description:    NVIDIA GPU memory plug-in
+                author:         Yishai Hadas
+                srcversion:     9F372F055FA43FA7440C57D
+                depends:        ib_core
+                retpoline:      Y
+                name:           nv_peer_mem
+                vermagic:       4.15.0-46-generic SMP mod_unload 
+                signat:         PKCS#7
+                signer:         
+                sig_key:        
+                sig_hashalgo:   md4
+# if modinfo see the module then run insert module command
+    insmod [filename]
+        # example:
+            insmod /lib/modules/4.15.0-46-generic/updates/dkms/nv_peer_mem.ko
+# use lsmod to check if the module is loaded
+    lsmod | grep [module_name]
+######################################################
+            
