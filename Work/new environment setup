@@ -171,6 +171,10 @@ aliases:    files nis
   # add (include comment sign)
   	# Load nv_peer_mem module upon boot 
      	ONBOOT=yes 
+  vi /etc/modprobe.d/nv_peer_mem.conf
+    # add (include comment sign)
+  	 # Load nv_peer_mem at boot
+           nv_peer_mem
 
 
 #install singularity
