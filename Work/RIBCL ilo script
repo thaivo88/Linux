@@ -111,6 +111,74 @@
 
 
 
+########################### IPMI/DCMI Over LAN ########################
+<RIBCL VERSION="2.0">
+ <LOGIN USER_LOGIN="admin" PASSWORD="password">
+  <RIB_INFO MODE="write">
+   <MOD_GLOBAL_SETTINGS>
+    <IPMI_DCMI_OVER_LAN_ENABLED VALUE="No"/>
+   </MOD_GLOBAL_SETTINGS>
+  </RIB_INFO>
+ </LOGIN>
+</RIBCL>
+############################ End ################################
+
+
+
+
+
+########################### Baud Rate/Serial Speed #####################
+<!-- SERIAL_CLI_SPEED -->
+<!-- 9600    1 -->
+<!-- 19200   2 -->
+<!-- 38400   3 -->
+<!-- 57600   4 -->
+<!-- 115200  5 -->
+
+<RIBCL VERSION="2.0">
+  <LOGIN USER_LOGIN="adminname" PASSWORD="password">
+     <RIB_INFO MODE="write">
+        <MOD_GLOBAL_SETTINGS>
+                <SERIAL_CLI_SPEED value="5"/>
+        </MOD_GLOBAL_SETTINGS>
+     </RIB_INFO>
+  </LOGIN>
+</RIBCL>
+############################ End ##############################
+
+
+
+
+
+########################## Get Network info #################
+<!--          RIBCL Sample Script for Integrated Lights-Out          -->
+<!--   Copyright (c) 2003 Hewlett-Packard Development Company, L.P.  -->
+
+<!-- Description:  This is a sample XML script to return current     -->
+<!--               network settings on iLO                           -->
+
+<!-- NOTE:  You will need to replace the USER_LOGIN and PASSWORD     -->
+<!--        values with values that are appropriate for your         -->
+<!--        environment.                                             -->
+<!--        Use CPQLOCFG.EXE ver 2.10 or greater with this script    -->
+<!--        This script was written for iLO firmware ver 1.10 or     -->
+<!--        higher.                                                  -->
+<!--        See the iLO User Guide for more information on scripting -->
+<!--        and the syntax of the RIBCL XML.                         -->
+
+<RIBCL VERSION="2.21">
+  <LOGIN USER_LOGIN="test" PASSWORD="password">
+    <RIB_INFO MODE="read">
+        <GET_NETWORK_SETTINGS/>
+    </RIB_INFO>
+  </LOGIN>
+</RIBCL>
+########################## End ###########################
+
+
+
+
+
 ############### Get MAC address and interface ID ############
 #!/bin/bash
 
@@ -187,3 +255,13 @@ esac
 
 exit 0
 #################### end ######################
+
+
+
+
+
+########################## Serial info ##################
+#!/bin/bash
+
+echo `dmidecode|grep -A5 "System Info"|grep "Serial"|awk '{print $NF}'`
+########################## End ##############################
