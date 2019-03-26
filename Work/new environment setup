@@ -76,8 +76,8 @@ mkdir /apps /home /scratch /mops /ml
 mount -a
 
   #editing file so new users can ssh into the system
-echo "+::::::/bin/false" >> /etc/passwd   # for rhel
-echo "+::::::" >> /etc/passwd              # for ubuntu
+echo "+::::::/bin/false" >> /etc/passwd   # ssh connection closed to everyone unless username is added to the node
+echo "+::::::" >> /etc/passwd              # ssh connection open to all users
 echo "+::::::::" >> /etc/shadow
 echo "+:::" >> /etc/group
 
