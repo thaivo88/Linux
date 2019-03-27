@@ -48,3 +48,11 @@ just copy the product license file into /opt/intel/licenses of the node
 ################################
 STAR-CCM+ / CDLMD
 /apps/star/licensing
+
+./lmutil lmhostid
+# check physical ID
+./lmutil lmhostid -hostname
+# check hostname (should be the same in license.dat file)
+
+./lmgrd
+# start daemon
