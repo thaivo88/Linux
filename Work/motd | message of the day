@@ -1,0 +1,10 @@
+# edit /etc/motd
+  vi /etc/motd
+  
+# add message in the file and quit and save 
+
+  ^[[46m^[[30mSTATUS:^[[0m ^[[42m^[[30m NOT VULNERABLE ^[[0m (Mitigation: Load fences)
+  ^[[46m^[[30mSTATUS:^[[0m ^[[42m^[[30m NOT VULNERABLE ^[[0m (IBRS + IBPB are mitigating the vulnerability)
+  ^[[46m^[[30mSTATUS:^[[0m ^[[42m^[[30m NOT VULNERABLE ^[[0m (Mitigation: PTI)
+  ^[[46m^[[30mSTATUS:^[[0m ^[[42m^[[30m NOT VULNERABLE ^[[0m (your CPU microcode mitigates the vulnerability)
+  ^[[46m^[[30mSTATUS:^[[0m ^[[42m^[[30m NOT VULNERABLE ^[[0m (Mitigation: Speculative Store Bypass disabled via prctl)
