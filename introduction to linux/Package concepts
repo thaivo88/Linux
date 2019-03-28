@@ -19,4 +19,16 @@ One of the most important types of information maintained by the package system 
 the requirements of packages for one another. 
 
 Checksums:
-The package system maintains checksums and assorted ancill
+The package system maintains checksums and assorted ancillary information about the file. 
+This information can be used to verify the validity of the installed software.
+
+Upgrades and Uninstallation:
+By tracking files and dependencies, package systems permit easy upgrades and uninstallation: 
+Tell the package system to upgrade or removed a package, and it will replace or remove every file in the package.
+
+Binary Package Creation:
+Both RPM and Debian package system provide tools to help create binary packages (those that are installed directly) from source code.
+This feature is particularly helpful if you're running Linux on a peculiar CPU: you can download source code and create a binary package,
+even if the developers didn't provide explicit support for your CPU. Creating a binary package from source has advantages over compiling
+software from source in more conventional ways, because you can then use the package management system to track dependencies,
+attend to individual files.
