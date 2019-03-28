@@ -1,0 +1,22 @@
+RPM Base Distro:
+-SUSE  
+-RedHat: splintered into three distributions:
+  -Fedora version favored by home users, students, and business on tight budget
+  -CentOS is a freely redistributable version intended for enterprise users
+  -RedHat reserved for the for-pay version of the distribution
+
+                          packagename-a.b.c-x.arch.rpm
+                          
+Package Name: The first component (packagename) is the name of the package.
+Note: the same program may be given different package names by different distribution maintainers.
+
+Version Number: The second component (a.b.c) is the package version number.
+
+Build Number: The number following the version number (x) is the build number (also known as the release number).
+This number represents minor changes made by the package maintainer, not by the program author.
+Many distribution maintainers add a letter code to the build number to distinguish their packages from those of others.
+Note: that these numbers are not comparable across package maintainers.
+
+Architecture: The final component preceding the .rpm extenstion (arch) is the code for the package's architecture.
+CPU-independent packages generally use the noarch architecture code.
+The main execption to this rule is source RPMs, which use the src architecture code.
