@@ -36,3 +36,23 @@ The main execption to this rule is source RPMs, which use the src architecture c
     which may include startup scripts that go in /etc/rc.d/init.d or elsewhere. To overcome this requires you to remove
     the offending scripts after installing the RPM.
     
+                      rpm [operation][options] [package-files|package-names]
+
+RPM Operations:
+-i                    installs a package
+-U                    installs a new package or upgrades an existing one
+-F or --freshen       upgrades a package only if an earlier version already exists
+-q                    queries a package; finds whether a package is installed, what files it contains, and so on
+-V or --verify        verifies a package; checks that its files are present and unchanged since installation
+-e                    uninstall a package
+-b                    builds a binary package, given source code and configuration files; moved to the rpmbuild program with RPM version 4.2
+--rebuild             builds a binary package, given a source RPM file; moved to the rpmbuild program with RPM version 4.2
+--rebuilddb           rebuilds the RPM database to fix errors
+
+RPM options:
+option                used with
+--root [dir]            any           modifies the linux system having a root directory located at [dir].
+--force                 i U F         forces installation of a package even when it means overwriting existing packages.
+-h or --hash            i U F         displays a series of hash marks to indicate the progress of the operation
+-v                      i U F         used in conjunction with the -h option to produce a uniform number of hash marks for each package
+--nodeps               i U F E        
