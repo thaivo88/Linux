@@ -20,3 +20,19 @@ Note: that these numbers are not comparable across package maintainers.
 Architecture: The final component preceding the .rpm extenstion (arch) is the code for the package's architecture.
 CPU-independent packages generally use the noarch architecture code.
 The main execption to this rule is source RPMs, which use the src architecture code.
+
+                        RPM package compatibility issues:
+                        
+-Distributions may be different versions of the RPM utilities.
+-An RPM package designed for one distribution may have dependencies that are unmet in another distribution.
+    A package may require a newer version of a library than is present on the distribution you're using.
+    To overcome this problem by installing or upgrading the package dependencies, but sometimes doing so causes problems
+    because the upgrade may break other packages. By rebuilding the package you want to install from a source RPM,
+    you can often work around these problem, but sometimes the underlying source code also needs the upgraded libraries.
+-An RPM package may be built to depend on a package of a particular name, but if the distribution you're using
+    has named the package differently, the RPM utility will object. You can override this objection by using the --nodeps switch.
+-Different distributions may include slightly different files in their packages. 
+-Some programs include distribution-specific scripts or configuration files. This problem is particularly acute for servers,
+    which may include startup scripts that go in /etc/rc.d/init.d or elsewhere. To overcome this requires you to remove
+    the offending scripts after installing the RPM.
+    
