@@ -1,2 +1,7 @@
 nano /etc/sudoers
-#adding user to sudoer file if sudo access
+# adding user to sudoer file for sudo access
+
+############################################
+# User privilege specification
+# root,[username]    ALL=(ALL) NOPASSWD: ALL
+# ALL     ALL=(ALL) NOPASSWD: [command|file directoy]
