@@ -1,0 +1,45 @@
+Mount the RHEL 7 installation ISO to a directory like /mnt, e.g.:				
+													
+mount -o loop /admin/RHEL-ALT-7.5-20180315.0-Server-aarch64-dvd1.iso /mnt/rh75		
+If you use DVD media , you can mount like below.						
+										
+																			
+cp /mnt/rh75/media.repo /etc/yum.repos.d/rhel7.5.repo					
+chmod 644 /etc/yum.repos.d/rhel7.5.repo						
+Edit the new repo file, changing the gpgcheck=0 setting to 1 and adding the following 3 lines		
+																			
+enabled=1									
+baseurl=file:///mnt/rh75								
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release				
+										
+In the end, the new repo file could look like the following (though the mediaid will be different depending on the version of RHEL):
+																			
+[InstallMedia]									
+name=DVD for Red Hat Enterprise Linux 7.1 Server						
+mediaid=1359576196.686790								
+metadata_expire=-1								
+gpgcheck=1									
+cost=500										
+enabled=1									
+baseurl=file:///mnt/rh75								
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release				
+										
+										
+										
+NEXT clear the related caches by yum clean all and subscription-manager clean once!		
+									
+yum clean all									
+subscription-manager clean								
+check whether you can get the packages list from the DVD repo				
+										
+									
+yum  --noplugins list								
+if no problem , you will update							
+										
+								
+yum  --noplugins update								
+yum provides */lsb_release								
+yum install redhat-lsb-core								
+yum -y install infiniband-diags 							
+yum -y install ypbind								
+yum install ntp									
