@@ -93,6 +93,7 @@ To change user password expiry information use the chage command on Linux as fol
 chage [username]
 chage [options] [username]
 chage -l voth
+chage [username] -d [date]
 
 Options:
   -d, --lastday LAST_DAY        set date of last password change to LAST_DAY
