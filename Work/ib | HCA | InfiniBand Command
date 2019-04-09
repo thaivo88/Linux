@@ -53,6 +53,7 @@ show OFED info
   
 #######################
 flashing HCA
+hpe HCA bit in hpchost1:# /admin/gbc
 
 finding the bus id
   lspci | grep Mellanox
