@@ -1,0 +1,5 @@
+# console into a node
+  console [hostname]
+
+# installing conrep hp scripting tool
+  cinstallman --yum-node --node cronusn003 --repo-group rhel76-x86_64-mel-4.5 install hp-scripting-tools
