@@ -4,7 +4,7 @@
 counter=001
 while [ $counter -le 144 ]
 do
- cinstallman --yum-node --node cronusn$(counter) --repo-group rhel76-x86_64-mel-4.5 install hp-scripting-tools
+ cinstallman --yum-node --node cronusn$counter --repo-group rhel76-x86_64-mel-4.5 install hp-scripting-tools
  ((counter++))
 done
 echo All done
