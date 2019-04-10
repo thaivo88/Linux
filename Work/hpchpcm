@@ -1,3 +1,6 @@
+# hpcm list of console:
+  /var/log/console
+
 # console into a node
   console [hostname]
 
@@ -9,7 +12,11 @@
  
 # show all OS images 
   cinstallman --show-images
+  
 # assigning an image and kernel to a node
   cinstallman --assign-image --image rhel7.6-mlnx-4.5-1-nv-410.79-hpc --node zeusn042 --kernel 3.10.0-957.el7.x86_64
 # on the next boot install assigned image
   cinstallman --next-boot image --node zeusn042
+
+# install repo package
+  cinstallman --yum-node --node [hostname] --repo [repo name]
