@@ -1,0 +1,6 @@
+service hp-health status
+service hp-health restart.
+/dev/cpqhealth/
+
+hpasmcli -s "show dimm" | egrep "Module|Status"
+hpasmcli -s "show fan; show temp"
