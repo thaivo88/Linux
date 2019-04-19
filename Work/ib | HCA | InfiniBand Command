@@ -1,3 +1,7 @@
+enable/disable ib port
+  ibportstate [card] [port] [enable or disable]
+  ibportstate 1 1 [enable|disable]
+  
 To check the board id  you can do this.
   cat /sys/class/infiniband/mlx5_0/board_id
   Example: HPE0000000008
