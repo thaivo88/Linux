@@ -12,3 +12,13 @@
  
 # will list all node
   pbsnodes -a
+
+# to display queue information:
+  qstat [option]
+    -a            Display all jobs in any status (running, queued, held)
+    -r            Display all running or suspended jobs
+    -n            Display the execution hosts of the running jobs
+    -i            Display all queued, held or waiting jobs
+    -u username   Display jobs that belong to the specified user
+    -s            Display any comment added by the administrator or scheduler. This option is typically used to find clues of why a job has not started running.
+    -f job_id     Display detailed information about a specific job
