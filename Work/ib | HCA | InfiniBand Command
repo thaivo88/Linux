@@ -1,3 +1,7 @@
+network service manager for IB
+  systemctl status opensm.service
+  systemctl restart opensm.service
+
 enable/disable ib port
   ibportstate [card] [port] [enable or disable]
   ibportstate 1 1 [enable|disable]
