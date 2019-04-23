@@ -1,4 +1,4 @@
-network service manager for IB
+subnet manager for IB
   systemctl status opensm.service
   systemctl restart opensm.service
 
