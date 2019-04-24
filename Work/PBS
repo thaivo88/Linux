@@ -22,3 +22,4 @@
     -u username   Display jobs that belong to the specified user
     -s            Display any comment added by the administrator or scheduler. This option is typically used to find clues of why a job has not started running.
     -f job_id     Display detailed information about a specific job
+       example: qstat -an
