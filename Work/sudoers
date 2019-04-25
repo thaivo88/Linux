@@ -1,10 +1,12 @@
-nano /etc/sudoers
+  nano /etc/sudoers
 # adding user to sudoer file for sudo access
 
-############################################
+##################### Sudoer File #######################
 # User privilege specification
-# root,[username]    ALL=(ALL) NOPASSWD: ALL
-# ALL     ALL=(ALL) NOPASSWD: [command|file directoy]
+# root,[username]     ALL=(ALL) NOPASSWD: ALL
+# ALL                 ALL=(ALL) NOPASSWD: [command|file directoy]
+# [username]          ALL=(ALL) NOPASSWD: [command|file directoy]
+###################### End ######################
 
   [username] ALL = NOPASSWD : /usr/bin/apt-get , /usr/bin/aptitude      # Ubuntu distro
-  [username] ALL = NOPASSWD : /usr/bin/yum                              # rhel distro
+  [username] ALL = NOPASSWD : /usr/bin/yum , /bin/rpm                   # rhel distro
