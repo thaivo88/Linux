@@ -1,0 +1,10 @@
+#!/bin/bash
+# While loop function to put nodes offline in PBS
+counter=1
+while [ $counter -le 10 ]
+do
+ pbsnodes -o apollon00$counter -C "Hardware Maintenance"
+ ((counter++))
+ echo apollon0$counter DONE!!!
+done
+echo All DONE!!!
