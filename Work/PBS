@@ -8,7 +8,8 @@
   pbsnodes -r rhean037   
   	 	 
 # Will offline the node
-  pbsnodes -o  [hostname]
+  pbsnodes -o  [hostname] -C "[comment]"
+  pbsnodes -o apollon001 -C "hardware maintain"
  
 # will list all node
   pbsnodes -a
