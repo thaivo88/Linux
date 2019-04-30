@@ -1,3 +1,7 @@
+# creating raid 0 on two nvme drives; folder /dev/md0
+  mdadm --create --verbose /dev/md0 --level=0 --raid-devices=2 /dev/nvme0n1 /dev/nvme1n1 
+
+
 #install ssacli (Ubuntu)
 #add this line below with the proper dist and project veriosn into /etc/apt/source.list && /etc/apt/source.list.d/mcp.list
   deb http://downloads.linux.hpe.com/SDR/repo/mcp [dist/project_ver] non-free
