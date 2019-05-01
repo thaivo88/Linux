@@ -1,0 +1,6 @@
+    cd /admin/hpcm/NVIDIA
+# create an RPM build from a runfile into the current OS and kernel
+# Download nvidia driver generic Linux 64-bit (non-distro)
+# https://www.nvidia.com/Download/index.aspx?lang=en-us​
+    ./sgi-package-nvidia [nvidia_driver_runfile]
+    
