@@ -20,3 +20,25 @@
 
 # install repo package
   cinstallman --yum-node --node [hostname] --repo [repo name]
+
+# show node and image
+  cinstallman --show-nodes | grep [keyword] 
+  
+# cloning and image to modify  
+  cinstallman --create-image --clone --source [image] --image [name_of_clone]
+
+# add the extra kernel params
+  cadmin --set-kernel-extra-params --image [imagename] "cgroup_disable=memory intel_pstate=disable"
+
+# show kernel params
+  cadmin --show-kernel-extra-params --image [imagename]
+
+# 
+  chroot [image]
+  rpm -qa | grep [keyword]
+
+#  show repo of the group
+  crep --show-groups
+
+
+ hpchpcm /thai_notes
