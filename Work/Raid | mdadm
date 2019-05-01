@@ -1,9 +1,10 @@
-Create a raid between both "sda"
-mdadm --create /dev/md0 -l raid0 -n2 /dev/sda1 /dev/sdc1
-
-Shows the software array
-cat /proc/mdstat
-
+# Create a raid between both "sda"
+      mdadm --create [device_name] -l raid[0|1|10|5|6] -n[number_of_drive] /dev/sd* /dev/sd*
+      mdadm --create /dev/md0 -l raid0 -n2 /dev/sda1 /dev/sdc1
+      
+# Shows the software array
+      cat /proc/mdstat
+############################
 Shows details of the soft array
 mdadm --detail /dev/md0
 Personalities : [raid0]
@@ -11,7 +12,10 @@ md0 : active raid0 sdc1[1] sda1[0]
       937435136 blocks super 1.2 512k chunks
 
 unused devices: <none>
-[root@harmonian001 ~]# mdadm --detail /dev/md0
+############################
+
+      mdadm --detail /dev/md0
+############################
 /dev/md0:
            Version : 1.2
      Creation Time : Tue Apr 30 13:25:25 2019
@@ -39,20 +43,26 @@ Consistency Policy : none
     Number   Major   Minor   RaidDevice State
        0       8        1        0      active sync   /dev/sda1
        1       8       33        1      active sync   /dev/sdc1
+###############################
 
-create the array conf file 
-mdadm --detail --scan --verbose >> /etc/mdadm/mdadm.conf 
+# create the array conf file 
+      mdadm --detail --scan --verbose >> /etc/mdadm/mdadm.conf 
 # cat /etc/mdadm/mdadm.conf
+###########
 ARRAY /dev/md0 level=raid0 num-devices=2 metadata=1.2 name=harmonian001:0 UUID=aa4566f5:e67f3995:d37a141e:4ff6ab1f
    devices=/dev/sda1,/dev/sdc1
+############
 
-Now create a file system on md0
-mkfs.xfs -f /dev/md0
-
-ADD LINE to FSTAB
-/etc/fstab
-ADD LINE
+# Now create a file system on md0
+      mkfs.xfs -f /dev/md0
+      mkfs.[systemfile] [device_name]
+      
+# ADD LINE to FSTAB
+      vi /etc/fstab
+# ADD LINE
+##########
 /dev/md0               /lvol        xfs rw,defaults 0 0 
+##########
 
-Change dirctory permissions 
-chmod 777 /lvol 
+# Change dirctory permissions 
+      chmod 777 /lvol 
