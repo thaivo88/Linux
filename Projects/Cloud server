@@ -161,3 +161,18 @@ server {
      
     
 #### Step 2: Create a Database and User in MariaDB ####    
+# Log into MariaDB database server with the following command. 
+# Since MariaDB is now using unix_socket plugin to authentication user login, there’s no need to enter MariaDB root password.
+# We just need to prefix the mysql command with sudo.
+        sudo mysql
+# Alternatively, you can also use this command to login.
+        sudo mariadb
+# Then create a database for Nextcloud. This tutorial name the database nextcloud. You can use whatever name you like.
+        create database nextcloud;
+# Create the database user. Again, you can use your preferred name for this user. Replace your-password with your preferred password.
+        create user nextclouduser@localhost identified by 'your-password';
+# Grant this user all privileges on the nextcloud database.
+        grant all privileges on nextcloud.* to nextclouduser@localhost identified by 'your-password';
+# Flush privileges and exit.
+        flush privileges;
+        exit;
