@@ -1,6 +1,162 @@
-    cd /admin/hpcm/NVIDIA
-# create an RPM build from a runfile into the current OS and kernel
+#### Setting/Config nodes on hpchpcm ####
+
+
+
+#### create an RPM build from a runfile into the current OS and kernel #### 
+# on the computing node
+# change directory:
+    [root@hpchpcm /]# cd /admin/hpcm/NVIDIA
 # Download nvidia driver generic Linux 64-bit (non-distro)
 # https://www.nvidia.com/Download/index.aspx?lang=en-us​
-    ./sgi-package-nvidia [nvidia_driver_runfile]
-    
+# use the sgi script to build the runfile into a RPM
+[root@zeusn039 NVIDIA]# ./sgi-package-nvidia [nvidia_driver_runfile]
+ 
+[root@hpchpcm ~]# cinstallman --show-nodes | grep zeusn
+zeusn039     service187   rhel7.6-mlnx-4.5-1-nv-410.79-hpc 3.10.0-957.el7.x86_64
+zeusn040     service188   rhel7.6-mlnx-4.5-1-nv-410.79-hpc 3.10.0-957.el7.x86_64
+zeusn041     service189   rhel7.6-mlnx-4.5-1-nv-410.79-hpc 3.10.0-957.el7.x86_64
+zeusn042     service190   rhel7.6-mlnx-4.5-1-nv-410.79-hpc 3.10.0-957.el7.x86_64
+
+[root@hpchpcm ~]# cinstallman --show-images
+Image Name                               BT VCS Compat_Distro
+rhel7.6                                  0  1   rhel7
+        0-rescue-f547d73dfd8e4d398e476733bc1aa090
+        3.10.0-957.el7.x86_64
+rhel7.6-hpc                              0  1   rhel7
+        0-rescue-f547d73dfd8e4d398e476733bc1aa090
+        3.10.0-957.el7.x86_64
+rhel7.6-mlnx-4.5-1-hpc                   0  1   rhel7
+        0-rescue-f547d73dfd8e4d398e476733bc1aa090
+        3.10.0-957.el7.x86_64
+rhel7.6-mlnx-4.5-1-nv-410.79-hpc         0  1   rhel7
+        0-rescue-f547d73dfd8e4d398e476733bc1aa090
+        3.10.0-957.el7.x86_64
+rhel7.6-op.1090-hpc                      0  1   rhel7
+        0-rescue-f547d73dfd8e4d398e476733bc1aa090
+        3.10.0-957.el7.x86_64
+rhel76-aarch-hpc                         0  1   rhel7
+        0-rescue-b390d4426b554a588b2ce2dee6582274
+        4.14.0-115.el7a.aarch64
+
+# Clone the image
+    [root@hpchpcm ~]# cinstallman --create-image --clone --source rhel7.6-mlnx-4.5-1-nv-410.79-hpc --image rhel7.6-mlnx-4.5-1-nv-418.40.04-hpc
+# Show knernel params
+    [root@hpchpcm ~]# cadmin --show-kernel-distro-params --image rhel7.6-mlnx-4.5-1-nv-418.40.04-hpc
+# Add the extra kernel params
+    [root@hpchpcm ~]# cadmin --set-kernel-extra-params --image rhel7.6-mlnx-4.5-1-nv-418.40.04-hpc "cgroup_disable=memory intel_pstate=disable"
+
+# Chroot into the image
+# Image location
+    [root@hpchpcm /]# cd /opt/clmgr/image/images
+    [root@hpchpcm /]# chroot rhel7.6-mlnx-4.5-1-nv-418.40.04-hpc
+    [root@hpchpcm /]# rpm -qa | grep nvidia
+        nvidia_peer_memory-1.0-8.x86_64
+        nvidia-410.79-rhel7.x86_64
+
+# Repo groups
+    [root@hpchpcm images]# crepo --show-groups
+        Repo Groups:
+        rhel76-x86_64-mel-4.5-nv
+        rhel76-x86_64-OPA-10.9
+        rhel76_arm
+        rhel76-x86_64-mel-4.5
+
+# Create the repo
+    [root@hpchpcm ~]# mkdir  /opt/clmgr/repos/nvidia-418.40.04-rpm-mln
+    [root@hpchpcm ~]# cp nvidia-418.40.04-rhel7.x86_64.rpm /opt/clmgr/repos/nvidia-418.40.04-rpm-mln
+    [root@hpchpcm ~]# crepo --add /opt/clmgr/repos/nvidia-418.40.04-rpm-mln --custom nvidia-418.40.04-rpm-mln
+
+# Add the repo to the repo group.
+    [root@hpchpcm ~]# crepo --add-group rhel76-x86_64-mel-4.5-nv  nvidia-418.40.04-rpm-mln
+
+# Now we install the package into our image
+    [root@hpchpcm ~]# cinstallman --yum-image --image rhel7.6-mlnx-4.5-1-nv-418.40.04-hpc --repo-group rhel76-x86_64-mel-4.5-nv install nvidia-410.79-rhel7.x86_64
+
+# Update post-install settings.
+    [root@hpchpcm ~]# cd /opt/clmgr/image/scripts/post-install/
+
+    [root@hpchpcm post-install]# ls
+00all.run_cluster_configuration                 97rhel76-aarch-hpc.hpc.nis        97rhel7.6-mlnx-4.5-1-nv-410.79-hpc.hpc.nis  README
+50all.create_filesystem_for_reserved_partition  97rhel7.6-hpc.hpc.nis             97rhel7.6-op.1090-hpc.hpc.nis
+95all.monitord_rebooted                         97rhel7.6-mlnx-4.5-1-hpc.hpc.nis  99all.harmless_example_script
+
+    [root@hpchpcm post-install]# cp 97rhel7.6-mlnx-4.5-1-nv-410.79-hpc.hpc.nis 97rhel7.6-mlnx-4.5-1-nv-418.40.04-hpc.hpc.nis
+
+# Now we are going to image a node with our new image.
+# We assign the image to the node.
+
+    [root@hpchpcm ~]# cinstallman --show-images
+Image Name                               BT VCS Compat_Distro
+rhel7.6                                  0  1   rhel7
+        0-rescue-f547d73dfd8e4d398e476733bc1aa090
+        3.10.0-957.el7.x86_64
+rhel7.6-hpc                              0  1   rhel7
+        0-rescue-f547d73dfd8e4d398e476733bc1aa090
+        3.10.0-957.el7.x86_64
+rhel7.6-mlnx-4.5-1-hpc                   0  1   rhel7
+        0-rescue-f547d73dfd8e4d398e476733bc1aa090
+        3.10.0-957.el7.x86_64
+rhel7.6-mlnx-4.5-1-nv-410.79-hpc         0  1   rhel7
+        0-rescue-f547d73dfd8e4d398e476733bc1aa090
+        3.10.0-957.el7.x86_64
+rhel7.6-mlnx-4.5-1-nv-418.40.04-hpc      0  1   rhel7
+        0-rescue-f547d73dfd8e4d398e476733bc1aa090
+        3.10.0-957.el7.x86_64
+rhel7.6-op.1090-hpc                      0  1   rhel7
+        0-rescue-f547d73dfd8e4d398e476733bc1aa090
+        3.10.0-957.el7.x86_64
+rhel76-aarch-hpc                         0  1   rhel7
+        0-rescue-b390d4426b554a588b2ce2dee6582274
+        4.14.0-115.el7a.aarch64
+
+    [root@hpchpcm ~]# cinstallman --assign-image --image  rhel7.6-mlnx-4.5-1-nv-418.40.04-hpc --kernel 3.10.0-957.el7.x86_64 --node zeusn039
+
+# Need to tell the node to image on the next boot.
+    [root@hpchpcm ~]# cinstallman --next-boot image --node zeusn039
+
+
+    [root@zeusn039 ~]# efibootmgr
+BootCurrent: 0012
+Timeout: 0 seconds
+BootOrder: 0012,0010,0013,0011,0014,0016,0017,0019,0018,0015,001E,0020,001B,001D,001F,001C,000A,000B,000F,0021,0001,001A,0023,0002,0003,0004,0005,0006,0007,0008,0009,0000,000C,000D,000E,0022
+Boot0000* System Utilities
+Boot0001* Embedded UEFI Shell
+Boot0002  Diagnose Error
+Boot0003  Intelligent Provisioning
+Boot0004  Boot Menu
+Boot0005  Network Boot
+Boot0006  View Integrated Management Log
+Boot0007  HTTP Boot
+Boot0008  PXE Boot
+Boot0009  Embedded Diagnostics
+Boot000A* Generic USB Boot
+Boot000B* Embedded SATA Port 7 HDD : VR000150GWEPP
+Boot000C* NVMe Drive Port 1B Box 1 Bay 7 : NVM Express Controller - ZC502264-MK001600KWDUN-C013CE8
+Boot000D* NVMe Drive Port 1B Box 1 Bay 8 : NVM Express Controller - ZC502285-MK001600KWDUN-C013D2D
+Boot000E* Slot 1
+Boot000F* Embedded RAID 1 : HPE Smart Array P816i-a SR Gen10 - 894.2 GiB, RAID0 Logical Drive 1(Target:0, Lun:0)
+Boot0010* Embedded LOM 1 Port 1 : HPE Ethernet 1Gb 4-port 331i Adapter - NIC (HTTP(S) IPv4)
+Boot0011* Embedded LOM 1 Port 1 : HPE Ethernet 1Gb 4-port 331i Adapter - NIC (HTTP(S) IPv6)
+Boot0012* Embedded LOM 1 Port 1 : HPE Ethernet 1Gb 4-port 331i Adapter - NIC (PXE IPv4)
+Boot0013* Embedded LOM 1 Port 1 : HPE Ethernet 1Gb 4-port 331i Adapter - NIC (PXE IPv6)
+Boot0014* Slot 11 Port 1 : HPE InfiniBand EDR 100Gb 1-port 841QSFP28 Adapter - HCA (HTTP(S) IPv4)
+Boot0015* Slot 11 Port 1 : HPE InfiniBand EDR 100Gb 1-port 841QSFP28 Adapter - HCA (HTTP(S) IPv6)
+Boot0016* Slot 11 Port 1 : HPE InfiniBand EDR 100Gb 1-port 841QSFP28 Adapter - HCA (PXE IPv4)
+Boot0017* Slot 9 Port 1 : HPE InfiniBand EDR 100Gb 1-port 841QSFP28 Adapter - HCA (HTTP(S) IPv4)
+Boot0018* Slot 9 Port 1 : HPE InfiniBand EDR 100Gb 1-port 841QSFP28 Adapter - HCA (HTTP(S) IPv6)
+Boot0019* Slot 9 Port 1 : HPE InfiniBand EDR 100Gb 1-port 841QSFP28 Adapter - HCA (PXE IPv4)
+Boot001A* @ CentOS Linux release 7.4.1708 (Core)
+Boot001B* Slot 12 Port 1 : HPE InfiniBand EDR 100Gb 1-port 841QSFP28 Adapter - HCA (HTTP(S) IPv4)
+Boot001C* Slot 12 Port 1 : HPE InfiniBand EDR 100Gb 1-port 841QSFP28 Adapter - HCA (HTTP(S) IPv6)
+Boot001D* Slot 12 Port 1 : HPE InfiniBand EDR 100Gb 1-port 841QSFP28 Adapter - HCA (PXE IPv4)
+Boot001E* Slot 10 Port 1 : HPE InfiniBand EDR 100Gb 1-port 841QSFP28 Adapter - HCA (HTTP(S) IPv4)
+Boot001F* Slot 10 Port 1 : HPE InfiniBand EDR 100Gb 1-port 841QSFP28 Adapter - HCA (HTTP(S) IPv6)
+Boot0020* Slot 10 Port 1 : HPE InfiniBand EDR 100Gb 1-port 841QSFP28 Adapter - HCA (PXE IPv4)
+Boot0021* SGI Slot Chooser
+Boot0022* Embedded RAID 1 : HPE Smart Array P816i-a SR Gen10 - Size:931.5 GiB Port:1I Bay:1 Box:1
+Boot0023* Red Hat Enterprise Linux
+
+# To Change the boot order
+    [root@zeusn039 ~]# efibootmgr -o 0000,0020
+
+# Reboot the node and watch it boot onto the new image.
