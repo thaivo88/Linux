@@ -133,7 +133,7 @@ server {
 # For your server’s security, you should delete info.php file now to prevent hacker seeing it.
 
 
-
+# Head to NoIP.com to set up a domain name which we will use for your nextcloud url/domain name
 
 
 #### How to Install NextCloud on Ubuntu 18.04 with Nginx (LEMP Stack) ####
@@ -176,3 +176,194 @@ server {
 # Flush privileges and exit.
         flush privileges;
         exit;
+        
+#### Step 3: Create a Nginx Config File for Nextcloud ####
+# Create a nextcloud.conf file in /etc/nginx/conf.d/ directory.
+        sudo nano /etc/nginx/conf.d/nextcloud.conf
+# Put the following text into the file. Replace the red-colored text with your actual data. 
+# Don’t forget to set A record for the domain name.
+
+######### Start ##########
+server {
+    listen 80;
+    server_name [nextcloud.your-domain.com];
+
+    # Add headers to serve security related headers
+    add_header X-Content-Type-Options nosniff;
+    add_header X-XSS-Protection "1; mode=block";
+    add_header X-Robots-Tag none;
+    add_header X-Download-Options noopen;
+    add_header X-Permitted-Cross-Domain-Policies none;
+
+    #This header is already set in PHP, so it is commented out here.
+    #add_header X-Frame-Options "SAMEORIGIN";
+
+    # Path to the root of your installation
+    root /usr/share/nginx/nextcloud/;
+
+    location = /robots.txt {
+        allow all;
+        log_not_found off;
+        access_log off;
+    }
+
+    # The following 2 rules are only needed for the user_webfinger app.
+    # Uncomment it if you're planning to use this app.
+    #rewrite ^/.well-known/host-meta /public.php?service=host-meta last;
+    #rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json
+    # last;
+
+    location = /.well-known/carddav {
+        return 301 $scheme://$host/remote.php/dav;
+    }
+    location = /.well-known/caldav {
+       return 301 $scheme://$host/remote.php/dav;
+    }
+
+    location ~ /.well-known/acme-challenge {
+      allow all;
+    }
+
+    # set max upload size
+    client_max_body_size 512M;
+    fastcgi_buffers 64 4K;
+
+    # Disable gzip to avoid the removal of the ETag header
+    gzip off;
+
+    # Uncomment if your server is build with the ngx_pagespeed module
+    # This module is currently not supported.
+    #pagespeed off;
+
+    error_page 403 /core/templates/403.php;
+    error_page 404 /core/templates/404.php;
+
+    location / {
+       rewrite ^ /index.php$uri;
+    }
+
+    location ~ ^/(?:build|tests|config|lib|3rdparty|templates|data)/ {
+       deny all;
+    }
+    location ~ ^/(?:\.|autotest|occ|issue|indie|db_|console) {
+       deny all;
+     }
+
+    location ~ ^/(?:index|remote|public|cron|core/ajax/update|status|ocs/v[12]|updater/.+|ocs-provider/.+|core/templates/40[34])\.php(?:$|/) {
+       include fastcgi_params;
+       fastcgi_split_path_info ^(.+\.php)(/.*)$;
+       fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+       fastcgi_param PATH_INFO $fastcgi_path_info;
+       #Avoid sending the security headers twice
+       fastcgi_param modHeadersAvailable true;
+       fastcgi_param front_controller_active true;
+       fastcgi_pass unix:/run/php/php7.2-fpm.sock;
+       fastcgi_intercept_errors on;
+       fastcgi_request_buffering off;
+    }
+
+    location ~ ^/(?:updater|ocs-provider)(?:$|/) {
+       try_files $uri/ =404;
+       index index.php;
+    }
+
+    # Adding the cache control header for js and css files
+    # Make sure it is BELOW the PHP block
+    location ~* \.(?:css|js)$ {
+        try_files $uri /index.php$uri$is_args$args;
+        add_header Cache-Control "public, max-age=7200";
+        # Add headers to serve security related headers (It is intended to
+        # have those duplicated to the ones above)
+        add_header X-Content-Type-Options nosniff;
+        add_header X-XSS-Protection "1; mode=block";
+        add_header X-Robots-Tag none;
+        add_header X-Download-Options noopen;
+        add_header X-Permitted-Cross-Domain-Policies none;
+        # Optional: Don't log access to assets
+        access_log off;
+   }
+
+   location ~* \.(?:svg|gif|png|html|ttf|woff|ico|jpg|jpeg)$ {
+        try_files $uri /index.php$uri$is_args$args;
+        # Optional: Don't log access to other assets
+        access_log off;
+   }
+}
+############ End #####################
+
+# Save and close the file. Test Nginx configuration, then reload Nginx for the changes to take effect.
+        sudo nginx -t
+        sudo systemctl reload nginx
+        
+        
+        
+#### Step 4: Install and Enable PHP Modules ####
+# Run the following commands to install PHP modules required or recommended by NextCloud.
+        sudo apt install php-imagick php7.2-common php7.2-gd php7.2-json php7.2-curl  php7.2-zip php7.2-xml php7.2-mbstring \
+        php7.2-bz2 php7.2-intl
+        
+        
+        
+#### Step 5: Enable HTTPS ####
+# Now you can access the Nextcloud web install wizard in your browser by entering the domain name for your Nextcloud installation.
+[nextcloud.your-domain.com]
+
+# If the web page can’t load, you probably need to open port 80 in firewall.
+        sudo iptables -I INPUT -p tcp --dport 80 -j ACCEPT
+        sudo ufw allow 80
+# And port 443 as well.
+        sudo iptables -I INPUT -p tcp --dport 443 -j ACCEPT
+        sudo ufw allow 443
+        
+# Before entering any sensitive information, we should enable secure HTTPS connection on Nextcloud. 
+# We can obtain a free TLS certificate from Let’s Encrypt. Install Let’s Encrypt client (certbot) from Ubuntu 18.04 repository.
+        sudo apt install certbot python3-certbot-nginx
+# Python-certbot-nginx is the Nginx plugin. Next, run the following command to obtain a free TLS certificate using the Nginx plugin.
+        sudo certbot --nginx --agree-tos --redirect --hsts --staple-ocsp --email [your-email-address] -d [nextcloud.your-domain.com]
+        
+# The Nginx plugin is not smart enough to handle such complex configuration file. 
+# It failed to redirect HTTP to HTTPS and the HSTS header wasn’t added. We can open the configuration file and enabled these two feature manually.
+        sudo nano /etc/nginx/conf.d/nextcloud.conf
+# To redirect HTTP to HTTPS, your Nginx configuration file needs to include a 301 redirect like below.
+
+############# Start ############
+server {
+    listen 80;
+    server_name [nextcloud.linuxbabe.com];
+    return 301 [https://nextcloud.linuxbabe.com]$request_uri;
+}
+
+server {
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/nextcloud.linuxbabe.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/nextcloud.linuxbabe.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+    ......  
+    ......
+    remaining configurations
+    ......
+}        
+########### End ###########        
+        
+# We can then add the following line in the ssl server block to enable HSTS header.
+        add_header Strict-Transport-Security "max-age=31536000" always;
+# Also, you can enable HTTP2 protocol by adding the option http2.
+        listen 443 ssl http2; # managed by Certbot        
+  
+# Save and close the file. Then text Nginx configurations.
+        sudo nginx -t
+# If the test is successful, reload Nginx for the change to take effect.
+        sudo systemctl reload nginx
+  
+# The data folder is where users’ files are stored. For security, it’s best to place the data directory outside of Nextcloud web root.
+# So instead of storing users’ files under /usr/share/nginx/nextcloud/data/, we can change it to /usr/share/nginx/nextcloud-data. 
+# which can be created with the following command:
+        sudo mkdir /usr/share/nginx/nextcloud-data
+        
+# Then make sure Nginx user (www-data) has write permission to the data directory.
+        sudo chown www-data:www-data /usr/share/nginx/nextcloud-data -R
+        
+
+        
