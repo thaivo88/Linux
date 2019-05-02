@@ -1,5 +1,9 @@
 #### How to Install LEMP Stack (Nginx, MariaDB, PHP7.2) on Ubuntu 18.04 LTS ####
 
+#### Prerequirements: For the cloud server to work yo must have gnome install ####
+# Update and install with this command: 
+    sudo apt-get update && sudo apt-get install gnome-shell ubuntu-gnome-desktop
+
 #### Step 1: Update Software Packages ####
 # Before we install the LEMP stack, it’s a good practice to update repository and software packages by running the following 
 # commands on your Ubuntu 18.04 OS.
