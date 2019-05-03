@@ -214,29 +214,34 @@ sr1      11:1    1  1024M  0 rom
     reboot
 
 # Shows boot order
-    [root@harmonian001 ~]# efibootmgr
-    BootCurrent: 0001
-    Timeout: 1 seconds
-    BootOrder: 0001,0002,0003,0004,0005,0006,0007
-    Boot0001* RedHat Boot Manager
-    Boot0002* UEFI: Network Card
-    Boot0003* UEFI: PXE IP4 Mellanox Network Adapter - 04:09:73:B8:2A:28
-    Boot0004* UEFI: PXE IP6 Mellanox Network Adapter - 04:09:73:B8:2A:28
-    Boot0005* UEFI: PXE IP4 Mellanox Network Adapter - 04:09:73:B8:2A:29
-    Boot0006* UEFI: PXE IP6 Mellanox Network Adapter - 04:09:73:B8:2A:29
-    Boot0007* UEFI: Built-in EFI Shell
+    efibootmgr
+########## Output #########
+BootCurrent: 0001
+Timeout: 1 seconds
+BootOrder: 0001,0002,0003,0004,0005,0006,0007
+Boot0001* RedHat Boot Manager
+Boot0002* UEFI: Network Card
+Boot0003* UEFI: PXE IP4 Mellanox Network Adapter - 04:09:73:B8:2A:28
+Boot0004* UEFI: PXE IP6 Mellanox Network Adapter - 04:09:73:B8:2A:28
+Boot0005* UEFI: PXE IP4 Mellanox Network Adapter - 04:09:73:B8:2A:29
+Boot0006* UEFI: PXE IP6 Mellanox Network Adapter - 04:09:73:B8:2A:29
+Boot0007* UEFI: Built-in EFI Shell
+############# End ##########
+
 # Change boot order
-    [root@harmonian001 ~]# efibootmgr -o 0003,0007
-    BootCurrent: 0001
-    Timeout: 1 seconds
-    BootOrder: 0003,0007
-    Boot0001* RedHat Boot Manager
-    Boot0002* UEFI: Network Card
-    Boot0003* UEFI: PXE IP4 Mellanox Network Adapter - 04:09:73:B8:2A:28
-    Boot0004* UEFI: PXE IP6 Mellanox Network Adapter - 04:09:73:B8:2A:28
-    Boot0005* UEFI: PXE IP4 Mellanox Network Adapter - 04:09:73:B8:2A:29
-    Boot0006* UEFI: PXE IP6 Mellanox Network Adapter - 04:09:73:B8:2A:29
-    Boot0007* UEFI: Built-in EFI Shell
+    efibootmgr -o 0003,0007
+########## Output #########
+BootCurrent: 0001
+Timeout: 1 seconds
+BootOrder: 0003,0007
+Boot0001* RedHat Boot Manager
+Boot0002* UEFI: Network Card
+Boot0003* UEFI: PXE IP4 Mellanox Network Adapter - 04:09:73:B8:2A:28
+Boot0004* UEFI: PXE IP6 Mellanox Network Adapter - 04:09:73:B8:2A:28
+Boot0005* UEFI: PXE IP4 Mellanox Network Adapter - 04:09:73:B8:2A:29
+Boot0006* UEFI: PXE IP6 Mellanox Network Adapter - 04:09:73:B8:2A:29
+Boot0007* UEFI: Built-in EFI Shell
+############# End ##########
 
 # Wipe out the partation /dev/sda
     dd if=/dev/zero of=/dev/sda bs=1024 count=10000 
