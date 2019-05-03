@@ -1,3 +1,21 @@
+# rescan all files to sync to mobile app
+    cd /usr/share/nginx/nextcloud/
+    sudo -u www-data php occ files:scan --all
+
+# add CNAME
+    cd  /usr/share/nginx/nextcloud/config
+    vi config.php
+    
+############# start ###########
+ array (
+    0 => '[domain_name]',
+    1 => '[domain_name]',
+    2 => '[domain_name]',
+
+rest of the code....
+########## End ###########
+
+
 #### How to Install LEMP Stack (Nginx, MariaDB, PHP7.2) on Ubuntu 18.04 LTS ####
 
 #### Prerequirements: For the cloud server to work yo must have gnome install ####
