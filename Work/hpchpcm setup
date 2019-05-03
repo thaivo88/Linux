@@ -250,7 +250,7 @@ parted /dev/sdc p
 ############ End ############
 
 # Shows details of the soft array
-    mdadm --detail /dev/md*
+    mdadm --detail /dev/md0
 ########### Output #############
 Personalities : [raid0]
 md0 : active raid0 sdc1[1] sda1[0]
@@ -297,7 +297,7 @@ ARRAY /dev/md0 level=raid0 num-devices=2 metadata=1.2 name=harmonian001:0 UUID=a
 
 # checking raid device name
     lsblk
-# Now create a file system on md*
+# Now create a file system on md0
     mkfs.xfs -f /dev/md[number listed on lsblk]
 # adding label to raid drive
     xfs_admin -L "lvol_m2" /dev/md[number listed on lsblk]
@@ -315,5 +315,8 @@ new label = "lvol"
 # add this to the end of the file:
     LABEL=lvol                          /lvol           xfs rw,defaults 0 0
 # mount raid drive
-    mount /dev/md* /lvol
+    mount /dev/md0 /lvol
+# reboot node and check to see if the raid | /lvol is mounted and not booted into emergency mode
+    reboot
+    df | grep lvol
     
