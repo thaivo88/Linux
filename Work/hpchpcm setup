@@ -333,9 +333,9 @@ ARRAY /dev/md0 level=raid0 num-devices=2 metadata=1.2 name=harmonian001:0 UUID=a
 # checking raid device name
     lsblk
 # Now create a file system on md0
-    mkfs.xfs -f /dev/md[number listed on lsblk]
+    mkfs.xfs -f /dev/md0
 # adding label to raid drive
-    xfs_admin -L "lvol_m2" /dev/md[number listed on lsblk]
+    xfs_admin -L "lvol_m2" /dev/md0
 ######### output ######
 writing all SBs
 new label = "lvol"
@@ -343,12 +343,14 @@ new label = "lvol"
 # ADD NEW DIR
     mkdir /lvol
     chmod 777 /lvol
+    
 # adding entry to /etc/fstab
     echo 'LABEL=lvol                          /lvol           xfs rw,defaults 0 0' >> /etc/fstab
 # or
     vi /etc/fstab
 # add this to the end of the file:
     LABEL=lvol                          /lvol           xfs rw,defaults 0 0
+    
 # mount raid drive
     mount /dev/md0 /lvol
 # reboot node and check to see if the raid | /lvol is mounted and not booted into emergency mode
