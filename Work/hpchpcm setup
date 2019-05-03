@@ -169,16 +169,22 @@ Boot0023* Red Hat Enterprise Linux
 
 ############################################################
 SET UP OF DISK FOR "harmonian" Nodes
- 
-List what drives are installed on the node
-[root@harmonian001 ~]# lsscsi
+
+# Take node off PBS
+    qstat -an                                               # show all nodes in PBS
+    pbsnodes -o harmonina001 -C "provisioning raid"         # taking node off PBS with comments
+    pbsnodes -l                                             # list offline nodes
+
+# List what drives are installed on the node
+    lsscsi
+######### Output ##########
 [0:0:0:0]    disk    ATA      VR000480GWFMD    HPG8  /dev/sda
 [1:0:0:0]    disk    ATA      MB4000GVYZA      HPG3  /dev/sdb
 [2:0:0:0]    disk    ATA      VR000480GWFMD    HPG8  /dev/sdc
-
-shows drives as parted and size
-parted /dev/sda p
-parted /dev/sdc p
+######### End ########
+# shows drives as parted and size
+    parted /dev/sda p
+    parted /dev/sdc p
 # Setup image to be forced on /dev/sdb
     cinstallman --next-boot image --node {NODE} --force-disk /dev/sdb
 
@@ -319,4 +325,5 @@ new label = "lvol"
 # reboot node and check to see if the raid | /lvol is mounted and not booted into emergency mode
     reboot
     df | grep lvol
-    
+# resume node on PBS
+    pbsnodes -r harmonian001
