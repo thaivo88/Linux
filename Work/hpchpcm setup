@@ -179,71 +179,79 @@ List what drives are installed on the node
 shows drives as parted and size
 parted /dev/sda p
 parted /dev/sdc p
-Setup image to be forced on /dev/sdb
-cinstallman --next-boot image --node {NODE} --force-disk /dev/sdb
+# Setup image to be forced on /dev/sdb
+    cinstallman --next-boot image --node {NODE} --force-disk /dev/sdb
 
 
-Shows boot order
-[root@harmonian001 ~]# efibootmgr
-BootCurrent: 0001
-Timeout: 1 seconds
-BootOrder: 0001,0002,0003,0004,0005,0006,0007
-Boot0001* RedHat Boot Manager
-Boot0002* UEFI: Network Card
-Boot0003* UEFI: PXE IP4 Mellanox Network Adapter - 04:09:73:B8:2A:28
-Boot0004* UEFI: PXE IP6 Mellanox Network Adapter - 04:09:73:B8:2A:28
-Boot0005* UEFI: PXE IP4 Mellanox Network Adapter - 04:09:73:B8:2A:29
-Boot0006* UEFI: PXE IP6 Mellanox Network Adapter - 04:09:73:B8:2A:29
-Boot0007* UEFI: Built-in EFI Shell
-Change boot order
-[root@harmonian001 ~]# efibootmgr -o 0003,0007
-BootCurrent: 0001
-Timeout: 1 seconds
-BootOrder: 0003,0007
-Boot0001* RedHat Boot Manager
-Boot0002* UEFI: Network Card
-Boot0003* UEFI: PXE IP4 Mellanox Network Adapter - 04:09:73:B8:2A:28
-Boot0004* UEFI: PXE IP6 Mellanox Network Adapter - 04:09:73:B8:2A:28
-Boot0005* UEFI: PXE IP4 Mellanox Network Adapter - 04:09:73:B8:2A:29
-Boot0006* UEFI: PXE IP6 Mellanox Network Adapter - 04:09:73:B8:2A:29
-Boot0007* UEFI: Built-in EFI Shell
+# Shows boot order
+    [root@harmonian001 ~]# efibootmgr
+    BootCurrent: 0001
+    Timeout: 1 seconds
+    BootOrder: 0001,0002,0003,0004,0005,0006,0007
+    Boot0001* RedHat Boot Manager
+    Boot0002* UEFI: Network Card
+    Boot0003* UEFI: PXE IP4 Mellanox Network Adapter - 04:09:73:B8:2A:28
+    Boot0004* UEFI: PXE IP6 Mellanox Network Adapter - 04:09:73:B8:2A:28
+    Boot0005* UEFI: PXE IP4 Mellanox Network Adapter - 04:09:73:B8:2A:29
+    Boot0006* UEFI: PXE IP6 Mellanox Network Adapter - 04:09:73:B8:2A:29
+    Boot0007* UEFI: Built-in EFI Shell
+# Change boot order
+    [root@harmonian001 ~]# efibootmgr -o 0003,0007
+    BootCurrent: 0001
+    Timeout: 1 seconds
+    BootOrder: 0003,0007
+    Boot0001* RedHat Boot Manager
+    Boot0002* UEFI: Network Card
+    Boot0003* UEFI: PXE IP4 Mellanox Network Adapter - 04:09:73:B8:2A:28
+    Boot0004* UEFI: PXE IP6 Mellanox Network Adapter - 04:09:73:B8:2A:28
+    Boot0005* UEFI: PXE IP4 Mellanox Network Adapter - 04:09:73:B8:2A:29
+    Boot0006* UEFI: PXE IP6 Mellanox Network Adapter - 04:09:73:B8:2A:29
+    Boot0007* UEFI: Built-in EFI Shell
 
-Wipe out the partation /dev/sda
-dd if=/dev/zero of=/dev/sda bs=1024 count=10000 
-dd if=/dev/zero of=/dev/sdc bs=1024 count=10000
-Shows that the disk is wiped
-parted /dev/sda p
-parted /dev/sdc p
-Makes label "gpt"
-parted /dev/sda mklabel gpt 
-parted /dev/sdc mklabel gpt 
+# Wipe out the partation /dev/sda
+    dd if=/dev/zero of=/dev/sda bs=1024 count=10000 
+    dd if=/dev/zero of=/dev/sdc bs=1024 count=10000
+# Shows that the disk is wiped
+    parted /dev/sda p
+    parted /dev/sdc p
+    reboot
+# Makes label "gpt"
+    parted /dev/sda mklabel gpt 
+    parted /dev/sdc mklabel gpt 
 
-Make disk (parted start at 1049 Bits
-parted /dev/sda mkpart primary xfs 1049 -1
-parted /dev/sdc mkpart primary xfs 1049 -1
+# Make disk (parted start at 1049 Bits
+# parted /dev/sda mkpart primary xfs 1049 -1
+# parted /dev/sdc mkpart primary xfs 1049 -1
 
-Use parted tool 
-parted /dev/sda & sdc
-mkpart primary xfs 1049k -1
+# Use parted tool 
+    parted 
+    select
+    /dev/sda
+    mkpart primary xfs 1049k -1
+# Then do the same for /dev/sdc
+    select
+    /dev/sdc
+    mkpart primary xfs 1049k -1
 
-p "to ptrint"
-quit  "to end the tool"
+# p "to ptrint"
+# quit  "to end the tool"
 
-Create a raid between both "sda"
-mdadm --create /dev/md0 -l raid0 -n2 /dev/sda1 /dev/sdc1
+# Create a raid between both sda and sdc
+    mdadm --create /dev/md0 -l raid0 -n2 /dev/sda1 /dev/sdc1
 
-Shows the software array
-cat /proc/mdstat
-Personalities : [raid0]
-md0 : active raid0 sdc1[1] sda1[0]
-      937435136 blocks super 1.2 512k chunks
+# Shows the software array
+    cat /proc/mdstat
+############ Output #########
+        Personalities : [raid0]
+        md0 : active raid0 sdc1[1] sda1[0]
+            937435136 blocks super 1.2 512k chunks
 
-unused devices: <none>
+        unused devices: <none>
+############ End ############
 
-
-
-Shows details of the soft array
-mdadm --detail /dev/md0
+# Shows details of the soft array
+    mdadm --detail /dev/md*
+########### Output #############
 Personalities : [raid0]
 md0 : active raid0 sdc1[1] sda1[0]
       937435136 blocks super 1.2 512k chunks
@@ -277,21 +285,35 @@ Consistency Policy : none
     Number   Major   Minor   RaidDevice State
        0       8        1        0      active sync   /dev/sda1
        1       8       33        1      active sync   /dev/sdc1
+################# End #################
 
-create the array conf file 
-mdadm --detail --scan --verbose >> /etc/mdadm.conf 
+# create the array conf file 
+    mdadm --detail --scan --verbose >> /etc/mdadm.conf 
 # cat /etc/mdadm.conf
+############# Output ################
 ARRAY /dev/md0 level=raid0 num-devices=2 metadata=1.2 name=harmonian001:0 UUID=aa4566f5:e67f3995:d37a141e:4ff6ab1f
    devices=/dev/sda1,/dev/sdc1
-   
-###########################################################
+############# End ###############   
 
-Now create a file system on md0
-mkfs.xfs -f /dev/md0
-
-ADD LINE to FSTAB
-/etc/fstab
-ADD LINE
-/dev/md0               /lvol        xfs rw,defaults 0 0 
-
-ADD NEW DIR
+# checking raid device name
+    lsblk
+# Now create a file system on md*
+    mkfs.xfs -f /dev/md[number listed on lsblk]
+# adding label to raid drive
+    xfs_admin -L "lvol_m2" /dev/md[number listed on lsblk]
+######### output ######
+writing all SBs
+new label = "lvol"
+####### End ######
+# ADD NEW DIR
+    mkdir /lvol
+    chmod 777 /lvol
+# adding entry to /etc/fstab
+    echo 'LABEL=lvol                          /lvol           xfs rw,defaults 0 0' >> /etc/fstab
+# or
+    vi /etc/fstab
+# add this to the end of the file:
+    LABEL=lvol                          /lvol           xfs rw,defaults 0 0
+# mount raid drive
+    mount /dev/md* /lvol
+    
