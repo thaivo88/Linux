@@ -160,3 +160,138 @@ Boot0023* Red Hat Enterprise Linux
     [root@zeusn039 ~]# efibootmgr -o 0000,0020
 
 # Reboot the node and watch it boot onto the new image.
+
+
+
+
+
+
+
+############################################################
+SET UP OF DISK FOR "harmonian" Nodes
+ 
+List what drives are installed on the node
+[root@harmonian001 ~]# lsscsi
+[0:0:0:0]    disk    ATA      VR000480GWFMD    HPG8  /dev/sda
+[1:0:0:0]    disk    ATA      MB4000GVYZA      HPG3  /dev/sdb
+[2:0:0:0]    disk    ATA      VR000480GWFMD    HPG8  /dev/sdc
+
+shows drives as parted and size
+parted /dev/sda p
+parted /dev/sdc p
+Setup image to be forced on /dev/sdb
+cinstallman --next-boot image --node {NODE} --force-disk /dev/sdb
+
+
+Shows boot order
+[root@harmonian001 ~]# efibootmgr
+BootCurrent: 0001
+Timeout: 1 seconds
+BootOrder: 0001,0002,0003,0004,0005,0006,0007
+Boot0001* RedHat Boot Manager
+Boot0002* UEFI: Network Card
+Boot0003* UEFI: PXE IP4 Mellanox Network Adapter - 04:09:73:B8:2A:28
+Boot0004* UEFI: PXE IP6 Mellanox Network Adapter - 04:09:73:B8:2A:28
+Boot0005* UEFI: PXE IP4 Mellanox Network Adapter - 04:09:73:B8:2A:29
+Boot0006* UEFI: PXE IP6 Mellanox Network Adapter - 04:09:73:B8:2A:29
+Boot0007* UEFI: Built-in EFI Shell
+Change boot order
+[root@harmonian001 ~]# efibootmgr -o 0003,0007
+BootCurrent: 0001
+Timeout: 1 seconds
+BootOrder: 0003,0007
+Boot0001* RedHat Boot Manager
+Boot0002* UEFI: Network Card
+Boot0003* UEFI: PXE IP4 Mellanox Network Adapter - 04:09:73:B8:2A:28
+Boot0004* UEFI: PXE IP6 Mellanox Network Adapter - 04:09:73:B8:2A:28
+Boot0005* UEFI: PXE IP4 Mellanox Network Adapter - 04:09:73:B8:2A:29
+Boot0006* UEFI: PXE IP6 Mellanox Network Adapter - 04:09:73:B8:2A:29
+Boot0007* UEFI: Built-in EFI Shell
+
+Wipe out the partation /dev/sda
+dd if=/dev/zero of=/dev/sda bs=1024 count=10000 
+dd if=/dev/zero of=/dev/sdc bs=1024 count=10000
+Shows that the disk is wiped
+parted /dev/sda p
+parted /dev/sdc p
+Makes label "gpt"
+parted /dev/sda mklabel gpt 
+parted /dev/sdc mklabel gpt 
+
+Make disk (parted start at 1049 Bits
+parted /dev/sda mkpart primary xfs 1049 -1
+parted /dev/sdc mkpart primary xfs 1049 -1
+
+Use parted tool 
+parted /dev/sda & sdc
+mkpart primary xfs 1049k -1
+
+p "to ptrint"
+quit  "to end the tool"
+
+Create a raid between both "sda"
+mdadm --create /dev/md0 -l raid0 -n2 /dev/sda1 /dev/sdc1
+
+Shows the software array
+cat /proc/mdstat
+Personalities : [raid0]
+md0 : active raid0 sdc1[1] sda1[0]
+      937435136 blocks super 1.2 512k chunks
+
+unused devices: <none>
+
+
+
+Shows details of the soft array
+mdadm --detail /dev/md0
+Personalities : [raid0]
+md0 : active raid0 sdc1[1] sda1[0]
+      937435136 blocks super 1.2 512k chunks
+
+unused devices: <none>
+[root@harmonian001 ~]# mdadm --detail /dev/md0
+/dev/md0:
+           Version : 1.2
+     Creation Time : Tue Apr 30 13:25:25 2019
+        Raid Level : raid0
+        Array Size : 937435136 (894.01 GiB 959.93 GB)
+      Raid Devices : 2
+     Total Devices : 2
+       Persistence : Superblock is persistent
+
+      Update Time : Tue Apr 30 13:25:25 2019
+             State : clean
+    Active Devices : 2
+   Working Devices : 2
+    Failed Devices : 0
+     Spare Devices : 0
+
+        Chunk Size : 512K
+
+Consistency Policy : none
+
+              Name : harmonian001:0  (local to host harmonian001)
+              UUID : aa4566f5:e67f3995:d37a141e:4ff6ab1f
+            Events : 0
+
+    Number   Major   Minor   RaidDevice State
+       0       8        1        0      active sync   /dev/sda1
+       1       8       33        1      active sync   /dev/sdc1
+
+create the array conf file 
+mdadm --detail --scan --verbose >> /etc/mdadm.conf 
+# cat /etc/mdadm.conf
+ARRAY /dev/md0 level=raid0 num-devices=2 metadata=1.2 name=harmonian001:0 UUID=aa4566f5:e67f3995:d37a141e:4ff6ab1f
+   devices=/dev/sda1,/dev/sdc1
+   
+###########################################################
+
+Now create a file system on md0
+mkfs.xfs -f /dev/md0
+
+ADD LINE to FSTAB
+/etc/fstab
+ADD LINE
+/dev/md0               /lvol        xfs rw,defaults 0 0 
+
+ADD NEW DIR
