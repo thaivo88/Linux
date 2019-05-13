@@ -1,8 +1,78 @@
 #### Setting/Config nodes on hpchpcm ####
 
+############################################# Discovering new node into HPCHPCM / PBS #############################################
+# Clone the basic image and rename it
+	cinstallman --create-image --clone --source rhel7.6-mlnx-4.5-1-nv-410.79-hpc --image rhel7.6-mlnx-4.5-1-nv-418.40.04-hpc
+
+# set up ilo and bios for hpchpcm
+# get Mac address of node nic & ilo
+
+# check the image for its kernel params
+	cadmin --show-kernel-extra-params --image rhel7.6-mlnx-4.5-1-nv-418.40.04-hpc
+
+# find the last service id number from /etc/hosts by grep
+# copy a config file and edit to add server hostname and both MAC address
+	cd /root on hpchpcm
+	cp [basic_config_file] [new_cluster_config_file]
+	vi [new_cluster_config_file]]
+
+# copy the nis file and rename it
+	cd /opt/clmgr/image/scripts/post-install
+	cp 97rhel7.6-mlnx-4.5-1-hpc.hpc.nis 97rhel7.6-mlnx-4.5-1-AMD-hpc.nis
+	discover --all --configfile /root/hpchpcmleto.config 
+
+# add label for lvol
+# Now create a file system on md0 (or md127)
+# Check what label was given to the device
+	lsblk
+    mkfs.xfs -f /dev/md0
+# adding label to raid drive
+    xfs_admin -L "lvol_m2" /dev/md0
+
+	######### output ######
+	writing all SBs
+	new label = "lvol"
+	####### End ######
+
+# adding entry to /etc/fstab
+    echo 'LABEL=lvol                          /lvol           xfs rw,defaults 0 0' >> /etc/fstab
+# or
+    vi /etc/fstab
+# add this to the end of the file:
+    LABEL=lvol                          /lvol           xfs rw,defaults 0 0
+
+# adding cluster to roundrobin and after.local script
+# edit roundrobin.sh and after.local
+# copy the for loop to add said hostname and edit lvol label name
+	cd /opt/clmgr/image/images/generic-customizations/etc
+	vi roundrobin.sh
+	vi after.local.sh
+# copy roundrobin and after.local into image dirctory
+	cp roundrobin.sh /opt/clmgr/image/images/rhel7.6-mlnx-4.5-1-AMD-hpc/etc/opt/sgi/conf.d/
+	cp after.local /opt/clmgr/image/images/rhel7.6-mlnx-4.5-1-AMD-hpc/etc/init.d/
+
+# check boot order
+	efibootmgr
+# rerange boot order
+	efibootmgr -o [PXE IPv4],[uefi shell]
+
+################################################### End #########################################################
 
 
-#### create an RPM build from a runfile into the current OS and kernel #### 
+
+
+
+
+
+
+
+
+
+
+
+
+
+############################ create an RPM build from a runfile into the current OS and kernel ##################### 
 # on the computing node
 # change directory:
     [root@hpchpcm /]# cd /admin/hpcm/NVIDIA
@@ -160,6 +230,7 @@ Boot0023* Red Hat Enterprise Linux
     [root@zeusn039 ~]# efibootmgr -o 0000,0020
 
 # Reboot the node and watch it boot onto the new image.
+####################################### End #########################################
 
 
 
@@ -167,8 +238,10 @@ Boot0023* Red Hat Enterprise Linux
 
 
 
-############################################################
-SET UP OF DISK FOR "harmonian" Nodes
+
+
+
+############################ SET UP OF DISK FOR "harmonian" Nodes ################################
 
 # Take node off PBS
     qstat -an                                               # show all nodes in PBS
@@ -358,3 +431,4 @@ new label = "lvol"
     df | grep lvol
 # resume node on PBS
     pbsnodes -r harmonian001
+#################################################### End ################################################
