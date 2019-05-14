@@ -20,6 +20,20 @@ Directory Path: /mops/nodes/INVENTORY
 
 
 
+/admin/srv_common/www/cgi-bin 
+
+
+
+#########
+Directory Path: /admin/nodes/INVENTORY
+
+updated ./getNodeInfo (getNodeInfo.backup.thai)
+edited script to change hpssacli to ssaucli (utility name changed)
+changed INVENTORY=/admin/nodes/INVENTORY (INVENTORY=/mops/nodes/INVENTORY)
+
+updated ./genInvPage
+changed INVENTORY=/admin/nodes/INVENTORY (INVENTORY=/mops/nodes/INVENTORY)
+
 
 #############################################################
 
@@ -32,7 +46,7 @@ Directory Path: /admin/inventory/
 	/data : holds all collected data of nodes in this directory from the script: ./getNodeInfo | HOSTLIST | inventory.htm
 		(node's hostname need to be in HOSTLIST file to be generated in the Resource Page)
 	./mkpage : collect all html code to generate inventory.htm then copy the file to /srv/www/htdocs/system
-Node must have ssaucli (aka hpssacli) install
+Node must have ssacli (aka hpssacli) install
 
 ./getNodeInfo ran into code error: which hpssacli not found
 edited script to change hpssacli to ssaucli (utility name changed)
@@ -60,3 +74,7 @@ run ./getNodeInfo && ./genInvPage
 Directory Path: /admin/nodes/INVENTORY
 update HOSTLIST
 run ./getNodeInfo && ./getInvPage
+
+hpcgate fixed
+when you add a new host and you update HOSTLIST, the process should be to run getNodeInfo in the new hosts as well.
+It would also make sense to run genInvPage too.  The INVENTORY script is run from a cronjob on hpcgate
