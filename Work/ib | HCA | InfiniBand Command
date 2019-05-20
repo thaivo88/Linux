@@ -1,3 +1,7 @@
+Performing Adapter Device Self test
+  cd /usr/bin
+  ./hca_self_test.ofed
+
 subnet manager for IB
   systemctl status opensm.service
   systemctl restart opensm.service
