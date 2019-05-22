@@ -1,4 +1,4 @@
-RPM Base Distro:
+                          RPM Base Distro:
 -SUSE  
 -RedHat: splintered into three distributions:
   -Fedora version favored by home users, students, and business on tight budget
@@ -50,9 +50,58 @@ RPM Operations:
 --rebuilddb           rebuilds the RPM database to fix errors
 
 RPM options:
-option                used with
---root [dir]            any           modifies the linux system having a root directory located at [dir].
---force                 i U F         forces installation of a package even when it means overwriting existing packages.
--h or --hash            i U F         displays a series of hash marks to indicate the progress of the operation
--v                      i U F         used in conjunction with the -h option to produce a uniform number of hash marks for each package
---nodeps               i U F E        
+option                  used with
+--root [dir]              any            modifies the linux system having a root directory located at [dir].
+--force                 -i -U -F         forces installation of a package even when it means overwriting existing packages.
+-h or --hash            -i -U -F         displays a series of hash marks to indicate the progress of the operation
+-v                      -i -U -F         used in conjunction with the -h option to produce a uniform number of hash marks for each package
+--nodeps                -i -U -F -E      specifies that no dependency checks be performed. Installs or removes the package even if it relies on a package or file that's not present or is required by a package that's not being uninstalled.
+--test                  -i -U -F         Checks for dependencies, conflicts, and other problems without actually installing the package.
+--prefix path           -i -U -F         Sets the installation directory to path (works only for some package)
+-a or --all             -q -V            Queries or verifies all packages
+-f file or --file file  -q -V            Queries or verifies the package that owns file
+-p package-file         -q               queries the uninstalled RPM package-file
+-i                      -q               Displays package information, including the package maintainer, a short description, and so on.
+-R or --requires        -q               Displays the packages and files on which this one depends.
+-l or --list            -q               Displays the files contained in the package.
+
+                        Extracting Data from RPMs
+Occasionally you may want to extract data from RPMs without installing the package. For instance, this can be a good way to retrieve the
+original source code from a source RPM for compiling the software without the help of the RPM tools or to retrieve fonts or other nonprogram
+data for use on a non-RPM system.
+RPM files are actually modified cpio archives. Converting the files into cpio files is relatively straightforward, whereupon you can use cpio
+to retrieve the individual files. To do this job, you need to use the rpm2cpio program.
+
+You can then extract the data using cpio, which takes the -i option to extract an archive and --make-directories to create directories:
+    $ cpio -i --make-directories < samba-4.1.9-4.fc20.src.cpio
+Alternatively, you can use a pipe to link these two commands together without creating an intermediary file:
+    $ rpm2cpio samba-4.1.9-4.fc20.src.rpm | cpio -i --make-directories
+The result is an extraction of the files in the archive in the current directory.
+
+Another option for extracting data from RPMs is to use alien:   This program convert RPM into Bebia package or a tarball.
+
+                    Using Yum 
+                    
+Yellow Dog Linux distribution
+
+Yum is one of several meta-packagers--it enables you to install a package and all its dependencies easily using a single command line.
+When using Yum, you don't even need to locate and download the package files because Yum does this for you by searching in one or more reposioties
+Internet sites that host RPM files for a particular distribution.
+
+Common Yum commands
+install                       Installs one or more packages by package name. Also installs dependencies of the specified package or packages.
+update                        Updates the specified package or packages to the lates avilable version. if no packages are specified, yum updates every installed package.
+check-update                  Checks to see whether updates are available. If they are, yum displays their names, versions, and repository area
+upgrade                       Works like update with the --obsoletes flag set, which handles obsolete packages in a way that's superior when performing a distribution version upgrade.
+remove or erase               Deletes a package from the system; similar to rpm -e, but yum also removes depended-on packages.
+list                          Displays information about a package, such as the installed version and whether an update is available.
+provides or whatprovides      Displays information about packages that provide a specified program or feature. For instance, typing yum provies samba lists all the samba-related packages, incluing every available update. Note that the output can be copious.
+search                        Searches package names, summaries, packagers, and descriptions for a specified keyword. this is useful if you don't know a package's name but can think of a word that's linkely to appear in one of these fields but not in these fields for other packages.
+info                          Displays information about a package, similar to the rpm -qi command.
+clean                         Cleans up the yum cache directory. Running this comman from time to time is advisable, lest downloaded packages chew up too much disk space.
+shell                         Enters the yum shell mode, in chich you cna enter multiple yum commands one after another.
+resolvedep                    Displas packages matching the specified dependency.
+localinstall                  Installs the specified local RPM files, using your Yum repositories to resolve dependencies.
+
+
+
