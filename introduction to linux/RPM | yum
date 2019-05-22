@@ -102,6 +102,21 @@ clean                         Cleans up the yum cache directory. Running this co
 shell                         Enters the yum shell mode, in chich you cna enter multiple yum commands one after another.
 resolvedep                    Displas packages matching the specified dependency.
 localinstall                  Installs the specified local RPM files, using your Yum repositories to resolve dependencies.
+localupdate                   Updates the system using the specified local RPM files, using you Yum repositories to resolve dependensies. Package other than those updated by local files and their dependencies are not updated.
+deplist                       Displays dependenciesof the specified package.
 
+Yum has its limits, though; it's only a good as its reposioties, so it can't install software that's not stored in these repositories.
+
+If you don't want to install the package buy merely want to obtain it, you can use yumdown-loader. Type this command followed by the name
+of a package and the latest version of the package will be downloaded to the current direcotory. this can be handyh if you need to update a system
+tha's not connected to the internet; you can use another computer that runs the same distribution to obtain the packages and then transferthem to the target system.
+
+GUI front-ends to yum exist.
+examples include yumex and kyum
+    install these front-ends: yum install kyum
+    
+                            RPM and Yum configuration files
+                       
+The main RPM configuration files is /usr/lib/rpm/rpmrc
 
 
