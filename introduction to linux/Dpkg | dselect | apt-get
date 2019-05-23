@@ -1,0 +1,50 @@
+dpkg [option] [action] [package-files|package-name]
+
+Action                  Description
+----------------------------------------------------------------------------------------------------
+-i or --install                       installs a package
+--configure                           reconfigures an installed package: runs the post-installation script to set site-specific options
+-r or --remove                        removes a package but leaves configuratin files intact
+-P or --purge                         removes a package, including configuration files
+--get-selections                      displays currently installed packages
+-p or --print-avail                   displays information about an installed package
+-I or --info                          displays information about an uninstalled package file
+-l pattern or --list pattern          lists all installed packages whose names match pattern
+-L or --listfiles                     lists the installed files associated with a package
+-S pattern or --search pattern        locates the packages that own the files specified by pattern
+-C or --audit                         searches for partially installed packages and suggests what to do with them
+
+Option                        Used w/ Actions   Description
+----------------------------------------------------------------------------------------------------
+--root=dir                    All          -Modifies the linux system using a root directory located at (dir). 
+                                           Can be used to maintain one linux installation discrete from another one, 
+                                           say during OS installation or emergency maintenance.
+-B or --auto-deconfigure      -r           -Disables packages that rely on one that is being removed.
+--force-things                Assorted     -Overrides defaults that would ordinarily cause dpkg to abort. 
+                                           Consult the dpkg man page for details of what (specified by things) this option does.
+--ignore-depends=package      -i -r        -Ignores dependency information for the specified package.
+--no-act                      -i -r        -Checks for dependencies, conflicts, and other problems without actually installing 
+                                           or removing the package.
+--recursive                   -i           -Installs all packages that match the package-name wildcard in the specified directory 
+                                           and all subdirectories.
+-G                            -i           -Doesn't install the package if a newer version of the same package is already installed.
+-E or --skip-same-version     -i           -Doesn't install the package if the same version of the package is already installed.
+
+Debian-based systems systems often use a pair of somewhat higher-level utilities, apt-get and dselect, to handle package installation and removal.
+
+
+
+Using apt-cache
+
+apt-cache : that's intended solely to provide information about the Debian package database.
+apt-cache showpkg : Display package information
+apt-cache stats : display package statistics; learn how many packages you've installed, how many dependencies are recorded, and various other statistics about the package database.
+apt-cache unmet : find unmet dependencies; reports missing libraries or files.
+apt-cache depends : displays dependencies; shows all of the specified package's dependencies.
+apt-cache pkgnames : displays the names of all the packages installed on the system.
+    apt-cachenpkgnames sa : returns only those packages that begin with the specified string.
+    
+
+
+Using apt-get
+
