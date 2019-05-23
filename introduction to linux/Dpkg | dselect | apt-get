@@ -48,3 +48,12 @@ apt-cache pkgnames : displays the names of all the packages installed on the sys
 
 Using apt-get
 
+Debian-based systems include a file, /etc/apt/sources.list, that specifies locations from which important packages can be obtained.
+The apt=get utility works by obtaining information about available packages from the sources listed in /etc/apt/sources.list
+and then using that information to upgrade or install packages.
+
+              apt-get [options] [command] [package-names]
+              
+Commands              Description
+-------------------------------------------------------------------------------------------------------
+
