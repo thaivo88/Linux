@@ -117,6 +117,6 @@ examples include yumex and kyum
     
                             RPM and Yum configuration files
                        
-The main RPM configuration files is /usr/lib/rpm/rpmrc
-
+The main RPM configuration files is /usr/lib/rpm/rpmrc. This file sets a variety of options, mostly related to the CPU optimizations used when compiling source packages.
+You
 
