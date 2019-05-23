@@ -122,4 +122,7 @@ mostly related to the CPU optimizations used when compiling source packages.
 You shouldn't edit this file, though; instead, you should create and edit: 
     /etc/rpmrc (to make global changes)
     ~/.rpmrc  (to make changes on a per-user basis) (~ : home directory of user)
-Yum is configured via the <b>/etc/yum.conf</b> file
+Yum is configured via the /etc/yum.conf file, with additional configuration files in the /etc/yum.repos.d directory.
+The yum.conf file holds basic options, such as the directory to which Yum downloads RPMs and where Yum logs its activities.
+
+
