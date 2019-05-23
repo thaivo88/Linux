@@ -1,4 +1,4 @@
-File Transfer Protocol (FTP)                                      TCP         20(data transfer) / 21 (control)
+> File Transfer Protocol (FTP)                                      TCP         20(data transfer) / 21 (control)
 Secure Shell (SSH)                                                TCP         22
 Telnet                                                            TCP         23
 Simple Mail Transfer Protocol (SMTP)                              TCP         25
