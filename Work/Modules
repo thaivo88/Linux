@@ -4,7 +4,7 @@
 #if yes install in /sw (mounted  hpchost3-a: /sw)
 
 #show all module
- <pre lang="no-highlight"><code>module avail</code>
+ ```module avail</code>```
 
 #show module loaded
  module list
