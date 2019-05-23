@@ -4,7 +4,7 @@
 #if yes install in /sw (mounted  hpchost3-a: /sw)
 
 #show all module
- module avail
+ `module avail`
 
 #show module loaded
  module list
