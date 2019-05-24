@@ -107,3 +107,22 @@ synaptic is a GUI X-based program with similar tools like dselect and aptitude.
 
 
 
+You may alter the configuration files for a package; if you do this and find that you've made a mess of things, you may want to revert
+to the initial standard configuration.
+                  dpkg-reconfigure [package_name]
+                  
+
+
+Debian source packages aren't single files; they're groups of files-the original source tarball, 
+a patch file that's used to modify the source code (including a file that controls the building of a debian package), 
+and a .dsc file that contains a digital "signature" to help verify the authenticity of the collection.
+    -tarball
+    -patch file
+    -.dsc file is optional
+
+The main configuration file for dpkg is /etc/dpkg/dpkg.cfg or ~/.dpkg.cfg
+APT, the main configuration file you're likely to modify s /etc/apt/sources.list
+/etc/apt/apt.conf which controls ATP and dselect options
+debian's package tool rely on various files in the /var/lib/dpkg directory tree; these files maintain lists of available packages,
+lists of installed packages, and so on. This directory tree is effectively the Debian installed file database.
+
