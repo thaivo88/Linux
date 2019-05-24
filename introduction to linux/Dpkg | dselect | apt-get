@@ -95,6 +95,15 @@ aptitude is similar to dselect in a rough way, but aptitude adds menus accessed 
 aptitude update : update package list from the APT repositories
 aptitude install [package] : install sofware
 aptitude install [package]- or aptitude remove [package] : uninstall package
+aptitude safe-upgrade : is conservative about removing packages or installing new ones and so may fail
+aptitude full-upgrade : is less conservative about these actions, and so it is more likely to complete its tasks. (may break software in the process)
+aptitude search : searches the database for packages matching the specified name.
+aptitude autoclean : removes already-downloaded packages that are no longer available, and clean removes all downloadeded packages.
+aptitude help : a complete list of options
+
+
+
+synaptic is a GUI X-based program with similar tools like dselect and aptitude.
 
 
 
