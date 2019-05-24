@@ -56,4 +56,45 @@ and then using that information to upgrade or install packages.
               
 Commands              Description
 -------------------------------------------------------------------------------------------------------
+update              Obtains updated information about packages available from the installation sources listed in /etc/apt/sources.list
+upgrade             Upgrades all installed packages to the newest versions available, based on locally stored information about available packages.
+dselect-upgrade     Performs any changes in package status (installation, removal, and so on) left undone after running dselect.
+dist-upgrade        Similar to upgrade, but performs "smart" conflict resolution to avoid upgrading a package if doing so would break a dependency.
+install             Installs a package by package name (not by package filename), obtaining the package from the source that contains the most up-to-date version.
+remove              Removes a specified package by package name
+source              Retrieves the newest available source package file by package file-name using information about packages listed in /etc/apt/sources.list
+check               Checks the package database for consistency and broken package installations.
+clean               Performs housekeeping to help clear out information about retrieved files from package database
+                    (If you don't use dselect for package management, run this from time to time in order to save disk space.)
+autoclean           Similar to clean, but removes information only about packages that can no longer be downloaded.
+
+Option                                    Used w/                        Description
+-------------------------------------------------------------------------------------------------------
+-d or --download-only                     upgrade, dselect-upgrade      -Downloads package files but doesn't install them.
+                                          install, source               
+-f or --fix-broken                        install                       -Attempts to fix a system on which dependencies are unsatisfied.
+                                          removed
+-m or --ignore-missing or --fix-missing   upgrade, dselect-upgrade      -Ignores all package files that can't be retrieved;
+                                          install, removed, source      (because of network errors, missing files, or the like)
+-q or --quiet                             All                           -Omits some progress indicated information. (may be doubled -qq)
+-s or --simulate or --just-print or       All                           -Performs a simulation of the action without actually modifying,
+--dry-run or --recon or --no-act                                        installing, or removing files.
+-y or --yes or --assume-yes               All                           -Produces a "yes" response to any yes/no prompt in installation
+-b or --compile or --build                source                        -Compiles a source package after retrieving it.
+--no-upgrade                              install                       -Causes apt-get to not upgrade a package if an older version is already installed.
+
+
+
+Using dselect, aptitude, and synaptic
+
+dselect program is a high-level package browser. Using it, you can select packages to install on your system from the APT archives defined
+in /etc/apt/sources.list, review the packages that are already installed on your system, uninstall packages, and upgrade packages.
+Default dselect isn't installed
+
+aptitude is similar to dselect in a rough way, but aptitude adds menus accessed by pressing Ctrl+T and rearranges some features.
+aptitude update : update package list from the APT repositories
+aptitude install [package] : install sofware
+aptitude install [package]- or aptitude remove [package] : uninstall package
+
+
 
