@@ -58,5 +58,11 @@ force installing
         dpkg -i --force-conflicts
         
         
-          
+        
+            Rebuild package
+If the software is recompiled on a system that has different packages, the dependencies will change. Therefore, rebuilding a package
+from source code can overcome at least some dependencies. Rebuild a RPM package: you call rpmbuild with the name of the source package
+and use --rebuild
+        rpmbuild --rebuild packagename-version.src.rpm
+Of course, to do this you must have the source RPM for the package.
             
