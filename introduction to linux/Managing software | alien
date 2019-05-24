@@ -1,0 +1,62 @@
+            Converting between package formats:
+
+The alien program can convert between RPM packages, Debian packages, and tarballs.
+alien requires that you have appropriate package manager software installed, both PRM and Debian, to convert between these format.
+When converting from a tarball, alien copies the files directly as they had been in the tarball, so alien works only if the original tarball
+has files that should be installed off the root (/) direcotry of the system.
+                alien [options] [file]
+--to-deb : convert to debian
+--to-rpm : convert to RPM
+--to-tgz : convert to tarball
+If you omit the destination format, alien assumes that you want debian package.
+If you use a Debian-based system and want to install a tarball but keep a record of the files it contains in your Debian package database:
+                alien --install binary-tarball.tar.gz
+
+Say if a tarball was unpacked with bin, lib, sbin but your intent maybe to unpack into /usr or /usr/local
+to do so you need to unpack the tarball file and move the file into a new directory called usr then tar the file.
+    tar xvfz program.tar.gz         :       uncompress file
+    mv program-files usr            :       move all file into a new usr directory
+    tar cvfz program.tgz usr        :       compress the usr directory as program.tgz
+    rm -r usr                       :       remove usr directory and subdirectory
+    alien --to-rpm program.tgz      :       convert tarball into RPM
+    
+
+
+              Real and imagined package dependency problems
+
+Missing libraries or support programs
+One of the most common dependency problems is caused by a missing support package.
+Libraries-support code that can be used by many different programs as if it were part of the program itself.
+
+Incompatible libraries or support programs
+Even if a library or support program is installed on your system, it may be the wrong version.
+Linux library-naming conventions enable you to install multiple versions of a library in case you have programs with competing requirement.
+
+Duplicate files of features
+Conflicts arise when one package includes file that are already installed and that belong to another package.
+Feature conflicts are usually accompanied by name conflicts.
+Mixing packages intended for different distro; because distro may split files across package in different ways.
+
+Mismatched names
+RPM and Debian package management systems give names to their packages. These names don't always match across distributions.
+
+
+
+            Workarounds for package dependency problems
+            
+Forcing the installation, modifying your system to meet the dependency, rebuilding the problem package from source code, and 
+finding another version of the problem package.
+
+Forcing the installation:
+One approach is to ignore the issue
+ignore failed dependencies
+        rpm -i apackage.rpm --nodeps
+        dpkg -i --ignore-depends=[package]
+force installing
+        rpm -i apackage.rpm --force
+        dpkg -i --force-depends
+        dpkg -i --force-conflicts
+        
+        
+          
+            
