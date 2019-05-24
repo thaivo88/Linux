@@ -1,4 +1,4 @@
-            Converting between package formats:
+                        Converting between package formats:
 
 The alien program can convert between RPM packages, Debian packages, and tarballs.
 alien requires that you have appropriate package manager software installed, both PRM and Debian, to convert between these format.
@@ -22,7 +22,7 @@ to do so you need to unpack the tarball file and move the file into a new direct
     
 
 
-              Real and imagined package dependency problems
+                        Real and imagined package dependency problems
 
 Missing libraries or support programs
 One of the most common dependency problems is caused by a missing support package.
@@ -42,7 +42,7 @@ RPM and Debian package management systems give names to their packages. These na
 
 
 
-            Workarounds for package dependency problems
+                        Workarounds for package dependency problems
             
 Forcing the installation, modifying your system to meet the dependency, rebuilding the problem package from source code, and 
 finding another version of the problem package.
@@ -59,10 +59,20 @@ force installing
         
         
         
-            Rebuild package
+                        Rebuild package
 If the software is recompiled on a system that has different packages, the dependencies will change. Therefore, rebuilding a package
 from source code can overcome at least some dependencies. Rebuild a RPM package: you call rpmbuild with the name of the source package
 and use --rebuild
         rpmbuild --rebuild packagename-version.src.rpm
 Of course, to do this you must have the source RPM for the package.
             
+                        Library Principle
+If programs use their own libraries we run into these main issue: (Libraries are share due to:)
+            -program file is huge; takes up a lot of disk space and consumes a lot of RAM when loading
+            -multiple programs use the library, the program-size issue is multiplied; disk space and RAM
+            
+Shared libraries usually have a .so or .so.[version] extension (like dynamic link libraries .DLL in window)
+Static libraries have .a filename extensions. (used by linkers for inclusion in programs when dynamic libraries aren't to be used.)
+                        
+                        
+                        
