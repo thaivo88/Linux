@@ -1,0 +1,9 @@
+\Dropbox\DropBoxHpcGate1\Apollo70\ROM
+
+Put the rom on hpchost3 since this version of “ipmi” is newer and supported
+
+Notes:
+IP of BMC: harmonian007 = IP: 172.24.0.191
+
+Run the following command:
+# ipmitool -I lanplus -H 172.24.0.191 -U admin -P admin123 -z 1400 hpm upgrade L50_5.13_1.0.9_230.signed.hpm force
