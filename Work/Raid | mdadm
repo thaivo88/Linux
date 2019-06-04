@@ -46,7 +46,7 @@ Consistency Policy : none
 ###############################
 
 # create the array conf file 
-      mdadm --detail --scan --verbose >> /etc/mdadm/mdadm.conf 
+      mdadm --detail --scan --verbose >> /etc/mdadm.conf 
 # cat /etc/mdadm/mdadm.conf
 ###########
 ARRAY /dev/md0 level=raid0 num-devices=2 metadata=1.2 name=harmonian001:0 UUID=aa4566f5:e67f3995:d37a141e:4ff6ab1f
