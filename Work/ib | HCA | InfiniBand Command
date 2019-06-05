@@ -2,6 +2,10 @@ Performing Adapter Device Self test
   cd /usr/bin
   ./hca_self_test.ofed
 
+IPoIB
+  ifconfig ib[#] [ipaddress]/[netmask]
+  example: ifconfig ib0 192.168.0.147/16
+
 subnet manager for IB
   systemctl status opensm.service
   systemctl restart opensm.service
