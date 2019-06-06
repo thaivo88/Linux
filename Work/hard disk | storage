@@ -1,3 +1,9 @@
+lsblk
+blkid
+
+#get serial number of hard drive sda
+udevadm info --query=all --name=/dev/sda | grep -i ID_SERIAL
+
 # The df command is primarily intended to report file system disk space usage. 
 df
 
