@@ -2,6 +2,9 @@ Performing Adapter Device Self test
   cd /usr/bin
   ./hca_self_test.ofed
 
+install support for Mellanox Infiniband hardware
+  yum install infiniband-diags
+
 ib ethtool
   cd /opt/mellanox/ethtool/sbin
   ./ethtool ib0
