@@ -12,8 +12,8 @@ network:
             gateway4: 10.100.0.5
             nameservers:
                 addresses:
-                - 15.243.160.52
-                - 16.110.135.51
+                - 15.x.x.x
+                - 16.x.x.x
                 search: []
         eno2:
             addresses: []
