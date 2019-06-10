@@ -73,6 +73,24 @@ If programs use their own libraries we run into these main issue: (Libraries are
             
 Shared libraries usually have a .so or .so.[version] extension (like dynamic link libraries .DLL in window)
 Static libraries have .a filename extensions. (used by linkers for inclusion in programs when dynamic libraries aren't to be used.)
+Shared library changes can be incompatible with some or all programs that use the library. Linux uses library-numbering schemes to 
+enable you to keep multiple versions of a library installed at once.                       
                         
-                        
-                        
+                Setting the Path system wide
+set the library path : edit the /etc/ld.so.config file
+This file consists of a series of lines, each of which lists one directory in which shared library files may be found.
+
+Some distribution use the env-update utility that reads files in /etc/env.d to create the final porm of several /etc configuration files,
+including /etc/ld.so.conf.
+To change ld.so.conf in distributions that uses this mechanism, you should add or edit files in etc/env.d then type env-update.
+Linux refers to the trusted library directories, /lib and /usr/lib. These directories are always on the library path, even if they aren't
+listed in ld.so.conf.
+
+After you change your library path, you must use ldconfig to have your programs use the new path.
+
+Correcting library problem:
+If you get an error loading shared libraries, make sure it is installed if not install the library.
+If the library is installed but the name is different you might want to create a symbolic link.
+    example: program may link to biglib.so.5 but your system has biglib.so.5.2 creating a symbolic link will fix this issue.
+You may beed to add its directory globally or to LD_LIBRARY_PATH.
+
