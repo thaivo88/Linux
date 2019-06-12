@@ -1,77 +1,86 @@
-Performing Adapter Device Self test
-  cd /usr/bin
-  ./hca_self_test.ofed
+# Logical-to-Physical Port Mapping
+    ibdev2netdev
+######### output ###########
+mlx5_0 port 1 ==> ib0 (Up)
+mlx5_1 port 1 ==> ib1 (Up)
+mlx5_2 port 1 ==> ib2 (Up)
+mlx5_3 port 1 ==> ib3 (Up)
+############# end ############
 
-install support for Mellanox Infiniband hardware
-  yum install infiniband-diags
+# Performing Adapter Device Self test
+    cd /usr/bin
+    ./hca_self_test.ofed
 
-ib ethtool
-  cd /opt/mellanox/ethtool/sbin
-  ./ethtool ib0
+# install support for Mellanox Infiniband hardware
+    yum install infiniband-diags
 
-IPoIB
-  ifconfig ib[#] [ipaddress]/[netmask]
-  example: ifconfig ib0 192.168.0.147/16
+# ib ethtool
+    cd /opt/mellanox/ethtool/sbin
+    ./ethtool ib0
 
-subnet manager for IB
-  systemctl status opensm.service
-  systemctl restart opensm.service
+# IPoIB
+    ifconfig ib[#] [ipaddress]/[netmask]
+    example: ifconfig ib0 192.168.0.147/16
 
-enable/disable ib port
-  ibportstate [card] [port] [enable or disable]
-  ibportstate 1 1 [enable|disable]
-  
-To check the board id  you can do this.
-  cat /sys/class/infiniband/mlx5_0/board_id
-  Example: HPE0000000008
-  
-To find the bus id
-  lspci | grep Mellanox
-  Example: 37:00.0 Infiniband controller: Mellanox Technologies MT27800 Family  
-  
-To find the serial number and part number
-  lspci -s [bus id] -vvv
+# subnet manager for IB
+    systemctl status opensm.service
+    systemctl restart opensm.service
 
-InfiniBand Command
-To Display the Local Host’s IB Device Status
-  ibstat
-  ibv_devinfo
-  ibstatus
+# enable/disable ib port
+    ibportstate [card] [port] [enable or disable]
+    ibportstate 1 1 [enable|disable]
+  
+# To check the board id  you can do this.
+    cat /sys/class/infiniband/mlx5_0/board_id
+    Example: HPE0000000008
+  
+# To find the bus id
+    lspci | grep Mellanox
+    Example: 37:00.0 Infiniband controller: Mellanox Technologies MT27800 Family  
+  
+# To find the serial number and part number
+    lspci -s [bus id] -vvv
 
-To Check the Presence of an IB-QNEM
-Use the ibswitch command to verify that an IB-QNEM is installed in the shelf.
-  ibswitch
-  
-To List All IB Hosts in the IB Network
-Use the ibhosts command to list all hosts in the IB network.
-  ibhosts
-  
-To Display the Network Topology for the Shelf
-Use the iblinkinfo command to list the network topology for the shelf.
-  iblinkinfo.pl -R
-  
-To Query the Local Host’s IB Firmware
-Use the mst and flint commands display the host’s firmware information.
-  mst status
-  mst start
-  flint -d /dev/mst/mt[vendor_part_id]_pci_cr0 q
-  
-Extract the vendor_part_id parameter
-  ibv_devinfo | grep vendor_part_id
-  
-Query the Host about ConnectX-4 adapters:
-  mlxconfig -d /dev/mst/mt4119_pciconf0 q 
-    # mt4119 is given by extracting the vendor part id
+# InfiniBand Command
+# To Display the Local Host’s IB Device Status
+    ibstat
+    ibv_devinfo
+    ibstatus
 
-Change the port type to Ethernet (LINK_TYPE = 2) | infiniband (LINK_TYPE =1)
-  mlxconfig -d /dev/mst/mt4119_pciconf0 set LINK_TYPE_P1=2 LINK_TYPE_P2=2
-    # Note that the LINK_TYPE_P1 and LINK_TYPE_P2 equal 1 (InfiniBand) by default.
-
-check that the port type    
-  ibdev2netdev
+# To Check the Presence of an IB-QNEM
+# Use the ibswitch command to verify that an IB-QNEM is installed in the shelf.
+    ibswitch
   
-show OFED info  
-  ofed_info -s
+# To List All IB Hosts in the IB Network
+# Use the ibhosts command to list all hosts in the IB network.
+    ibhosts
+  
+# To Display the Network Topology for the Shelf
+# Use the iblinkinfo command to list the network topology for the shelf.
+    iblinkinfo.pl -R
+  
+# To Query the Local Host’s IB Firmware
+# Use the mst and flint commands display the host’s firmware information.
+    mst status
+    mst start
+    flint -d /dev/mst/mt[vendor_part_id]_pci_cr0 q
+  
+# Extract the vendor_part_id parameter
+    ibv_devinfo | grep vendor_part_id
+  
+# Query the Host about ConnectX-4 adapters:
+    mlxconfig -d /dev/mst/mt4119_pciconf0 q 
+      # mt4119 is given by extracting the vendor part id
+
+# Change the port type to Ethernet (LINK_TYPE = 2) | infiniband (LINK_TYPE =1)
+    mlxconfig -d /dev/mst/mt4119_pciconf0 set LINK_TYPE_P1=2 LINK_TYPE_P2=2
+      # Note that the LINK_TYPE_P1 and LINK_TYPE_P2 equal 1 (InfiniBand) by default.
+
+# check that the port type    
+    ibdev2netdev
+  
+# show OFED info  
+    ofed_info -s
   
   
 #######################
