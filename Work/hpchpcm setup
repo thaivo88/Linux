@@ -464,5 +464,8 @@ new label = "lvol"
 
 
 #################################### Adding node to sales op ###################################
+# set sales op per node
 	qmgr –c “set node [node] resources_available.sales_op = [sales op name]”
+# list sales op
+	pbsnodes -av | egrep "^c|^l|^a|^r|^z|^h|sales_op" | more
 #################################### End ###################################
