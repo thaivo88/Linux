@@ -126,8 +126,19 @@ which is the sceondary duty of this program.
 Causes ldconfig to update the links contained in the directories specifed on the command line.
 The system won't examine the directories specified in the /etc/ld.so.conf or the trusted directories /lib and /usr/lib.
   Don't Update Links: -X
+Opposite of -N; it causes ldconfig to update the cache but not manage links.
+  Use a new configuration file: -f [file]
+You can change the configuration file from /etc/ld.so.conf
+  Use a new cache file: -C [file]
+You can change the cache file that ldconfig create
+  Use a new root: -r [dir]
+Cause ldconfig to treat [dir] as if it were the root (/) directory. This option is helpful when you're recovering a badly corrupted system.
+  Display current information: -p
+Causes ldconfig to display the current cache-all of the librarydirectories and the libraries they contain.
 
+ldconfig run automatically after installing or removing the package. The same thing happens as part of the installation process.
 
+                      Managing Processes
 
                 
 
