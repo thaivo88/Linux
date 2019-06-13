@@ -65,7 +65,10 @@ from source code can overcome at least some dependencies. Rebuild a RPM package:
 and use --rebuild
         rpmbuild --rebuild packagename-version.src.rpm
 Of course, to do this you must have the source RPM for the package.
-            
+                                              
+                                              
+################ Library ################
+                                              
                         Library Principle
 If programs use their own libraries we run into these main issue: (Libraries are share due to:)
             -program file is huge; takes up a lot of disk space and consumes a lot of RAM when loading
@@ -76,7 +79,7 @@ Static libraries have .a filename extensions. (used by linkers for inclusion in 
 Shared library changes can be incompatible with some or all programs that use the library. Linux uses library-numbering schemes to 
 enable you to keep multiple versions of a library installed at once.                       
                         
-                Setting the Path system wide
+                      Setting the Path system wide
 set the library path : edit the /etc/ld.so.config file
 This file consists of a series of lines, each of which lists one directory in which shared library files may be found.
 
@@ -88,9 +91,45 @@ listed in ld.so.conf.
 
 After you change your library path, you must use ldconfig to have your programs use the new path.
 
-Correcting library problem:
+                      Correcting library problem:
 If you get an error loading shared libraries, make sure it is installed if not install the library.
 If the library is installed but the name is different you might want to create a symbolic link.
     example: program may link to biglib.so.5 but your system has biglib.so.5.2 creating a symbolic link will fix this issue.
 You may beed to add its directory globally or to LD_LIBRARY_PATH.
+
+                      Library Management Commands
+Linux provides a pair of commands that you're likely to use for library management:
+    ldd : displays a program's shared library dependencies-that is, the shared liraries that a program uses.
+    ldconfig :  updates caches and links used by the system for locating libraries, it reads /etc/ld.so.conf and implements
+any changes in that file or in the directories to which it refers.
+
+If you run into a program that won't launch because of missing libraries, the first step is to check which libraries the program file uses.
+      example: ldd /bin/ls
+If the library name doesn't contain a complete path, ldd attempts to find the true library and displays the complete path following the => symbol.
+The -v option provide a long list of version information following the main entry. May be helpful to track down which version of a 
+library a program is using, in case you have multiple versions installed.
+Library can themselves depend on other libraries, thus you can use ldd to discover what libraries are used by a library.
+
+                      Rebuilding the library cache
+  ldconfig
+The ld.so and ld-linux.so programs, which manage the loading of libraries, doesn't read /etc/ld.so.conf every time a program runs.
+Instead, the system relies on a cached list of directories and the files they contain stored in binary format in /etc/ld.so.cache.
+The drawback is that you must rebuild that cache every time you add or remove libraries.
+
+        ldconfig
+  Display Verbose Information: -v
+Causes the program to summarize the directories and files it's registering as it goes about its business.
+  Don't Rebuild the Cache: -N
+Causes ldconfig not to perform its primary duty of updating the library cache. It will update symbolic links to libraries, 
+which is the sceondary duty of this program.
+  Process Only Specified Directories: -n
+Causes ldconfig to update the links contained in the directories specifed on the command line.
+The system won't examine the directories specified in the /etc/ld.so.conf or the trusted directories /lib and /usr/lib.
+  Don't Update Links: -X
+
+
+
+                
+
+
 
