@@ -138,9 +138,34 @@ Causes ldconfig to display the current cache-all of the librarydirectories and t
 
 ldconfig run automatically after installing or removing the package. The same thing happens as part of the installation process.
 
-                      Managing Processes
+                              Managing Processes
+                  Understanding the Kernel: The First Process
+        uname [option]                
+  Node Name: -n or --nodename
+displays the system's node name; that is, its network hostname
+  Kernel Name: -s or --kernel-name
+displays the kernel name, which is Linux on a linux system
+  Kernel Version: -v or --kernel-version
+holds the kernel build date and time, not the actual version number.
+  Kernel Release: -r or --kernel-release
+kernel version number
+  Machine: -m or --machine
+returns information about your machine; cpu arch
+  Processor: -p or --processor
+return information about your CPU (manufacturer, model, and clock speed)
+  Hardware Platform: -i or --hardware-platform
+hardware information; often return 'unknown'
+  OS Name: -o or --operating-system
+return OS name-normally GNU/LINUX
+  Print All Information: -a or --all
+returns all available information
 
-                
+            Examining Process Lists
+      ps (processes's status): monitoring what's happening on a system.
+ps supports three different types of options as well as many options within each type:
+  1) Unix98 Options: These single-character options may be grouped together and are preceded by a single dash (-).
+  2) BSD Options: These single-character options may be grouped together and must not be preceded by a dash.
+  3) GNU Long Option: These multi-character options are never grouped together. They're preceded by two dashes (--).
 
 
 
