@@ -1,0 +1,5 @@
+# connect mini usb to superdome flex and install the driver per device management for the serial card via mini usb
+# set ip configuration and hostname for RMC
+# reboot rmc to save all changes
+  set network addressing=static ipaddress=10.0.211.101 netmask=255.255.0.0 hostname=[hostname gateway=10.0.0.10 
+  reboot rmc
