@@ -1,0 +1,41 @@
+            Examining Process Lists
+      ps (processes's status): monitoring what's happening on a system.
+ps supports three different types of options as well as many options within each type:
+  1) Unix98 Options: These single-character options may be grouped together and are preceded by a single dash (-).
+  2) BSD Options: These single-character options may be grouped together and must not be preceded by a dash.
+  3) GNU Long Option: These multi-character options are never grouped together. They're preceded by two dashes (--).
+
+ Options that may be grouped together may be clustered without spaces between them. For instance, rather than typing ps -a -f >> ps -af
+ The reason for so complexity is that the ps utility has a varied a lot from one Unix OS to another.
+ You can change some of its default behaviors by setting the PS_PERSONALITY environment variable to posix,old,linux,bsd,sun,digital.
+
+
+            ps Option:
+  Display Help: --help
+  Display All Processes: 
+-A and -e: Cause it to display all of the processes on the system, by default ps only display processes that were run from its own terminal.
+-x: displays all the processes owned by the user who gives the command
+  Display One User's Processes: -u [username] or U [username] or --User [username]
+You can display processes owned by a given user with username or user ID.
+  Display Extra Information: -f, -l, j, l, u, v
+Expand the information provided in the ps output.
+  Display Process Hierarchy: -H, -f, and --forest
+Group processes and use indentation to show the hierarchy of relationships between processes.
+  Display Wide Output: -w or w
+Normally ps output to fit the screen or xterm; ps can output more than 80 columns wide. You can set the wide columns with w option for more information.
+
+          Columns details:
+Username:
+    This is the name of the user who runs the programs.
+Process ID (PID):
+    PID is a number that's associated with the process.
+Parent Process ID (PPID):
+    PPID identifes the process's parent.
+TTY teletype:
+    a code used to identify a terminal. X program and daemons do not have tty. Text-mode programs doe have tty which point to a console/xterm.
+CPU time:
+    
+CPU Priority
+Memory Use
+Command
+
