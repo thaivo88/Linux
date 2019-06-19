@@ -53,11 +53,11 @@
 
 
 #when creating an account for Plab search group to find the GID or default to Guest 10400 or 10300 for HPCD
-cat /etc/group | grep [group]
-/etc/gshadow
+     cat /etc/group | grep [group]
+     /etc/gshadow
 #to find user email address or name
      cat /etc/aliases | grep -i [username] 
-/etc/netgroup
+    /etc/netgroup
 
 #both rsa key should look the same
 (ypcat passwd | grep $USER) = (getent shadow $USER)
@@ -128,3 +128,8 @@ Options:
                                 but do not change files
   -R, --root CHROOT_DIR         directory to chroot into
   -s, --sort                    sort entries by UID
+  
+##############################################
+
+# searches the log directory for instent of passwd for the given username to see any update
+     grep -R -i passwd /var/log/* | grep [username]
