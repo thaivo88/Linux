@@ -3,3 +3,10 @@
 # reboot rmc to save all changes
   set network addressing=static ipaddress=10.0.211.101 netmask=255.255.0.0 hostname=[hostname gateway=10.0.0.10 
   reboot rmc
+
+
+# ssh into the ip address above and type console to pull up a console interface
+  console
+# head to boot loader manu and click on the iso, click E to edit the iso input this line (one line)
+  linuxefi /vmlinuz-3.10.0-693.el7.x86_64 root=UUID=29300cf0-66a8-48ed-bb77-e2f1fc2dbc6f ro crashkernel=auto rhgb  LANG=en_US.UTF-8 console=ttyS0,115200 
+  earlyprintk=ttyS0,115200 modprobe.blacklist=ioatdma modprobe.blacklist=skx_edac mce=2 bau=0 pci=nobar nmi_watchdog=0 edac_report=off erst_disable 
