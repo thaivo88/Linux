@@ -85,5 +85,12 @@ example: quad-core CPU the load average can be as high as 4.0 without causing co
 
 
             jobs
+The jobs command displays minimal information about the processes associated with the current session. Job ID number.
+The job ID numbers are used by a handful of utilities in place of PIDs. A second use of jobs is to ensure that all of your programs
+have terminated prior to logging out.
+
+            pgrep
+Perform simple searches within the process list; similar to piping the ps command output to the grep command.
+ps | grep >> pgrep
 
 
