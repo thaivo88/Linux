@@ -4,6 +4,12 @@
 # console into a node
   console [hostname]
 
+# list of all RPM package
+# change directory and pick the node arch
+  cd /opt/clmgr/repos/distro/
+    cd rhel7.6-aarch64     or     cd rhel7.6-x86_64
+  cd /Packages
+  
 # installing conrep hp scripting tool
   cinstallman --yum-node --node cronusn003 --repo-group rhel76-x86_64-mel-4.5 install hp-scripting-tools
 
