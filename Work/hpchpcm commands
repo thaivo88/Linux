@@ -44,7 +44,7 @@
   rpm -qa | grep [keyword]
 
 #  show repo of the group
-  crep --show-groups
+  crepo --show-groups
 
 
  hpchpcm /thai_notes
