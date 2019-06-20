@@ -75,6 +75,7 @@
     id tecmint_test0
 # So, user tecmint_test0 remains in its primary group and also in secondary group (wheel). 
 # This will make my normal user account to execute any root privileged commands in Linux box.
+    service httpd restart
 
 # Change User Login Name
 # To change any existing user login name, we can use ‘-l‘ (new login) option.
