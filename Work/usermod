@@ -1,0 +1,127 @@
+# When we execute ‘usermod‘ command in terminal, the following files are used and affected.
+
+                /etc/passwd – User account information.
+                /etc/shadow – Secure account information.
+                /etc/group – Group account information.
+                /etc/gshadow – Secure group account information.
+                /etc/login.defs – Shadow password suite configuration..
+
+  usermod [options] username
+
+# The ‘usermod‘ command is simple to use with lots of options to make changes to an existing user. Let us see how to use usermod command by 
+# modifying some existing users in Linux box with the help of following options.
+
+                -c = We can add comment field for the useraccount.
+                -d = To modify the directory for any existing user account.
+                -e = Using this option we can make the account expiry in specific period.
+                -g = Change the primary group for a User.
+                -G = To add a supplementary groups.
+                -a = To add anyone of the group to a secondary group.
+                -l = To change the login name from tecmint to tecmint_admin.
+                -L = To lock the user account. This will lock the password so we can’t use the account.
+                -m = moving the contents of the home directory from existing home dir to new dir.
+                -p = To Use un-encrypted password for the new password. (NOT Secured).
+                -s = Create a Specified shell for new accounts.
+                -u = Used to Assigned UID for the user account between 0 to 999.
+                -U = To unlock the user accounts. This will remove the password lock and allow us to use the user account.
+
+# Adding Information to User Account
+# The ‘-c‘ option is used to set a brief comment (information) about the user account. 
+# For example, let’s add information on ‘tecmint‘ user, using the following command.
+  usermod -c "This is Tecmint" tecmint
+# After adding information on user, the same comment can be viewed in /etc/passwd file.
+  grep -E --color 'tecmint' /etc/passwd
+      tecmint:x:500:500:This is Tecmint:/home/tecmint:/bin/sh
+    
+# Change User Home Directory
+# In the above step we can see that our home directory is under /home/tecmint/, If we need to change it to some other directory 
+# we can change it using -d option with usermod command.
+# For example, I want to change our home directory to /var/www/, but before changing, let’s check the current home directory of a user, 
+# using the following command.
+    grep -E --color '/home/tecmint' /etc/passwd
+        tecmint:x:500:500:This is Tecmint:/home/tecmint:/bin/sh
+# Now, change home directory from /home/tecmint to /var/www/ and confirm the home director after changing.
+    usermod -d /var/www/ tecmint
+    grep -E --color '/var/www/' /etc/passwd
+        tecmint:x:500:500:This is Tecmint:/var/www:/bin/sh
+        
+# Set User Account Expiry Date
+# The option ‘-e‘ is used to set expiry date on a user account with the date format YYYY-MM-DD. 
+# Before, setting up an expiry date on a user, let’s first check the current account expiry status using the ‘chage‘ 
+# (change user password expiry information) command.
+    usermod -e 2019-06-20 [username]
+
+# Change User Primary Group
+# To set or change a user primary group, we use option ‘-g‘ with usermod command. Before, changing user primary group, 
+# first make sure to check the current group for the user tecmint_test.
+    id tecmint_test
+        uid=501(tecmint_test) gid=502(tecmint_test) groups=502(tecmint_test)
+# Now, set the babin group as a primary group to user tecmint_test and confirm the changes.
+    usermod -g babin tecmint_test
+    id tecmint_test
+        uid=501(tecmint_test) gid=502(babin) groups=502(tecmint_test)
+        
+# Adding Group to an Existing User
+# If you want to add a new group called ‘tecmint_test0‘ to ‘tecmint‘ user, you can use option ‘-G‘ with usermod command as shown below.
+    usermod -G tecmint_test0 tecmint
+    id tecmint
+# Note: Be careful, while adding a new groups to an existing user with ‘-G’ option alone, will remove all existing groups that user 
+# belongs. So, always add the ‘-a‘ (append) with ‘-G‘ option to add or append new groups.        
+
+# Adding Supplementary and Primary Group to User
+# If you need to add a user to any one of the supplementary group, you can use the options ‘-a‘ and ‘-G‘. 
+# For example, here we going to add a user account tecmint_test0 with the wheel user.
+    usermod -a -G wheel tecmint_test0
+    id tecmint_test0
+# So, user tecmint_test0 remains in its primary group and also in secondary group (wheel). 
+# This will make my normal user account to execute any root privileged commands in Linux box.
+
+# Change User Login Name
+# To change any existing user login name, we can use ‘-l‘ (new login) option.
+# In the example below, we changing login name tecmint to tecmint_admin. 
+# So the username tecmint has been renamed with the new name tecmint_admin.
+    usermod -l tecmint_admin tecmint
+# Now check for the tecmint user, It will not be present because we have changed it to tecmint_admin.
+    id tecmint
+# Check for the tecmint_admin account it will be there with same UID and with existing group what we have added before.
+    id tecmint_admin
+
+# Lock User Account
+# To Lock any system user account, we can use ‘-L‘ (lock) option, After the account is locked we can’t login by using the password and 
+# you will see a ! added before the encrypted password in /etc/shadow file, means password disabled.
+    usermod -L babin
+# Check for the locked account.
+    grep -E --color 'babin' cat /etc/shadow
+
+# Unlock User Account
+# The ‘-U‘ option is used to unlock any locked user, this will remove the ! before the encrypted password.
+    grep -E --color 'babin' /etc/shadow
+    usermod -U babin
+# Verify the user after unlock.
+    grep -E --color 'babin' /etc/shadow
+
+# Move User Home Directory to New location
+# Let’s say you’ve a user account as ‘pinky‘ with home directory ‘/home/pinky‘, you want to move to new location say ‘/var/pinky‘. 
+# You can use the options ‘-d‘ and ‘-m‘ to move the existing user files from current home directory to a new home directory.
+# Check for the account and it’s current home directory.
+    grep -E --color 'pinky' /etc/passwd
+# Then list the files which is owned by user pinky.
+    ls -l /home/pinky/
+# Now we have to move the home directory from /home/pinky to /var/pinky.
+    usermod -d /var/pinky/ -m pinky
+# Next, verify the directory change.
+    grep -E --color 'pinky' /etc/passwd
+# Check for the files under ‘/home/pinky‘. Here we have moved the files using -m option so there will be no files. The pinky user files will be now under /var/pinky.
+    ls -l /home/pinky/
+    ls -l /var/pinky/
+
+# Change UID and GID of a User
+# We can change UID and GID of a current user. For changing to a New GID we need an existing group. 
+# Here already there is an account named as orange with GID of 777.
+# Now my jack user account want to be assigned with UID of 666 and GID of Orange (777).
+# Check for the current UID and GID before modifying.
+    id jack
+# Modify the UID and GID.
+    usermod -u 666 -g 777 jack
+# Check for the changes.
+    id jack
