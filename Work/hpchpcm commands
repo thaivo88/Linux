@@ -25,7 +25,8 @@
   cinstallman --next-boot image --node zeusn042
 
 # install repo package
-  cinstallman --yum-node --node [hostname] --repo [repo name]
+# for the package name drop the .rpm
+  cinstallman --yum-node --node [hostname] --repo-group [repo name] install [package_name]
 
 # show node and image
   cinstallman --show-nodes | grep [keyword] 
