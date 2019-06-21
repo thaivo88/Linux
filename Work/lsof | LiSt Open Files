@@ -1,0 +1,29 @@
+# LiSt Open Files
+
+# check to see what is running on the port
+  lsof -i :[port number]
+  
+# How to list open files based on port range
+# The utility also allows you to list open files based on a specific port or port range. For example, 
+# to display open files for port 1-1024, use the following command:
+  lsof -i :1-1024
+
+# How to list open files based on type of connection (TCP or UDP)
+# The tool allows you to list files based on the type of connection. For example, for UDP specific files, use the following command:
+  lsof -i udp
+  
+# How to list files specific to a process
+# The tool also lets you display opened files based on process identification (PID) numbers. 
+This can be done by using the -p command line option. 
+  lsof -p [PID]
+  
+# How to list files based on their Internet address
+# The tool lets you list files based on their Internet address. This can be done using the -i command line option. 
+# For example, if you want, you can have IPv4 and IPv6 files displayed separately. 
+  lsof -i 4 
+  lsof -i 6
+  
+# How to list files opened by processes belonging to a specific user
+# The tool also allows you to list files opened by processes belonging to a specific user. 
+# This feature can be accessed by using the -u command line option.
+  lsof -u [user-name]
