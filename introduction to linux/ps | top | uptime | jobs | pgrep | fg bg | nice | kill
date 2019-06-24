@@ -93,4 +93,38 @@ have terminated prior to logging out.
 Perform simple searches within the process list; similar to piping the ps command output to the grep command.
 ps | grep >> pgrep
 
+            Foreground and backgroud processes
+If a program is running but you devide you want to use that terminal for something else, pressing Ctrl+Z normally pasues the program
+and gives you control of the terminal. This can be handy if you, you're running a text editor in a text-mode login and you want to check
+the filename so that you can mention it in the file you're editing. You press Ctrl+Z and type 'ls' to get the file listing. To get back
+to the text editor, you then type fg, which restores the text editor to the foreground of your terminal. If you suspended several process,
+you can add a job number, as in fg 2, to restore job 2. List jobs with 'jobs' command.
+Whereas fg restores a job to the foreground, bg restores a job to running status, but in the backgroud.
+As an alternative to launching a program, using Ctrl+Z, and typing 'bg' to run a program in the backgroud, you can append and ampersand '&'
+to the command when launching the program.
+  Ctrl+Z    # then
+  fg | fg [job_number]   # or
+  bg | bg [job_number]
+  
+  [command] & 
+  example: vi myfile.txt &
+  
+            Managing Process Priorities (nice | renice)
+You may have a job that's more important than others that are running, so you may want to give it a priority boost. To accomplish this goal
+is through the 'nice' and 'renice' commands. You can use 'nice' to launch a program with a speficied priority or use 'renice' to alter
+the priority of a running program.
+nice: before starting
+renice: during the process
+If you omit the adjustment value, 'nice' uses 10 as a default.
+Range -20 to 19
+Negative values having the highest priority
+The default priority for a program without 'nice' is 0
+  nice [argument] [command [command-argument]]
+  nice -[number] [command]                      nice -12 number-crunch data.txt     
+  nice -n [number] [command]                    nice -n 12 number-crunch data.txt   (this works well for positive number but looks weird with negative number)
+  nice --adjustment=[number] [command]          nice --adjustment=12 number-crunch data.txt
+'renice' program to alter its priority without disrupting the program's operation.
+  renice priority [[-p] pids] [[-g] pgrps] [[-u] users]
 
+            Killing Processes
+            
