@@ -4,6 +4,8 @@
 # console into a node
   console [hostname]
 
+# For HPCM all package/application is installed from the repo diretory or enviornment module
+# installing packages is a bad idea (via yum/apt-get) because it’s a tmpfs image (once it reboots the image is returned to a pristine state)
 # list of all RPM package
 # change directory and pick the node arch
   cd /opt/clmgr/repos/distro/
