@@ -1,6 +1,9 @@
 lsblk
 blkid
 
+# search for the biggest file
+du -a / 2>/dev/null | sort -n -r | head -n 20 
+
 #get serial number of hard drive sda
 udevadm info --query=all --name=/dev/sda | grep -i ID_SERIAL
 
