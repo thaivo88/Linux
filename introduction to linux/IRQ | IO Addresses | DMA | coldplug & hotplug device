@@ -1,0 +1,69 @@
+            IRQs
+Interrupt request (IRQ), or interrupt, is a signal sent to the CPU instructing it to suspend its current activity and to handle some
+external event such as keyboard input. On the x86 platform, IRQs are numbered from 0 to 15. More modern computer, including x86-64 systems
+provide more than these 16 interrupts. Some interrupts are reserved for specific purposes.
+IRQ     Typical Use                         Notes
+0       system timer                        reserved for internal use
+1       keyboard                            reserved for keyboard use only
+2       cascade for IRQs 8-15               the original x86 IRQ-handling circuit can manage just 8 IRQs; 2 are tired together to handle
+                                            16 IRQs, but IRQ 2 must be used to handle IRQs 8-15
+3       second RS-232 serial port           May also be shared by a fourth RS-232 serial port
+4       first RS-232 serial port            May also be shared by a third RS-232 serial port
+5       sound card or second parallel port  
+6       floppy disk controller              reserved for the first floppy disk controller
+7       first parallel port
+8       real-time clock                     reserved for system clock use only
+9       ACPI system control interrupt       Used by intel chipsets for Advanced Configuration and Poser Interface used for power managerment
+10      open interrupt
+11      open interrupt
+12      ps/2 mouse
+13      math coprocessor                    reserved for internal use
+14      primary ATA controller              the controller for ATA devices such as hard drives; traditionally /dev/hda and /dev/hdb
+15      secondary ATA controller            the controller for more ATA devices; traditionally /dev/hdc and /dev/hdd
+    PCI device frequently end up sharing an IRQ
+examining the contents of the /proc/interrupts
+/proc filesystem is a virtual filesystem-it doesn't refer to actual files on a hard disk but to kernel data
+
+
+
+          I/O Addresses
+I/O Addresses also referred to as I/O ports, are unique locations in memory that are reserved for communications between the CPU and 
+specific physical hardware devices.
+Linux Device          Windows Name      Typical IRQ       I/O Address
+/dev/ttyS0            COM1              4                 0x03f8
+/dev/ttyS1            COM2              3                 0x02f8
+/dev/ttyS2            COM3              4                 0x03e8
+/dev/ttyS3            COM4              3                 0x02e8
+/dev/lp0              LPT1              7                 0x0378-0x037f
+/dev/lp1              LPT2              5                 0x0278-0x027f
+/dev/fd0              A:                6                 0x03f0-0x03f7
+/dev/fd1              B:                6                 0x0370-0x0377
+examining the contents of the /proc/ioports
+
+
+
+          DMA Addresses
+Direct memory addressing is an alternative method of communication of I/O ports. Rather than have the CPU mediate the transfer of data
+between a device and memory, DMA permits the device to transfer data directly, without the CPU's attention. The result can be lower CPU
+requirements for I/O activity, which can improve overall system performance.
+examining the contents of the /proc/dma
+
+
+
+          Disk Geometry setting
+BIOS  The BIOS boot process begins with the computer reading a boot sector (typically the first sector) from a disk and then executing that code.
+EFI   The boot process involves the computer reading a boot loader file from a filesystem on a special partition, known as the EFI system partition (ESP)
+Any sector on a hard disk can be uniquely identified by three numbers: a cylinder number, a head number, and a sector number.
+One consequence of this configuration is that the BIOS must know how many cylinders, heads, and sectors the disk has.
+Modern disks squeeze more sectors onto outer tracks than inner ones, fitting more data on each disk.
+Logical block addressing (LBA) (some sources use the expansion linear block addressing) a single unique number is assigned to each sector on the disk.
+EFI uses LBA mode exclusively
+
+
+
+          Coldplug and Hotplug Devices
+Attached and detached when a computer is turn on (hot) versus only when it's turned off (cold)
+
+
+
+
