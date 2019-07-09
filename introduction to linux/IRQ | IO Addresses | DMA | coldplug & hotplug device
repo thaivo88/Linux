@@ -63,7 +63,18 @@ EFI uses LBA mode exclusively
 
           Coldplug and Hotplug Devices
 Attached and detached when a computer is turn on (hot) versus only when it's turned off (cold)
-
+Devices rely on specialized linux software to detect the changes to the system as they're attached and detached.
+A user-space program is one that runs as an ordinary program.
+Several utilities help in managing hotplug devices:
+  Sysfs: The sysfs virtual filesystem, mounted at /sys, exports information about devices so that user-space utilities can access the information.
+  HAL Daemon: Hardware Abstraction Layer Daemon, or hald, is a user-space program that runs at all times, provides other user-space programs
+with information about available hardware.
+  D-Bus: The Desktop Bus provides a further abstractio of hardware information access. Enables processes to communicate with each other as
+well as to register to be notified of events, both by other processes and by hardware.
+  udev: Traditionally, linux has created device nodes as conventional files in the /dev directory tree. The existence of hotplug 
+devices and various other issues, however, have motivated the creation of udev: a virtual filesystem, mounted at /dev, which creates dynamic
+device files as drivers are loaded and unloaded. You can configure udev through files in /etc/udev
+  
 
 
 
