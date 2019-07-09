@@ -1,1 +1,19 @@
+          Configuring PCI Cards
+You can tweak how PCI devices are detected in several ways:
+  -The linux kernel has several options that affect how it detects PCI devices; the kernel configuration screens under bus options.
+  -Most firmware iplementations have PCI options that change the way PCI resources are allocated.
+  -Some linux drivers support options that cause them to configure the relevant hardware to use particular resources. You must then pass
+these options to the kernel using a boot loader.
+  -You can use the 'setpci' utility to query ad adjust PCI devices' configurations directly.
 
+You can check your PCI devices by using 'lspci' command; it displays all of the information about the PCI busses on your system and all
+of the devices connected to those busses.
+            lspci
+Option    Effect
+-v        Increases verbosity of output. May be doubled (-vv) or tripled (-vvv) to produce more output
+-n        Displays information innumeric codes rather than translating the codes to manufacturer and device names.
+-nn       Displays both the manufacturer and device names and their associated numeric codes.
+-x        Displays the PCI configuration space for each device as a hexadecimal dump. May be triple (-xxx) or quadrupling (-xxxx)
+-b        Shows IRQ numbers and other data as seen by devices rather than as seen by the kernel
+-t        Displays a tree view depicting the relationship between devices.
+-s
