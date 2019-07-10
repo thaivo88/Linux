@@ -5,6 +5,9 @@ to copy a directory use the -r option
 cp [option] [file] [directory path]
 cp -r [directory] [directory path]
 
+# copy and overwrite with no prompt 
+yes | cp -rf [source_directory] [destination_directory]
+
 scp secure copy
 scp [location of file] [destination of file]
 scp /tmp/text.txt \username@hostname:/[directory where files will be place]
