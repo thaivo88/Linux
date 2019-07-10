@@ -114,3 +114,46 @@ We can add specific options to the modules to customize external access. These o
     lsmod | grep [module_name]
 ######################################################
             
+             Kernel Modules
+Kernel driver which many come in the form of kernel modules. These are stand-alone driver files, typically stored in the /lib/modules directory.
+To list the currently loaded modules use 'lsmod'
+To learn more about a module use 'modinfo'
+
+You can load kernel modules with two commands:
+-insmod
+-modprobe
+
+'lsmod' shows how much memory each module consumes
+
+'insmod' program insert a single module into the kernel. (require already loaded modules to which the initial module relies on)
+If you attempt to load a module that depends on others and those other module aren't loaded, insmod will fail.
+'modprobe'automatically loads any depended on modules.
+          
+                    modprobe
+          Be Verbose: -v or --verbose 
+Display extra information about its operations, typically a summary.
+          Change Configuration files: modprobe -C [directory]
+'modprobe' program uses a configuration file called /etc/modprobe.conf (multiple files in /etc/modprobe.d); you can change the configuration
+file or directory by passing a new file with the -C [filename option].
+          Perform a Dry Run: -n or --dry-run
+Causes modprobe to perform checks and all other operations except the actual module insertions. (helpful for debugging)
+          Remove Modules: -r or --remove
+remove the specified module and any on which it depends. (depended on modules are not removed if they're in use)
+          Force loading: -f or --force
+Force the module loading even if the kernel version doesn't match what the module expects. (dangerous option)
+          Show Dependencies: --show-depends
+shows all of the modules on which the specified module depends
+          Show Available module: -l or --list
+displays a list of available options whose names match the wildcard you specify.
+modprobe -l v* (list all module start with 'v')
+
+                    Removing Kernel Modules: rmmod
+          Be Verbose: -v or --verbose
+display some extra information about what it's doing, may be helpful for debugging
+          Force Removal: -f or --force
+forces mmodule removal even if the module is marked as being in use.
+          Wait until unused: -w or --wait
+Wait for the module to become unused rather than return an error message if the module is in use.
+If you try to unload a module that's depended on by other modules or is in use, rmmod will return an error message.
+If you want to unload an entire module stack-that is, a module and all those upon which it depends-you can use the modprobe command
+and its -r option.
