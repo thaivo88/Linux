@@ -8,6 +8,7 @@ these options to the kernel using a boot loader.
 
 You can check your PCI devices by using 'lspci' command; it displays all of the information about the PCI busses on your system and all
 of the devices connected to those busses.
+
             lspci
 Option    Effect
 -v        Increases verbosity of output. May be doubled (-vv) or tripled (-vvv) to produce more output
@@ -16,4 +17,11 @@ Option    Effect
 -x        Displays the PCI configuration space for each device as a hexadecimal dump. May be triple (-xxx) or quadrupling (-xxxx)
 -b        Shows IRQ numbers and other data as seen by devices rather than as seen by the kernel
 -t        Displays a tree view depicting the relationship between devices.
--s
+-s [domain:bus:slot.function]  Displays only devices that match the listed specification. This can be used to trim the results of the output
+-d [vendor:device]  Shows data on the specified devices
+-i [file]  Uses the specified file to map vendor and device IDs to names. (default /usr/share/misc/pci.ids)
+-m        Dumps data in a machine-readable form intended for use by scripts. -m backward-compatible format; -mm newer format
+-D        Displays PCI domain numbers. These numbers normally aren't displayed.
+-M        Scan in bus-mapping mode, which can reveal devices hidden behind a misconfigured PCI bridge.
+--version Displays version information
+
