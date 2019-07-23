@@ -23,6 +23,11 @@ yum install -y docker-ce-18.09.0-3.el7.x86_64
  docker load -i tf18.08.tar
  docker tag [image id] [repositoy name]:[tag]
 
+# stop docker container
+ docker stop [container-name]
+# list process of docker
+ docker ps
+
 
 #If docker daemon does not start and in a failed state check metadata file at : /var/lib/docker/devicemapper/devicemapper/metadata
 #If the file has symbols delete docker directory : /var/lib/docker
