@@ -1,0 +1,16 @@
+Steps to run Nvqual on Nvidia GPUs:
+ 
+1.	Disable Nouveau (steps below)
+2.	Make sure nvidia driver is not installed and you are in run level 3
+3.	Install Mod driver from mods directory
+4.	Run ./nvqual
+ 
+Note: For errors run ./nvqual –debug and send logs (nvqual-debug.log) to NVIDIA for analysis.
+ 
+disable Nouveau in RHEL7
+ 
+1. echo "blacklist nouveau" >/lib/modprobe.d/nvidia.conf
+2. mv /boot/initramfs-`uname -r`.img /boot/initramfs-`uname -r`.img.bkp
+3. cd /boot; dracut
+4. reboot
+
