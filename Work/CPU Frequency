@@ -1,0 +1,43 @@
+-bash-4.2$ sudo /bin/turbostat
+Package Core    CPU     Avg_MHz Busy%   Bzy_MHz TSC_MHz
+-       -       -       1009    100.00  1000    2523
+0       0       0       1016    100.00  1000    2541 
+0       1       1       1016    100.00  1000    2541 
+0       2       2       1016    100.00  1000    2541
+                :               :               :
+
+The usage is 100% but the CPU frequency has been low.
+
+% cat marirun.o7326
+Start Prologue v3.6 Sun Aug  4 22:09:35 CDT 2019
+cat: /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies: No such file or directory
+cat: /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies: No such file or directory
+cat: /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies: No such file or directory
+End Prologue v3.6 Sun Aug  4 22:09:41 CDT 2019
+  Product Name: ProLiant XL170r Gen10         Nodes:apollon[034-045]
+     Board MFG:  HPE
+HPE
+          BIOS: U38 - 05/21/2019 - 2.10
+    Processors: 2 x 20 Intel(R) Xeon(R) Gold 6248 CPU @ 2.50GHz   Hyperthreading: Enabled
+     Total Mem: 384 GB Speed: 2666MT/s
+    OS Release: Redhat 7.6
+    Kernel Ver: 3.10.0-957.el7.x86_64
+      MLNX KIT: 4.6-1.0.1.1
+     MLNX RATE:
+        Lustre: 2.10.6
+Setting of /sys/kernel/debug/x86/pti_enabled is 0
+Setting of /sys/kernel/debug/x86/ibpb_enabled is 1
+Setting of /sys/kernel/debug/x86/ibrs_enabled is 4
+Unmatched `.
+Start Epilogue v3.6 Sun Aug  4 22:49:33 CDT 2019
+cat: /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies: No such file or directory
+cat: /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies: No such file or directory
+cat: /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies: No such file or directory
+
+Go into bios and change the 'Workload Profile' to 'HPC' then save then change to 'Custom'.
+Head to 'Power and Performance Options' change 'Power Regulator' to 'OS control Mode'
+install conrep to the hostname
+conrep -s -f [file path]
+
+then run the xml file to the rest of the nodes
+pdsh -w [nodes] conrep -l -f [file path]
