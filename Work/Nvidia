@@ -89,6 +89,7 @@ disable nouveau kernal driver to install nvidia driver
 
 RHEL:
   echo "blacklist nouveau" >/lib/modprobe.d/blacklist.conf
+        or /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
   mv /boot/initramfs-`uname -r`.img /boot/initramfs-`uname -r`.img.bkp
   dracut -v /boot/initramfs-$(uname -r).img $(uname -r)
   reboot
