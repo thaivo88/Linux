@@ -86,12 +86,23 @@ yum install -y cuda-libraries-10-0
 
 ###############################################
 disable nouveau kernal driver to install nvidia driver
+
+RHEL:
+  echo "blacklist nouveau" >/lib/modprobe.d/blacklist.conf
+  mv /boot/initramfs-`uname -r`.img /boot/initramfs-`uname -r`.img.bkp
+  dracut -v /boot/initramfs-$(uname -r).img $(uname -r)
+  reboot
+
+-----------
+
+Ubuntu:
 create file: 
   nano /etc/modprobe.d/blacklist-nouveau.conf
 with the following contents:
   blacklist nouveau
   options nouveau modeset=0
 
-Regenerate the kernel initramfs:
+Regenerate the kernel initramfs for Ubuntu:
   sudo update-initramfs -u
   reboot
+###############################################
