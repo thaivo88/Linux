@@ -1,0 +1,378 @@
+Prepare install please confirm the following is done before installing Cuda & Fabric Manager
+ 
+Installed repo rh75
+Make sure to install the following tools and packages 
+ 
+# yum install redhat-lsb-core                                                        
+# yum -y install infiniband-diags                                                         
+# yum -y install ypbind                                                                
+# yum install ntp        
+# yum -y install numactl gcc-c++
+ 
+Make sure your in run level 3 
+# init 3
+ 
+Make sure to blacklist nouveau
+Edit boot parameters :
+# vi /etc/default/grub  
+Add these parameters :
+GRUB_CMDLINE_LINUX="rd.driver.blacklist=nouveau modprobe.blacklist=nouveau nvidia-drm.modeset=1"  
+ 
+Update GRUB config :
+# grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg  
+ 
+Blacklist nouveau :
+# vi /etc/modprobe.d/nouveau.conf  
+Add these lines :
+blacklist nouveau
+options nouveau modeset=0
+ 
+ 
+Downloaded cuda-toolkit version and installed them
+ 
+cuda_10.1.168_418.67_linux.run
+datacenter-gpu-manager-fabricmanager-1.6.3-1.x86_64.rpm
+ 
+ 
+Installation Instructions: Installing CUDA 10.418 
+cuda_10.1.168_418.67_linux.run
+Follow the command-line prompts
+1.	# sh cuda_10.1.105_418.39_linux.run
+ 
+This is new installer and is much slower to start-up than the older scripts (in case you have done this before).
+You will be asked to accept the EULA, of course, after which you will be presented with a "selector". Un-check the "Driver" block and then select "Install" and hit "Enter".
+ 
+┌──────────────────────────────────────────────────────────────────────────────
+│ CUDA Installer                                                   │
+│ - [ ] Driver                                                           │
+│      [ ] 418.39                                                       │
+│ + [X] CUDA Toolkit 10.1                                   │
+│   [X] CUDA Samples 10.1                                  │
+│   [X] CUDA Demo Suite 10.1                            │
+│   [X] CUDA Documentation 10.1                     │
+│   Install                                                                │
+│   Options                                                             │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ Up/Down: Move | Left/Right: Expand | 'Enter': Select | 'A': Advanced options │
+└──────────────────────────────────────────────────────────────────────────────
+This will do the "right thing". It will,
+ 
+install the CUDA toolkit in /usr/local/cuda-10.1
+create a symbolic link to /usr/local/cuda
+install the samples in /usr/local/cuda/samples and in your home directory under NVIDIA_CUDA-10.1_Samples
+add the appropriate library path
+ 
+Please make sure that
+-   PATH includes /usr/local/cuda-10.1/bin
+-   LD_LIBRARY_PATH includes /usr/local/cuda-10.1/lib64, or, add /usr/local/cuda-10.1/lib64 to /etc/ld.so.conf and run ldconfig as root
+As root
+ 
+ 
+2.	 # cat /etc/ld.so.conf.d/cuda-10-1.conf 
+/usr/local/cuda-10.1/targets/x86_64-linux/lib
+ 
+ 
+LIBRARY PATH:
+The cuda-toolkit install did add a .conf file to /etc/ld.so.conf.d but what it added is not idea and seems to not always work right. If you are doing a system-wide environment configuration I suggest doing the following;
+ 
+Move the installed conf file out of the way,
+3.	# sudo mv /etc/ld.so.conf.d/cuda-10-1.conf  /etc/ld.so.conf.d/cuda-10-1.conf-orig
+Then create, (using sudo and your editor of choice), the file
+ 
+4.	# /etc/ld.so.conf.d/cuda.conf
+ 
+containing,
+/usr/local/cuda/lib64
+ 
+Then run
+6.	# ldconfig
+This cuda.conf file in /etc/ld.so.conf.d/ will be pointing at the symbolic link to cuda-xx in /usr/local so it will still be correct even if you change the cuda version that the link is pointing to. (This is my "normal" way of setting up system-wide environments for CUDA.)
+ 
+ 
+7.	This also describes how to uninstall the installation and gives hints to adapt PATH and LD_LIBRARY_PATH. It might be beneficial to do this in .bashrc and .bash_profile:
+ 
+export PATH=/usr/local/cuda-10.1/bin${PATH:+:$PATH}
+export CUDADIR=/usr/local/cuda-10.1
+export LD_LIBRARY_PATH=/usr/local/cuda-10.1/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+
+ 
+Restart the console, and test the installation using:
+ 
+8.	#  nvcc -V
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2019 NVIDIA Corporation
+Built on Wed_Apr_24_19:10:27_PDT_2019
+Cuda compilation tools, release 10.1, V10.1.168
+ 
+ 
+9.	Install fabric manger 
+# rpm -ivh datacenter-gpu-manager-fabricmanager-1.6.3-1.x86_64.rpm
+ 
+10.	terminate the nv-hostengine using 
+# nv-hostengine –t
+then restart the nvidia-fabricmanager 
+# service nvidia-fabricmanager start
+ 
+ 
+11.	Additionally, the samples can be compiled, for example navigating to ~/NVIDIA_CUDA-8.0_Samples/1_Utilities/deviceQuery (if the default path for the samples was used) and then:
+ 
+$ make
+$ ./deviceQuery
+ 
+ 
+< Default (multiple host threads can use ::cudaSetDevice() with device simultaneously) >
+> Peer access from Tesla V100-SXM3-32GB (GPU0) -> Tesla V100-SXM3-32GB (GPU1) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU0) -> Tesla V100-SXM3-32GB (GPU2) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU0) -> Tesla V100-SXM3-32GB (GPU3) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU0) -> Tesla V100-SXM3-32GB (GPU4) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU0) -> Tesla V100-SXM3-32GB (GPU5) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU0) -> Tesla V100-SXM3-32GB (GPU6) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU0) -> Tesla V100-SXM3-32GB (GPU7) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU0) -> Tesla V100-SXM3-32GB (GPU8) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU0) -> Tesla V100-SXM3-32GB (GPU9) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU0) -> Tesla V100-SXM3-32GB (GPU10) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU0) -> Tesla V100-SXM3-32GB (GPU11) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU0) -> Tesla V100-SXM3-32GB (GPU12) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU0) -> Tesla V100-SXM3-32GB (GPU13) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU0) -> Tesla V100-SXM3-32GB (GPU14) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU0) -> Tesla V100-SXM3-32GB (GPU15) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU1) -> Tesla V100-SXM3-32GB (GPU0) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU1) -> Tesla V100-SXM3-32GB (GPU2) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU1) -> Tesla V100-SXM3-32GB (GPU3) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU1) -> Tesla V100-SXM3-32GB (GPU4) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU1) -> Tesla V100-SXM3-32GB (GPU5) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU1) -> Tesla V100-SXM3-32GB (GPU6) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU1) -> Tesla V100-SXM3-32GB (GPU7) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU1) -> Tesla V100-SXM3-32GB (GPU8) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU1) -> Tesla V100-SXM3-32GB (GPU9) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU1) -> Tesla V100-SXM3-32GB (GPU10) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU1) -> Tesla V100-SXM3-32GB (GPU11) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU1) -> Tesla V100-SXM3-32GB (GPU12) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU1) -> Tesla V100-SXM3-32GB (GPU13) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU1) -> Tesla V100-SXM3-32GB (GPU14) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU1) -> Tesla V100-SXM3-32GB (GPU15) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU2) -> Tesla V100-SXM3-32GB (GPU0) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU2) -> Tesla V100-SXM3-32GB (GPU1) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU2) -> Tesla V100-SXM3-32GB (GPU3) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU2) -> Tesla V100-SXM3-32GB (GPU4) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU2) -> Tesla V100-SXM3-32GB (GPU5) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU2) -> Tesla V100-SXM3-32GB (GPU6) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU2) -> Tesla V100-SXM3-32GB (GPU7) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU2) -> Tesla V100-SXM3-32GB (GPU8) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU2) -> Tesla V100-SXM3-32GB (GPU9) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU2) -> Tesla V100-SXM3-32GB (GPU10) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU2) -> Tesla V100-SXM3-32GB (GPU11) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU2) -> Tesla V100-SXM3-32GB (GPU12) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU2) -> Tesla V100-SXM3-32GB (GPU13) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU2) -> Tesla V100-SXM3-32GB (GPU14) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU2) -> Tesla V100-SXM3-32GB (GPU15) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU3) -> Tesla V100-SXM3-32GB (GPU0) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU3) -> Tesla V100-SXM3-32GB (GPU1) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU3) -> Tesla V100-SXM3-32GB (GPU2) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU3) -> Tesla V100-SXM3-32GB (GPU4) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU3) -> Tesla V100-SXM3-32GB (GPU5) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU3) -> Tesla V100-SXM3-32GB (GPU6) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU3) -> Tesla V100-SXM3-32GB (GPU7) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU3) -> Tesla V100-SXM3-32GB (GPU8) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU3) -> Tesla V100-SXM3-32GB (GPU9) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU3) -> Tesla V100-SXM3-32GB (GPU10) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU3) -> Tesla V100-SXM3-32GB (GPU11) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU3) -> Tesla V100-SXM3-32GB (GPU12) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU3) -> Tesla V100-SXM3-32GB (GPU13) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU3) -> Tesla V100-SXM3-32GB (GPU14) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU3) -> Tesla V100-SXM3-32GB (GPU15) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU4) -> Tesla V100-SXM3-32GB (GPU0) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU4) -> Tesla V100-SXM3-32GB (GPU1) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU4) -> Tesla V100-SXM3-32GB (GPU2) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU4) -> Tesla V100-SXM3-32GB (GPU3) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU4) -> Tesla V100-SXM3-32GB (GPU5) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU4) -> Tesla V100-SXM3-32GB (GPU6) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU4) -> Tesla V100-SXM3-32GB (GPU7) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU4) -> Tesla V100-SXM3-32GB (GPU8) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU4) -> Tesla V100-SXM3-32GB (GPU9) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU4) -> Tesla V100-SXM3-32GB (GPU10) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU4) -> Tesla V100-SXM3-32GB (GPU11) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU4) -> Tesla V100-SXM3-32GB (GPU12) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU4) -> Tesla V100-SXM3-32GB (GPU13) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU4) -> Tesla V100-SXM3-32GB (GPU14) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU4) -> Tesla V100-SXM3-32GB (GPU15) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU5) -> Tesla V100-SXM3-32GB (GPU0) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU5) -> Tesla V100-SXM3-32GB (GPU1) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU5) -> Tesla V100-SXM3-32GB (GPU2) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU5) -> Tesla V100-SXM3-32GB (GPU3) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU5) -> Tesla V100-SXM3-32GB (GPU4) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU5) -> Tesla V100-SXM3-32GB (GPU6) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU5) -> Tesla V100-SXM3-32GB (GPU7) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU5) -> Tesla V100-SXM3-32GB (GPU8) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU5) -> Tesla V100-SXM3-32GB (GPU9) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU5) -> Tesla V100-SXM3-32GB (GPU10) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU5) -> Tesla V100-SXM3-32GB (GPU11) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU5) -> Tesla V100-SXM3-32GB (GPU12) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU5) -> Tesla V100-SXM3-32GB (GPU13) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU5) -> Tesla V100-SXM3-32GB (GPU14) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU5) -> Tesla V100-SXM3-32GB (GPU15) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU6) -> Tesla V100-SXM3-32GB (GPU0) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU6) -> Tesla V100-SXM3-32GB (GPU1) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU6) -> Tesla V100-SXM3-32GB (GPU2) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU6) -> Tesla V100-SXM3-32GB (GPU3) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU6) -> Tesla V100-SXM3-32GB (GPU4) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU6) -> Tesla V100-SXM3-32GB (GPU5) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU6) -> Tesla V100-SXM3-32GB (GPU7) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU6) -> Tesla V100-SXM3-32GB (GPU8) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU6) -> Tesla V100-SXM3-32GB (GPU9) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU6) -> Tesla V100-SXM3-32GB (GPU10) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU6) -> Tesla V100-SXM3-32GB (GPU11) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU6) -> Tesla V100-SXM3-32GB (GPU12) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU6) -> Tesla V100-SXM3-32GB (GPU13) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU6) -> Tesla V100-SXM3-32GB (GPU14) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU6) -> Tesla V100-SXM3-32GB (GPU15) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU7) -> Tesla V100-SXM3-32GB (GPU0) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU7) -> Tesla V100-SXM3-32GB (GPU1) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU7) -> Tesla V100-SXM3-32GB (GPU2) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU7) -> Tesla V100-SXM3-32GB (GPU3) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU7) -> Tesla V100-SXM3-32GB (GPU4) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU7) -> Tesla V100-SXM3-32GB (GPU5) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU7) -> Tesla V100-SXM3-32GB (GPU6) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU7) -> Tesla V100-SXM3-32GB (GPU8) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU7) -> Tesla V100-SXM3-32GB (GPU9) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU7) -> Tesla V100-SXM3-32GB (GPU10) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU7) -> Tesla V100-SXM3-32GB (GPU11) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU7) -> Tesla V100-SXM3-32GB (GPU12) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU7) -> Tesla V100-SXM3-32GB (GPU13) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU7) -> Tesla V100-SXM3-32GB (GPU14) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU7) -> Tesla V100-SXM3-32GB (GPU15) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU8) -> Tesla V100-SXM3-32GB (GPU0) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU8) -> Tesla V100-SXM3-32GB (GPU1) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU8) -> Tesla V100-SXM3-32GB (GPU2) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU8) -> Tesla V100-SXM3-32GB (GPU3) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU8) -> Tesla V100-SXM3-32GB (GPU4) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU8) -> Tesla V100-SXM3-32GB (GPU5) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU8) -> Tesla V100-SXM3-32GB (GPU6) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU8) -> Tesla V100-SXM3-32GB (GPU7) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU8) -> Tesla V100-SXM3-32GB (GPU9) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU8) -> Tesla V100-SXM3-32GB (GPU10) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU8) -> Tesla V100-SXM3-32GB (GPU11) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU8) -> Tesla V100-SXM3-32GB (GPU12) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU8) -> Tesla V100-SXM3-32GB (GPU13) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU8) -> Tesla V100-SXM3-32GB (GPU14) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU8) -> Tesla V100-SXM3-32GB (GPU15) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU9) -> Tesla V100-SXM3-32GB (GPU0) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU9) -> Tesla V100-SXM3-32GB (GPU1) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU9) -> Tesla V100-SXM3-32GB (GPU2) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU9) -> Tesla V100-SXM3-32GB (GPU3) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU9) -> Tesla V100-SXM3-32GB (GPU4) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU9) -> Tesla V100-SXM3-32GB (GPU5) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU9) -> Tesla V100-SXM3-32GB (GPU6) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU9) -> Tesla V100-SXM3-32GB (GPU7) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU9) -> Tesla V100-SXM3-32GB (GPU8) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU9) -> Tesla V100-SXM3-32GB (GPU10) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU9) -> Tesla V100-SXM3-32GB (GPU11) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU9) -> Tesla V100-SXM3-32GB (GPU12) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU9) -> Tesla V100-SXM3-32GB (GPU13) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU9) -> Tesla V100-SXM3-32GB (GPU14) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU9) -> Tesla V100-SXM3-32GB (GPU15) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU10) -> Tesla V100-SXM3-32GB (GPU0) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU10) -> Tesla V100-SXM3-32GB (GPU1) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU10) -> Tesla V100-SXM3-32GB (GPU2) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU10) -> Tesla V100-SXM3-32GB (GPU3) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU10) -> Tesla V100-SXM3-32GB (GPU4) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU10) -> Tesla V100-SXM3-32GB (GPU5) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU10) -> Tesla V100-SXM3-32GB (GPU6) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU10) -> Tesla V100-SXM3-32GB (GPU7) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU10) -> Tesla V100-SXM3-32GB (GPU8) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU10) -> Tesla V100-SXM3-32GB (GPU9) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU10) -> Tesla V100-SXM3-32GB (GPU11) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU10) -> Tesla V100-SXM3-32GB (GPU12) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU10) -> Tesla V100-SXM3-32GB (GPU13) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU10) -> Tesla V100-SXM3-32GB (GPU14) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU10) -> Tesla V100-SXM3-32GB (GPU15) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU11) -> Tesla V100-SXM3-32GB (GPU0) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU11) -> Tesla V100-SXM3-32GB (GPU1) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU11) -> Tesla V100-SXM3-32GB (GPU2) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU11) -> Tesla V100-SXM3-32GB (GPU3) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU11) -> Tesla V100-SXM3-32GB (GPU4) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU11) -> Tesla V100-SXM3-32GB (GPU5) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU11) -> Tesla V100-SXM3-32GB (GPU6) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU11) -> Tesla V100-SXM3-32GB (GPU7) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU11) -> Tesla V100-SXM3-32GB (GPU8) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU11) -> Tesla V100-SXM3-32GB (GPU9) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU11) -> Tesla V100-SXM3-32GB (GPU10) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU11) -> Tesla V100-SXM3-32GB (GPU12) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU11) -> Tesla V100-SXM3-32GB (GPU13) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU11) -> Tesla V100-SXM3-32GB (GPU14) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU11) -> Tesla V100-SXM3-32GB (GPU15) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU12) -> Tesla V100-SXM3-32GB (GPU0) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU12) -> Tesla V100-SXM3-32GB (GPU1) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU12) -> Tesla V100-SXM3-32GB (GPU2) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU12) -> Tesla V100-SXM3-32GB (GPU3) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU12) -> Tesla V100-SXM3-32GB (GPU4) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU12) -> Tesla V100-SXM3-32GB (GPU5) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU12) -> Tesla V100-SXM3-32GB (GPU6) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU12) -> Tesla V100-SXM3-32GB (GPU7) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU12) -> Tesla V100-SXM3-32GB (GPU8) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU12) -> Tesla V100-SXM3-32GB (GPU9) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU12) -> Tesla V100-SXM3-32GB (GPU10) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU12) -> Tesla V100-SXM3-32GB (GPU11) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU12) -> Tesla V100-SXM3-32GB (GPU13) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU12) -> Tesla V100-SXM3-32GB (GPU14) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU12) -> Tesla V100-SXM3-32GB (GPU15) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU13) -> Tesla V100-SXM3-32GB (GPU0) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU13) -> Tesla V100-SXM3-32GB (GPU1) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU13) -> Tesla V100-SXM3-32GB (GPU2) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU13) -> Tesla V100-SXM3-32GB (GPU3) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU13) -> Tesla V100-SXM3-32GB (GPU4) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU13) -> Tesla V100-SXM3-32GB (GPU5) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU13) -> Tesla V100-SXM3-32GB (GPU6) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU13) -> Tesla V100-SXM3-32GB (GPU7) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU13) -> Tesla V100-SXM3-32GB (GPU8) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU13) -> Tesla V100-SXM3-32GB (GPU9) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU13) -> Tesla V100-SXM3-32GB (GPU10) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU13) -> Tesla V100-SXM3-32GB (GPU11) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU13) -> Tesla V100-SXM3-32GB (GPU12) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU13) -> Tesla V100-SXM3-32GB (GPU14) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU13) -> Tesla V100-SXM3-32GB (GPU15) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU14) -> Tesla V100-SXM3-32GB (GPU0) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU14) -> Tesla V100-SXM3-32GB (GPU1) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU14) -> Tesla V100-SXM3-32GB (GPU2) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU14) -> Tesla V100-SXM3-32GB (GPU3) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU14) -> Tesla V100-SXM3-32GB (GPU4) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU14) -> Tesla V100-SXM3-32GB (GPU5) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU14) -> Tesla V100-SXM3-32GB (GPU6) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU14) -> Tesla V100-SXM3-32GB (GPU7) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU14) -> Tesla V100-SXM3-32GB (GPU8) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU14) -> Tesla V100-SXM3-32GB (GPU9) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU14) -> Tesla V100-SXM3-32GB (GPU10) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU14) -> Tesla V100-SXM3-32GB (GPU11) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU14) -> Tesla V100-SXM3-32GB (GPU12) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU14) -> Tesla V100-SXM3-32GB (GPU13) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU14) -> Tesla V100-SXM3-32GB (GPU15) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU15) -> Tesla V100-SXM3-32GB (GPU0) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU15) -> Tesla V100-SXM3-32GB (GPU1) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU15) -> Tesla V100-SXM3-32GB (GPU2) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU15) -> Tesla V100-SXM3-32GB (GPU3) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU15) -> Tesla V100-SXM3-32GB (GPU4) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU15) -> Tesla V100-SXM3-32GB (GPU5) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU15) -> Tesla V100-SXM3-32GB (GPU6) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU15) -> Tesla V100-SXM3-32GB (GPU7) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU15) -> Tesla V100-SXM3-32GB (GPU8) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU15) -> Tesla V100-SXM3-32GB (GPU9) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU15) -> Tesla V100-SXM3-32GB (GPU10) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU15) -> Tesla V100-SXM3-32GB (GPU11) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU15) -> Tesla V100-SXM3-32GB (GPU12) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU15) -> Tesla V100-SXM3-32GB (GPU13) : Yes
+> Peer access from Tesla V100-SXM3-32GB (GPU15) -> Tesla V100-SXM3-32GB (GPU14) : Yes
+ 
+deviceQuery, CUDA Driver = CUDART, CUDA Driver Version = 10.1, CUDA Runtime Version = 10.1, NumDevs = 16
+Result = PASS
