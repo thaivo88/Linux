@@ -36,5 +36,41 @@ MBR partitions have type codes, which are 1-byte (two-digit hexadecimal) numbers
   swap: 0x82
   Linux file system: 0x83
   
-        GPT Partition
+        GPT Partition : GUID Partition Table
+GPT is the preferred partitioning system for disks bigger than 2TiB. Most EFI-based computers use GPT.
+GPT employs a protective MBR, which is a legal MBR definition that makes GPT-unaware utilities think that the disk holds a single MBR 
+partition that spans the entire disk. Data structures are duplicated, with one copy at the start of the disk and another at the end.
+This provides redundancy that can help in data recovery should an accident damage one of the two sets of data structures.
+You can define up to 128 partitions by default
+    *fdisk utility doesn't work with GPT disks
+    **GPT does not imploy primary/extended/logical distinction of MBR
+    
+        LVM : logical volume management
+An alternative to partitions for some functions is logical volume management LVM. To use LVM, you set aside one or more partitions and
+assign them MBR partition type codes. You then use a series of utilities, such as 'pvcreate', 'vgcreate', 'lvcreate', and 'lvscan', 
+to manage the partitions (known as physical volumes in this scheme), to merge them into volume groups, and create and manage logical
+volume within the volume groups. You can access the logical volumes using names you assigned them in the /dev/mapper directory, such
+as /dev/mapper/myvol-home. The biggest advantage to LVM is that it enables you to resize your logical volumes easily without worrying
+about the positions or sizes of surrounding partitions.
+
+        Common Partitions and Filesystem Layouts
         
+Partition               Typical
+Mount point             Size                        Use
+
+Swap (not mounted)   One to two times the        -Serves as an adjunct to system RAM. It is slow but enables the computer to run
+                     system RAM size             more or larger programs.
+/home                200MiB-3TiB or more         -Holds users' data files. Isolating it on a separate partition preserves user data
+                                                 during system upgrade. Size depends on the number of users and their data storage needs.
+/boot                100-500MiB                  -Holds critical boot files. Creating it as a separate partition lets you circumvent
+                                                 limitations of older BIOSs and boot loaders, which often can't boot a kernel from a
+                                                 point above a value between 504MiB and 2TiB.
+/usr                 500MiB-25GiB                -Holds most linux program and data files; this is sometimes the largest partition,
+                                                 although /home is larger on systems with many users or if users store large data file.
+                                                 Changes implemented in 2012 are making it harder to create a separate /usr partition.
+/usr/local           100MiB-3GiB                 -Holds linux program and data files that are unique to this installation, particularly 
+                                                 those that you compile yourself.
+/opt                 100MiB-5GiB                 -                                                 
+                                                 
+                                                 
+                                                  
