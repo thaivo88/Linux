@@ -65,6 +65,9 @@ option                  used with
 -R or --requires        -q               Displays the packages and files on which this one depends.
 -l or --list            -q               Displays the files contained in the package.
 
+# to downgrade/install older version
+  rpm -Uvh --oldpackage [filename]
+
                         Extracting Data from RPMs
 Occasionally you may want to extract data from RPMs without installing the package. For instance, this can be a good way to retrieve the
 original source code from a source RPM for compiling the software without the help of the RPM tools or to retrieve fonts or other nonprogram
