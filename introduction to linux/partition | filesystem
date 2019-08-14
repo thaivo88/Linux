@@ -59,18 +59,106 @@ Partition               Typical
 Mount point             Size                        Use
 
 Swap (not mounted)   One to two times the        -Serves as an adjunct to system RAM. It is slow but enables the computer to run
-                     system RAM size             more or larger programs.
+                     system RAM size              more or larger programs.
 /home                200MiB-3TiB or more         -Holds users' data files. Isolating it on a separate partition preserves user data
-                                                 during system upgrade. Size depends on the number of users and their data storage needs.
+                                                  during system upgrade. Size depends on the number of users and their data storage needs.
 /boot                100-500MiB                  -Holds critical boot files. Creating it as a separate partition lets you circumvent
-                                                 limitations of older BIOSs and boot loaders, which often can't boot a kernel from a
-                                                 point above a value between 504MiB and 2TiB.
+                                                  limitations of older BIOSs and boot loaders, which often can't boot a kernel from a
+                                                  point above a value between 504MiB and 2TiB.
 /usr                 500MiB-25GiB                -Holds most linux program and data files; this is sometimes the largest partition,
-                                                 although /home is larger on systems with many users or if users store large data file.
-                                                 Changes implemented in 2012 are making it harder to create a separate /usr partition.
+                                                  although /home is larger on systems with many users or if users store large data file.
+                                                  Changes implemented in 2012 are making it harder to create a separate /usr partition.
 /usr/local           100MiB-3GiB                 -Holds linux program and data files that are unique to this installation, particularly 
-                                                 those that you compile yourself.
-/opt                 100MiB-5GiB                 -                                                 
+                                                  those that you compile yourself.
+/opt                 100MiB-5GiB                 -Holds Linux program and data files that are associated with third-party packages,
+                                                  especially commercial ones.
+/var                 100MiB-3TiB or more         -Holds miscellaneous files associated with the day-to-day functioning of a computer.
+                                                  These files are often transient in the nature. Most often split off as a separate partition
+                                                  when the  system functions as a server that user the /var directory for server-related files.
+/tmp                 100Mib-20GiB                -Holds temporary files created by ordinary users.
+/mnt                 N/A                         -Not a separate partition; rather, it or its subdirectories are used as mount points
+                                                  for removable media like CDs and DVDs.
+/media               N/A                         -Holds subdirectories that may be used as mount points for removable media, 
+                                                  much like /mnt or its subdirecoties.                                                
                                                  
-                                                 
-                                                  
+*Some directories - /etc /bin /sbin /lib /dev should NEVER be placed on separate partitions. These directories host critical system
+configuration files or files without which a Linux system cannot function.
+
+                         Partitioning a Disk
+          fdisk
+The traditional Linux tool for MBR disk partitioning is called 'fdisk'. This tool's name is short for fixed disk.
+To use 'fdisk', type the command name followed by the name of the disk device.
+              fdisk /dev/sd[x]
+Which will take you to fdisk utility for that give disk device
+Using these option below will bring up prompts:
+  Display the Current Partition Table: p or fdisk -l /dev/sd[x] (at command prompt rather than enter fdisk's interactive mode)
+  Create a Partition: n
+A series of prompts asking for information like: primary, extended or logical. Partition's starting clinder; the partition's ending cylinder 
+or size. Older versions of 'fdisk' measure partition start and end points in cylinders, not megabytes. Recent versions of 'fdisk' use sectors
+as the default unit of measure, although you can specify a partition's size by using a plus sign, number, and suffix +20G create 20GiB partition.
+  Delete a Partition: d
+If more than one partition exists, the program will ask for the partition number.
+  Change a Partition's type: t
+'fdisk' will assign 0x83 type code which corresponds to Linux filesystem. I you want to create a Linux swap partition or any other OS
+partition, type t and a prompt will ask you for the partition type code.
+  List Partition Types: l
+Type l at the main 'fdisk' prompt to list partition type
+Type L at the change partition prompt to list partition type
+  Mark a Partition Bootable: a
+Some OSs, such as Windows, rely on their partitions having special bootable flags in order to boot. Type a, whereupon 'fdisk' asks
+for the partition number.
+  Get Help: m or ?
+  Exit: q without saving or w write change and quit
+  
+        gdisk  
+If you're working with a GPT-formatted hard drive, you'll need to use the 'gdisk' utility.
+              gdisk /dev/sd[x]
+It works exactly like the 'fdisk' utility.
+*Remember that the GPT format doesn't use primary, extended, or logical partitions-all of the partitions are the same.
+
+        GNU Parted
+GNU Parted is a partitioning tool that works with MBR, GPT, APM, and BSD, and other disk types.
+              parted /dev/sd[x]
+                        or
+              parted        # entering the utility
+              select        # select disk device
+print : display information
+mklabel gpt : create a GPT disk
+mkpart primary ext4 1024k 2tb : create new partition as primary and file system type ext4
+
+Once a partition is created, you must prepare it for use. This process is often called "making a filesystem" or "formatting a partition".
+Low-level formatting, which creates a structure of sectors and tracks on the disk media, or High-level formatting, which creates a filesystem.
+Hard disks are low-level formatted at the factory and should never need to be low-level formatted again.
+
+                    Filesystem Types
+ext2 or ext2fs: The second extended file system                    
+  Has a reputation as a reliable filesystem, a good choice for a small /boot parttition, non-journaling (log files)
+ext3 or ext3fs: The third extended file system
+  Basically ext2 with journal added
+ext4 or ext4fs: The fourth extended file system
+  Ability to work with very large disks >16TiB and very large file >2TiB
+ReiserFS
+  Designed from scratch as a journaling filesystem. Good at handling large number of small files. Uses various tricks to squeeze the end
+  of files into each other's unused space.
+JFS: Journaled File System
+  IBM developed. For AIX OS on mainframe systems and workstation OS, called OS/2. After the demise of OS/2, JFS was donated to Linux.
+  Sophisticated journaling filesystem.
+XFS: Extents File System
+  Created by Silicon Graphics (SGI). Robustness, speed, and flexibility.
+Btrfs: 
+  Fast performer, and it is able to handle very large disk and file.
+FAT: File Allocation Table
+  Limited to 8 character with an optional 3 character extension (8.3 filename) 
+  Can not transfer file over 4GiB
+NTFS: New Technology File System
+  Preferred filesystem for Windows. NTFS-3G driver is the default for Linux distro to read NTFS files.
+HFS and HFS+: Hierarchical File System
+  Apple's filesystem.
+ISO-9660:
+  Standard filesystem for CD-ROMs
+UDF: Universal Disc Format
+  Used on DVD-ROMs
+
+
+  
+  
