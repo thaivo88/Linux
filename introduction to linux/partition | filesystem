@@ -1,0 +1,40 @@
+                          Partition
+        Why Partition?
+  Multiple-OS support: partitioning enables you to keep the data for different OSs separate.
+  Filesystem Choice: By partitioning your disk, you can use different filesystems-data structures designed to hold all of the files on a partition.
+  Disk Space Management: By partitioning your disk, you can lock certain sets of files into a fixed space.
+  Disk Error Protection: If data structures on one partition become corrupted, the errors affect only the files on that partition.
+This separation can therefore protect data on other partitions and simplify data recovery.
+  Security: You can use different security-related mount options on different partitions.
+  Backup: Keeping partitions small you may be able to back up more easily.
+  
+        Understanding Partitioning System
+Partitions are defined by data structures that are written to specified parts of the hard disk. Master Boot Record (MBR) partitioning
+system, so called because it stores its data in the first sector of the disk. MBR is limited to partitions and partition placement of 
+2 tebibytes. The successor to MBR is the GUID Partition Table (GPT) partitioning system.
+
+        MBR Partition
+Allowed for only 4 partitions
+  Primary partitions: which are the same as the original partition types
+  Extended partitions: which are a special type of primary partition that serve as placeholders for the next type.
+  Logical partitions: which reside within an extended parttion
+  ___________________________________  ___________________________________   ___________________________________
+  |                                  | | 2nd Primary / Extended Partition |  |                                  |
+  |      First Primary Partition     | |        1st Logial Partition      |  |      Third Primary Partition     |
+  |__________________________________| |________2nd_Logial_Partition______|  |__________________________________|
+
+The primary partitions have nubers in the range of 1-4, whereas lovial partitions are numbered 5 and up.
+You can backup your MBR partitions by typing:
+        sfdisk -d /dev/sd[x] > sd[x]-backup.txt
+You can then copy the backup file to a removable disk or another computer for safekeeping.
+You can restore the backup by typing:
+        sfdisk -f /dev/sd[x] < sd[x]-backup.txt
+MBR partitions have type codes, which are 1-byte (two-digit hexadecimal) numbers:
+  FAT:  0x0c
+  ext:  0x05
+  NTFS: 0x07
+  swap: 0x82
+  Linux file system: 0x83
+  
+        GPT Partition
+        
