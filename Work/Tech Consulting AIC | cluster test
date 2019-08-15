@@ -1,3 +1,25 @@
+################ GPU Linpack Test ################
+#     set up cluster node
+clsetup.pl
+#     If standalone node:
+      Cluster start with: node1
+      Total Nodes in Solution: 1
+      Nodes in Group: 1
+#     Click on Network... button
+      have nothing checked
+      change the IP Prefix to the first octet of your network
+#     Click on all the button on the left
+      Head Node Setup
+      DHCP setup
+      Cluster clean
+      Cluster Setup
+#     Open Cluster Test with GPU Test      
+testnodes.pl --gpu
+#     Run Verify Test
+#     Once the test confirm the total GPU
+#     Run NvidiaLinPack
+##################################################
+
 pdsh –w node[x-xx] hponcfg –f /root/bin/bin/smartscript/Shared_Network_Port.xml
 #     pdsh: parallel device sharing | hponcfg: HPE Lights-Out Online Configuration Utility
 #     directory location: /root/bin/bin/smartscript/ file: Shared_Network_Port.xml
