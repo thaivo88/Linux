@@ -154,11 +154,30 @@ NTFS: New Technology File System
   Preferred filesystem for Windows. NTFS-3G driver is the default for Linux distro to read NTFS files.
 HFS and HFS+: Hierarchical File System
   Apple's filesystem.
-ISO-9660:
+ISO-9660:*
   Standard filesystem for CD-ROMs
 UDF: Universal Disc Format
   Used on DVD-ROMs
 
+*mkisofs creates an ISO-9660 filesystem
+*cdrecord writes this image to a blank CD-R
+*growisofs program combines both function but works only on recordable DVD media
 
-  
-  
+          Creating a Filesystem
+These tools have filenames in the form of 'mkfs.fstype', where fstype is the filesystem type code.
+A front-end tool called 'mkfs'
+For ext2 and ext3 filesystems, the mke2fs program is often used instead of mkfs.
+mke2fs = mkfs.ext2
+
+        mkfs
+-t : pass the filesystem type code
+-c : perform bad-block check-every sector in the partition is checked to be sure it can reliably hold data.
+-m : sets the reserved-space percentage. The idea is that you don't want the disk to fill up completely with user files;
+     if the disk start getting close to full, Linux should report that the disk is full before it really is.
+     ext2-4 reserved-space percentage defaults to 5 percent.
+        mkdosfs
+mkfs.msdos & mkfs.vfat = mkdosfs
+Automatically adjust the size of the FAT data structure to 12, 16, or 32 bits depending on the device size.
+You can override this option with the -F fat-size option, where fat-size is the FAT size in bits - 12, 16, 32
+
+      Creating 
