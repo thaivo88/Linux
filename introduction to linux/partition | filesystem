@@ -180,4 +180,40 @@ mkfs.msdos & mkfs.vfat = mkdosfs
 Automatically adjust the size of the FAT data structure to 12, 16, or 32 bits depending on the device size.
 You can override this option with the -F fat-size option, where fat-size is the FAT size in bits - 12, 16, 32
 
-      Creating 
+      Creating Swap Space
+Some partitions don't hold files. Most notably, Linux can use a swap partition, which is a partition that Linux treats as
+an extension of memory. Linux can use swap file as the same way as swap partition.
+Although swap space doesn't hold a filesystem per se, and it isn't mounted in the way that filesystem partitions are mounted.
+  Creating swap partition:
+          mkswap /dev/sd[x]
+  Activate swap partition:
+          swapon /dev/sd[x]
+          
+*Filesystem maintenance tools should be run when the filesystem is NOT mounted. Changes made by maintenance utilities while
+the filesystem is mounted can confuse the kernel's filesystem drivers, resulting in data corruption.
+
+      Tuning Filesystem
+Some filesystem include tools that enable you to set filesystem options that affect performance.
+Three tools are particularly important for tuning these filesystems:
+  dumpe2fs
+  tune2fs
+  debugfs
+The first of these tools provides information about the filesystem, and the other two enable you to change tuning option.
+
+    Obtaining Filesystem Information
+    dumpe2fs /dev/sd[x]
+You can learn a lot about your ext2 or ext3 filesystem with the dumpe2fs command.
+-h : cause the utility to omit information about group descriptors.
+inode: each inode contains information for one file, so the number of inodes effectively limits the number of files you can store.
+You could retrieve information about how your filesystem are currently configured using dumpe2fs.
+
+xfs filesystem uses xfs_info
+    xfs_info /home
+Unlike dumpe2fs where you list the partition name/device name, you pass the mount point.
+Require filesystem to be mounted, unlike dumpe2fs.
+    xfs_metadump
+This program copies the filesystem's metadata to a file.
+    xfs_metadump /dev/sda7 /home/hpcd/voth/dump_file.data
+
+
+
