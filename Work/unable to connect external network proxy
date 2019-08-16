@@ -1,0 +1,6 @@
+# ubuntu 18.04
+
+  cd /etc/apt/apt.conf.d/
+  vi 90curtin-aptproxy
+
+# remove entry of proxy
