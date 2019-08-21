@@ -215,5 +215,29 @@ Require filesystem to be mounted, unlike dumpe2fs.
 This program copies the filesystem's metadata to a file.
     xfs_metadump /dev/sda7 /home/hpcd/voth/dump_file.data
 
+                  Adjusting Tunable filesystem Parameters
+The 'tune2fs' program enables you to change many of the filesystem parameters that are reported by 'dumpe2fs'.
+            tune2fs [option] [device]
+    Adjust the Maximum Mount Count:          
+Ext2-4 require a periodic disk check with 'fsck'. This check is designed to prevent errors from creeping onto the disk undetected.
+You can adjust the maximum number of times the disk may be mounted without a check with the '-c mounts' option, 
+where mounts is the number of mount. You can trick the system into thinking the filesystem has been mounted a certain number of times
+with the '-C mounts' option; this sets the mount counter to 'mounts'.
+    Adjust the Time between Checks:
+Periodic disk checks are required based on time as well as the number of mounts. You can set the time between checks with the 
+'-i interval' option, where 'interval' is the maximum time between checks. 'Interval' is a number with the character d, w, or m
+appended, to specify days, weeks, or months. respectively.
+    Add a Journal:
+The '-j' option adds a journal to the filesystem. converting an ext2 filesystem into an ext3 filesystem.
+    Set the Reserved Blocks:
+The '-m percent' option sets the percentage of disk space that's reserved for use by root. The default value is 5.
+You can also set the reserved space in blocks, rather than as a percentage of disk space, with the '-r blocks' option.
+
+As with most low-level disk utilities, you shouldn't use 'tune2fs' to adjust a mounted filesystem.
+   
+XFS, the xfs_admin command is the rough equivalent of 'tune2fs'
+            xfs_admin [option] [device]      
+    Use Version 2 Journal Format:
+    
 
 
