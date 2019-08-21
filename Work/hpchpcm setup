@@ -471,3 +471,17 @@ new label = "lvol"
 # list sales op
 	pbsnodes -av | egrep "^c|^l|^a|^r|^z|^h|sales_op" | more
 #################################### End ###################################
+
+
+
+
+
+
+
+##################### Updating Sudoer #########################
+cd /etc/sudoers.d
+vi houston
+cd
+/etc/dsh/group
+pdcp -g [group_node] /etc//sudoers.d/houston /etc/sudoers.d/houston
+###############################################################
