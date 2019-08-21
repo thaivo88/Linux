@@ -479,6 +479,7 @@ new label = "lvol"
 
 
 ##################### Updating Sudoer #########################
+on hpchost3
 cd /etc/sudoers.d
 vi houston
 cd
