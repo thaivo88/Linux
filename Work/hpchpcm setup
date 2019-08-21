@@ -479,10 +479,24 @@ new label = "lvol"
 
 
 ##################### Updating Sudoer #########################
-on hpchost3
-cd /etc/sudoers.d
-vi houston
-cd
-/etc/dsh/group
-pdcp -g [group_node] /etc//sudoers.d/houston /etc/sudoers.d/houston
+# Modifying Sudoer file for Houston lab & updating HPCM nodes.
+
+# On hpchost3 change directory to sudoers.d
+	[root@hpchost3 ~]# cd /etc/sudoers.d
+	[root@hpchost3 sudoers.d]# ls
+	bcfree-lite  houston
+
+# Edit the houston file to update sudoers permission access.
+# You can use vi or nano text editor.
+	[root@hpchost3 sudoers.d]# vi houston
+
+# Change directory to /etc/dsh/group.
+# This directoy holds all cluster's computing nodes in a group alias.
+	[root@hpchost3 sudoers.d]# cd /etc/dsh/group
+# List all the current group alias
+	[root@hpchost3 group]# ls
+	apollo-gen10  artemis  cronus  harmonia  leto  rhea  zeus
+
+# From here we will copy the houston file to a group of hosts in parallel.
+	[root@hpchost3 group]# pdcp -g [group_node] /etc/sudoers.d/houston /etc/sudoers.d/houston
 ###############################################################
