@@ -1,3 +1,6 @@
+#using Bus ID to indecate phyical slot location
+  lspci -vs [bus_ID] | grep -i slot
+
 #CPU info for socket, core, thread count
   lscpu | grep -i -E "^CPU\(s\):|core|socket"
 
