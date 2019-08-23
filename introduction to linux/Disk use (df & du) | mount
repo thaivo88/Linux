@@ -1,0 +1,14 @@
+                      Disk Use
+df and du programs, which summarize disk use on a partition-by-partition and directory-by-directory basis.                      
+
+        Monitoring Disk Use by Partition
+You can type the command name to see a summary of disk space used on all of the system's partition
+      df [options] [files]
+    Include All Filesystems:
+The -a or --all option includes pseudo-filesystems with a size of 0 in the output.
+    Use Scaled Units
+The -h or --human-readable option causes df to scale and label its units. example 100KiB, 350MiB, 150G
+The -H and --si option have a similar effect, but they use power of 10 units rather than power of 2.
+The -k (--kilobyets) and -m (--megabytes) options force output in their respective units.
+  Summarize Inodes:
+  
