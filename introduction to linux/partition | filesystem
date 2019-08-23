@@ -274,4 +274,35 @@ the journal. When the operations are complete, their entries are removed from th
 In the event of a crash or power failure, the system can examine the journal and check only those data structures described within it.
 If inconsistencies are found, the system can roll back or complete the changes, returning the disk to a consistent state without
 checking every data structure in the filesystem.
+You can set these with the '-J' option to tune2fs. In particular, the 'size=journal-size' and 'device=external-journal' suboptions
+enable you to set the journal's size and the device on which it's stored. By default, the sytem creates a journal that's the right 
+size for the filesystem and stores it on the filesystem itself.
+
+                  Checking Filesystems
+Tuning a filesystem is a task that you're likely to perform every once in a while-say, when making major changes to an installation.
+Another task is much more common: checking a filesystem for errors. Bugs, power failures, and mechanical problems can all cause the 
+data structures on a filesystem to become corrupted.
+The main tool that you'll use for this purpose is called 'fsck'.
+  e2fsck == fsck.ext2 | fsck.ext3 | fsck.ext4
+  xfs_check and xfs_repair
+  
+  Check All Files:
+-A option cause 'fsck' to check all of the filesystems marked to be checked in /etc/fstab.
+  Indicate Progress:
+-C option displays a text-mode progress indicator of the check process.
+  Show Verbose Output:
+-V option produces verbose output of the check process.
+  No Action:
+-N option tells 'fsck' to display what it would normally do without actually doing it.
+  Set the Filesystem Type:
+Normally, 'fsck' determines the filesystem type automatically. You can force the type with the '-t fstype' flag. Used in conjunction
+with -A, this causes the program to check only the specified filesystem types. If 'fstype' is prefixed with 'no', then all filesystems 
+except the specified type are check.
+  Filesystem-Specific Option:
+The 'fsck' command passes options it doesn't understand, or those that follow a double dash (--), to the underlying check program.
+-a or -p perform an automatic check
+-r perform an interactive check
+-f force a full filesystem check even if the filesystem initially appears to be clean
+ 
+  
 
