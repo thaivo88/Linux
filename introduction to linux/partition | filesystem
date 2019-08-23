@@ -304,5 +304,5 @@ The 'fsck' command passes options it doesn't understand, or those that follow a 
 -r perform an interactive check
 -f force a full filesystem check even if the filesystem initially appears to be clean
  
-  
+*Run fsck only on filesystems that are not currently mounted or that are mounted in read-only mode.  
 
