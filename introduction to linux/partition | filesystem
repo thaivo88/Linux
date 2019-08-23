@@ -233,11 +233,45 @@ The '-j' option adds a journal to the filesystem. converting an ext2 filesystem 
 The '-m percent' option sets the percentage of disk space that's reserved for use by root. The default value is 5.
 You can also set the reserved space in blocks, rather than as a percentage of disk space, with the '-r blocks' option.
 
-As with most low-level disk utilities, you shouldn't use 'tune2fs' to adjust a mounted filesystem.
+*As with most low-level disk utilities, you shouldn't use 'tune2fs' to adjust a mounted filesystem.
    
 XFS, the xfs_admin command is the rough equivalent of 'tune2fs'
             xfs_admin [option] [device]      
     Use Version 2 Journal Format:
-    
+The -j option enables version 2 log (journal) format, which can improve performance in some situations.
+    Obtain the filesystem Label and UUID:
+You can use the -l and -u options to obtain the filesystem's label (name) and universally unique identifier (UUID)
+    Set the filesystem label and UUID:
+You can change the filesystem's label or UUID by using the '-L label' or '-U uuid' option.
+You can use 'generate' as the uuid value to have xfs_admin create a new UUID.
+xfs_admin should be used only on unmounted filesystem.
 
+                    interactively modify a filesystem's features
+            debugfs [device]
+    Display Filesystem Superblock Information:
+The 'show_super_stats' or 'stats' command produces superblock information, similar to what dumpe2fs displays.    
+    Display Inode Information:
+You can display the inode data on a file or directory by typing 'stat filename', where filename is the name of the file.
+    Undelete a file:
+You can use debugfs to undelete a file by typing 'undelete inode name', where inode is the inode number of the deleted file and name is
+the filename you want to give to it. (You can use 'undel' in place of undelete if you like.) You can obtain a list of deleted inodes by
+typing 'lsdel' or 'list_deleted_inodes'.
+    Extract a File:
+You can extract a file from the filesystem by typing write 'internal-file external-file', where internal-file is the name of a file 
+in the filesystem that you're manipulating and external-files is a filename on your main linux system.
+
+*debugfs Don't use it on mounted filesystem
+
+The closest xfs equivalent to 'debugfs' is called 'xfs_db'
+
+                    Maintaining a Journal
+After a power failure, a system crash, or another uncontrolled shutdown, the filesystem could be in an inconsistent state. The only way
+to mount the filesystem safely so that you're sure its data structures are valid is to perform a full disk check on it.
+This task is usually handled automatically when the system boots, but it takes time.
+The solution to this problem is to change to a 'journaling filesystem'. Such a filesystem maintains a journal, which is a data structure
+that describes pending operations. Prior to writing data to the disk's main data structures, Linux describes what it's about to do in
+the journal. When the operations are complete, their entries are removed from the journal.
+In the event of a crash or power failure, the system can examine the journal and check only those data structures described within it.
+If inconsistencies are found, the system can roll back or complete the changes, returning the disk to a consistent state without
+checking every data structure in the filesystem.
 
