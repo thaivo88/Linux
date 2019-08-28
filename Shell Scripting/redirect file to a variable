@@ -1,0 +1,2 @@
+# Creating a file with a word written on it, put that word in a variable.
+  my_var=$(cat my_file)
