@@ -1,0 +1,6 @@
+# sed -i 's/[A]/[B]/' [file]
+# sed s/ : to replace [A] with [B]
+# [A] : #PermitRootLogin prohibit-password
+# [B] : PermitRootLogin yes
+# we want to uncomment out PermitRootLogin to enable it then remove 'prohibit-password' with 'yes'
+    sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config 
