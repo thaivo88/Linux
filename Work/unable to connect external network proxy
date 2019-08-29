@@ -4,3 +4,6 @@
   vi 90curtin-aptproxy
 
 # remove entry of proxy
+# and remove the proxy lines from environment file
+  
+  cd /etc/environment
