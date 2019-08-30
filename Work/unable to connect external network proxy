@@ -1,4 +1,4 @@
-# ubuntu 18.04
+# ubuntu 18.04 on computing nodes
 
   cd /etc/apt/apt.conf.d/
   vi 90curtin-aptproxy
@@ -7,3 +7,8 @@
 # and remove the proxy lines from environment file
   
   cd /etc/environment
+######################################
+
+
+# on hpcgate
+  iptables -t nat -A POSTROUTING -o eth1 -j MASQUERADE
