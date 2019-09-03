@@ -1,3 +1,6 @@
+# See where the files land
+  rpm -qlp <filename>.rpm
+
 #using Bus ID to indecate phyical slot location
   lspci -vs [bus_ID] | grep -i slot
 
