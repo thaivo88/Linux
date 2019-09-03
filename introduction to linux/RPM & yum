@@ -67,6 +67,9 @@ option                  used with
 
 # to downgrade/install older version
   rpm -Uvh --oldpackage [filename]
+  
+# See where the files land
+  rpm -qlp <filename>.rpm
 
                         Extracting Data from RPMs
 Occasionally you may want to extract data from RPMs without installing the package. For instance, this can be a good way to retrieve the
