@@ -1,0 +1,142 @@
+          Creating a Filesystem
+These tools have filenames in the form of 'mkfs.fstype', where fstype is the filesystem type code.
+A front-end tool called 'mkfs'
+For ext2 and ext3 filesystems, the mke2fs program is often used instead of mkfs.
+mke2fs = mkfs.ext2
+
+        mkfs
+-t : pass the filesystem type code
+-c : perform bad-block check-every sector in the partition is checked to be sure it can reliably hold data.
+-m : sets the reserved-space percentage. The idea is that you don't want the disk to fill up completely with user files;
+     if the disk start getting close to full, Linux should report that the disk is full before it really is.
+     ext2-4 reserved-space percentage defaults to 5 percent.
+        mkdosfs
+mkfs.msdos & mkfs.vfat = mkdosfs
+Automatically adjust the size of the FAT data structure to 12, 16, or 32 bits depending on the device size.
+You can override this option with the -F fat-size option, where fat-size is the FAT size in bits - 12, 16, 32
+
+      Creating Swap Space
+Some partitions don't hold files. Most notably, Linux can use a swap partition, which is a partition that Linux treats as
+an extension of memory. Linux can use swap file as the same way as swap partition.
+Although swap space doesn't hold a filesystem per se, and it isn't mounted in the way that filesystem partitions are mounted.
+  Creating swap partition:
+          mkswap /dev/sd[x]
+  Activate swap partition:
+          swapon /dev/sd[x]
+          
+*Filesystem maintenance tools should be run when the filesystem is NOT mounted. Changes made by maintenance utilities while
+the filesystem is mounted can confuse the kernel's filesystem drivers, resulting in data corruption.
+
+      Tuning Filesystem
+Some filesystem include tools that enable you to set filesystem options that affect performance.
+Three tools are particularly important for tuning these filesystems:
+  dumpe2fs
+  tune2fs
+  debugfs
+The first of these tools provides information about the filesystem, and the other two enable you to change tuning option.
+
+    Obtaining Filesystem Information
+    dumpe2fs /dev/sd[x]
+You can learn a lot about your ext2 or ext3 filesystem with the dumpe2fs command.
+-h : cause the utility to omit information about group descriptors.
+inode: each inode contains information for one file, so the number of inodes effectively limits the number of files you can store.
+You could retrieve information about how your filesystem are currently configured using dumpe2fs.
+
+xfs filesystem uses xfs_info
+    xfs_info /home
+Unlike dumpe2fs where you list the partition name/device name, you pass the mount point.
+Require filesystem to be mounted, unlike dumpe2fs.
+    xfs_metadump
+This program copies the filesystem's metadata to a file.
+    xfs_metadump /dev/sda7 /home/hpcd/voth/dump_file.data
+
+                  Adjusting Tunable filesystem Parameters
+The 'tune2fs' program enables you to change many of the filesystem parameters that are reported by 'dumpe2fs'.
+            tune2fs [option] [device]
+    Adjust the Maximum Mount Count:          
+Ext2-4 require a periodic disk check with 'fsck'. This check is designed to prevent errors from creeping onto the disk undetected.
+You can adjust the maximum number of times the disk may be mounted without a check with the '-c mounts' option, 
+where mounts is the number of mount. You can trick the system into thinking the filesystem has been mounted a certain number of times
+with the '-C mounts' option; this sets the mount counter to 'mounts'.
+    Adjust the Time between Checks:
+Periodic disk checks are required based on time as well as the number of mounts. You can set the time between checks with the 
+'-i interval' option, where 'interval' is the maximum time between checks. 'Interval' is a number with the character d, w, or m
+appended, to specify days, weeks, or months. respectively.
+    Add a Journal:
+The '-j' option adds a journal to the filesystem. converting an ext2 filesystem into an ext3 filesystem.
+    Set the Reserved Blocks:
+The '-m percent' option sets the percentage of disk space that's reserved for use by root. The default value is 5.
+You can also set the reserved space in blocks, rather than as a percentage of disk space, with the '-r blocks' option.
+
+*As with most low-level disk utilities, you shouldn't use 'tune2fs' to adjust a mounted filesystem.
+   
+XFS, the xfs_admin command is the rough equivalent of 'tune2fs'
+            xfs_admin [option] [device]      
+    Use Version 2 Journal Format:
+The -j option enables version 2 log (journal) format, which can improve performance in some situations.
+    Obtain the filesystem Label and UUID:
+You can use the -l and -u options to obtain the filesystem's label (name) and universally unique identifier (UUID)
+    Set the filesystem label and UUID:
+You can change the filesystem's label or UUID by using the '-L label' or '-U uuid' option.
+You can use 'generate' as the uuid value to have xfs_admin create a new UUID.
+xfs_admin should be used only on unmounted filesystem.
+
+                    interactively modify a filesystem's features
+            debugfs [device]
+    Display Filesystem Superblock Information:
+The 'show_super_stats' or 'stats' command produces superblock information, similar to what dumpe2fs displays.    
+    Display Inode Information:
+You can display the inode data on a file or directory by typing 'stat filename', where filename is the name of the file.
+    Undelete a file:
+You can use debugfs to undelete a file by typing 'undelete inode name', where inode is the inode number of the deleted file and name is
+the filename you want to give to it. (You can use 'undel' in place of undelete if you like.) You can obtain a list of deleted inodes by
+typing 'lsdel' or 'list_deleted_inodes'.
+    Extract a File:
+You can extract a file from the filesystem by typing write 'internal-file external-file', where internal-file is the name of a file 
+in the filesystem that you're manipulating and external-files is a filename on your main linux system.
+
+*debugfs Don't use it on mounted filesystem
+
+The closest xfs equivalent to 'debugfs' is called 'xfs_db'
+
+                    Maintaining a Journal
+After a power failure, a system crash, or another uncontrolled shutdown, the filesystem could be in an inconsistent state. The only way
+to mount the filesystem safely so that you're sure its data structures are valid is to perform a full disk check on it.
+This task is usually handled automatically when the system boots, but it takes time.
+The solution to this problem is to change to a 'journaling filesystem'. Such a filesystem maintains a journal, which is a data structure
+that describes pending operations. Prior to writing data to the disk's main data structures, Linux describes what it's about to do in
+the journal. When the operations are complete, their entries are removed from the journal.
+In the event of a crash or power failure, the system can examine the journal and check only those data structures described within it.
+If inconsistencies are found, the system can roll back or complete the changes, returning the disk to a consistent state without
+checking every data structure in the filesystem.
+You can set these with the '-J' option to tune2fs. In particular, the 'size=journal-size' and 'device=external-journal' suboptions
+enable you to set the journal's size and the device on which it's stored. By default, the sytem creates a journal that's the right 
+size for the filesystem and stores it on the filesystem itself.
+
+                  Checking Filesystems
+Tuning a filesystem is a task that you're likely to perform every once in a while-say, when making major changes to an installation.
+Another task is much more common: checking a filesystem for errors. Bugs, power failures, and mechanical problems can all cause the 
+data structures on a filesystem to become corrupted.
+The main tool that you'll use for this purpose is called 'fsck'.
+  e2fsck == fsck.ext2 | fsck.ext3 | fsck.ext4
+  xfs_check and xfs_repair
+  
+  Check All Files:
+-A option cause 'fsck' to check all of the filesystems marked to be checked in /etc/fstab.
+  Indicate Progress:
+-C option displays a text-mode progress indicator of the check process.
+  Show Verbose Output:
+-V option produces verbose output of the check process.
+  No Action:
+-N option tells 'fsck' to display what it would normally do without actually doing it.
+  Set the Filesystem Type:
+Normally, 'fsck' determines the filesystem type automatically. You can force the type with the '-t fstype' flag. Used in conjunction
+with -A, this causes the program to check only the specified filesystem types. If 'fstype' is prefixed with 'no', then all filesystems 
+except the specified type are check.
+  Filesystem-Specific Option:
+The 'fsck' command passes options it doesn't understand, or those that follow a double dash (--), to the underlying check program.
+-a or -p perform an automatic check
+-r perform an interactive check
+-f force a full filesystem check even if the filesystem initially appears to be clean
+ 
+*Run fsck only on filesystems that are not currently mounted or that are mounted in read-only mode
