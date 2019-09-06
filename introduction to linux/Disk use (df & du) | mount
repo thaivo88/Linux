@@ -1,9 +1,13 @@
                       Disk Use
 df and du programs, which summarize disk use on a partition-by-partition and directory-by-directory basis.                      
 
+                      df
+
         Monitoring Disk Use by Partition
 You can type the command name to see a summary of disk space used on all of the system's partition
       df [options] [files]
+
+Options:      
     Include All Filesystems:
 The -a or --all option includes pseudo-filesystems with a size of 0 in the output.
     Use Scaled Units
@@ -11,4 +15,62 @@ The -h or --human-readable option causes df to scale and label its units. exampl
 The -H and --si option have a similar effect, but they use power of 10 units rather than power of 2.
 The -k (--kilobyets) and -m (--megabytes) options force output in their respective units.
   Summarize Inodes:
+Report on available and used inodes by passing the -i or --inodes option.
+  Local filesystem only:
+The -l or --local option causes 'df' to omit network filesystems.
+  Display Filesystem Type:
+The -T or --print-type option adds the filesystem type to the information 'df' displays.
+  Limit by filesystem type:
+The -t [fstype] or --type=fstype option displays only information about filesystems of the specified type.
+The -x [fstype] or --exclude-type=fstype option has the opposite effect; it excludes filesystems of the specified type from the report.
+
+                    du
+                    
+You can use 'du' to find the disk usage
+      du [options] [directories]
+This command searches directories that you specify and reports how much disk space each is consuming. This search is recursive,
+so you can learn how much space the directory and all its subdirectories consume.
+
+Options:
+  Summarize file and directories:
+Passing the -a or --all option causes 'du' to report on individual files as well.
+  Compute a Grand Total:
+-c or --total option causes 'du' to add a grand total to the end of its output.
+  Use Scaled Units:
+-h or --human-readable option causes 'du' to scale and label its units.
+-H and --si option have a similar effect, but they use power of 10 units rather than power of 2 units.
+-k --kilobytes and -m --megabytes options force output in their respective units.
+  Count hard links:
+'du' counts files that appear multiple times as hard links only once.
+-l or --count-links option counts hard links aswell
+  Limit Depth:
+--max-depth=n option limits the report on n level. The subdirectories' contents are counted even if they aren't reported.
+  Summarize:
+If you don't want a line of output for each subdirectory in the tree, pass the -s or --summarize option.
+This option is equivalent to --max=depth=0
+  Limit to one filesystem:
+-x or --one-file-system option limits the report to the current filesystem.
+
+
+
+                    Mount/umount
+      mount [-alrsvw] [-t fstype] [-o options] [device] [mountpoint]
+
+Features:
+  Mount all filesystems:
+The -a parameter causes mount to mount all of the filesystems listed in the /etc/fstab file.  
+  Mount read-only:
+The -r parameter causes Linux to mount the filesystem read-only  
+  Show verbose output:
+The -v produces verbose output the program provides comments on operations as they occur.  
+  Mount Read/Write:
+The -w parameter causes Linux to attempt to mount the filesystem for both read and write operations.
+The -o rw option has the same effect
+  Specify the filesystem type:
+Use the -t [fstype] parameter to specify the file system type.
+  Mount by label or UUID:
+Instead of the device name, you can use the -L [label] or -U [UUID] options to tell mount to mount the filesystemm with the specified
+label or UUID.
+  Additiional Option:
+  
   
