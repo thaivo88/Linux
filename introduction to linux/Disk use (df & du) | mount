@@ -72,5 +72,68 @@ Use the -t [fstype] parameter to specify the file system type.
 Instead of the device name, you can use the -L [label] or -U [UUID] options to tell mount to mount the filesystemm with the specified
 label or UUID.
   Additiional Option:
+You can add many options using the -o parameter.
+  Device:
+The device parameter is the device filename associated with the partition or disk device.
+  Mount point:
+The mountpoint parameter is the directory to which the device's contents should be attached.
+
+Ordinarily, only root may issue a mount command; however, if /etc/fstab specifies the user, users, or owner option, an ordinary user
+may mount a filesystem using a simplified syntax in which only the device or mount point is specified.
+
+When Linux mounts a filesystem, it ordinarily records this fact in /etc/mtab. This file has a format similar to that of /etc/fstab
+and is stored in /etc, but it's not a configuration file that you should edit.
+
+Option            Supported Filesystems       Description
+------------------------------------------------------------------------------------------------------------------------------------
+defaults          ALL                         -Causes the default optoins for this file system to be used. It's used primarily in the
+                                              /etc/fstab file to ensure that the file includes an options column.
+------------------------------------------------------------------------------------------------------------------------------------
+loop              ALL                         -Causes the loopback device for this mount to be used. Allows you to mount a file as if it
+                                              were a disk partition.
+------------------------------------------------------------------------------------------------------------------------------------
+auto or noauto    ALL                         -Mounts or doesn't mount the filesystem at boot time or when root issues the 'mount -a'
+                                              command. The default is auto, but noauto is appropriate for removeable media. Used /etc/fstab
+------------------------------------------------------------------------------------------------------------------------------------
+user or nouser    ALL                         -Allows or disallows ordinary users to mount the filesystem. The default is nouser, but
+                                              user is often appropriate for removable media. Used in /etc/fstab. When included in this
+                                              file, user allows users to type 'mount /[mountpoint]' to mount a disk. Only the user who
+                                              mounted the filesystem may unmount it.
+------------------------------------------------------------------------------------------------------------------------------------
+users             ALL                         -Similar to user, except that any user may unmount a filesystem once it's been mounted.
+------------------------------------------------------------------------------------------------------------------------------------
+owner             ALL                         -Similar to user, except that the user must own the device file. Some distribution, such
+                                              as Red Hat, assign ownership of some device files (such as /dev/fd0 for the floppy disk)
+                                              to the console user, so this can be a helpful option.
+------------------------------------------------------------------------------------------------------------------------------------
+remount           ALL                         -Changes one or more mount options without explicitly unmounting a partition. To use this
+                                              option, you issue a mount command on an already-mounted filesystem but with remount along
+                                              with any options that you want to change. This feature can be used to enable or disable
+                                              write access to a partition.
+------------------------------------------------------------------------------------------------------------------------------------
+ro                ALL                         -Specifies a read-only mount of the filesystem. This is the default for filesystems that 
+                                              include no write access and for some with particularly unreliable write support.
+------------------------------------------------------------------------------------------------------------------------------------
+rw                All read/write filesystems  -Specifies a read/write mount of the filesystem. This is the default for most read/write filesystem.
+------------------------------------------------------------------------------------------------------------------------------------
+uid=value         vfat, hpfs, ntfs, hfs       -Set the owner of all files. Example, uid=1000 sets the owner to whomever has Linux 
+                                              user ID 1000.
+------------------------------------------------------------------------------------------------------------------------------------
+gid=value         vfat, hpfs, ntfs, hfs       -Works like uid=value, but sets the group of all files on the filesystem. You can find
+                                              group ID in /etc/group file.
+------------------------------------------------------------------------------------------------------------------------------------
+umask=value       vfat, hpfs, ntfs, hfs
+------------------------------------------------------------------------------------------------------------------------------------
+dmask=value       vfat, hpfs, ntfs, hfs
+------------------------------------------------------------------------------------------------------------------------------------
+fmask=value       vfat, hpfs, ntfs, hfs
+------------------------------------------------------------------------------------------------------------------------------------
+conv=code         msdos, umsdos, 
+                  vfat, hpfs, hfs
+------------------------------------------------------------------------------------------------------------------------------------
+norock
+------------------------------------------------------------------------------------------------------------------------------------
+nojoliet
+------------------------------------------------------------------------------------------------------------------------------------
   
-  
+------------------------------------------------------------------------------------------------------------------------------------
