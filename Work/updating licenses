@@ -57,3 +57,10 @@ STAR-CCM+ / CDLMD
 
 ./lmgrd
 # start daemon
+
+#############################
+
+PGI
+
+/hpcsw/x86-64/pgi
+/opt/pgi
