@@ -53,7 +53,7 @@ This option is equivalent to --max=depth=0
 
 
 
-                    Mount/umount
+                    Mount
       mount [-alrsvw] [-t fstype] [-o options] [device] [mountpoint]
 
 Features:
@@ -122,18 +122,74 @@ uid=value         vfat, hpfs, ntfs, hfs       -Set the owner of all files. Examp
 gid=value         vfat, hpfs, ntfs, hfs       -Works like uid=value, but sets the group of all files on the filesystem. You can find
                                               group ID in /etc/group file.
 ------------------------------------------------------------------------------------------------------------------------------------
-umask=value       vfat, hpfs, ntfs, hfs
+umask=value       vfat, hpfs, ntfs, hfs       -Sets the umask for the permissions on files. 'value' is interpreted in binary as bits to be
+                                              removed from permissions on files. For instance, 'umask=027' yields permissions of 750, or
+                                              -rwxr-x---. Used in conjunction with 'uid=value' and 'gid=value' this option lets you control
+                                              who can access files on FAT, HPFS, and many other foreign filesystems.
 ------------------------------------------------------------------------------------------------------------------------------------
-dmask=value       vfat, hpfs, ntfs, hfs
+dmask=value       vfat, hpfs, ntfs, hfs       -Similar to 'umask', but sets the umask for directories only, not for files.
 ------------------------------------------------------------------------------------------------------------------------------------
-fmask=value       vfat, hpfs, ntfs, hfs
+fmask=value       vfat, hpfs, ntfs, hfs       -Similar to 'umask', but sets the umask for files only, not for directories.
 ------------------------------------------------------------------------------------------------------------------------------------
-conv=code         msdos, umsdos, 
-                  vfat, hpfs, hfs
+conv=code         msdos, umsdos,              -If 'code' is 'b' or 'binary', linux doesn't modify the files' contents. If 'code' is 't'
+                  vfat, hpfs, hfs             or 'text', linux auto-converts files between linux-style and Window or Macintosh
+                                              end-of-line characters. if 'code' is 'a' or 'auto', linux applies the conversion unless 
+                                              the file is a known binary file format. It's usually best to leave this at its default
+                                              value of binary because file conversions can cause serious problems for some application
+                                              and file types.
 ------------------------------------------------------------------------------------------------------------------------------------
-norock
+norock            iso9660                     -Disables Rock Ridge extensions for ISO-9660 CD-ROMs
 ------------------------------------------------------------------------------------------------------------------------------------
-nojoliet
+nojoliet          iso9660                     -Disables Joliet extensions for ISO-9660 CD-ROMs.
 ------------------------------------------------------------------------------------------------------------------------------------
   
-------------------------------------------------------------------------------------------------------------------------------------
+                       Umount
+       umonut [-afnrv] [-t fstype] [device | mountpoint]
+  
+Features:  
+  Unmount All: -a
+Rather than unmount the partitions listed in /etc/fstab, the -a option causes the system to attempt to unmount all of the partitions 
+listed in /etc/mtab.
+  Force Unmount: -f
+You can use the -f option to tell Linux to force an unmount operation that might otherwise fail.
+  Fall Back to Read-Only: -r
+The -r option tells umount that if it can't unmount a filesystem, it should attempt to remount it in read-only mode.
+  Unmount Partitions of a Specific filesystem Type: -t [fstype]
+The -t fstype option tells the systemm to unmount only partitions of the specified type.
+  The Device and Mount Point: 
+You need to specify only the device (with 'device') or only the mount point (with 'mountpoint'), not both.
+
+As with mount, normal users can't ordinarily use umount. The exception is if the partition or device is listed in /etc/fstab and
+specifies the user, users, or owner option, in which case normal users can unmount the device.
+
+
+
+                   Permanently mounting Filesystems
+
+The /etc/fstab file controls how linux provides access to disk partitions and removable media devices.
+The /etc/fstab file describes how these filesystems are laid out. (The filename fstab is an abbreviation for filesystem table)
+The /etc/fstab file consists of a series of lines that contain six fields each.
+
+Device:  The first column specifies the mount device. These are usually device filenames that reference hard disks, USB drives, and so on.
+Most distributions now specify partitions by their labels or UUIDs, as in the LABEL=/home and UUID=364a5sd4854asf65a-as6d454a-a436d54.
+
+Mount Point:  The second column specifies the mount point. This is where the partition or disk will be mounted in the unified linux filesystem.
+
+Filesystem Type:  The filesystem type code is the same as the type code used to mount a filesystem with the mount command. A filesystem
+type code of auto lets the kernel auto-detect the filesystem type, which can be a convenient option for removable media devices. Auto-
+detection doesn't work with all filesystems, though.
+
+Mount Options:  Most filesystems support several mount options, which modify how the kernel treats the filesystem.
+
+Backup Operation: The next-to-last field contains a 1 if the dump utility should back up a partition or a 0 if it shouldn't.
+
+Filesystem Check Order: At boot time, linux uses the 'fsck' program to check filesystem integrity. A 0 means that 'fsck' should NOT check
+a filesystem. Higher numbers represent the check order. The root partition should have a value of 1, and all others that should be checked
+should have a value of 2. ReiserFS, shouldn't be automatically checked and so should have a values of 0.
+
+You can set up a credentials opton for mount point. You can use the username=name and password=pass options to smbfs or cifs.
+All though this password can be seen.
+An alternative to use is credentials=file option, you can use it to point linux at a file that holds the username and password.
+This file has labeled lines:
+username=[username]
+password=[password]
