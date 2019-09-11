@@ -1,9 +1,28 @@
 The touch command is the easiest way to create new, empty files. 
 It is also used to change the timestamps (i.e., dates and times of the most recent access and modification) on existing files and directories.
+  -last file-modification time
+  -last inode change time
+  -last access time
 
-touch's syntax is
-touch [option] file_name(s)
-
-or
-
+  touch's syntax is
+touch [option] [filename]
+    or
 touch [directory path/file_name]
+
+Sometimes you may need to modify the time stamps.
+By default, 'touch' sets the modification and access times to the current time.
+
+Options:
+Change Only the Access Time:  -a or --time=[atime]
+  causes touch to change the access time alone, not modification time
+Change Only the Modification Time:  -m or --time=[mtime]
+  causes touch to change the modification time alone, not the access time
+Do Not Create File: -c or --no-create
+  If you don't want touch to create any files that don't already exist
+Set the Time as Specified:  -t [timestamp]
+  Sets the time to the value specified by [timestamp]. This value is given in the form MMDDhhmm[[CC]YY][.ss]
+  MM is month
+  DD is day
+  hh is hour (on 24-hour time)
+  mm is minute
+  [CC]YY is year (CCYY=2019 YY=19)
