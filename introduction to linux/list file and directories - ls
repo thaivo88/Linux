@@ -1,24 +1,38 @@
-'ls'          
-list all files in the directory
+    ls          
+# list all files in the directory
 
-'ls -a'       
-list all files including all hidden files in the directory. All hidden files will be denoted by '.' in front of the file name.
+    ls -a       
+# list all files including all hidden files in the directory. All hidden files will be denoted by '.' in front of the file name.
 
-'ls -l'       
-detail of directory (permision, date, user, size, ect)
+    ls -l       
+# detail of directory (permision, date, user, size, ect)
 
-'ls -lh'
-detail of directory (permision, date, user, size, ect) changing the size in byte into kilobyte
+    ls -lh
+# detail of directory (permision, date, user, size, ect) changing the size in byte into kilobyte
 
-'ls -t'
-'ls -lt'
-list all the file/directory in order of newest to oldest
+    ls -t
+    ls -lt
+# list all the file/directory in order of newest to oldest
 
-'ls -F' 	
-lists files and subdirectories
+    ls -F 	
+# lists files and subdirectories
 
-'ls -R' 	
-lists the chain of directories starting from the current directory
+    ls -R 	
+# lists the chain of directories starting from the current directory
+# display the current and subdirectories' files
 
-'ls -s' 	
-lists the name and size of each file in a directory
+    ls -s 	
+# lists the name and size of each file in a directory
+
+    ls -d
+    ls --directory
+# Display directory name; only list the directory name
+
+    ls -f
+    ls --classify
+# Display file type, this option appens an indicator code to the end of the filename so that you  know what type of file it is.
+        / directory
+        * executable
+        | named pipe
+        = socket
+        @ symbolic link
