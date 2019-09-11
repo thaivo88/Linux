@@ -1,9 +1,10 @@
-mv - move
+# Move command is used both to move files and directories from one location to another and to rename them.
+  mv [source] [destination]
 
-mv [source] [destination]
-
-mv -f 
-does not ask you to overwrite message
-
-mv -v
-show you the process
+   Options:
+Force Overwrite:  -f or --force
+  Forces the system to overwrite any existing files without prompting.
+Use Interactive Mode: -i or --interactive
+  Ask you before overwriting any existing files
+Perform and Update copy:  -u or --update
+  Tell move the file only if the original is newer than the target or if the target doesn't exist.
