@@ -12,3 +12,19 @@ scp secure copy
 scp [location of file] [destination of file]
 scp /tmp/text.txt \username@hostname:/[directory where files will be place]
 scp /tmp/text.txt \root@node01:/tmp
+
+    Options:
+Force Overwrite:  -f or --force
+  Forces the system to overwrite any existing files without prompting.
+Use Interactive Mode: -i or --interactive
+  Ask you before overwriting any existing files
+Preserve Ownership and Permissions: -p or --preserve
+  Preserves ownership and permission of the copied file.
+Perform a Rcursive copy:  -R or --recursive
+  Copy the entire directory including its subdirectories.
+  -r also performs a recursive copy, its behavior with files other than ordinary files and directories is unspecified.
+Perform an Archive copy:  -a or archive
+  Simlar to -R but it also preserves ownership and copies links as is.
+  The -R option copies the files to which symbolic links points rather than the symbolic links themselves.
+Perform and Update copy:  -u or --update
+  Tell copy the file only if the original is newer than the target or if the target doesn't exist.
