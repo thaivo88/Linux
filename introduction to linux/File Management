@@ -1,0 +1,32 @@
+                          Naming Files
+Its recommended that you restrict any non-alphanumeric symbols in your linux filenames to dot (.), the dash (-), and the underscore (_).
+Although linux filenames can contain spaces, they must be escaped on the linux command line or enclosing the entire filename in quotes (").
+      escaped command: \ the backslash
+      
+      Special Characters      *should never use in filename*
+asterisk (*)
+question mark (?)
+forward slash (/)
+backslash (\)
+quotation mark (")
+
+      Linux filename length:
+ext2fs, ext3fs, ext4fs, xfs, btrfs    limit 255 characters/bytes
+1-to-4 character filename extensions; followed by a single dot
+
+  Filenames can begin with a dot
+Files begin with a dot are hidden files that are many view by utilities that display files.
+A filename consists of a single dot (.) refers to the current directory
+Whereas a filename that consists of a double dot (..) refers to the parent directory. (a directory level up)
+
+
+          Wildcard
+You can use wildcards with many commands. A wildcard is a symbol or set of symbols that stands in for other characters.
+Three classes of wildcards are common in linux:
+? : A question Mark stands in for a single character.
+* : An asterisk matches any character or set of character, including no character.
+[]  : Bracketed match any character in the set or array of characters.
+Remember linux treats filenames with case-sensitive, using bracket wildcard you must remember to use the correct case.
+
+
+ 
