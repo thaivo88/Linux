@@ -62,7 +62,33 @@ cpio utility has three operation mode:
 To create an archive, you combine the --create (or -o) option with one or more of the option. 
 To restore data, you do te same, but you use --extract (or -i)
 
-Option Abbreviation Description
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
+Option                    Abbreviation        Description
+---------------------------------------------------------------------------------------------------------------------
+--reset-access-time         -a              -Resets the access time after reading a file so that it doesn't appear to have been read.
+---------------------------------------------------------------------------------------------------------------------
+--append                    -A              -Appends data to an existing archive.
+---------------------------------------------------------------------------------------------------------------------
+--pattern-file=filename     -E filename     -Uses the contents of [filename] as a list of files to be extracted in copy-in mode.
+---------------------------------------------------------------------------------------------------------------------
+--file=filename             -F filename     -Uses [filename] as the 'cpio' archive file; if this parameter is omitted, 'cpio' uses 
+                                            standard input or output.
+---------------------------------------------------------------------------------------------------------------------                                     
+--format=format             -H format       -Uses a specified format for the archive file. Common values for [format] include 'bin'
+                                            (a newer binary format with a checksum), and 'tar' (the format used by 'tar')
+---------------------------------------------------------------------------------------------------------------------                                     
+N/A                         -I filename     -Uses the filename specified by [filename] instead of standard input.
+                                            (Unlike -F, this option does not redirect output data.)
+---------------------------------------------------------------------------------------------------------------------                                            
+--no-absolute-file-names    -N/A            -In copy-in mode, extracts files relative to the current directory, even if filenames
+                                            in the archive contain full directory paths.
+---------------------------------------------------------------------------------------------------------------------
+N/A                         -O filename     -Uses the filename specified by [filename] instead of standard output.
+                                            (Unlike -F, this option does not redirect input data.)
+---------------------------------------------------------------------------------------------------------------------
+--list                      -t              -Displays a table of contents for the input.
+---------------------------------------------------------------------------------------------------------------------
+--unconditional             -u              -Replaces all files without first asking for verification.
+---------------------------------------------------------------------------------------------------------------------
+--verbose                   -v              -Displays filenames as they're added to or extracted from the archive.
+                                            When used with -t, displays additional listing information (similar to ls -l)
+---------------------------------------------------------------------------------------------------------------------
