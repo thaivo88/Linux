@@ -1,0 +1,68 @@
+A file-archiving tool collects a group of files into a single package file, called an archive.
+Linux supports sveral archiving commands, the most prominent being 'tar' and 'cpio'
+
+              tar utility
+The 'tar' program's name stands for "tape archiver."
+A tarball is an archive file created by 'tar' and typically compressed with gzip, xz, or bzip2
+
+                                tar 
+                     tar [options] destination/tar_file_name files-to-archive           
+                                
+Command                     Abbreviation                  Description
+---------------------------------------------------------------------------------------------------
+--create                    c                 Creates an archive
+--concatenate               A                 Appends tar files to an archive
+--append                    r                 Appends non-tar files to an archive
+--update                    u                 Appends files that are newer than those in an archive
+--diff or --compare         d                 Compares an archive to files on disk
+--list                      t                 Lists an archive's contents
+--extract or --get          x                 Extracts files from an archive
+---------------------------------------------------------------------------------------------------
+
+Qualifier                 Abbreviation                Description
+---------------------------------------------------------------------------------------------------
+--directory dir               C           Changes to directory 'dir' before performing operations  
+--file [host:]file            f           Uses the file called 'file' on the computer called 'host' as the archive file
+--listed-incremental file     g           Performs an incremental backup or restore, using 'file' as a list of previously archived file
+--multi-volume                M           Creates or extracts a multi-volume archive
+--preserve-permissions        p           Preserves all protection information
+--absolute-paths              P           Retains the leading / on filenames
+--verbose                     v           Lists all files read or extracted; when used with --list, displays file sizes, ownerships, and time stamps
+--verify                      W           Verifies the archive after writing it
+--gzip or --ungzip            z           Compresses an archive with gzip
+--bzip2                       j           compresses an archive with bzip2
+--xz                          J           Compresses an archive with xz
+---------------------------------------------------------------------------------------------------
+
+      tar -xvzf
+f: this must be the last flag of the command, and the tar file must be immediately after. It tells tar the name and path of the compressed file.
+z: tells tar to decompress the archive using gzip
+x: tar can collect files or extract them. x does the latter.
+v: makes tar talk a lot. Verbose output shows you all the files being extracted.
+
+Three compression tools:  (oldest to newest)
+-gzip   extension: .gz  .tgz
+-bzip2  extension: .bz2 .tbz
+-xz     extension: .xz 
+
+
+
+    
+    
+              
+                                cpio 
+cpio utility has three operation mode:
+  -Copy-Out Mode: -o or --create 
+    to create an archive and copies files into it.
+  -Copy-In Mode: -i or --extract
+    extracts data from an existing archive
+  -Copy-Pass Mode: -p or --pass-through
+    It combines the copy-out and copy-in modes, enable you to copy a directory tree from one location to another.
+    
+To create an archive, you combine the --create (or -o) option with one or more of the option. 
+To restore data, you do te same, but you use --extract (or -i)
+
+Option Abbreviation Description
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
