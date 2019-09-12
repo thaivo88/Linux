@@ -92,3 +92,19 @@ N/A                         -O filename     -Uses the filename specified by [fil
 --verbose                   -v              -Displays filenames as they're added to or extracted from the archive.
                                             When used with -t, displays additional listing information (similar to ls -l)
 ---------------------------------------------------------------------------------------------------------------------
+
+To use 'cpio' to archive a directory, you must pass a list of files to the utility using standard input. 
+You can do this by piping the STDOUT of the 'find' utility.
+example:
+  find ./home/voth | cpio -o > /mnt/usb/mywork.cpio
+The example above is uncompressed; to compress you must include a compression utility:
+  find ./home/voth | cpio -o > /mnt/usb/mywork.cpio.gz
+
+Extracting data from a 'cpio' archive entails using the -i option, but no pipe is required.
+  gunzip /mnt/usb/mywork.cpio.gz    *to unzip/uncompress*
+  cpio -i < /mnt/usb/mywork.cpio    *to extract the data*
+          or
+You can uncompress your compressed cpio archive and extract the data in one step by using -c option with gunzip 
+and passing its output to cpio in a pipe:          
+  gunzip -c /mnt/usb/mywork.cpio.gz | cpio -i
+  
