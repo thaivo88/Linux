@@ -1,0 +1,40 @@
+A link is a way to give a file multiple identities, similar to shortcuts in Windows and aliases in MAC.
+Few reason for links:
+-Help make files more accessible
+-Give commands multiple name
+-Enable programs that look for the same files in different locations to access the same file
+
+Two types of links exits:
+  -hard links:
+Are produced by creating two directory entries that point to the same file. (point to the same inode: inode stores basic infomation of a file)
+Both filenames are equally valid and prominent; neither is a "truer" filename than the other, except that one was created first
+and the other was created second. You can't create a hard link from your root (/) directory to a separate directory you've mounted on it.
+  -symbolic links (soft links)
+The symbolic link is a separate file whose contents point to the linked-to file. Accessing a symbolic link works just like accessing the
+origainal file. You can point from the root (/) directory to a separate directory that you've mounted on it.
+
+      ln [options] [source] [link]
+Options:      
+Remove Target files: -f or --force
+  Remove any existing links or files that have the target link name.
+Interactive: -i or --interactive
+  Queries you before replacing existing files and links.
+Create Directory Hard Links: -d -F or --directory
+  You can't create hard links to directories, though, by passing with these option.
+  By default ln create hard link
+Create a Symbolic Link: -s or --symbolic
+Logical: -L or --logical
+  Dereference targets that are symbolic links.
+  For each source_file operand that names a file that is a symbolic link, create a hard link to the file referenced by the symbolic link.
+Physical: -P or --physical
+  Make hard links directly to symbolic links
+  For each source_file operand that names a file that is a symbolic link, create a (hard) link to the symbolic link itself.
+If more than one of the mutually-exclusive options -L and -P is specified the last option specified determines the behavior of the utility.
+If the -s option is not specified and neither a -L nor a -P option is specified, the implementation defines which of the -L and -P options will be used as the default.
+
+When a file is not hard linked to another file, the link count is set to one (1). Once a file becomes hard linked to another file, the link
+count increases.
+Using the -i option with the list command ls can also be used to show files' inode numbers.
+
+Unlike hard link, the symbolically linked files' link counts do not increase. The ls -l command shows the symbolically linked files
+with an arrow (->)
