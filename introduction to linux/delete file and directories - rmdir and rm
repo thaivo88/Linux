@@ -1,6 +1,9 @@
 rm and rmdir
 remove and remove directories syntax
 
+   rm [options] [files]
+   rmdir [options] [directory]
+
 rmdir can only be used to remove an empty directory. It won't work for non-empty directories.
 rm removes both files and non-empty directories (user -r option to remove directory)
 
@@ -15,3 +18,13 @@ Use Interactive Mode: -i or --interactive
   Ask you before overwriting any existing files
 Perform and Update copy:  -u or --update
   Tell move the file only if the original is newer than the target or if the target doesn't exist.
+
+rmdir
+
+Ignore Failure on Non-empty Directories: --ignore-fail-on-non-empty
+   Still doesn't delete the directory, but it doesn't return an error
+Delete Tree: -p or --parents
+   Causes rmdir to delete an entire directory tree.
+   example:
+      rmdir -p /home/voth/iso
+   will delete all of /iso file and directory then /voth then /home
