@@ -1,17 +1,17 @@
-mkdir
-#     make directory - to create a directory (folder)
+    mkdir
+make directory - to create a directory (folder)
 
-#     example:
+    mkdir [option] [directory name]
 
-mkdir [directory name]
-#     or
+    mkdir [directory path/directory name]
+to create a directory in a different directory (folder)
 
-mkdir [directory path/directory name]
-#     to create a directory in a different directory (folder)
+  Create Parent Directories: -p or --parents
+Adding the -p option allows to create a new directory path that does not exist yet
+    mkdir -p [new directory path/directory name]
 
-mkdir -p [new directory path/directory name]
-#     adding the -p option allows to create a new directory path that does not exist yet
-
+  Set Mode: -m or --mode=mode
+Causes the new directory to have the specified permission mode:
 mkdir -m777 [directory name]
 #     -m option appows permission to be added to the directory
 #     The first number is for the owner permissions, the second number is for the group permissions and the last number is for everyone else.
@@ -26,3 +26,4 @@ mkdir -m777 [directory name]
 #     7 = (4: read) + (2: write) + (1: execute)
 #     5 = (4: read) + (1: execute)
 #     4 = (4: read)
+
