@@ -108,3 +108,34 @@ You can uncompress your compressed cpio archive and extract the data in one step
 and passing its output to cpio in a pipe:          
   gunzip -c /mnt/usb/mywork.cpio.gz | cpio -i
   
+
+
+
+
+
+                        dd utility
+The 'dd' utility is a low-level copying program. When you give it a partiton device file as input, it copies that partition's contens
+to the output file you specify.
+The input and output file are passed with the:
+  input: if=file
+  output: of=file
+example:
+  dd if=/dev/sda3 of=/dev/dvd
+This example backs up the /dev/sda3 disk partition to /dev/dvd media.
+
+The 'dd' utility can be a way to create extract backups of entire partitions. However, as a general backup tool, it has serious problems.
+It backs up the entire partition, including any empty space. Finally, you can't easily restore data to a partition that's smaller than
+the original partition, and when restoring to a larger partition, you'll end up wasting some of the space available on that partition.
+example:
+  dd if=/dev/dvd of=/dev/sda3
+This example restore the backup from the dvd content to /dev/sda3 partition
+
+You can also use 'dd' in some other capacities. For instance, if you need an empty file of a particular size, you can copy from the 
+/dev/zero device to a target file.
+example:
+  dd if=/dev/zero of=[device|file] bs=1024 count=720
+The bs=size and count=length options are needed to set the block size and length of the file.
+1024 x 720 bytes empty file = 737,280 bytes = 737kb
+
+                        
+                        
