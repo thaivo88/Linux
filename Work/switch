@@ -25,3 +25,13 @@ Bridge-Aggregation 6:  ports 13 & 14
 Bridge-Aggregation 7:  ports 17 & 18
 Bridge-Aggregation 8:  ports 19 & 20
 Bridge-Aggregation 9:  ports 21 & 22
+
+
+#########################################
+# set mtu 9000
+
+enable
+config terminal
+interface eth 1/1-1/32
+mtu 9000 force
+##########################################
