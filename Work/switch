@@ -31,7 +31,21 @@ Bridge-Aggregation 9:  ports 21 & 22
 # set mtu 9000
 
 enable
-config terminal
+configure terminal
 interface eth 1/1-1/32
 mtu 9000 force
+
+# save configuration
+
+enable
+configure terminal
+configuration write
+configuration write to [filename]
+show configuration files
+
+# load configuration file
+
+enable
+configure terminal
+configuration switch-to [filename]
 ##########################################
