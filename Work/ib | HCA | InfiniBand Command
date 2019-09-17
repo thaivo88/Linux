@@ -13,6 +13,9 @@ mlx5_2 port 1 ==> ib2 (Up)
 mlx5_3 port 1 ==> ib3 (Up)
 ############# end ############
 
+# status for OPA card
+    ibstat 'hfi1_0'
+
 # Performing Adapter Device Self test
     cd /usr/bin
     ./hca_self_test.ofed
