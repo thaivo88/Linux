@@ -92,5 +92,73 @@ permissions. The SUID, SGID, and sticky bit permissions correspond to these bits
     1 Sticky bit permission
     2 SGID permission
     4 SUID permission
-    
-                
+                    
+                                                        Codes Used in Symbolic Modes
+--------------------------------------------------------------------------------------------------------------------------------------
+Permission | Meaning |  Change     | Meaning  | Permission     |  Meaning
+set code   |         |  type code  |          | to modify code |
+--------------------------------------------------------------------------------------------------------------------------------------
+u           Owner         +         add               r         read
+g           Group         -         remove            w         write
+o           Other         =         set equal to      x         execute
+a           All                                       X         Execute only if the file is a directory or already has execute permission.
+                                                      s         SUID or SGID
+                                                      t         Sticky bit
+                                                      u         Existing owner's permissions
+                                                      g         Existing group permissions
+                                                      o         Existing other permissions
+--------------------------------------------------------------------------------------------------------------------------------------
+
+                                                        Example of symbolic permissions with chmod
+--------------------------------------------------------------------------------------------------------------------------------------
+Commands                        Initial Permissions         End Permissions
+--------------------------------------------------------------------------------------------------------------------------------------
+chmod a+x bigprogram            rw-r--r--                   rwxr-xr-x
+chmod ug=rw report.txt          r--------                   rw-rw----
+chmod 0-rwx bigprogram          rwxrwxr-x                   rwxrwx---
+chmod g=u report.txt            rw-r--r--                   rw-rw-r--
+chmod g-w,o-rw report.txt       rw-rw-rw-                   rw-r-----
+--------------------------------------------------------------------------------------------------------------------------------------
+
+                    Setting the Default Mode and Group (mask)
+When a user creates a file, the file has default ownership and permissions. The default owner is, understandably, the user who created
+the file. The default group is the user's primary group.
+The default permissions are configurable. These are defined by the 'user mask', which is set by the 'umask' command.
+This command takes as input an octal value that represents the bits to be removed from 777 permissions for directories, or from
+666 permissions for files, when a new file or directory is created.
+
+                                                        Example of umask values and their effects
+--------------------------------------------------------------------------------------------------------------------------------------
+umask   Created files       Created directories
+000     666 (rw-rw-rw-)     777 (rwxrwxrwx)
+002     664 (rw-rw-r--)     775 (rwxrwxr-x)
+022     644 (rw-r--r--)     755 (rwxr-xr-x)
+027     640 (rw-r-----)     750 (rwxr-x---)
+077     600 (rw-------)     700 (rwx------)
+277     400 (r--------)     500 (r-x------)
+--------------------------------------------------------------------------------------------------------------------------------------
+r: read = 4  | w: write = 2 | x: execute = 1
+minus the number 4|2|1 from 6 for files of 7 for directories
+
+Ordinary users can enter the 'umask' command to change the permissions on new files they create. The superuser can also modify the default
+setting for all users by modifying a system configuration file. Typically, /etc/profile contains one or more 'umask' commands.
+
+To check your default user mask
+      umask
+To change umask, use the four-digit octal code.
+      umask 0002
+  -This will change your default for file to 664 and for directory to 775      
+To express symbolically rather than octal form use the -S option.
+      umask -S
+      u=rwx,g=rwx,0=rx
+  -The special permissions are not included in the display because the octal code is currently set to zero.
+
+You specify the bits that you do want set. For instance, for changing umask, typing 'umask u=rwx,g=rw,o=rx' 
+is equivalent to typing 'umask 022'. However, if a permission bit is not set in the default file or directory permissions,
+the specified permission will not be set.
+
+Users can change their default group with 'newgrp', as in 'newgrp docker' to create new files with the group set to the 'docker' group.
+The 'newgrp' command also accepts the -l parameter, as in 'newgrp -l docker', which reinitializes the environment as if 
+the user had just logged in.
+
+
