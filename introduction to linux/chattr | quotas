@@ -1,0 +1,2 @@
+                                                        Changing File Attributes
+Some filesystems support additional attributes that you can adjust with the 'chattr' command:
