@@ -1,0 +1,96 @@
+                                    Ownership & Permission
+If you delete an account, the account's files don't vanish, but the account name does. Internally, Linux uses numbers rather
+than names, so you'll see numbers in place of the username and group name in the 'ls' output.
+A new user account could be assigned those numbers. This would allow the new user account access to those deleted account's files.
+      
+                Understanding Permission   
+-----------------------------------------
+| - | r | w | x | r | - | x | r | - | x |
+-----------------------------------------
+| * |    **     |    ***    |    ****   |
+*The first character has special meaning-it's the file type code.
+**Owner Permissions
+***Group Permissions
+****World (Others) Permissions
+(r: read = 4) (w: write = 2) (x: execute = 1) (-: no permission = 0)
+
+Individual permissions, such as execute access for the file's owner, are often referred to as permission bits.
+Known as base-8 number is 3 bits in length. Base-8 representation of a permission string is three characters long;
+one character for each of the owner, group, and world permissions.
+
+The first number is for the owner permissions, the second number is for the group permissions and the last number is for everyone else.
+     4 stands for "read",
+     2 stands for "write",
+     1 stands for "execute", and
+     0 stands for "no permission."
+Example: 754    
+The user can read, write, and execute it;
+Members of your group can read and execute it; and
+Others may only read it.
+     7 = (4: read) + (2: write) + (1: execute)
+     5 = (4: read) + (1: execute)
+     4 = (4: read)
+     
+When a directory's execute bit is set, that means that the directory's contents may be searched.
+Symbolic links are unusual with respect to permissions. This file type always has 777 (rwxrwxrwx) permissions.
+This access applies only to the link file itself and not ot the linked-to file.
+     
+                                                        File Type Codes
+--------------------------------------------------------------------------------------------------------------------------------------
+Code |  Meaning
+--------------------------------------------------------------------------------------------------------------------------------------
+-       Normal data file: This may be text, an executable program, graphics, compressed data, or just about any other type of data.
+--------------------------------------------------------------------------------------------------------------------------------------
+d       Directory: Disk directories are files just like any others, but they contain filenames and pointers to disk inodes.
+--------------------------------------------------------------------------------------------------------------------------------------
+l       Symbolic link: The file contains the name of another file or directory. When Linux accesses the symbolic link, 
+        it tries to read the linked-to file.
+--------------------------------------------------------------------------------------------------------------------------------------        
+p       Named pipe: a pipe enables two running linux programs to communicate with each other. One opens the pipe for reading, 
+        and the other opens it for writing, enabling data to be transferred between the programs.
+--------------------------------------------------------------------------------------------------------------------------------------
+s       Socket: A socket is similar to a named pipe, but it permits network and bidirectional links.
+--------------------------------------------------------------------------------------------------------------------------------------
+b       Block device: This is a file that corresponds to a hardware device to and from which data is transferred in blocks of 
+        more than 1 byte. Disk devices (hard disks, USB, flash drives, CD-ROMs, and so on) are common block devices.
+--------------------------------------------------------------------------------------------------------------------------------------
+c       Character device: A file that corresponds to a hardware device to and from which data is transferred in units of 1 byte. 
+        Examples include parallel port, RS-232 serial port, and audio devices.
+--------------------------------------------------------------------------------------------------------------------------------------
+
+                Understanding Special Permission Bits
+Set User ID (SUID): 
+  The set user ID option is used in conjunction with executable files. It tells Linux to run the program with the permissions of whoever
+  owns the file rather than with the permissions of the user who runs the program.
+  SUID programs are indicated by an 's' in the owner's execute bit position in the permission string, as in rwsr-xr-x.
+  If the SUID bit is set on a file without execution permission set, the permission string appears with a capital 'S', as in
+  rwSr-xr-x. However, in this case, SUID will not function and the setting is called benign.
+Set Group ID (SGID): 
+  The set group ID option is similar to the SUID option, but it sets the running program's group to the file's group. It's indicated by
+  an 's' in the group execute bit position in the permission string, as in rwxr-sr-x.
+  Similar to SUID, if the SGID bit is set on a file without execution permission set, the permission string appears with a capital 'S',
+  as in rwsr-Sr-x.
+  When the SGID bit is set on a directory, new files or subdirectories created in the original directory will inherit the group
+  ownership of the directory rather than be based on the user's current default group.
+Sticky Bit:
+  The sticky bit is used to protect files from being deleted by those who don't own the files. When this bit is present on a directory,
+  the directory's files can be deleted only by their owners, the directory's owner, or root. The sticky bit is indicated by a 't' in the
+  world execute bit posiiton, as in rwxr-xr-t.
+
+                Changing a file's Owner
+      chown [options] [newowner][:newgroup] [filenames]
+                Changing a file's Group
+      chgrp [options] [newgroup] [filenames]
+                Modify a file's permissions
+      chmod [options] [mode[mode]] [filename]
+      
+-R or --recursive options will change the ownership on an entire directory tree.
+
+A 'symbolic mode' is a set of codes related to the string representation of the permissions.
+In addition, you can precede the three octal mode digits for the owner, group, and other permissions with another digit that sets special
+permissions. The SUID, SGID, and sticky bit permissions correspond to these bits as follows:
+    1 Sticky bit permission
+    2 SGID permission
+    4 SUID permission
+    
+                
