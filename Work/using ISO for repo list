@@ -43,3 +43,67 @@ yum install redhat-lsb-core
 yum -y install infiniband-diags 							
 yum -y install ypbind								
 yum install ntp									
+
+##############################################################
+For RHEL8
+
+Step:1) Mount RHEL 8 ISO file / Installation DVD
+To mount RHEL 8 ISO file inside your RHEL 8 server use the beneath mount command
+	mkdir /mnt/rh8
+	mount -o loop rhel-8.0-x86_64-dvd.iso /mnt/rh8
+	
+Step:2) Copy media.repo file from mounted directory to /etc/yum.repos.d/
+	cp /mnt/rh8/media.repo /etc/yum.repos.d/rh8.repo
+Set “644” permission on “/etc/yum.repos.d/rhel8.repo”
+	chmod 644 /etc/yum.repos.d/rhel8.repo
+
+Step:3) Add repository entries in “/etc/yum.repos.d/rhel8.repo” file
+By default, rhel8.repo file will have following content,
+
+default-rhel8-repo-file:
+	[InstallMedia]									
+	name=Red Hat Enterprise Linux 8						
+	mediaid=None								
+	metadata_expire=-1								
+	gpgcheck=0									
+	cost=500										
+Edit rhel8.repo file
+	vi /etc/yum.repos.d/rhel8.repo
+Add the following contents:
+	[InstallMedia-BaseOS]
+	name=Red Hat Enterprise Linux 8 - BaseOS
+	metadata_expire=-1
+	gpgcheck=1
+	enabled=1
+	baseurl=file:///mnt/rh8/BaseOS/
+	gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+
+	[InstallMedia-AppStream]
+	name=Red Hat Enterprise Linux 8 - AppStream
+	metadata_expire=-1
+	gpgcheck=1
+	enabled=1
+	baseurl=file:///mnt/rh8/AppStream/
+	gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+	
+Step:4) Clean Yum / DNF and Subscription Manager Cache 
+Use the following command to clear yum or dnf and subscription manager cache:
+	dnf clean all
+	subscription-manager clean
+
+Step:5) Verify whether Yum / DNF is getting packages from Local Repo
+Use dnf or yum repolist command to verify whether these commands are getting packages from Local repositories or not.
+	dnf repolist
+	
+Note : You can use either dnf or yum command, if you use yum command then its request is redirecting to DNF itself because 
+in RHEL 8 yum is based on DNF command.
+If you have noticed the above command output carefully, we are getting warning message 
+“This system is not registered to Red Hat Subscription Management. 
+You can use subscription-manager to register”, if you want to suppress or prevent this message while running dnf / yum command 
+then edit the file “/etc/yum/pluginconf.d/subscription-manager.conf”, changed the parameter “enabled=1” to “enabled=0”
+	vi /etc/yum/pluginconf.d/subscription-manager.conf
+	
+	[main]
+	enabled=0
+save and exit the file.	
+##############################################################	
