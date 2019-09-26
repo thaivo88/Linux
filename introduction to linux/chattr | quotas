@@ -1,2 +1,83 @@
                                                         Changing File Attributes
 Some filesystems support additional attributes that you can adjust with the 'chattr' command:
+          chattr [[ options: +|-|= ] attribute|flag ] [file]
+No Access Time Updates: A
+  If you set the 'A' attribute, Linux won't update the access time stamp when you access a file.
+Append Only: a
+  The 'a' attribute sets append mode, which disables write access to the file except for appending data.
+Compressed: c
+  The 'c' attribute causes the kernel to compress data written to the file automatically and uncompress it when it's read back.
+Immutable: i
+  The 'i' flag makes a file immutable, which goes a step beyond simply disabling write access to the file. The file can't be deleted,
+  links to it can't be created, and the file can't be renamed.
+  You'll  be unable to delete the file, even as root.
+Data Journaling: j
+  The 'j' flag tells the kernel to journal all data written to the file. This flas has no effect on ext2 filesystem.
+Secure Deletion: s
+  When you delete a file, its directory entry is removed and its inode is marked as being available for recycling. The data blocks that
+  make up the bulk of the file aren't erased. Setting the 's' flag changes this behavior; when the file is deleted, the kernel zeros
+  its data blocks, which may be desirable for files that contain sensitive data.
+No Tail-Merging: t
+  Tail-merging is a process in which small data pieces at a file's end that don't fill a complete block are merged with similar pieces
+  of data from other files The result is reducted disk space consumption. Setting the 't' flag disables this behavior which is desirable
+  if certain non-kernel drivers will read the filesystem.
+  
+You set the options that you want using the minus (-), plus (+), or equal (=) symbol to remove an option from an existing set,
+add an option to an existing set, or set a precise set of options (overwriting any that already exist).
+
+
+
+
+
+                                                        Managing Disk Quotas
+Linux support disk quotas; that is, limits enforced by the OS on how many files or how much disk space a single user may consume.
+Two general quota support systems are available for linux. 
+The first was used through the 2.4.x kernels and is referred to as the quota v1 support system.
+The second was added with the 2.6.x kernel serise and is referred to as the quota v2 support system.
+For the quota v2 system, this package is usually called 'quota' and it installs a number of utilities, 
+configuration files, system startup scripts, and so on.
+You must modify your /etc/fstab entries fo any partitions on which you want to use quota support. You must add the 'usrquota' filesystem
+mount option to employ user quotas and the 'grpquota' option to use group quotas.
+
+To enable Quota support
+  chkconfig quota on
+
+The superuser can turn quotas on at any time by using the 'quotaon' command and off with 'quotaoff' command.
+
+Reboot or run the startup script for the quota tools and remounting the filesytem
+Once the system is booted and the filesystems needing quotas are mounted, then the 'quotacheck' command should be executed.
+The 'quotacheck' command surveys the filesystem needing quotas and builds current disk usage data records.
+There are two files the 'quotacheck' command builds that are needed to enable quotas: aquota.user and aquota.group
+To create these files (c) and check both user (u) and group (g) quotas, the quotacheck optios -cug are used.
+  quotacheck -cu /home
+
+Setting Quotas for users
+You can set the quotas by using the 'edquota' command.
+The editor opens a temporary configuration file, /etc/quotatab, which controls the specified user's quotas.
+  edquota voth
+                output:
+  filesystem  blocks  soft    hard    inodes  soft  hard
+  /dev/sdc4   97104   109239  109239  1242    0     0
+  
+You can alter the soft and hard limits for both blocks and inodes. 
+The hard limit is the maximum number of blocks or inodes that the user may consume.
+Soft limits are somewhat less stringent. Users may temporarily exceed soft limit values, but when they do so, the system issues warnings.
+Soft limits also interact with a grace period. If the soft quota limit is exceeded for longer than the grace period, the kernel begins
+treating it like a hard limit and refuses to allow the user to create more files.
+  
+  edquota [option] [users]
+Set the soft limit grace period: -t
+  Grace periods are set on a per-filesystem basis rather than a per-users basis.
+Edit quotas for a group: -g  
+  To adjust quotas for the users group
+
+  repquota [option] [filesystem]
+Summarizes the quota information about the filesystem or all filesystem.
+quota command has the same effect as repquota  
+
+  quota [option]
+-g displays group quotas
+-l omits NFS mounts
+-q limits output of filesystem on which usage is over the limit
+
+
