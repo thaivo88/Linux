@@ -1,0 +1,95 @@
+                      Filesystem Standard (FSSTND) standardized:
+  Standardized the programs that reside in /bin /usr/bin
+  Specified that executable files shouldn't reside in /etc
+  Removed changeable files from the /usr directory tree, enabling it to be mounted read-only
+
+                      Filesystem Hierarchy Standard (FHS)
+Two important distinction made by the FHS
+  Shareable and unsharable files
+  Static and variable files
+  
+Most executable are static files
+Users, automated scripts, servers, or the like may change variable files.
+            _________________________
+           | Shareable | Unshareable |
+___________|_________________________|
+|          |    /usr   |    /etc     |
+|  Static  |    /opt   |    /boot    |
+|__________|___________|_____________|
+|          |   /home   |  /var/run   |
+| Variable | /var/mail |  /var/lock  |
+|__________|___________|_____________|
+
+    Directories and Their Contents:
+  /
+Every Linux filesystem traces its roots to a single directory (the root directory or root filesystem). All other directories branch
+off this one. Every filesystem is mounted at a mount point within another partition.
+  /boot
+The /boot directory contains static and unshareable files related to the computer's initial booting. You will find GRUB or LILO 
+configuration files along with the other files necessary for the initial boot. It is recommended that you store /boot on its own partition.
+  /etc
+The /etc dirctory contains unshareable and static system configuration files. These higher-level startup and configuration files control
+the various programs and services offered on a system. 
+  /bin
+This directory contains certain critical executable files, such as ls, cp, and mount. These commands are accessible to all users and
+constitute the most important commands that ordinary users might issue. The directory contains static files, and almost never shared-any
+potential clients must have their own local /bin directories.
+  /sbin
+This directory is similar to /bin, but it contains programs that are normally run only by the system administrator-tools like 'fdisk'
+and 'e2fsck'. It's static and theoretically shareable, but in practice it makes no sense to share it.
+  /lib
+This directory is similar to /bin and /sbin, but it contains program libraries. Program libraries consist of code that's shared across
+many programs and stored in separate files to save disk space and RAM. The /lib/modules subdirectory contains kernel modules-drivers
+that con be loaded and unloaded as required. Like /bin and /sbin, /lib is static and theoretically shareable, although it's not shared in practice.
+  /usr
+This directory hosts the bulk of a Linux computer's programs. Its contents are shareable and static. Some subdirectories of /usr are 
+similar to their namesakes in the root directory (such as /usr/bin and /usr/lib), but they contain programs and libraries that aren't
+absolutely critical to the computer's basic functioning.
+  /usr/local
+This directory contains subdirectories that mirror the organization of /usr, such as /usr/local/bin and /usr/local/lib. The /usr/local
+directory hosts files that a system administrator installs locally-for instance, packages that are compiled on the target computer.
+The idea is to have an area that's safe from automatic software upgrades when the OS as a whole is upgraded.
+  /usr/share/man
+This directory stores the manual pages used by the man command. Any local manual pages are stored in the /usr/local/share/man directory.  
+  /usr/X11R6
+This directory houses files related to the X Window System (X for short), Linux's GUI environment. Like /usr/local, this directory
+contains subdirectories similar to those in /usr, such as /usr/X11R6/bin and /usr/X11R6/lib. Although commonly used several years ago,
+most modern distributions have moved the contents of this directory to others, such as /usr/bin
+  /opt
+This directory is similar to /usr/local in many ways, but it's intended for ready made packages that don't ship with the OS, such
+as commercial word processors or games. typically, these programs reside in subdirectories in /opt named after themselves.
+The /opt directory is static and shareable
+  /home
+This directory contains users' data, and it's shareable and variable.  
+  /root
+This is the home directory for the root user; variable directory isn't really shareable.
+  /var
+This directory contains transient files of various types-system log files, print spool files, mail and new files, and so on. Therefore,
+the directory's contents are variable. Some subdirectories are shareable, but others are not.
+  /tmp
+Many programs need to create temporary (hence variable) files, and the usual place to do so is in /tmp. Most distributions include 
+routines that clean out this directory periodically and sometimes wipe the directory clean at bootup. The /tmp directory is seldom shared.
+A similar directory exists as part of the /var directory tree /var/tmp
+  /mnt
+Linux mounts removable-media devices within its normal directory structure, and /mnt is provided for this purpose.  
+  /media
+It's like /mnt, but it should contain subdirectories for specific media types, such as /media/dvd  
+  /dev
+Because Linux treats most hardware devices as if they were files, the OS must have a location in its filesystem where these device files
+reside. The /dev directory is that place. The Linux kernel supports a device filesystem that enables /dev to be an automatically created
+virtual filesystem-the kernel and support tools create /dev entries on the fly to accommodate the needs of specific drivers.
+  /proc
+This is an unusual directory because it doesn't correspond to a regular directory or partition. Instead, it's a virtual filesystem that's
+created dynamically by Linux to provide access to certain types of hardware information that aren't accessible via /dev.
+
+Directories should NOT be on their own partitions:
+/bin
+/dev
+/etc
+/lib
+/sbin
+
+
+  
+  
+  
