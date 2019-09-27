@@ -1,0 +1,23 @@
+RHEL8 above use chrony instead of ntp
+Chrony is a default NTP client as well as an NTP server on RHEL 8 / CentOS 8.
+Chrony is a flexible implementation of the Network Time Protocol (NTP). It is used to synchronize the system clock from different 
+NTP servers, reference clocks or via manual input.
+
+install chrony
+  dnf install chrony
+  yum install chrony
+enable chrony to start after reboot
+  systemctl enable chronyd
+edit config file
+  vi /etc/chrony.conf
+add server ip address; to get list of ip address go to hpchost and input 'ntpq -p'
+  cat /etc/chrony.conf:
+    # These servers were defined in the installation:
+    server xx.xx.xx.xx
+restart chrony daemon to refresh the config file
+  systemctl restart chronyd
+check to see if the server ip was picked upt  
+  chronyc sources 
+  chronyc clients
+  chronyc tracking
+  timedatectl status
