@@ -11,12 +11,15 @@ install chrony
   yum install chrony
 enable chrony to start after reboot
   systemctl enable chronyd
-edit config file
-  vi /etc/chrony.conf
-add server ip address; to get list of ip address go to hpchost and input 'ntpq -p'
+edit config file and add server ip address for outbound facing or add ip address to allow for local NTP server.
   cat /etc/chrony.conf:
-    # These servers were defined in the installation:
-    server xx.xx.xx.xx
+  ##################### Output ##########################
+      # These servers were defined in the installation:
+      server xx.xx.xx.xx
+    
+      # Allow NTP client access from local network.
+      allow xx.xx.xx.xx/xx
+  ###################### End ###########################  
 restart chrony daemon to refresh the config file
   systemctl restart chronyd
 check to see if the server ip was picked upt  
