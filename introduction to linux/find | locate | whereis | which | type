@@ -1,0 +1,51 @@
+                                          Find
+The 'find' utility implements a brute-force approach to finding files. This program finds files by searching through the specified
+directory tree, checking filenames, file creation dates, and so on to locate the files that match the specified criteria.
+'find' tends to be slow; but it's very flexible and is very likely to succeed.
+          find [path] [expression]
+You can specify one or more paths in which 'find' should operate. The expression option is a way of specifying what you want to find.
+
+Search by Filename: -name [pattern]
+  Doing so finds files that match the pattern specified by 'pattern'. You can use wildcards if you enclose 'pattern' in quotes.
+Search by Permission Mode: -perm [mode]  
+  If you need to find files what have certain permissions, you can do so by using the -perm mode expression. The mode option may be
+  expressed either symbolically or in octal form. If you precede mode with a '+', find locates files in which any of the specified
+  permission bits are set. If you precede mode with a '-', find locates files in which all of the specified permission bits are set.
+Search by File Size: -size [n]
+  You can search for a file of a given size with the -size n expression. n is specified in 512-byte blocks, but you can modify this
+  by trailing the value with a letter code, such as c for bytes or k for kilobytes.
+Search by Group: -gid [GID]
+  The -gid [GID] expression searches for files whose group ID (GID) is set to GID. The -group [name] option locates files whose group 
+  name is [name].
+Search by User ID: -uid [UID]
+  The -uid [UID] expressio searches for files owned by the user whose user ID (UID) is [UID]. The -user [name] option searches for files
+  owned by [name].
+Restrict Search Depth: -maxdepth [levels]
+  If you want to search a directory and, perhaps, some limited number of subdirectories, you can use the -maxdepth [levels] expression
+  to limit the search.
+  
+  
+                                          Locate
+The 'locate' utility works much like 'find' if you want to find a file by name, but it differs in two important ways:
+  -The 'locate' tool is far less sophisticated in its search options. You normally use it to search for filenames. The program returns
+  all files that contain the specified string.
+  -The 'locate' program works from a database that is maintains. Most distributios include a 'cron' job that calls utilities to update
+  the 'locate' database. 'locate' may not find recent files, or it may return the names of files that no longer exist. However, you can
+  use the 'updatedb' command, which is configured via the /etc/updatedb.conf file, to do this task at any time.
+Some Linux distributions use 'slocate' rather than 'locate'. The 'slocate' program includes security features to prevent users from
+seeing the names of files in directories they shouldn't be able to access.
+
+
+                                          Whereis
+The 'whereis' program searches for files in a restricted set of locations, such as standard binary file directories, library directories,
+and 'man' page directories. This tool does not search user directories or many other locations that are easily searched by 'find' or 'locate'.
+The whereis command lets users locate binary, source, and manual page files for a command.
+  whereis [options] [directory] [name]
+
+                                          Which
+'which' is very weak; it merely searches your path for the command that you type and lists the complete path to the first match it finds.
+'which' returns the pathnames of the files (or links) which would be executed in the current environment.
+You can search for all matches by adding the -a option.
+
+                                          Type
+'type' tells you how a command you enter will be interpreted-as a built-in command, an external command, an alias, and so on.                                          
