@@ -1,0 +1,82 @@
+The computer's boot process begins with a program called a 'boot loader'. This program runs before any OS has loaded, although you
+normally install and configure it from within Linux.
+In Linux, the most-used boot loader is the Grand Unified Boot Loader (GRUB)
+There is also the older linux boot loader, the Linux Loader (LILO)
+
+Your computer's firmware reads the boot loader into memory from the hard disk and executes it. The boot loader, in turn, is responsible
+for loading the Linux kernel into memory and starting it.
+The boot process begins with the BIOS, the BIOS which boot device to use.
+The BIOS loads code from the Master Boot Record (MBR), which is the first sector on the hard disk. 
+This code is the primary boot loader code.
+    _______   _____________________ B (BIOS > MRB > Kernel)
+ __|___   _|_|_____________________|___________________________
+|      | |     |                                               |
+| BIOS | | MRB | Boot Sector  |  Kernel  |  Non-Boot Partition |
+|______| |_____|_______________________________________________|
+    |      | |         | |         |
+    -------- ----------- ----------- A (BIOS > MRB > Boot Sector > Kernel)
+          
+    The primary boot loader does one of the two things:
+1: It examines the partition table and locates the partition that's marked as bootable. The primary boot loader then loads the boot sector
+   from that partition and executes it. This boot sector contains a secondary boot loader, which continues the process by locating an OS
+   kernel, loading it, and executing it. This option is depicted by the Line A
+2: It locate an OS kernel, loads it, and executes it directly. This approach bypasses the secondary boot loader entirely, as depicted 
+   by Line B.
+   
+    ______________________     ______________________ B (EFI > Loader2.efi > kernel2)  
+ __|___   ________________|___|______________________|________
+|      | | Loader1.efi  Loader2.efi                           |
+| EFI  | |            ESP            |  Kernel  |  Kernel2    |
+|______| |____________________________________________________|
+   |         | |                          |
+    ---------   -------------------------- A (EFI > Loader1.efi > kernel1)   
+    
+Instead of relying on code stored in boot sectors on the hard disk, EFI relies on boot loaders stored as files in a disk partition known
+as the EFI System Partition (ESP), which uses the File Allocation Table (FAT) filesystem.
+ESP is typically mounted at /boot/efi
+
+GRUB is the default boot loader for most Linux distributions; however, GRUB is really two boot loaders:
+1: GRUB Legacy
+2: GRUB 2
+
+  GRUB Legacy
+The usual location for GRUB Legacy's configuration file on a BIOS-based computer is /boot/grub/menu.lst.
+Some distributions use the filename grub.conf rather than menu.list
+GRUB Legacy supports BIOS but not EFI
+
+GRUB donesn't refer to disk drives by device filename the way that linux does. 
+GRUB numbers drives, so instead of /dev/hda or /dev/sda, GRUB uses (hd0).
+GRUB Legacy's drive mappings can be found in the /boot/grub/device.map file.
+GRUB Legacy numbers partitions on a drive starting at 0 instead of the 1
+Grub Legacy separates partition numbers from drive numbers with a comma, as in (hd0,0) for the first partition on the first disk.
+GRUB's root partition is the partition in which GRUB's configuration file (menu.lst or grub.conf) resides.
+Because this file is normally in linux's /boot/grub/directory, the GRUB root parttion will be the same as linux's root partition
+if you do not use a separate /boot or /boot/grub partition. If you split off /boot into its own partition, as is fairly common,
+GRUB's root partition will be the same as linux's /boot partition.
+
+######################### menu.lst/grub.conf #########################
+# grub.conf/menu.lst
+# 
+# Global Options:
+# 
+default=0
+timeout=15
+splashimage=/grub/bootimage.xpm.gz
+#
+# kernel image options:
+#
+title Fedora (3.4.1)
+  root (hd0,0)
+  kernel /vmlinuz-3.4.1 ro root=/dev/sda5 mem-4096M
+  initrd /initrd-3.4.1
+title Debian (3.4.2-experimental)
+  root (hd0,0)
+  kernel (hd0,0)/bzImage-3.4.2-experimental ro root=/dev/sda6
+#
+# Other operating system
+#
+title Windows
+  rootnoverify (hd0,1)
+  chainloader +1
+################################ End ################################
+
