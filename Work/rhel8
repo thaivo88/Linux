@@ -41,37 +41,3 @@ check to see if the server ip was picked upt
 
 
 
-###################################### DNS ##########################################
-Install bind and its utilities  
-  dnf install bind bind-utils
-  yum install bind bind-utils
-  
-Start DNS nameserver daemon
-  systemctl start named
-Enable nameserver daemon to start during boot  
-  systemctl enable named
-Check the status of nameserver daemon  
-  systemctl status named
-  
-Configuring BIND DNS on RHEL 8
-Creating a backup of name daemon config file
-  cp /etc/named.conf /etc/named.conf.orig
-Editing nameserver config file  
-  vi /etc/named.conf 
-
-Under the options configuration section, comment out the following lines.
-##################################################
-options {
-        #listen-on port 53 { 127.0.0.1; };
-        #listen-on-v6 port 53 { ::1; };
-        directory       "/var/named";
-##################################################
-
-Next, look for the allow-query parameter and set its value to your network, 
-which means that only hosts on your local network can query the DNS server.
-##################################################
-allow-query  {localhost; 192.168.56.0/24;}
-##################################################
-
-
-###################################### End ##########################################
