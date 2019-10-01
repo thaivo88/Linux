@@ -13,3 +13,11 @@
 # hit ‘ctrl+x’ to start the installation
 # To reboot the server you must be connected to the serial console not the BMC console
   power reset force
+
+
+
+Power On the server with the RMC:
+  RMC cli> power on npar pnum=1 bootopt=shell
+bootopt=shell will force the console to stop at the UEFI Shell prompt.
+Access the console either by launching the KVM from the webpage or opening a text console from RMC.
+  RMC cli> connect npar pnum=p1
