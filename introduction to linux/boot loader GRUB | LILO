@@ -80,3 +80,40 @@ title Windows
   chainloader +1
 ################################ End ################################
 
+Global Options
+GRUB's global section precedes its per-image configurations.
+    Default OS: 
+        The 'default=' option tells GRUB which OS to boot. The default=0 causes the first listed OS to be booted.
+    Timeout: 
+        The 'timeout=' option defines how long, in seconds, to wait for user input before booting the default operation system.
+    Background Graphic: 
+        The 'splashimage=' line points to a graphics file that's displayed as the background for the boot process.
+
+Kernel image option
+GRUB Legacy's per-image options are often indented after the first line.
+    Title: 
+        The 'title' line begins a per-image stanza
+    GRUB Root:
+        The 'root' option specifies the location of GRUB legacy's root partition.
+    Kernel Specification:
+        The 'kernel' setting describes the location of the linux kernel as well as any kernel options that are to be passed to it.
+        The 'ro' option tells the kernel to mount its root filesystem read-only.
+        The 'root=' option specifies the linux root filesystem
+    Initial RAM Disk:
+        Use the 'initrd' option to specify an initial RAM disk, which holds a minimal set of drivers, utilities, and configuration files
+        that the kernel uses to mount its root filesystem before the kernel can fully access the hard disk.
+    Non-Linux Root:
+        The 'rootnoverify' option is similar to the root option except that GRUB legacy won't try to access files on this partition.
+    Chainloading:
+        The 'chainloader' option tells GRUB legacy to pass control to another boot loader. It's passd a '+1' option to load the first
+        sector of the target OS's root partition. (Works on BIOS computers)
+
+The command for installing GRUB legacy on a BIOS-based computer is 'grub-install'.
+You must specify the boot sector by device name when you install the boot loader.
+        grub-install /dev/sda
+                or
+        grub-install '(hd0)'
+In the second example, you need single quotes around the device name. If you want to install GRUB legacy in the boot sector of a
+partition rather than in the MBR, you include a partition identifier, as in /dev/sda1 or (hd0,0)
+
+
