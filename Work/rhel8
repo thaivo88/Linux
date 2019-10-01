@@ -1,0 +1,77 @@
+DNF or Dandified YUM is the next-generation version of the Yellowdog Updater, Modified, a package manager for .rpm-based distributions. 
+DNF was introduced in Fedora 18, it has been the default package manager for Fedora since version 22 and Red Hat Enterprise Linux 8.
+
+
+
+
+
+##################################### NTP ###########################################
+RHEL8 above use chrony instead of ntp
+Chrony is a default NTP client as well as an NTP server on RHEL 8 / CentOS 8.
+Chrony is a flexible implementation of the Network Time Protocol (NTP). It is used to synchronize the system clock from different 
+NTP servers, reference clocks or via manual input.
+
+hpchost does not internet facing so hpchost will be the ntp server use ntpq -p to find the list of ip
+hpcgate please use https://www.ntppool.org/en/use.html to find the server ip/url
+
+install chrony
+  dnf install chrony
+  yum install chrony
+enable chrony to start after reboot
+  systemctl enable chronyd
+edit config file and add server ip address for outbound facing or add ip address to allow for local NTP server.
+  cat /etc/chrony.conf:
+  ##################### Output ##########################
+      # These servers were defined in the installation:
+      server xx.xx.xx.xx
+    
+      # Allow NTP client access from local network.
+      allow xx.xx.xx.xx/xx
+  ###################### End ###########################  
+restart chrony daemon to refresh the config file
+  systemctl restart chronyd
+check to see if the server ip was picked upt  
+  chronyc sources 
+  chronyc clients
+  chronyc tracking
+  timedatectl status
+####################################### End #########################################
+
+
+
+
+
+###################################### DNS ##########################################
+Install bind and its utilities  
+  dnf install bind bind-utils
+  yum install bind bind-utils
+  
+Start DNS nameserver daemon
+  systemctl start named
+Enable nameserver daemon to start during boot  
+  systemctl enable named
+Check the status of nameserver daemon  
+  systemctl status named
+  
+Configuring BIND DNS on RHEL 8
+Creating a backup of name daemon config file
+  cp /etc/named.conf /etc/named.conf.orig
+Editing nameserver config file  
+  vi /etc/named.conf 
+
+Under the options configuration section, comment out the following lines.
+##################################################
+options {
+        #listen-on port 53 { 127.0.0.1; };
+        #listen-on-v6 port 53 { ::1; };
+        directory       "/var/named";
+##################################################
+
+Next, look for the allow-query parameter and set its value to your network, 
+which means that only hosts on your local network can query the DNS server.
+##################################################
+allow-query  {localhost; 192.168.56.0/24;}
+##################################################
+
+
+###################################### End ##########################################
