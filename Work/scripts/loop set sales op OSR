@@ -1,0 +1,10 @@
+#!/bin/bash
+# While loop function to set sales op
+counter=30
+while [ $counter -le 41 ]
+do
+  qmgr -c "set node apollon$counter resources_available.sales_op = none"
+ ((counter++))
+ echo apollon$counter DONE!!!
+done
+echo All DONE!!!
