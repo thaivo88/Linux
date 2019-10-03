@@ -116,4 +116,42 @@ You must specify the boot sector by device name when you install the boot loader
 In the second example, you need single quotes around the device name. If you want to install GRUB legacy in the boot sector of a
 partition rather than in the MBR, you include a partition identifier, as in /dev/sda1 or (hd0,0)
 
- 
+The first screen that the GRUB Legacy boot loader shows you is a list of all of the operating systems that you specified with the 
+'title' option in your GRUB configuration file.
+
+The GRUB 2 configuration file is /boot/grub/grub.cfg
+Some distributions place this file in /boot/grub2, enabling simultaneous installations of GRUB Legacy and GRUB 2.
+GRUB 2 adds a number of features, such as support for loadable modules for specific filesystems and modes of operation, 
+which aren't present in GRUB legacy. The 'insmod' command in the GRUB 2 configuration file loads modules.
+GRUB 2 also supports conditional logic statemonets, enabling loading modules or displaying menu entries only if particular conditions are met.
+
+######################### grub.cfg #########################
+# 
+# Kernel Image Options:
+# 
+menuentry "Fedora (3.4.1)" {
+    set root=(hd0,1)
+    linux /vnmlinuz-3.4.1 ro root=/dev/sda5 mem=4096M
+    initrd /initrd-3.4.1
+}
+menuentry "Debian (3.4.2-experimental)" {
+    set root=(hd0,1)
+    linux (hd0,1)/bzImage-3.4.2-experimental ro root=/dev/sda6
+}
+#
+# Other Operatiing System
+#
+menuentry "Window" {
+    set root=(hd0,2)
+    chainloader +1
+}
+################################ End ################################
+
+Partitions are numbered starting from 1 rather than 0.
+
+GRUB 2 makes further changes in that it employs a set of scripts and other tools that help automatically maintain the 
+/boot/grub/grub.cfg file. The intent is that system administrators need never explicitly edit this file. Instead, you would edit files
+in /etc/grub.d, and the /etc/default/grub file, to change your GRUB 2 configuration. After making such changes, you must explicitly
+rebuild the grub.cfg file.
+
+
