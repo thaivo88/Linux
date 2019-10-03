@@ -153,5 +153,19 @@ GRUB 2 makes further changes in that it employs a set of scripts and other tools
 /boot/grub/grub.cfg file. The intent is that system administrators need never explicitly edit this file. Instead, you would edit files
 in /etc/grub.d, and the /etc/default/grub file, to change your GRUB 2 configuration. After making such changes, you must explicitly
 rebuild the grub.cfg file.
+Files in /etc/grub.d control particular GRUB OS probers. These scripts scan the system for particular OSs and kernels and add GRUB
+entries to /boo/grub/grub.cfg to support those OSs.
+The /etc/default/grub file controls the defaults created by the GRUB 2 configuration scripts.
+
+If you need to make changes to the GRUB 2 configuration file yourself, edit either the /etc/default/grub file or the files in the
+/etc/grub.d folder, and then use the 'update-grub' or 'grub-mkconfig' command to move the changes to the /boot/grub/grub.cfg file.
+When you run the 'update-grub' or 'grub-mkconfig' command, it outputs the new grub.cfg file to the standard outpot. 
+If you want to save the changes, you can type:
+        update-grub > /boot/grub/grub.cfg
+        grub-mkconfig > /boot/grub/grub.cfg
+This command rereads these configuration files and writes a fresh /boot/grub/grub.cfg file.
+(some use grub2 in the command name: grub2-mkconfig)
+GRUB 2 is designed to work with both BIOS and EFI.
+
 
 
