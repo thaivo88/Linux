@@ -1,0 +1,58 @@
+It's the 'init' program's job to start all of those programs when the linux system starts up. This is called the initialization process.
+There are currently three popular initialization process methods used in linux distributions:
+  1:  Unix System V (SysV)        /etc/init.d
+  2:  systemd                     /usr/lib/systemd
+  3:  Upstart                     /usr/share/upstart
+  
+The original linux 'init' program was based on the unix system V 'init' program, and it become commonly called SysV. The SysV 'init'
+program uses a series of shell scripts, divided into separate runlevels, to determine what programs run at what times. Each program uses
+a separate shell script to start and stop the program. The system administrator sets the runlevel in which the linux system starts, 
+which in turn determines which set of programs is running.
+            service - runlevel1     service - runlevel2     service - runlevel3 .....
+
+Upstart version of the 'init' program was developed as part of the Ubuntu Linux distribution. Its main goal was to handle the dynamic
+environment that hotplug devices cause in linux. Upstart method uses separate configuration files for each service, and each service
+configuration file sets the runlevel in which the service should start. One service file that's used for multiple runlevels.
+            service - (runlevel1-6)
+
+The systemd program was developed by the Red Hat linux distribution to handle dynamic linux environments as well. Similar to Upstart,
+it too uses separate configuration files to define program behavior.
+            service - (runlevel1-6)
+
+
+
+                              SysV
+The key to the SysV initialization process is runlevels. The 'init' program determines what services to start based on the runlevel
+of the system. Runlevels are numbered from 0 to 6, and each one is assigned a set of services that should be active for that runlevel.
+
+            Runlevel Functions
+Single-user mode, to get to this mode when booting linux, you use 1, S, or s, or single as an option 
+passed to the kernel by the boot loader. Single-user mode is simply an available runlevel for your system.
+Runlevels 0, 1, and 6 are reserved for special purpose. If you run into peculiar runlevel numbers, consult /etc/inittab
+it defines them and often contains comments explaining the various runlevels.
+
+Runlevel    Purpose
+--------------------------------------------------------------------------------------------------------------------------------
+0           A transitional runlevel; used to shift the computer from one state to another. It shuts down the system.
+1,s,S       Single-user mode. Low-level system maintenance.
+2           On Debian base. A full multi-user mode with X running and a graphical login. 
+3           On Fedora, Mandriva, Redhat base. A full multi-user mode with a console (nongraphical) login screen. (CLI)
+4           Undefined by default. Customization.
+5           On Fedora, Mandriva, Redhat base. Same behavior as runlevel 3; having X run with an XDM (graphical) login
+6           A transitional runlevel. Used to reboot the system.
+--------------------------------------------------------------------------------------------------------------------------------
+
+Don't configure your default runlevel to 0 or 6. If you do, your system will immediately shut down or reboot once it finishes
+powering up.
+
+There are two main ways to affect what programs run when you enter a new SysV runlevel. The first is to add or delete entries
+in your /etc/inittab file.
+
+Basics of the /etc/inittab file
+Each line consists of four colondelimited fields:
+    [id]:[runleves]:[action]:[process]
+
+Identification Code:  The 'id' field consists of a sequence of one to four characters that identifies its function.
+Applicable Runlevels: 
+Action to be Taken: 
+Process to Run: 
