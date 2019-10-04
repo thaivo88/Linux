@@ -169,3 +169,49 @@ GRUB 2 is designed to work with both BIOS and EFI.
 
 
 
+                Alternative Boot Loader
+Syslinux:   BIOS-based boot loader, smaller and more specialized than GRUB legacy or GRUB 2.
+    ISOLINUX, which is a boot loader for use on optical dics.
+    EXTLINUX, it can boot linux from an ext2, ext3, or ext4 filesystem.
+LILO:   The linux loader was the most common linux boot loader in the 1990s. Works only on BIOS-base computers.
+    LILO's configuration file: /etc/lilo.conf
+The Linux Kernel:   Since version 3.3.0, the linux kernel has incorporated an EFI boot loader for x86 and x86-64 systems.
+    On an EFI-based computer, this feature enables the kernel to serve as its own boot loader.
+rEFIt:  Technically a boot manager, not a boot loader. 
+rEFInd: This program is derived from rEFIt, so as to make it more useful on UEFI-based PCs and to extend its feature set.
+    rEFOnd is a boot manager, not a boot loader.
+Gummiboot:  This is an open-source EFI boot manager that's conceptually similar to rEFIt or rEFInd, but it uses a text-mode interface.
+
+Firmware feature known as Secure Boot is having an impact on linux boot loaders. With Secure Boot enabled, an EFI-based computer
+will launch a boot loader only if it's been cryptographically signed with a key whose counterpart is stored in the computer's firmware.
+The goal is to make it harder for malware authors to take over a comuter by inserting their programs early in the boot process.
+
+Certain linux kernel and module log information is stored in what is called the Kernel Ring Buffer.
+You can inspect this information with this command:
+        dmesg
+Many linux distributions store the kernel ring buffer to the /var/log/dmesg log file soon after the system boots.
+The kernel ring buffer is held in memory, its contents are cleared and generated anew with every boot of the computer.
+
+Another source of logging information is the system logger (syslogd). The most useful syslogd file to examine is usually /var/log/messages,
+but /var/log/syslog and other log files in /var/log can also hold helpful information.
+
+Debian uses a daemon called 'bootlogd' that, by default, logs any messages that go to /dev/console to the /var/log/boot file.
+Fedora and Red Hat use 'syslogd' services to log information to /var/log/boot.log
+
+
+
+                Boot Process
+1:  CPU to look at a predeterminded address and execute the code stored in that location. CPU runs the firmware.
+2:  Firmware performs some tasks. Checking for hardware, configuring hardware, and looking for a boot loader.
+3:  Boot loader takes over from the firmware, it loads a kernel or chainloads to another boot loader.
+4:  Linux kernel takes over, it performs tasks such as initializing devices, mounting the root partition, and finally loading and
+executing the initial program for your system. By default, this is the program /sbin/init. It gets the process ID (PID) of 1, because
+it's the first program to run on the system.
+
+The kernel needs to load drivers to handle the hardware, but those drivers may not be accessible if the hard drive isn't mounted yet.
+To avoid this situation, most linux distributions utilize an 'initramfs' file, which contains the necessary modules to access the
+hardware. The boot loader mounts the 'initramfs' file into memory as a virtual root filesystem during the boot step for the kernel to
+use. Once the kernel loads the necessary drivers, it unmounts the 'initramfs' filesystem and mounts the real root filesystem from the HDD.
+
+    
+
