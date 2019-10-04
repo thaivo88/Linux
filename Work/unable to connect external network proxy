@@ -6,7 +6,7 @@
 # remove entry of proxy
 # and remove the proxy lines from environment file
   
-  cd /etc/environment
+  vi /etc/environment
 ######################################
 
 
