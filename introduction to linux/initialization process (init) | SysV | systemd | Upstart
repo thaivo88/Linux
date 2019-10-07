@@ -50,9 +50,36 @@ in your /etc/inittab file.
 
 Basics of the /etc/inittab file
 Each line consists of four colondelimited fields:
+
     [id]:[runleves]:[action]:[process]
 
 Identification Code:  The 'id' field consists of a sequence of one to four characters that identifies its function.
-Applicable Runlevels: 
-Action to be Taken: 
-Process to Run: 
+Applicable Runlevels: The 'runlevels' field consists of a list of runlevels for which this entry applies.
+Action to be Taken: Specific codes in the 'action' field tell 'init' how to treat the process. 
+  'Wait' tells 'init' to start the process once when entering a runlevel and to wait for the process's termination,
+  'respawn' tells 'init' to restart the process whenever it terminates
+Process to Run: The 'process' field is the process to run for this entry.
+
+These lines specify scripts or programs that are to be run when the specified runlevel is entered.
+
+
+
+
+
+            SysV
+The /etc/init.d/rc or /etc/rc.d/rc script performs the crucial task of running all of the scripts associated wht the runlevel. 
+The runlevel-specific scripts are stored in /etc/rc.d/rc?.d, /etc/init.d/rc?.d, /etc/rc?.d or a similar location. (? is the runlevel)
+When entering a runlevel, 'rc' passes the 'start' parameter to all the scripts with names that begin with a captial S, 
+and it passes the 'stop' parameter to all of the scripts with names that begin with a capital 'K'. 
+These SysV startup scripts start or stop services depending on the parameter they're passed, 
+so the naming of the scripts controls whether they're started or stopped when a runlevel is entered.
+These scripts are also numbered, as in S10network and K35smb. The 'rc' program runs the scripts in numeric order.
+Control the order in which scriipts run by giving them appropriate numbers. 
+This control is important because some services depend on others.
+The files in the SysV runlevel directories are symbolic links to the main scripts, which are typically stored in /etc/rc.d, /etc/init.d
+or /etc/rc.d/init.d
+
+
+
+
+
