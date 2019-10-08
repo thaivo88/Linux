@@ -79,6 +79,10 @@ This control is important because some services depend on others.
 The files in the SysV runlevel directories are symbolic links to the main scripts, which are typically stored in /etc/rc.d, /etc/init.d
 or /etc/rc.d/init.d
 
+The SysV startup scripts in the runlevel directories are symbolic links back to the original script. This is done so that you don't 
+need to copy the same script into each runlevel directory. Instead, you can modify the original script without having to track down
+its copies inall of the SysV runlevel directories.
+
 
 
 
