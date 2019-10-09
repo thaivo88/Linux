@@ -66,7 +66,7 @@ These lines specify scripts or programs that are to be run when the specified ru
 
 
 
-            SysV
+                                SysV initialization
 The /etc/init.d/rc or /etc/rc.d/rc script performs the crucial task of running all of the scripts associated wht the runlevel. 
 The runlevel-specific scripts are stored in /etc/rc.d/rc?.d, /etc/init.d/rc?.d, /etc/rc?.d or a similar location. (? is the runlevel)
 When entering a runlevel, 'rc' passes the 'start' parameter to all the scripts with names that begin with a captial S, 
@@ -83,6 +83,114 @@ The SysV startup scripts in the runlevel directories are symbolic links back to 
 need to copy the same script into each runlevel directory. Instead, you can modify the original script without having to track down
 its copies inall of the SysV runlevel directories.
 
+Numerous utility programs are available to help you manage these links, suck as 'chkconfig', 'update-rc.d', and 'rc-update'.
+To list the services and their applicable runlevels with 'chkconfig', use the --list option.
+To modify the runlevels in which a service runs, use a command like this:
+
+    chkconfig --level [0|1|2|3|4|5|6] [service] [on|off|reset]
+    chkconfig --level 23 nfs-common on
+
+You can use 'on' to activate the script, 'off' to deactivate it, or 'reset' to set it to default value.
+If you've added a startup script to the main SysV startup script directory, you can have 'chkconfig' register it and add appropriate 
+start and stop links in the runlevel directories. 'chkconfig' inspects the script for special comments to indicate default runlevels.
+
+    chkconfig --add nfs-common
+
+This command adds the nfs-common script to those managed by 'chkconfig'
+
+
+
+Different runlevel checks are possible: checking your default runlevel and checking your current runlevel.
+On a SysV-based system, you can determine your default runlevel by inspecting the /etc/inittab
+If you want to change the default runlevel for the next time you boot your system, edit the 'initdefault' line in /etc/inittab and
+change the runlevel field to the value you want.
+
+The first character is the previous runlevel. When the character is 'N', this means the system hasn't switched runlevel since booting.
+kIt's possible to switch to different runlevels on a running system with the 'init' and 'telinit' programs. The second character in the
+runlevel output is your current runlevel.
+
+The 'init' process is the first process run by the Linux kernel.
+A variant of 'init' is 'telinit'.
+With 'telinit' you can also take the 'Q' or 'q' option to have the tool reread /etc/inittab and implement any changes if finds there.
+
+Although you can shut down or reboot the computer with 'init', doing so has some problems. One issue is that it's simply an unintuitive
+command for this action. Another is that changing runlevels with 'init' causes an immediate change to the new runlevel. This may
+cause other users on your system some aggravation because they'll be given no warning about the shutdown.
+The 'shutdown' program sends a message to all users who are logged into your system and prevents other users from logging in during the
+process of changing runlevels. The 'shutdown' command also lets you specify when to effect the runlevel change so that users have
+time to exit editors and safely stop other processes that they may have running.
+
+hh:mm   for a time in 24-hour clock format (6:00 for 6:00 am or 13:30 for 1:30 pm)
++m      m for a time in minutes in the future
+-r      reboot the system
+-H      halts (terminates operation but doesn't power it off)
+-h      power off
+-p      powers off
+
+    shutdown now
+    shutdown -h +15 "systm going down for maintenance"                    reboots in 15min
+    shutdown -c "never mind"                                              cancel shutdown command
+
+Three additional shortcut commands are halt, reboot, and poweroff
+
+
+
+
+
+
+                                systemd initialization
+The 'systemd initialization process'method is quickly gaining in popularity in the Linux world. Instead of lots of small initialization
+shell scripts, the systemd method uses one monolithic program that uses individual configuration files for each service.
+
+Instead of using shell scripts and runlevels, the systemd method use 'units' and 'targets'. A systemd unit defines a service or action
+on the system. It consists of a name, a type, and a configuration file. There are currently eight different types of systemd units:
+    automount
+    device
+    mount
+    path
+    service
+    snapshot
+    socket
+    target
+
+You use the 'systemctl' command to list the units currently loaded in your linux system.
+    systemctl list-units
+    
+The systemd method uses service-type units to manage the daemons on the Linux system. The target-type units are important in that
+they group multiple units together so that they can be started at the same time. Each target represents a different group of services
+that should be running on the system. Instead of changing runlevels to alter what's running on the sytem, you just change target.
+To make the transition from SysV to systemd smoother, there are target that mimic the standard 0 through 6 SysV runlevel,
+called 'runlevel0.target' through 'runlevel6.target'.
+
+Each unit requires a configuration file that defines what program it starts and how it should start the program. The systemd system
+stores unit configuration files in the /lib/systemd/system folder.
+Target units also use configuration files. They don't define programs but instead define which service units to start.
+
+The default target used whenthe Linux system boots is defined in the /etc/systemd/system folder as the file 'default.target'.
+This is the file the systemd program looks for when it starts up. This file is normally set as a link to a standard target file in the
+/lib/systemd/system folder.
+
+----------------------------------------------------------------------------------------------------------------------------------
+systemctl command name    Explanation
+----------------------------------------------------------------------------------------------------------------------------------
+list-units                Displays the current status of all configured units.
+default                   Changes to the default target unit.
+isolate                   Starts the named unit and stops all others.
+start [name]              Starts the named unit
+stop [name]               Stop the named unit
+reload [name]             Causes the named unit to reload its configuration file.
+restart [name]            Cause the named unit to shutdown and restart.
+status [name]             Displays the status of the name units.
+enable [name]             Configures the unit to start when the computer next boots.
+disable [name]            Configures the unit not to start when the computer next boots.
+----------------------------------------------------------------------------------------------------------------------------------                        
+
+
+
+
+
+
+                                  Upstart initialization
 
 
 
