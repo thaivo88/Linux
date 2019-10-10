@@ -1,0 +1,41 @@
+vi text editor
+
+Three modes in which it operates:
+  1:  Command Mode or Normal Mode: This mode accepts commands, which are usually entered as single letters.
+        i or a  insert mode
+        o opens a line below the current one
+  2:  Ex Mode or Colon command: To manipulate file. You enter ex mode from command mode by typing a colon (:)
+  3:  Insert Mode or Edit mode: Once in insert mode you can edit and modify the file. Esc key will exit insert mode and enter command mode.
+  
+The tildes (~) down the left side of the display indicate the end of the file.
+
+Command mode
+  o : Open Text, inserts a new line below the current one and enters insert mode.
+  [n]yy : Yank [n] line of text. Yank is like copy-you copy the text to a buffer from which you can later paste it back into the file.
+use the yy (do not press the Enter key) command preceded by the number of lines you want to yank.
+  dd : works like yy, but it deletes the lines as well as copying them to a buffer.
+  dw : delete the next word
+  p : (do not press the Enter key) paste the contents of the buffer starting on the line after the cursor.
+  R : enter insert mode so that it's configured for text replacement rather than insertion.
+    ~ : Change Case, you can use the tilde (~) key in command mode to change the case. Position the cursor on the first character you want
+to change, and press ~ repeatedly until the task is done.
+  u : undo in command mode
+  /[keywords] or ?[keywords] : to search the file use / or ? to search backwards 
+  c : Change Text within the command mode
+  cw : change word
+  cc : change entire line
+  G : brings you to a line that you specify
+  H : "home" the cursor like the home button
+  L : brings the cursor to the bottom line of the screen
+  :%s/[original]/[replacement]/g : to replaec all occurrences of one string with another. Change % to a starting line number, comma, 
+and ending line number to perform this change on a small range of lines.
+  ZZ : write and quit
+
+ex mode
+  :e : edit a new file
+  :r : include an existing file, includes the contents of an old file in an existing one.
+  :! : executes the external command that you specify.
+  :q : quit
+  :wq : write and quit
+  :x : save the file if it has changed and quit
+  
