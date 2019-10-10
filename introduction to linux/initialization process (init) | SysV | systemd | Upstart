@@ -191,6 +191,25 @@ disable [name]            Configures the unit not to start when the computer nex
 
 
                                   Upstart initialization
+Broadly speaking, Upstart does the same job as the SysV scripts, but Upstart is designed to better handle today's 
+dynamically changing hotplug hardware. Upstart does away with /etc/inittab, instead providing an integrated set of startup script that
+can, in principle, completely replace the SysV-style /etc/inittab and runlevel-specific startup scripts.
+
+A system that uses nothing but Upstart and its native scripts replaces both /etc/inittab and the runlevel-specific SysV startup script
+directories with scripts in the /etc/init directory.
+To change the runlevels in which a particular service runs, you'll have to edit its configuration file in a text editor.
+Locate the script, typically /etc/init/[name].conf where [name] is the name of the serivce.
+      initctl reload
+To have Upstart reread its configuration files.
+
+Because the SysV startup script system has been so common for so long, a large number of software packages include SysV startup scripts.
+To accommodate such packages, Upstart provides a compatibility mode: it runs SysV startup scripts in the usual locations.
+(/etc/rc.d/rc?.d, /etc/init.d/rc?.d, /etc/rc?.d, or a similar location). Thus, if you install a package that doesn't yet include an
+Upstart configuration script, it should still launch in the usual way.
+
+You may find, however, that 'chkconfig' and other SysV-based tools no longer work for some services. As time goes on, this is likely to 
+be true for more and more services because the developers of distriburtions that favor Upstart may convert their packages' startup
+scripts to use Upstart-native methods.
 
 
 
