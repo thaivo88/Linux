@@ -24,7 +24,7 @@ Many modern distributions ship with their own custom X configuration tools.
 Display Settings Tool - accessible from the default desktop menu or by typing:
     system-config-display
     	
-    
+          
     
           X configuration file format
 
