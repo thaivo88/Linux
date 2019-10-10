@@ -1,0 +1,37 @@
+          Linux, the main GUI is known as the X Window System or X for short.
+
+Several implementations of X are available:
+  XFree86 : The dominant X server in Linux until 2004 was XFree86. This open-source server supports a wide array of video cards and
+input devices.  A significant changes occurred between version 3.3.6 and the 4.x series.
+  X.org-X11 : Most Linux distributions shifted from XFree86 to X.org-Xll because of licensing changes to XFree86. Because X.org-X11
+is based on XFree86, the two are virtually identical in most important respects. One significant difference is the name of the 
+configuration file and another is the default location for fonts.
+  Accelerated-X : The commercial Accelerated-X sercer from Xi Graphics is an alternative to the open-source XFree and X11. 
+  
+
+
+          x configuration utilities
+        
+The X server itself includes the capacity to query the hardware and produce a configuration file. 
+To do this, type:
+    XFree86 -configure      # for XFree86
+    Xorg -configure         # for X11
+The configuration file should be located at:
+    /root/XF86Config.new    # for XFree86
+    /root/xorg.config.new   # for X11
+    
+Many modern distributions ship with their own custom X configuration tools. 
+Display Settings Tool - accessible from the default desktop menu or by typing:
+    system-config-display
+    	
+    
+    
+          X configuration file format
+
+X.org-X11
+This server's configuration file is called xorg.conf and it's usually stored in /etc/X11
+    (Many modern X.org-X11 configurations omit the X configuration file entirely, instead relying on runtime auto-detection of hardware.
+    This often works fine, but if X doesn't work or if some of its features are set incorrectly, you may need to generate an xorg.conf
+    file by typing Xorg-configure when X is not running and edit the file manually.)
+    
+XFree86 4.x 
