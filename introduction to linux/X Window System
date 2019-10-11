@@ -15,10 +15,10 @@ configuration file and another is the default location for fonts.
 The X server itself includes the capacity to query the hardware and produce a configuration file. 
 To do this, type:
     XFree86 -configure      # for XFree86
-    Xorg -configure         # for X11
+    Xorg -configure         # for X.org-X11
 The configuration file should be located at:
     /root/XF86Config.new    # for XFree86
-    /root/xorg.config.new   # for X11
+    /root/xorg.config.new   # for X.org-X11
     
 Many modern distributions ship with their own custom X configuration tools. 
 Display Settings Tool - accessible from the default desktop menu or by typing:
@@ -35,3 +35,21 @@ This server's configuration file is called xorg.conf and it's usually stored in 
     file by typing Xorg-configure when X is not running and edit the file manually.)
     
 XFree86 4.x 
+This server's configuration file is called XF86Config-4 or XF86Config and is found in /etc/X11 or /etc
+
+XFree86 3.3.6 and earlier
+The X configuration file's name is XF86Config and the file is located in /etc/X11 or /etc
+
+All three of these classes of X server use configuration files that are broken down into multiline sections, one section 
+for each major feature. These sections begin with a line consisting of the keyword 'Section' and the section name in quotes and end
+with the keywork 'EndSection:'
+
+############## X Config file ##############
+Section "InputDevice"
+    Identifier  "Keyboard0"
+    Driver      "kbd"
+    Option      "XkbModel" "pc105"
+    Option      "XkbLayout" "us"
+    Option      "AutoRepeat" "500 200"
+EndSection
+################ End ################
