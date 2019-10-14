@@ -47,3 +47,14 @@
 
 # reboot the system to take affect
   reboot
+  
+# after a reboot and the kernel fail to load and you see this error below:
+  Gave up waiting for root file system device. Common problems:
+  -Boot args (cat /proc/cmdline)
+    -Check rootdelay= (did the system wait long enough?)
+  -Missing modules (cat /proc/modules; ls /dev)
+  ALERT! UUID=135212h5kjh3o4htwoehgu3h4ugh34 does not exist. Dropping to a shell!
+  
+# find a system with the new kernel and copy over the initrd.img-4.15.0-65-generic
+  cd /boot
+  scp initrd.img-4.15.0-65-generic \root@znode44:/boot
