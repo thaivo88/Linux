@@ -1,3 +1,7 @@
+# if kernel fail to load after installation
+# https://www.dedoimedo.com/computers/ubuntu-initrd-bug.html
+
+
 # check the current kernel version
   uname -a
   
