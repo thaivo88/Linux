@@ -1,6 +1,9 @@
 lsblk
 blkid
 
+# turn on led light for the drives
+lsmcli local-disk-ident-led-on --path /dev/mapper/ S4P3E019
+
 # search for the biggest file
 du -a / 2>/dev/null | sort -n -r | head -n 20 
 
