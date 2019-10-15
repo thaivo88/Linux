@@ -34,8 +34,8 @@
   vi /etc/default/grub
 # edit lines below
   	GRUB_DEFAULT=0
-		#GRUB_TIMEOUT_STYLE=hidden
-		GRUB_TIMEOUT=10
+	#GRUB_TIMEOUT_STYLE=hidden
+	GRUB_TIMEOUT=10
     
 
 # install the kernel image and headers
