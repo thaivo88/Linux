@@ -53,3 +53,132 @@ Section "InputDevice"
     Option      "AutoRepeat" "500 200"
 EndSection
 ################ End ################
+
+Some Exception to X configuration file between version
+The 'Option' key isn't used in XFree86 3.3.6 and earlier. Instead, the option name appears without quotes as the first word on the line.
+XFree86 3.3.6 and earlier don't use this 'ServerLayout' section.
+XFree86 3.3.6 and earlier lack the 'Identifier' and 'Driver' line.
+
+Once the X session is shut down, you can log in using a text-mode login prompt and tweak your X settings manually. 
+To start the X server again:
+          startx
+If you get the desired results, quit from X to restore the system to its normal X login screen:
+          telinit 5
+or                
+          /etc/init.d/xdm start
+          
+Kill the X server:  Ctrl+Alt+Backspace or use the kill command
+
+
+
+          X Configuration Options
+The 'Module' section controls the loading of X server modules-drivers for specific features or hardware.
+
+########## X server Modules ###########
+Section "Module"
+          Load "dbe"
+          Load "extmod"
+          Load "fbdevhw"
+          Load "glx"
+          Load "record"
+          Load "freetype"
+          Load "type1"
+          Load "dri"
+EndSection
+################ End ################
+
+For the most part, if an X configuration works, you shouldn't try to adjust the 'Module' section.
+
+########## Input Device ###########
+Section "InputDevice"
+    Identifier  "Keyboard0"
+    Driver      "kbd"
+    Option      "XkbModel" "pc105"
+    Option      "XkbLayout" "us"
+    Option      "AutoRepeat" "500 200"
+EndSection
+################ End ################
+
+The 'Identifier' line provides a label that's used by another section (ServerLayout)
+The 'Driver' line tells X what driver to use to access the keyboard.
+The 'kbd' and 'keyboard' drivers are keyboard-specific drivers.
+The 'evdev' driver, by contrast, is a generic input device driver.
+The 'Option' lines set various options that adjust keyboard features, such as the model, the layout, and the repeat rate.
+The time until the first repeat and the time between subsequent repeats, both expressed in milliseconds (ms).
+
+########## Input Device ###########
+Section "InputDevice"
+    Identifier  "Keyboard0"
+    Driver      "kbd"
+    Option      "XkbModel" "pc105"
+    Option      "XkbLayout" "us"
+    Option      "AutoRepeat" "500 200"
+EndSection
+################ End ################
+
+The 'Driver' line identifies the driver to use: 'mouse'. (Many modern systems use 'evdev' for the mouse.)
+The 'Option' lines set mouse control options.
+The most important of these are 'Device' and 'Protocol'.
+The 'Device' line tells X what Linux device file to read to access the mouse.
+The 'Protocol' option tells X what signals to expect from the mouse for various movements and button presses.
+The 'Auto' protocol causes X to try to guess the mouse's protocol.
+If it doesn't work, you can try more specific protocols, such as 'IMPS/2' and 'ExploreerPS/2'.
+(Mouses use the PS/2 protocol even if they don't use the PS/2 port; as PS/2 is a hardware and software: protocol)
+'Emulate3Buttons' option tells X wheather to treat a 'chord' (simultaneous press) of both buttons on a two button mouse as if were a
+middle-button press.
+This option is usually disabled on three-button mice and scroll mice (the scroll wheel does double duty as a middle mouse button)
+The 'ZAxisMapping' option in the preceding example maps the scroll wheel actions to the fourth and fifth buttons, because X must
+treat scroll wheels as if they were buttons. When you scroll up or down, these "button" presses are generated.
+Software can detect this and take appropriate actions. Button 4 scroll up, Button 5 scrool down
+
+
+
+                    Setting the Monitor
+Some of the trickiest aspects of X configuration relate to the monitor options.
+
+########## Input Device ###########
+Section "Monitor"
+    Identifier      "Monitor0"
+    ModelName       "AOC e2343FK"
+    HorizSync       30.0 - 83.0
+    VertRefresh     55.0 - 75.0
+    # My custom     1920x1080 mode
+    Modeline        "1920x1080" 138.50 1920 1968 2000 2080 1080 1083 1088 1111
+EndSection
+################ End ################
+
+The 'Identifier' option can be just about anything you like. Likewise, the 'ModelName' option can be anything you like; it's used mainly
+for your own edification when reviewing the configuration file.
+'HorizSync' and 'VertRefresh' lines, which are extremely critical. They define the range of horizontal and vertical refresh rates
+that the monitor can accept, in kilohertz (kHz) and hertz (Hz). Together, these values determine the monitor's maximum resolution and
+refresh rate.
+'HorizSync' item alone doesn't determine the maximum horizontal refresh rate. Rather, this value, the 'VertRefresh' value, and the
+resolution determine the monitor's maximum refresh rate.
+To settle on a resolution, X looks through a series of 'mode lines', which are specified via the 'Modeline' option. Computing mode
+lines is tricky, so we don't recommend that you try it unless you're skilled in such matters. The mode lines define combinations of
+horizontal and vertical timing that can produce a given resolution and refresh rate.
+
+Some mode lines represent video modes that are outside the horizontal or vertical sync ranges of a monitor. X can compute these cases
+and discard the video modes that a monitor can't support. If asked to produce a given reolution, X searches all of the mode lines
+that accomplish the job, discards those that the monitor can't handle, and uses the remaining mode line that creates the highest refresh
+rate at that resolutioin. (If no mode line supports the requested resolution, X drops down to another specified resolution.)
+
+XFree86 4.x and X.org-X11 support a feature known as 'Data Display Channel' (DDC). This is a protocol that enables monitors to communicate 
+their maximum horizontal and vertical refresh rate and appropriate mode lines to the computer. You may need to create a Modeline option
+if this feature fails, though.
+
+
+
+                    Setting the Video Card
+Your monitor is usually the most important factor in determining your maximum refresh rate at any given resolution. An incorrect
+configuration of the video card is likely to result in an inability to start X.
+
+Sometimes X, and particularly modern versions of X.org-X11, can pick the optimum video driver automatically.
+          Driver "nv"
+This line sets the name of the driver. The drivers reside in the /usr/X11R6/lib/modules/drivers/ or /usr/lib/xorg/modules/drivers/ directory.
+Most of the drivers' filenames en in [name]_drv.o, and if you remove this portion, you're left with the driver name.
+
+If you type Xorg -configure to create an initial configuration, the resulting file is likely to include multiple 'Device' sections,
+each for a different driver. Some of these, such as 'fbdev' and 'vesa', are generic drivers that work. Today, you're most likely
+to use the 'nv' or 'nouveau' drivers for nvidia, 'radeon' driver for AMD/ATI cards, and 'intel' driver for intel cards.
+
