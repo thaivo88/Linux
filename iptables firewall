@@ -1,3 +1,7 @@
+#List Rules
+  
+  iptables -L
+
 #Saving Rules
 #Iptables rules are ephemeral, which means they need to be manually saved for them to persist after a reboot.
 #On Ubuntu, the easiest way to save iptables rules, so they will survive a reboot, is to use the iptables-persistent package. Install it with apt-get like this:
