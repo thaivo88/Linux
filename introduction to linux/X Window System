@@ -182,3 +182,15 @@ If you type Xorg -configure to create an initial configuration, the resulting fi
 each for a different driver. Some of these, such as 'fbdev' and 'vesa', are generic drivers that work. Today, you're most likely
 to use the 'nv' or 'nouveau' drivers for nvidia, 'radeon' driver for AMD/ATI cards, and 'intel' driver for intel cards.
 
+Setting Card-Specific Options
+############# Device Section ###############
+Section "Device"
+          Identifier "Videocard0"
+          Driver "nv"
+          VendorName "nVidia"
+          BoardName "GeForce 6100"
+          VideoRam 131072
+EndSection         
+############################################
+
+
