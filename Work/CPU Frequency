@@ -53,6 +53,9 @@ pdsh -w [nodes] conrep -l -f [file path]
 # conservative	: Scales the frequency dynamically according to current load. Scales the frequency more gradually than ondemand.
 # schedutil	: Scheduler-driven CPU frequency selection
 
-echo performance > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+  echo performance > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 (note you have to do this for each logical cpu)
+
+# or install linux-tools-common for cpupower command
+  cpupower frequency-set -g performance
 ######################################
