@@ -1,3 +1,49 @@
+MUNGE
+An authentication service for creating and validating credentials. It is designed to be highly scalable for use in an HPC cluster 
+environment. It allows a process to authenticate the UID and GID of another local or remote process within a group of hosts having 
+common users and groups. These hosts form a security realm that is defined by a shared cryptographic key. Clients within this security 
+realm can create and validate credentials without the use of root privileges, reserved ports, or platform-specific methods.
+
+NIS
+The Network Information Service, or NIS, is a client–server directory service protocol for distributing system configuration data 
+such as user and host names between computers on a computer network.
+
+NFS
+Network File System (NFS) is a distributed file system protocol originally developed by Sun Microsystems (Sun) in 1984, 
+allowing a user on a client computer to access files over a computer network much like local storage is accessed.
+
+Lustre
+Lustre is a type of parallel distributed file system, generally used for large-scale cluster computing. 
+The name Lustre is a portmanteau word derived from Linux and cluster.
+
+Kubernetes
+Kubernetes is an open-source container-orchestration system for automating application deployment, scaling, and management. 
+It was originally designed by Google, and is now maintained by the Cloud Native Computing Foundation.
+
+CUDA
+CUDA is a parallel computing platform and programming model developed by Nvidia for general computing on its own GPUs 
+(graphics processing units). CUDA enables developers to speed up compute-intensive applications by harnessing the power of GPUs for the 
+parallelizable part of the computation.
+
+FPGA
+Field Programmable Gate Arrays (FPGAs) are semiconductor devices that are based around a matrix of configurable logic blocks (CLBs) 
+connected via programmable interconnects. FPGAs can be reprogrammed to desired application or functionality requirements after manufacturing.
+
+OPA
+Omni-Path (also Omni-Path Architecture, abbr. OPA) was a high-performance communication architecture owned by Intel. It aims for low 
+communication latency, low power consumption and a high throughput. Intel plans to develop technology based on this architecture for 
+exascale computing.
+
+IB
+InfiniBand (IB) is a computer networking communications standard used in high-performance computing that features very high throughput 
+and very low latency. It is used for data interconnect both among and within computers.
+
+
+##############################################################
+
+
+
+
 5 key functions in a computer system:
   1     application platform
   2     hardware moderator
@@ -126,3 +172,5 @@ Linux GUI is modular: its composed of several different pieces that work togethe
             -KDE
             -GNOME
             
+
+
