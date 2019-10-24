@@ -248,6 +248,32 @@ EndSection
 
 
           Obtaining X display information
+Sometimes, it's helpful to know about the capabilities of your display as X manages it. The tool for this job is 'xdpyinfo'. When you
+type 'xdpyinfo', it produces copious information about the current display, such as the X version number, the resolution and color depth
+of all the current displays, and so on.
+For still more technical information, you can use the '-ext [extension]' option to 'xpdyinfo.extension' is the name of an X extension.
+You can obtain detailed technical information about a specific window with the 'xwininfo' command. In basic use, you type 'xwininfo',
+move the mouse cursor over a window, and click.
+
+xwininfo option:
+
+          Alternate Window Selection Methods:
+The -id and -name options enable you to identify a window by an ID number or by its name. 
+The -root option selects the root window. (entrie display)
+          Window Relationships:
+Like processes, windows can have parents and children. Identify these relationships with the -children option.
+The -tree option works in a similar way, but it works recursively.
+          Basic Information:
+The -stats option is used by default. You can restrict the output by using the -bits option, which limits output to information on the
+windown's bit states.
+          Additional Information:
+The -events option produces information on the events that the window processes
+-size displays information on sizing hints
+-wm displays window manager data
+-frame modifies the display to include information on the window manager's frame
+-metric adds measures in millimeters (mm) to the regular pixel-based measures
+-english adds measures in feet and inches
+-all display all available information
 
 
 
