@@ -182,7 +182,7 @@ If you type Xorg -configure to create an initial configuration, the resulting fi
 each for a different driver. Some of these, such as 'fbdev' and 'vesa', are generic drivers that work. Today, you're most likely
 to use the 'nv' or 'nouveau' drivers for nvidia, 'radeon' driver for AMD/ATI cards, and 'intel' driver for intel cards.
 
-Setting Card-Specific Options
+          Setting Card-Specific Options
 ############# Device Section ###############
 Section "Device"
           Identifier "Videocard0"
@@ -192,5 +192,63 @@ Section "Device"
           VideoRam 131072
 EndSection         
 ############################################
+
+The 'Identifier' line provides a name that's used in the subsequent 'Screen' section to identify this particular 'Device' section.
+The 'VendorName' and 'BoardName' lines provide information that's useful mainly to people reading the file.
+The 'VideoRam' line is unnecessary with most boards because the driver can detect the amount of RAM installed in the card.
+With some devices, however, you may need to specify the amount of RAM installed in the card in kilobytes.
+
+          Setting the resolution and color depth.:
+The 'Screen' section tells X about the combination of monitors and video cards that you're using. XFree86 4.x and X.org-X11 
+support multiple video cards and monitors on one system.
+
+############# Screen Section ###############
+Section "Screen"
+          Identifier "Screen0"
+          Device "Videocard0"
+          Monitor "Monitor0"
+          DefaultDepth 24
+          SubSection "Display"
+                    Depth 24
+                    Modes "1920x1080" 1280x1024" "1024x768"
+          EndSubSection
+          SubSection "Display"
+                    Depth 8
+                    Modes "1024x768" "800x600" "640x480"
+          EndSubSection        
+EndSection         
+############################################
+
+The 'Device' and 'Monitor' lines refer to the 'Identifier' lines in your 'Device' and 'Monitor' sections, respectively. The 'Screen'
+section includes one or more 'Display' subsections, which define the video modes that X may use.
+To choose between the 'Display' subsections, you include a 'DefaultDepth' line. In this example, X uses the 24-bit display if possible,
+unless it's overridden by other options when starting X.
+Graphical video modes require a certian amount of RAM on the video card. 
+Integrated video chip, portion of system RAM is reserved for this use by the BIOS.
+The total amount of RAM required is determined by an equation:
+          R = xres x yres x bpp / 8,388,608
+R is RAM in megabytes
+xres is the x resolution in pixels
+yres is the y resolution in pixels
+bpp is the bit depth
+
+All mondern video cards have at least 32MB of RAM. Modern video cards ship with large amounts of RAM to support 3D acceleration features.
+
+          Putting it all together
+Xfree86 4.x and X.org-X11 require a section that's not present in the XFree86 3.3.6 configuration file: 'serverLayout'. This section
+links together all of the other components of the X configuration:
+############# Server Layout Section ###############
+Section "ServerLayout"
+          Identifier "single head configuration"
+          Screen "Screen0" 0 0
+          InputDevice "Mouse0" "CorePointer"
+          InputDevice "Keyboard0" "CoreKeyboard"
+EndSection
+####################################################
+
+
+          Obtaining X display information
+
+
 
 
