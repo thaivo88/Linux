@@ -1,11 +1,11 @@
-# So please create the following account  that will never expire 
+# Create pbsdata account  that will never expire 
   groupadd  -g 700 -r pbsdata useradd -u 700 -g 700 -m -r -d /usr6/pbsdata -c "PBS Data Service User" -s /bin/bash pbsdata
 
-# give you a listing	
+# give you a listing of offline nodes
   pbsnodes -l	 
 
 # will replinish	
-  pbsnodes -r rhean037   
+  pbsnodes -r [hostname]   
   	 	 
 # Will offline the node
   pbsnodes -o  [hostname] -C "[comment]"
