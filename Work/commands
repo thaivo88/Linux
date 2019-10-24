@@ -1,3 +1,6 @@
+# list all loaded service running
+ service --status-all
+ 
 # watch is a command-line tool, part of the Linux procps and procps-ng packages, that runs the specified command repeatedly and displays 
 # the results on standard output so you can watch it change over time. 
  watch [command]
