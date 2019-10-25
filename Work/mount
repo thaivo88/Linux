@@ -10,3 +10,6 @@ When mounting a file system and run into this error:
 "(for several filesystems (e.g. nfs, cifs) you might need a /sbin/mount. helper program)"
 install nfs-common to resolve this issue
   sudo apt install nfs-common
+
+install exfat to mount exfat files
+  sudo apt-get install exfat-fuse exfat-utils
