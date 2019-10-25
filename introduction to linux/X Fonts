@@ -1,1 +1,135 @@
+X's core font system can be set up from the X configuration file. Alternatively, you can configure a font server-a program that delivers
+fonts to one or many computers using network protocols-to handle the fonts.
+Some applications don't rely on either X or any other standard library to handle fonts; they manage their own fonts themselves.
+
+      Font technologies can be classified as falling into one of two broad categories:
+
+  Bitmap Fonts:
+The simplest type of font format is the bitmap font, which represents fonts much like bitmap graphics in which individual pixels in an
+array are either active or inactive. Bitmap fonts are fairly easy to manipulate and display from a programming perspective, which makes
+them good for low-powered computers. The problem is that each font must be optimized for display at a particular resolution. You need
+multiple files to display a single font at multiple sizes; requires potentially dozens of individual files for display at different
+sizes and on different display devices.
+  Outline Fonts:
+Most modern fonts are distributed as outline fonts (aka scalable fonts). This type of format represents each character as a  series of 
+lines and curves in a high-resolution matrix. The computer can scale this representation to any font size or for any display resolution,
+enabling a single font file to handle every possible use of the font. The main problem wiht outline fonts is that this scaling operation
+is imperfect; scalable fonts often look slightly worse than bitmap fonts, paarticularly at small sizes. Scaling and displaying the fonts
+also takes more CPU time than displaying a bitmap font.
+
+Both bitmap and outline fonts come in several different formats.
+  Type 1 (Adobe's PostScript Type 1)
+  TrueType
+
+
+
+      Configuring X core Fonts
+X core fonts are those that are handled directly by X. To configure these fonts, you must do two things:
+  1: prepare a font directory that holds the fonts
+  2: add the font directory to X's font path
+
+The first step to installing fonts is to prepare a directory in which to sotre them. 
+  XFree86 has traditionally stored its fonts in subdirectories of /usr/X11R6/lib/X11/fonts/
+  X.org-X11 changes this to /usr/share/fonts/ or /usr/share/X11/fonts/.
+
+Adding fonts that you've downloaded from the internet or obtained from a commercial font CD-ROM, you may want to store these additional
+fonts elsewwhere, such as /opt/fonts/ or /usr/local/fonts/.
+
+Type 1 fonts, Linux needs the font files with names that end in .pfa or .pfb
+Truetype fonts commes in TTF files.
+
+Once you've copied fonts to a directory, you must prepare a summary file that describes the fonts. This file is called fonts.dir,
+and it begins with a line that specifies the number of fonts that are described. Subsequent lines provide a font filename and an X
+logical font description (XLFD).
+
+Fortunately, you needn't create this file manually; programs exist to do so automatically:
+        mkfontscale
+        mkfontdir
+        
+The 'mkfontscale' program reads all of the fonts in the current directory and creates a fonts.scale file, which is just like a
+fonts.dir file but describes only outline fonts. The 'mkfontdir' program combines the 'fonts.scale' file with the 'fonts.dir' file,
+creating it if it doesn't already exist.
+
+'ttmkfdir' creates a fonts.dir file that describes TrueType fonts
+'type1inst' creates a fonts.dir file that describes Type 1 fonts.
+'mkfontscale' is preferable because it handles both font types.
+
+    
+    
+    Adding fonts to X's font path
+Once you've set up fonts in a directory and created a 'fonts.dir' file describing them, you must add the fonts to the X font path.
+You do this by editing the 'Files' section of the XF86Config or xorg.conf file.
+
+################ XF86Config or xorg.conf file ################
+Section "Files"
+  FontPath "/usr/share/fonts/100dpi:unscaled"
+  FontPath "/usr/share/fonts/Type1"
+  FontPath "/usr/share/fonts/truetype"
+  FontPath "/usr/share/fonts/URW"
+  FontPath "/usr/share/fonts/Speedo"
+  FontPath "/usr/share/fonts/100dpi"
+EndSection  
+##############################################################
+
+(If your 'Files' section contains 'FontPath' lines that refer to 'unix:/7100' or 'unix:/-1' but that don't list conventional directories,
+your system is configured to rely on an X font server for its core fonts.)
+
+X tries each directory in turn, so if two diretories hold fonts of the same name, the first one takes precedence. If you want your
+new fonts to override any existing fonts, place the new directory at the top of the list; if you want existing fonts to take
+precedence, add your directory to the end of the list.
+
+The ':unscaled' string in the first entry in the preceding example tells X to use bitmap fonts from this directory only if they 
+exactly match the requested font size. Bitmap directories are listed twice: once near the top of the font path with the ':unscaled'
+specification and again near the bottom of the list without it. This produces quick display of matching bitmapped fonts, followed by
+any matching scalable fonts, followed by scaled bitmap fonts.
+
+Once you've added your font directory to X's font path, you should test the configuration. The most reliable way to do this
+is to shut down X and restart it.
+
+A quicker approach, but one that presents some opportunity for error, is to add the font path to a running system by using the xset:
+    xset fp+ [/your/font/directory]
+    xset fp rehash
+The first of the commands adds [/your/font/directory] to the end of the font path.
+(substitute +fp for fp+ to add the direcoty to the start of the existing font path)
+The second command tells X to reexamine all of the font directories to rebuild the list of available fonts.
+One program to test the matter quickly is 'xfontsel'. This program enables you to select an X core font for display so that you can
+check to be sure that the fonts you've added are available and appear as you'd expect.
+
+
+
+      Configuring a font server
+Prior to the release of XFree86 4.0, several Linux distributions began using TrueType-enabled font servers to provides TrueType
+font support. Most distributions have now avandoned tis practice, but some haven't, and font servers can be useful in some
+environments. A font server is a handy way to deliver fonts to many computers from a central location.
+To use a font server, X must list that server in its font path:
+
+################ XF86Config or xorg.conf file ################ 
+Section "Files"
+  FontPath "unix:/7100"
+  FontPath "tcp/fount.pangaea.edu:7100"
+EndSection  
+##############################################################
+
+The first line in this example specifies a local font server.
+The second line specifies that the font server on the remote system 'fount.pangaea.edu' is to be used.
+
+To add fonts to a font server, you should first install the fonts on the system. You should then modify the font server's configuration
+files, the font server's configuration lists the font path using the 'catalogue' keyword as a comma-delimited lists:
+
+############ /etc/X11/fs/config ############
+catalogue = /usr/share/fonts/100dpi:unscaled,
+            /usr/share/fonts/Type1,
+            /usr/share/fonts/truetype,
+            /usr/share/fonts/URW,
+            /usr/share/fonts/Speedo,
+            /usr/share/fonts/100dpi
+############################################
+
+The 'catalogue' list may span several lines or just one. In either event, all of the entries are separated by commas, but the final
+entry ends without a comma.
+
+
+
+
+
 
