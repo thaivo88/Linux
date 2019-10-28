@@ -128,6 +128,42 @@ catalogue = /usr/share/fonts/100dpi:unscaled,
 The 'catalogue' list may span several lines or just one. In either event, all of the entries are separated by commas, but the final
 entry ends without a comma.
 
+Once you've saved your changes, you must restart the font server.
+      /etc/init.d/xfs restart
+      
+At this point, you should restart X or type 'xset fp rehash' to have X reexamine its font path, 
+including the fonts delivered via the font server.      
+
+
+
+            Configuring Xft Fonts
+X core fonts have several significant drawbacks:
+-They aren't easy to integrate between the screen display and printed output. This makes them awkward from the point of view of word
+processing or other applications that produce printed output.
+-They're server based. Applications may not be able to access the font files directly because the fonts may be stored on a different
+computer than the application.
+-They provide limited or no support for kerning.
+-They don't support font smoothing (anti-aliasing). Employs gray pixels along curves to create the illusion of greater resolution.
+
+These problems are deeply embedded in the X core font system, so developers have decided to bypass that sysem. The result is the Sft font
+system, which is based in part on the FreeType 1 Fonts.
+Xft is a client-based system, meaning that applications access font files on the computer on which they're running. Xft also supports
+font smoothing and other advanced font features.
+The cost, though, is that linux now has two font systems:
+      1: X core fonts
+      2: Xft fonts
+      
+You can share the same font directories through both systems. Load the /etc/fonts/local.conf file into a text editor. Look for any lines
+in this file that take the following form:
+      <dir>/font/directory</dir>
+      
+If such lines are present, duplicate one of them and change the duplicate to point to your new font directory. If such lines, don't
+exist, create one just before the </fontconfig> line.
+
+Once you've made these changes, type 'fc-cache' as root. This command causes Xft to run through its font directories and create index
+files. These files are similar to the fonts.dir file in principle.
+
+
 
 
 
