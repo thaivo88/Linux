@@ -59,8 +59,10 @@ service ypbind restart
 #to makesure ypbind is working
 ypwhich 
 
-apt-get install nfs-common    #system file to mount fstab
-yum install nsf-common
+#system file to mount fstab
+sudo yum install nfs-utils (Red Hat or CentOS)
+sudo apt-get install nfs-common (Ubuntu)
+sudo zypper install nfs-client
 
 
   #if you run into an error when installing a package
@@ -76,16 +78,14 @@ mkdir /apps /home /scratch /mops /ml
 mount -a
 
   #editing file so new users can ssh into the system
-echo "+::::::/bin/false" >> /etc/passwd   # ssh connection closed to everyone unless username is added to the node
-echo "+::::::" >> /etc/passwd              # ssh connection open to all users
+echo "+::::::/bin/false" >> /etc/passwd   # allow no one in unless added to the node
+echo "+::::::" >> /etc/passwd              # allow anyone to ssh in
 echo "+::::::::" >> /etc/shadow
 echo "+:::" >> /etc/group
 
   #add DNS IP
 vi /etc/resolv.conf
   #add these domain ip address below
-nameserver 16.xx.xx.xx
-nameserver 15.xx.xx.xx
 nameserver 15.xx.xx.xx
 
   #edit nsswitch file to config NIS
@@ -133,6 +133,9 @@ aliases:    files nis
   apt-get install gcc
   chmod +x [nvidia_driver]
   ./[nvidia_driver]
+  sudo apt-key add /var/nvidia-diag-driver-local-repo-418.40.04/7fa2af80.pub
+  apt-get update
+  apt-get install cuda-drivers
 
 #move MLNX file to /root
 #move nv peer file to /root
@@ -156,7 +159,7 @@ aliases:    files nis
 
 #tar nv_peer_mem
   tar cvfz nvidia-peer-memory_1.0.orig.tar.gz nv_peer_memory-master --owner=1000 --group=1000
-  cd nv_peer_mem
+  cd nv_peer_memory-master
   dpkg-buildpackage -us -uc
   cd ..
   dpkg -i nvidia-peer-memory-dkms_1.0-8_all.deb
@@ -164,27 +167,25 @@ aliases:    files nis
 #nv_peer_mem will disappear after reboot to fix this issue add config file
   vi /etc/modprobe.d/nvidia.conf
   # add
-  	options nvidia NVreg_RegistryDwords="PeerMappingOverride=1;"
+    options nvidia NVreg_RegistryDwords="PeerMappingOverride=1;"
   #If the display driver is r387 or newer
-  	options nvidia NVreg_EnableStreamMemOPs=1 NVreg_RegistryDwords="PeerMappingOverride=1;"
+    options nvidia NVreg_EnableStreamMemOPs=1 NVreg_RegistryDwords="PeerMappingOverride=1;"
   vi /etc/infiniband/nv_peer_mem.conf
   # add (include comment sign)
-  	# Load nv_peer_mem module upon boot 
-     	ONBOOT=yes 
-  vi /etc/modprobe.d/nv_peer_mem.conf
-    # add (include comment sign)
-  	 # Load nv_peer_mem at boot
-           nv_peer_mem
-
+    # Load nv_peer_mem module upon boot 
+      ONBOOT=yes 
 
 #install singularity
 #singularity needs go language to install
+  export VERSION=1.11.4 OS=linux 
   apt-get install golang
+  sudo apt-get update &&   sudo apt-get install -y build-essential libssl-dev uuid-dev libgpgme11-dev libseccomp-dev pkg-config squashfs-tools
   git clone https://github.com/singularityware/singularity.git
   echo 'export GOPATH=${HOME}/go' >> ~/.bashrc &&  echo 'export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin' >> ~/.bashrc &&   source ~/.bashrc
   mkdir -p ${GOPATH}/src/github.com/sylabs &&  cd ${GOPATH}/src/github.com/sylabs &&  git clone https://github.com/sylabs/singularity.git &&   cd singularity
   apt install libssl-dev uuid-dev
   cd ${GOPATH}/src/github.com/sylabs/singularity &&  ./mconfig &&  cd ./builddir &&   make &&   make install
+  #if above fails use apt-get install singularity singularity-container
 
 #installing docker 
   apt-get install apt-transport-https  ca-certificates  curl  gnupg-agent   software-properties-common
@@ -216,9 +217,18 @@ aliases:    files nis
   ln -s cuda-10.1 cuda      #create symbolic link
 
 #install nccl
+  ls      #install tools
   move nccl.txz to /usr/local/
   untar nccl
   ln -s nccl.txz nccl     #creating a symbolic link
+
+#install kubernetes  
+  sudo curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add 
+  Next add a repository by creating the file /etc/apt/sources.list.d/kubernetes.list and enter the following content:
+      deb http://apt.kubernetes.io/ kubernetes-xenial main 
+  apt-get update
+  apt-get install -y kubelet kubeadm kubectl kubernetes-cni
+
 
 #create lvol dir add permission
 	mkdir /lvol
@@ -230,7 +240,7 @@ aliases:    files nis
   
 ### ONLY for Ubuntu 18 and above ### 
 #Fix systemd-logind sandboxing issue with causes slow logins
-#Modify /lib/systemd/system/systemd-login.service to remove the "any" statement
+#Modify /lib/systemd/system/systemd-logind.service to remove the "any" statement
 	#IPAddressDeny=any
 	IPAddressDeny=
 #Restart daemons
@@ -246,5 +256,42 @@ Added  the following to /etc/netplan/50-cloud-init.yaml
             addresses:
             - 192.168.0.147/16
 
+########################## Tensorflow ####################
+  apt-get install python-pip
+  pip install tensorflow==2.0.0-alpha0 
+###################### end ####################
+
 
 ############################################ End of Config ###############################################################
+
+singularity 3
+
+$ export VERSION=1.11.4 OS=linux ARCH=x86_64
+
+$ wget -O /tmp/go${VERSION}.${OS}-${ARCH}.tar.gz https://dl.google.com/go/go${VERSION}.${OS}-${ARCH}.tar.gz && sudo tar -C /usr/local -xzf /tmp/go${VERSION}.${OS}-${ARCH}.tar.gz
+
+apt-get update && sudo apt-get install -y  build-essential   libssl-dev   uuid-dev   libgpgme11-dev   squashfs-tools   libseccomp-dev    pkg-config
+
+export VERSION=1.11 OS=linux ARCH=amd64 &&    wget https://dl.google.com/go/go$VERSION.$OS-$ARCH.tar.gz &&    sudo tar -C /usr/local -xzvf go$VERSION.$OS-$ARCH.tar.gz &&   rm go$VERSION.$OS-$ARCH.tar.gz
+
+echo 'export GOPATH=${HOME}/go' >> ~/.bashrc &&  echo 'export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin' >> ~/.bashrc &&  source ~/.bashrc
+
+go get -d github.com/sylabs/singularity
+
+export VERSION=v3.0.3 &&  cd $GOPATH/src/github.com/sylabs/singularity &&   git fetch &&   git checkout $VERSION 
+
+export VERSION=3.0.3 &&  mkdir -p $GOPATH/src/github.com/sylabs &&  cd $GOPATH/src/github.com/sylabs &&  wget https://github.com/sylabs/singularity/releases/download/v${VERSION}/singularity-${VERSION}.tar.gz &&  tar -xzf singularity-${VERSION}.tar.gz &&   cd ./singularity &&  ./mconfig
+
+ ./mconfig &&  make -C ./builddir &&  sudo make -C ./builddir install
+
+
+
+
+
+ export VERSION=v3.1.0  &&  cd $GOPATH/src/github.com/sylabs/singularity &&   git fetch &&   git checkout $VERSION 
+
+ export VERSION=3.1.0 &&    mkdir -p $GOPATH/src/github.com/sylabs &&   cd $GOPATH/src/github.com/sylabs &&   wget https://github.com/sylabs/singularity/releases/download/v${VERSION}/singularity-${VERSION}.tar.gz &&   tar -xzf singularity-${VERSION}.tar.gz &&    cd ./singularity &&     ./mconfig
+
+ ./mconfig && \
+    make -C ./builddir && \
+    sudo make -C ./builddir install
