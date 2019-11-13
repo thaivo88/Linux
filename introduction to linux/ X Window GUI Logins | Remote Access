@@ -1,0 +1,147 @@
+    The X GUI Login System
+X is a network-enabled GUI. 
+Network login protocol, The X Display Manager Control Protocol (XDMCP). 
+To handle remote logins, an XDMCP server runs on a computer and listens for connections from remote computers' X servers.
+To handle local logins, an XDMCP server runs on a computer and starts the local computer's X servers.
+
+    Five XDMCP servers are common on Linux:
+X Display Manager (XDM)
+KDE Display Manager (KDM)
+GNOME Display Manager (GDM)
+Light Display Manager (LightDM)
+
+Many distributions configure themselves to run their chosen XDMCP server when they start in runlevel5 but not when they start in
+runlevel3. This is the only difference between these two runlevels in most cases.
+
+Permanently changing the runlevel on a SysV-based system requires editing the /etc/inittab file and, in particular, its id line:
+    id:5:initdefault:
+    
+A few distributions attempt to start an XDMCP server in all runlevels. 
+This is done through the use of a SysV startup script called: xdm, kdm, or gdm.
+
+You can temporarily start or stop the XDMCP server by running this script and passing it the 'start' or 'stop' option. To enable or 
+disable the XDMCP server permanently, you should adjust your SysV startup scripts.
+
+Most distributions set a default XDMCP server in one way or another. Two common methods exist:
+  Selection via Configuration file:
+Some distributions hide the XDMCP server choice in a configuration file, often in the /etc/sysconfig directory.
+In Fedora, the /etc/sysconfig/desktop file sets the DISPLAYMANAGER variable to the path to the executable, as in DISPLAYMANAGER=/bin/xdm.
+In openSUSE, /etc/sysconfig/displaymanager sets the DISPLAYMANAGER variable to the display manageer's name in lowercase letters, as in
+DISPLAYMANAGER="xdm"
+  Selection via Startup Script:
+In Debian and derivative distributions, such as Ubuntu, the display manager is set via a SysV, Upstart, or systemd startup script
+use the gdm script to use GDM, kdm to use KDM, and so on. By default, only one XDMCP server is installed.
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------
+                Configuring an XDMCP Server:
+                
+    Configuring XDM
+XDM is the simplest of the major XDMCP servers. It accepts usernames and passwords, but it doesn't enable  users to perform other actions,
+such as choosing which desktop environment to run.
+XDM's main configuration file is /etc/X11/xdm/xdm-config
+If you want to enable the computer to respond to remote login requests from other X servers on the network, or if you want to verify
+that the sytem is not configured accordingly, you should pay attention to this line:
+    DisplayManager.requestPort: 0
+This line tells XDM not to access a conventional server port. To activate XDM as a remote login server, you should change 0 to 177,
+the traditional XDMCP port. You must then restart XDM.
+The /etc/X11/xdm/Xaccess file is another important XDM configuration file. If XDM is configurated to permit remote access, this file
+controls who may access the XDM server and in what ways. A wide-open system contains lines that use an asterisk * to denote that 
+anybody may access the system.
+   *
+   * CHOOSER BROADCAST
+The first line tells XDM that anybody may connect, and the second line tells XDM that anybody may request a chooser a display of
+local systems that accept XDMCP connections. To limit the choices, you should list individual computers or groups of computers instead
+of using the asterisk wildcard:
+    *.pangaea.edu
+    tux.example.com
+    *.pangaea.edu CHOOSER BROADCAST
+This example lets any computer in the pangaea.edu domain connect to or receive a chooser, and it also lets tux.example.com connect
+to but not receive a chooser. Many addiional options are set in the /etc/X11/xdm/Xresources file; it hosts X resources, which are
+similar to environment variables but apply only to X-base programs.
+
+
+
+    Configuring KDM
+KDM is based partly on XDM. Sometimes KDM uses the XDM configuration files, at other times they're stored in /etc/X11/kdm or
+/etc/kde/kdm, and occasionally they're stored in a truly strange location, such as /usr/lib/kde4/libexec/.
+
+KDM expands XDM by enabling users to select a session type when they log in, to shut down the computer from the main KDM prompt.
+Most of these extra options are set in the kdmrc file.
+The 'Enable' option in that section should be set to 'true' if you want to support network logins.
+
+
+
+    Configuring GDM
+GDM is more of a break from XDM than is KDM. GDM doesn't use the conventional XDM configuration files or similar files. Instead, it
+uses configuration files that are usually stored in /etc/X11/gdm or /etc/gdm. You can set local options in the 'custom.conf' file in
+the GDM configuration directory. This file typically start with no options, but the ones you set override the defaults. You should
+set the 'enable'options to 'yes' in the [xdmcp] section if you want to enable remote logins.
+
+A GUI control tool for GDM:
+    gdmconfig
+    gdmesetup
+
+GDM is a bit unusual in that it prompts for the username and only then presents a prompt for the password. XDM and KDM both present
+fields for the username and password simultaneously.
+
+
+
+    Configuring LightDM
+The system-generated LightDM configuration files are stored in the /usr/share/lightdm/lightdm.conf.d folder.
+You can override the system-generated defaults by either making changes in the /etc/lightdm/lightdm.config file or creating files in
+the /etc/lightdm/lightdm.conf.d folder.
+Disable the Guest login feature in the Ubuntu login window, set by default in LightDM, you can change the /etc/lightdm/lightdm.conf file
+
+    [SeatDefaults]
+    allow-guest=false
+    
+    
+
+------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+    Using X for Remote Access
+X is a server, meaning that the X server runs on the computer at which the user sits. X clients are the programs that users run You use 
+X for remote access, you must remember that the X server runs on the user's computer, while the X clients run on the remote system.
+
+    Using Remote X clients
+Two local network machines:
+zeus a powerful machine that hosts important programs like word, and data analysis utilities.
+apollo is less powerful system, but it has an adequate monitor and keyboard.
+You want to set at apollo and run programs that are located on zeusn, both system run linux.
+    1.  Log into apollo, and if it's not already running X, start it.
+    2.  Open a terminal (xterm) on apollo.
+    3.  Type xhost +zeus in apollo's terminal. This command tells apollo to accept for display in its X server data that originates on zeus.
+    4.  Log into zeus form apollo. You might use Telnet or SSH, for instance. The result should be the ability to type comands 
+    in a shell on zeus.
+    5.  On zeus, type export DISPAY=apollo:0.0 (This assumes that you're using bash; if you're using tcsh, the command is 
+    setenv DISPLAY apollo:0.0) This command tells zeus to use apollo for the display of X progrmas.
+    6.  Type whatever you need to type to run program at the zeus command prompt. For instance, you could type loffice to launch LibreOffice.
+    You should see the progrmas open on apollo's display, but they're running on zeus-their computations use zeus's CPU, they can read files
+    accessible on zeus, and so on.
+    7.  After you're done, close the programs you've launched, log off zeus, and type xhost -zeus on apollo. This tightens security so
+    that an intruder on zeus won't be able to modify your display on apollo.
+    
+SSH tunneling does require that certain options be set. In particular, you must either use the -X or -Y option to the ssh client program
+or set the ForwardX11 or FowardX11Trusted option to yes in /etc/ssh_config on the client system. You must also set the X11Forwarding option
+to yes in the /etc/sshd_config file on the SSH server syste. These options enable SSH's X forwarding feature; without these option,
+SSH's X forwarding won't work.
+
+As an added security measure, many Linux distributions today configure X to ignore true network connections. If your distro is thus
+configured, the preceding setps won't work; when you try to launch an X program from the remote system.
+To work around this problem:
+    GDM:
+    
+    KDM or XDM:
+    Special openSUSE configuration:
+    X Launched from a Text-Mode Login:
+    
+
