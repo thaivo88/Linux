@@ -58,6 +58,7 @@ with a running job or job step.
 scontrol 
 is the administrative tool used to view and/or modify Slurm state. Note that many scontrol commands can only be executed as user root.
   scontrol: update NodeName=cn114 State=RESUME
+  scontrol update NodeName=node[02-04] State=DRAIN Reason=”Cloning”
 
 sinfo 
 reports the state of partitions and nodes managed by Slurm. It has a wide variety of filtering, sorting, and formatting options.
