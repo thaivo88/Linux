@@ -1,0 +1,50 @@
+    Standard keyboard and mouse options
+
+  Sticky Keys:
+When enabled, this option causes keyboard modifier keys (Ctrl, Alt, and Shift) to "stick" when pressed, affecting the next regular key to
+be pressed even after release of the sticky key.
+  Toggle Keys:
+When enabled plays a sound cue when the locking keys (Caps lock, Num lock, or Scroll lock) are pressed. A high-pitched sound plays when
+the features are activated, and a low-pitched sound plays when the features are deactivated.
+  Mouse Keys:
+This option enables you to use the cursor keypad on your keyboard to emulate a mouse.  
+  Bounce (or Debounce) keys:
+If a user tends to press a single key accidentally multiple times, the bounce keys option may be able to compensate for this tendency.  
+  Slow Keys:
+When activated, this option requires a key to be pressed for longer than a specified period of time before it registers as a keypress.  
+  Keyboard Repeat Rate:
+The repeat delay and rate can be set using sliders. These settings override those set in the X configuration file, but if you use a bare
+window manager, you may need to set these options in the X configuration file.
+  Time Out:
+In AccessX, the TimeOut option sets a time after which its accessibility options will be disabled.
+  Mouse tracking and click option:
+The ordinar mouse tracking and click options can be adjusted to unusual values for those who have special needs.  
+  Simulated mouse clicks:
+Some environments let you configure the mouse to simulate a click whenever the mouse pointer stops moving or to simulate a double click
+whenever the mouse button is pressed for an extended period.
+  Mouse Gestures:
+Gestures are similar to keyboard shortcuts but are designed for mice. They permit you to activate program options by moving your mouse
+in particular ways.
+
+
+
+The GNOME desktop development team created the GNOME On-Screen Keyboard (GOK)
+Newer versions of the GNOME desktop have replaced GOK with Caribou
+
+
+
+    Adjusting default fonts
+Most desktop environments provides options to set the default fonts used on the screen. System settings dialop box provided with KDE.
+You can access this by typing 'systemsettings' in the terminal window.
+
+Screen magnifier is KMag
+
+    Speak
+Orca: a screen reader that's been integrated into GNOME 2.16 and later
+Emacspeck: program aims to enable those with visual impairments to use a linux computer.
+
+    Braille
+A braille display is a special type of computer monitor that display tactile display of textual information in braille.
+The BRITTY project (mielke.cc/brltty/)
+
+    
