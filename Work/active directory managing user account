@@ -5,7 +5,11 @@
 # plabgate1   Partner Lab gateserver     WIN
 
 ### HPC Lab Environment System ###
-# hpchost1    SLURM for HPCHOST NIS      UNIX
+# hpchou-login      login server/PBS    UNIX
+# hpchost1          NIS                 UNIX
+# hpchost2          hpchost1 backup     UNIX
+# hpchost3          NFS mount           UNIX
+# hpchost4          NFS mount           UNIX
 # hpcg3       Accelerators gateserver    WIN
 # hpcg4       Cluster Test gateserver    WIN
 # hpcg5       Fabrics, CLuster Stack & Setuip Tools gateserver   WIN
@@ -15,6 +19,15 @@
 # When someone request an account for any environment above, an email will be sent to mops when they fill out the request form.
 # In that request email a command will be posted, copy and paste into that given Unix environment
 
+#########################################
+# Nov 2019 Update, NIS mapping issue. Master hpchost1; slaves hpchost3-4
+# When creating an account use hpchost1
+# Then go to hpchost3 to create their directory in usr1-6
+# change permission
+     usermod -d [home_directory] -m [username]
+# cp /etc/skel files to their new directory
+
+##################################################
 # Command structure:
 # /admin/cronjobs/BuildAccount -a [yes/no] -e [email] -n [environment] -i [employee ID] -l "[location]" -r "[name]" -R "[requestor]" -m "[manager]" -t [employee type] -u [username] 
 # option def:
