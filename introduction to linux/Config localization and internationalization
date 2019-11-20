@@ -17,3 +17,7 @@ If you need to change your time zone, you should copy of link a sample file from
 3.  View the contents of the /usr/share/zoneinfo directory. This directory contains files for certain time zones named after the zones or 
 the regions to which they apply. Most users will need to look in subdirectories, such as /usr/share/zoneinfo/US for the United States or
 /usr/share/zoneinfo/America for North and South America. 
+4.  If a localtime file exists in /etc, delete it or rename it.
+5.  Create a symbolic link from your chosen time zone file to the /etc/localtime file.
+        ln -s /usr/share/zoneinfo/US/Eastern /etc/localtime
+
