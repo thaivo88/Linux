@@ -139,9 +139,22 @@ As an added security measure, many Linux distributions today configure X to igno
 configured, the preceding setps won't work; when you try to launch an X program from the remote system.
 To work around this problem:
     GDM:
-    
+On older versions of GDM, check the GDM configuration file (typically /etc/X11/gdm/gdm.conf), look for the line 'DisallowTCP=true', 
+and change it to read 'DisallowTCP=false'. On newer versions of GDM, edit /etc/gdm/custom.conf and add a line that reads 
+'DisallowTCP=false' to the [security] section
     KDM or XDM:
+These two XDMCP servers both rely on settings in the Xservers file (in /etc/X11/xdm for XDM, and in this location or some other highly
+variable location for KDM). Look for the line that begins with :0. This line contains the commands that KDM or XDM uses to launch the X
+server. If this line contains the string '-nolisten tcp', remove that string from the line. Doing so eliminates the option that
+causes X to ignore conventional network connections.
     Special openSUSE configuration:
+In openSUSE, you must edit /etc/sysconfig/display-manager and set the DISPLAYMANAGER_XSERVER_TCP_PORT_6000_OPEN option to 'yes'.    
     X Launched from a Text-Mode Login:
+If you log in using text mode and type 'startx' to launch X, you may need to modify the 'startx' script itself, which is usually 
+stored in /usr/bin. Search this script for the string '-nolisten tcp'. Chances are that this string will appear in a variable assignment
+(such as to 'defaultserverargs) or possibly in a direct call to the X server program. Remove the '-nolisten tcp' option from this
+variable assignment or program call.
+
+Once you've made these changes, you'll need to restart X
     
 
