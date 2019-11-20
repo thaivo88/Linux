@@ -1,0 +1,12 @@
+    Setting a linux computer's time zone
+Linux uses Coordinated Universal Time (UTC) internally. This is the time in Greenwich, England, uncorrected for daylight saving time.
+When you write a file to disk on a linux native filesystem, the time stamp is stored in UTC.
+(cron use UTC when running schedule jobs)
+Linux are able to translate between local time and UTC, to perform this translation, Linux needs to know your time zone. Linux looks to 
+the /etc/localtime file for information about local time zone. This file is the rare configuration files that's not a plain-text file,
+so you shouldn't try editing it with a text editor. This file can be a file of its own or a symbolic or hard link to another file.
+If it's a symbolic link, you should be able to determine your time znoe by performing a long file listing to see the name of the file
+to which 'localtime' links:
+  ls -l /etc/localtime
+  
+  
