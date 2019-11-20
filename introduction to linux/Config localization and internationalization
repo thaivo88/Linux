@@ -7,6 +7,13 @@ the /etc/localtime file for information about local time zone. This file is the 
 so you shouldn't try editing it with a text editor. This file can be a file of its own or a symbolic or hard link to another file.
 If it's a symbolic link, you should be able to determine your time znoe by performing a long file listing to see the name of the file
 to which 'localtime' links:
-  ls -l /etc/localtime
-  
-  
+    ls -l /etc/localtime
+If /etc/localtime is a regular file and not a symbolic link, or if you want further confirmation of your time zone, try using the 
+'date' command by itself. Note that the time zone codes vary depending on whether daylight saving time is active.
+
+If you need to change your time zone, you should copy of link a sample file from a standard directory location to the /etc/localtime file:
+1.  Log in as root or acquire root privileges.
+2.  Change to the /etc directory
+3.  View the contents of the /usr/share/zoneinfo directory. This directory contains files for certain time zones named after the zones or 
+the regions to which they apply. Most users will need to look in subdirectories, such as /usr/share/zoneinfo/US for the United States or
+/usr/share/zoneinfo/America for North and South America. 
