@@ -20,12 +20,17 @@
 # In that request email a command will be posted, copy and paste into that given Unix environment
 
 #########################################
+
 # Nov 2019 Update, NIS mapping issue. Master hpchost1; slaves hpchost3-4
-# When creating an account use hpchost1
-# Then go to hpchost3 to create their directory in usr1-6
+# When creating an account use hpchost1 /admin/cronjobs/BuildAccounts
+# Then go to hpchost3/4 to create their directory in usr[1-6]
+     mkdir /usr[1-6]/[username]
 # change permission
+     chown [username]:users /usr[1-6]/[uesrname]
+# copy over the directory templet files to their new directory from /etc/skel
+      cp -r /etc/skel/* /[user_home_directory]
+# head back to hpchost1 and change the user's home directory      
      usermod -d [home_directory] -m [username]
-# cp /etc/skel files to their new directory
 
 ##################################################
 # Command structure:
