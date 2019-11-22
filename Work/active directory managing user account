@@ -28,7 +28,7 @@
 # change permission
      chown [username]:users /usr[1-6]/[uesrname]
 # copy over the directory templet files to their new directory from /etc/skel
-      cp -r /etc/skel/* /[user_home_directory]
+      cp -a /etc/skel/. /[user_home_directory]
 # head back to hpchost1 and change the user's home directory      
      usermod -d [home_directory] -m [username]
 
