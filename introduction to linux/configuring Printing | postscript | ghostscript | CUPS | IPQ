@@ -1,0 +1,6 @@
+    Configuring Printing
+
+Applications submit print jobs as PostScript documents. Because most Linux systems aren't connected directly to true PostScript printers,
+a program called Ghostscript converts the print job into a form that the system's printer can actually handle. The print queue, which is
+managed by software known as the Common Unix Printing System (CUPS), then sends the job to the printer.
+
