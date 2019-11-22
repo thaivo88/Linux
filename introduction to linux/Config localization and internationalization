@@ -21,3 +21,79 @@ the regions to which they apply. Most users will need to look in subdirectories,
 5.  Create a symbolic link from your chosen time zone file to the /etc/localtime file.
         ln -s /usr/share/zoneinfo/US/Eastern /etc/localtime
 
+In addition to /etc/localtime, some distributions use a secondary file with text-mode time zone data. This file is called /etc/timezone
+on Debian. On Fedora and related distributions, it's /etc/sysconfig/clock.
+Some distributions provide text-mode or GUI tools to help make time zone changes. 
+Look for a program called 'tzsetup', 'tzselect', 'tzconfig'.
+
+
+
+
+        Setting an individual login's Time Zone
+        
+TZ environment variable, this environment variable holds time zone information in any of three formats:
+    -The most common format on Linux is :filename as in :/usr/share/zoneinfo
+    -Common on non-linux systems, is 'std offset', where 'std' is a three-character or longer time zone name (such as EST) and 'offset'
+is a time relative to UTC, with positive values representing offsets west of the prime meridian and negative values beig east of it.
+For instance, EST+5 specifies US Eastern time. This format is used when daylight savings time is not in effect.
+    -If daylight saving time is in effects, a variant on the preceding method is possible: std offset dst[offset],start[/time],end[time].
+This specification adds the daylight savings time code as well as encoded start and end dates (and optionally times). For instance,
+EST+5EDT,M3.10.0/2,M11.3.0/2 specifies US Eastern time with daylight saving time encoded with dates for 2013.
+
+The easiest way to use TZ for a single login is to issue a command such as the following:
+    export TZ=:/usr/share/zoneinfo/Europe/London
+This example sets the time zone to London for a single session, but only from the shell at which you type this command.    
+You should not use this method if all of a computer's programs should use the target time zone; instead, set it by adjusting the
+/etc/localtime file.
+
+
+
+
+        Querying and setting your locale
+
+In linux, a 'locale' is a way of specifying the computer's (or user's) language, country, and related information for the purpose of
+customizing displays. A single locale takes the following form:
+    [language[_territory][.codeset][@modifier]]
+    
+-Language can be en (English), fr (French), ja (Japanese), and so on. These are two- or three-letter codes for languages.
+-The codeset code can be ASCII, UTF-8, or other encoding names. 
+    -ASCII (American Standard Code for Inofrmation Interchange) only American character code; 
+     can't handle characters used in many non-English languages.
+    -ISO-8859 is broken down into many substandards, each of which handles one language or small group of languages.
+     ISO-8859-1 covers Western European.    
+    -UTF-8 (Unicode Transformation Format) designed to support character as many languages as possible but does not 
+     group them in substandards.
+-The modifier is a locale-specific code that modifies how it works.
+
+/usr/bin/locale or locale command will show you all environment variables set to different locale.
+
+
+
+        Changing your locale
+If you want to change your locale, you should first verify that an appropriate one is available to you by using locale -a
+If you don't see appropriate codes, you may need to install additional packages. Your best bet is to use a GUI package manager such as
+yumex or Synaptic to search on package names and descriptions that include locale of language. Ubuntu sysstem that provides just a few
+locales, many more can be installed from packages called 'language-support-??', where ?? is a two-character language code.
+
+To change your locale temporarily, the simplest method is o set the LC_ALL environment variable. You should also set LANG.
+    export LANG=en_GB.UTF-8
+    export LC_ALL=en_GB.UTF-8
+The result should be that all of the locale variables change for that session.
+To change your locale permanently, you can adjust your bash startup script files, such as ~/.bashrc or /etc/profile.
+
+X's configuration file (xorg.conf or XF86Config) includes an option called XkbLayout in the keyboard's InputDevice section. This option
+takes a partial or complete locale specification but converted to lowercase-for instance, us or en_us.utf-8. Adjusting this option
+can provide you with access to language- or country-specific keys.
+
+One setting requires special mention: LANG=C. When you set LANG to C, programs that see this environment variable display output 
+without passing it through locale translations.
+
+The iconv utility converts between character sets. Converting ASCII, UTF-8 or ISO-8859-[#].
+    iconv -f encoding [-t encoding] [inputfile]...
+The -f and -t options specify the source and destination encodings. 
+You can obtain a list of encodings by typing: 
+    iconv --list    
+
+
+
+
