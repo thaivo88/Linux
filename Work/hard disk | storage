@@ -1,6 +1,9 @@
 lsblk
 blkid
 
+# find out top biggest directories
+du -a /home | sort -n -r | head -n 5
+
 # turn on led light for the drives
 lsmcli local-disk-ident-led-on --path /dev/mapper/ S4P3E019
 
