@@ -1,4 +1,8 @@
- hpchpcm /thai_notes
+# you can virutally console to a node using either the two commands.
+	tail -F /var/log/consoles/hostname
+	console [hostname]
+############################################################
+hpchpcm /thai_notes
 
 
 # hpcm list of console:
