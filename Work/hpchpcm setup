@@ -2,7 +2,7 @@
 
 ############################################# Discovering new node into HPCHPCM / PBS #############################################
 # Clone the basic image and rename it
-	cinstallman --create-image --clone --source rhel7.6-mlnx-4.5-1-nv-410.79-hpc --image rhel7.6-mlnx-4.5-1-nv-418.40.04-hpc
+	cinstallman --create-image --clone --source rhel7.6-mlnx-4.5-1-nv-410.79-hpc --image [new_image_name]
 
 # set up ilo and bios for hpchpcm
 # get Mac address of node nic & ilo
@@ -19,7 +19,7 @@
 # copy the nis file and rename it
 	cd /opt/clmgr/image/scripts/post-install
 	cp 97rhel7.6-mlnx-4.5-1-hpc.hpc.nis 97rhel7.6-mlnx-4.5-1-AMD-hpc.nis
-	discover --all --configfile /root/hpchpcmleto.config 
+	discover --all --configfile /root/[new_cluster_config_file from above]
 
 # add label for lvol
 # Now create a file system on md0 (or md127)
