@@ -1,6 +1,187 @@
-    Configuring Printing
+            Configuring Printing
 
 Applications submit print jobs as PostScript documents. Because most Linux systems aren't connected directly to true PostScript printers,
 a program called Ghostscript converts the print job into a form that the system's printer can actually handle. The print queue, which is
 managed by software known as the Common Unix Printing System (CUPS), then sends the job to the printer.
 
+Linux printing is built around the concept of a print queue.
+You might use one queue to print single-sided and another queue for double-sided printing on a printer that supports duplexing.
+Users submit print jobs by using a program called 'lpr'.
+'lpr', sends the print job into a specified queue. This queue corresponds to a directory on the hard disk, typically in a subdirectory of 
+the /var/spool/cups diretory. Linux printing is that it's highly network oriented. Linux printing tools can accept print jobs that 
+originate from remote systems as well as from local ones. Even local print jobs are submitted via network protocols, although they don't
+normally use network hardware, so even a computer with no network connections can print. In addition to being a server for print jobs,
+CUPS can function as a client, passing print jobs to other computers that run the same protocol.
+
+            Understanding PostScript and Ghostscript
+            
+In linux, the printer driver is part of Ghostscript, which exists as part of the printer queue. This relationship can be confusing at
+times, particularly because not all applications or printers need Ghostscript. Ghostscript serves as a way to translate PostScript, a
+common printer language, into forms that can be understood by many different printers.
+
+        PostScript: The de facto linux printer language
+        
+Unix print queues weren't designed with Windows-style printer drivers in mind, so Unix programs that took advantage of laser printer
+features were typically written to produce PostScript output directly. As a result, PostScript developed into the de facto printing
+standard for Unix and, by inheritance, Linux.
+
+The problem with PostScript as a standard is that is that it's uncommon on the low- and mid-priced printers with which Linux if often
+paired. Therefore, to print to such printers using traditional Unix programs that generate PostScript output, you need a translator 
+and a way to fit that translator into the print queue. This is where Ghostscripts fits into the picture.
+
+        GhostScript: A PostScript translator
+        
+ When it uses a traditional PostScript printer, a computer sends a PostScript file directly to the printer. 
+ PostScript is a programming language, oriented toward the goal of producing a printed page as output.
+ GhostScript is a PostScript interpreter that runs on a computer. It takes PostScript input, parses it, and produces output in any of
+ dozens of different bitmap formats, including formats that can be accepted by many non-PostScript printers.
+ One of GhostScript's drawbacks is that is produces large output files.
+ 
+        Squeezing GhostScript into the Queue
+        
+Printing to a non-PostScript printer in linux requires fitting GhostScript into the print queue. This is generally done through the use
+of a smart filter. This is a program that's called as part of the printing process. The smart filter examines the file that's being
+printed, determines its types, and passes the file through one or more additional programs before the printing software sends it on
+to the printer. The smart filter can be configured to call GhostScript with whatever parameters are appropriate to produce output for
+the queue's printer.
+CUPS ships with its own set of smart filters, which it calls automatically when you tell the system what model printer you're using.
+CUPS provides a Web-based configuration tools.
+
+        Configuring CUPS
+        
+CUPS uses various configuration files in the /etc/cups directory and its subdirectories to manage its operation.
+You can add or delete printers by editing the /etc/cups/printers.conf file, which consists of printer definitions. Each definition begins
+with the name of a printer, identified by the string 'DefaultPrinter' (for the default printer) or 'Printer' (for a nondefault printer)
+in angle brackets (<>), as in the following:
+    <DefaultPrinter okidata>
+Additional options are stored in a PostScript Printer Definition (PPD) file that's named after the queue and stored in the /etc/cups/ppd
+subdirectory. PPD files follow an industry-standard format.
+One of the great advantages of CUPS is that it uses a new network printing protocol, known as the Internet Printing Protocol (IPP). 
+IPP supports a feature it calls 'browsing', which enables computers on a network to exchange printer lists automatically.
+You may need to change some settings in the main CUPS configuration file, /etc/cups/cupsd.conf, to enable this support.
+The /etc/cups/cupsd.conf file, which is structurally similar to the Apache web server configuration file, contains a number of
+configuration blocks that specify which other systems should be able to access it. Each block controls access to particular location
+on the server.
+
+<Location /printers>
+Order Deny,Allow
+Deny from All
+BrowseAllow from 127.0.0.1
+BrowseAllow form 192.168.1.0/24
+BrowseAllow from @LOCAL
+Allow from 127.0.0.1
+Allow from 192.168.1.0/24
+Allow from @LOCAL
+</Location>
+
+The /printers location section of the configuration file controls access to the printers themselves. 
+The following list includes features of this examples:
+    -Directive Order: The 'Order Deny,Allow' lines tells CUPS in which order it should apply allow and deny directives-in this case, 
+allow directives modify deny directives.
+    -Default Policy: The 'Deny from All' line tells the system to refuse all connections execpt those that are explicitly permitted.
+    -Browsing Control Lines: The 'BrowseAllow' line tell CUPS from which other systems it should accept browsing requests. In this
+case, it accepts connections from itself (127.0.0.1), from systems on the 192.168.1.0/24 network, and from system connected to local
+subnets (@LOCAL)
+    -Access Control Lines: The 'Allow' lines give the specified systems non-browse access to printers-that is, those systems can print
+to local printers. In most cases, the 'Allow' lines are the same as the 'BrowseAllow' lines.
+    -Enabling Browsing: The 'Browsing' directive accespts On and Off values. The CUPS default is to enable browsing (Browsing On),
+but some Linux distributions disable it by default.
+    -Browsing Access Control: The 'BrowseAddress' directive specifies the broadcast address to which browsing information should be
+sent. For instance, to broadcast data on your printers to the 192.168.1.0/24 subnet, you'd specify 'BrowseAddress 192.168.1.255'.
+
+
+
+
+    Obtaining CUPS Printer Definitions    
+            
+    Your linux Distribution: 
+Many distributions ship extra printer definitions under various names, so check your distribution for 
+such a package. Many distributions include some of the driver packages described next.
+    Foomatic:
+The linux printing website hosts a set of utilities and printer definitions known collectively as Foomatic. These provide many additional 
+printer definitions for CUPS. 
+The linux printing website is at the following location: www.linuxfoundation.org/en/OpenPrinting/Database/Foomatic
+    Gutenprint:
+The Gutenprint drivers, originally known as GIMP Print, after the GNU Image Manipulation Program (GIMP), support a wide variety of printers.
+    CUPS DDK:
+The CUPS Driver Development Kit (DDK) is a set of tools designed to simplify CUPS driver development. It ships with  a handful of drivers 
+for HP and Epson printers, and it is included with the CUPS sources code.
+    Printer Manufacturers:
+Some printer manufacturers offer CUPS drivers for their printers. These may be nothing more than Foomatic, Gutenprint, or other open-source
+drivers, but a few provide proprietary drivers, some of which support advanced printer features that the open-source drivers don't support.
+
+
+
+        Using the Web-Based CUPS Utilities
+
+The CUPS IPP printing system is closely related to the Hypertext Transfer Protocol (HTTP) used on the Web. The protocol is so similar,
+in fact, that you can access a CUPS daemon by using a web browser. You need only specify that you want to access the server on port 631
+the normal printer port.
+
+        Printing to Network Printers
+        
+If your network hosts many Windows computers, you may use the Server Message Block/Common Internet File System (SMB/CIFS) for file and
+printer sharing among Windows systems. You can print to an SMB/CIFS printer queue from a Linux system. To do so, you select SMB/CIFS
+queue in the printer configuration tool. Under CUPS, it's called Window Printer via SAMBA. You must then provide your usename, password,
+server name, and share name, but the format isn't obvious from the Web-based configuration tool:
+    smb://username:password@SERVER/SHARE
+If you want to print to a Unix or Linux server that uses the old LPD protocol, the URI format is similar but omits a username and password:
+    lpd://hostname/queue
+You can use the same format, but substitute ipp:// for lpd://, to print to a CUPS server if browsing is disabled on your network.
+IPP is the simplest to configure because it supports browsing, which means that CUPS clients shouldn't need explicit configuration to 
+handle specific printers. This makes IPP the best choice for Linux-to-Linux printing, assuming both systems run CUPS. When CUPS isn't
+in use, LPD is generally easier to configure than SMB/CIFS.
+
+        Monitoring and controlling the print queue
+
+You can use several utilities to submit print jobs and to examine and manipulate a linux print queue. 
+These utilities are lpr. lpq, lprm, and lpc
+All of these commands can take the -P parameter to specify that they operate on a specific print queue.
+
+
+
+lpr : program to submit print jobs
+    Specify a Queue Name: 
+The -Pqueuename option enables you to specify a print queue. This is useful if you have several printers, or if you've defined several 
+queues for on printer. If you omit this option, the default printer is used. In the original BSD version of lpr, there should be no 
+space between the -P and the queuename value. 
+    Delete the Original File: 
+Normally, lpr sends a copy of the file you print into the queue, leaving the original unharmed. Specifying the -r option causes 
+lpr to delete the orginal file after printing it.
+    Suppress the Banner: 
+The -h option suppresses the banner for a single print job. Early versions of CUPS didn't support this option, but recent versions do.    
+    Specify a job name: 
+Print jobs hae names to help identify them, both while they're in the queue and once they're printed. The name is normally the name of 
+the first file in the print job, but you can change it by including the -J [jobname] option. 
+The -C and -T options are synonymous with the -J.
+    Notify a user by email:
+The -m [username] option causes lpd to send email to [username] when the print job is complete.    
+    Specify the number of copies:
+You can specify the number of copies of a print job by using the -# [number] option, as in -# 3, to print three copies of a job.    
+
+Sometimes you want to process a file in some way prior to sending it to the printer. Commands that can do this, such as fmt and pr.
+Another handy program is mpage, which reads plain-text or PostScript files and reformats them so that each printed sheet contains 
+several reduced-size pages from the original document.
+
+
+    
+lpq
+The lpq utility displays information about the print queue-how many files is contains, how large thye are, who their owners are, and
+so on. By entering the user's name as an argument, you can also use this command to check on any print jobs owned by a particular user.
+
+Removing print jobs with lprm
+The lprm command removes one or more jobs from the print queue. You can issue this command in a couple of ways:
+    -If lprm is used with a number, that number is understood to be the job ID of the job that's to be deleted.
+    -If a user runs the BSD or CUPS lprm and passes a dash (-) to the program it removes all of the jobs belonging to the user.
+Ordinary users may remove only their own jobs from the queue, but root may remove anybody's print jobs.
+
+controlling the print queue
+The lpc utility starts, stops, and reorders jobs within print queues.
+    -You can disable a queue by clicking the Stop Printer link for the printer on the CUPS Web interface. The Jobs link also provides a
+way to cancel and otherwise manage specific jobs.
+    -You can use a series of commands, such as cupsenable, cupsdisable, and lpmove, to control the queue.
+    
+    
+
+
+    
