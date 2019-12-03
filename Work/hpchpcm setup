@@ -1,6 +1,9 @@
 #### Setting/Config nodes on hpchpcm ####
 
 ############################################# Discovering new node into HPCHPCM / PBS #############################################
+# Notes:
+# by default all computing nodes when discover process will have rhel7.6
+
 # Clone the basic image and rename it
 	cinstallman --create-image --clone --source rhel7.6-mlnx-4.5-1-nv-410.79-hpc --image [new_image_name]
 
@@ -19,8 +22,12 @@
 # copy the nis file and rename it
 	cd /opt/clmgr/image/scripts/post-install
 	cp 97rhel7.6-mlnx-4.5-1-hpc.hpc.nis 97rhel7.6-mlnx-4.5-1-AMD-hpc.nis
+# only use when you copy the whole config file
+	discover --node [service_number] --configfile /root/[new_cluster_config_file from above]
+# only use discover --all if you only have the new nodes only in the discovery file.
 	discover --all --configfile /root/[new_cluster_config_file from above]
-
+	
+# on your node add a raid
 # add label for lvol
 # Now create a file system on md0 (or md127)
 # Check what label was given to the device
