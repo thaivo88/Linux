@@ -119,4 +119,33 @@ algorithm was used to hash the password.
 Many passwd parameters may be used only by root. Specifically, -l, -u, -f, and -d are all off-limits to ordinary uers. Similarly, only
 root may specify a username to passwd.
 
+
+
+        usermod
+        
+The usermod program closely parallels useradd in its features and parameters. This utility changes an existing account instead of 
+creating a new one, though. The major differences between useradd and usermod are as follows:
+  -usermod allows the addition of an -m parameter when used with -d. The -d parameter alone changes the user's home directory, but
+it doesn't move any files. Adding -m causes usermod to move the user's files to the new location.
+  -usermod supports an -l parameter, which changes the user's login name to the specified value. For instance, typing
+        usermod -l sjones sally                 |               usermod -l [new_username] [current_username]
+changes the name from sally to sjones.
+  -You may lock and unlock a user's password with the -L and -U options, repectively.
+        -L : lock       |       -U : unlock
+        
+Changing an account's characteristics while the owner is logged in can have undesirable consequences. This is particularly true of
+the -d -m combination, which can cause the files on which a user is working to move.
+
+If you change the account's UID, this action does not change the UIDs associated with a user's existing files. Because of this,
+the user may lose access to these files.
+
+When using the -G option to add a user to new groups, be aware that any groups not listed will be removed. Therefore, it's a good
+idea to use the -a option as well. Using the -a -G parameter options together allows you to add a user to a new group without 
+having to list any old groups in the command.
+
+If you only use the usermod -G option without the -a option, you must list all of the user's current groups along with any 
+additional new groups. Omitting any of the user's current groups will remove the user from those groups. It's best to use the
+-a option to avoid hassle.
+  
+  
   
