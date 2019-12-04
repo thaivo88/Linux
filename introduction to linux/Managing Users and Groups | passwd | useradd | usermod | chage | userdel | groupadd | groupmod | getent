@@ -1,0 +1,122 @@
+        Users | Group Account
+
+Linux accounts can also be accounts for system services called daemons. A daemon is typically a program that provides a particular service.
+Daemon program runs continuously in the background waiting for an event to trigger it to perform some service. While a daemon does not log
+into a linux system, it still needs an account.
+
+Linux treats usernames in a case-sensitive way.
+
+Groups are not accounts, however. Rather, groups help organize collections of accounts, largely as a security measure. Every file on a
+linux system is associated with a specific user and a specific group. Various permissions can be assigned to members of a group.
+
+Group membership is controlled through the /etc/group file. This file contains a list of groups and the members belonging to each group.
+Each user has a default or primary group. The user's primary group is set in the user's configuration /etc/passwd record.
+
+When users log onto a computer, their group membership is set to their primary group. When users create files of launch programs, those
+files and running programs are associated with a single group-the current group membership.
+The user must run the 'newgrp' command to switch current group memebership.
+  newgrp docker
+  newgrp users
+*the default group is users, but you need their primary group as docker and you can switch back to users.*
+Alternatively, users can change the group associated with an existing file by using the 'chgrp' or 'chown' command.
+
+        Mapping UID and GID to User and Group
+
+As mentioned earlier, linux defines users and groups by numbers, referred to as user IDs (UIDs) and group IDs (GIDs).
+Linux distributions reserve at least the first 100 user and group IDs (0-99) for system use.
+The most important of these is 0, which corresponds to root. (both the user and the group)
+Accounts and groups that are associated with specific linux utilities and functions use succeeding low numbers. For instance, UID 2 and 
+GID 2 may be the daemon account and group.
+The first normal user account is usually assigned a UID of 500 or 1000.
+When you remove an account, that account's ID number may be reused. Reusing an ID number can cause problems if you don't clear away the old 
+user's files. In this case, the new user, with the reused ID number, will become the old user's files' owners, which can lead to confusion 
+and security issue.
+Account numbering limits are set in the /etc/login.defs. In particular, UID_MIN and UID_MAX define the minimum and maximum UID values for
+ordinary user accounts.
+
+UID/GID  |   
+Number   | Uses
+---------------------
+0        | root uses
+1-99     | system uses
+500-1000 | normal uses *(Limit can be changed in /etc/login.defs)
+
+It's possible to create multiple usernames that use the same UID or multiple group names that use the same GID. These are different
+accounts or groups. They have different entries in /etc/passwd or /etc/group, so they can have different home directories, different
+passwords, and so on. Because these users or groups share IDs with other users or groups, though, they're treated identically in
+terms of file permissions. You should avoid creating multiple users or groups that share an ID.
+
+Adding users can be accomplished through the 'useradd' utility.
+  useradd [option] [username]
+In its simplest form, you may type just useradd username, where username is the account name that you want to create. The rest of the
+parameters are used to modify the default values for the system, which are stored in the file /etc/login.defs.
+
+                                                useradd options:
+  Comment:
+The -c [comment] parameter passes the comment field fo rthe user. Use to store public information.
+  Home Directory:
+You specify the account's home directory with the -d home-dir parameter. 
+  Account Expiration Date:
+You set the date on which the account will be disabled, expressed in the form YYYY-MM-DD, with the -e expire-date option.
+Alternative forms, such as MM-DD-YYYY
+By default, no expiration date is set.
+  Inactive Days:
+An account becomes completely disabled a certain number of days after a password expires. The -f inactive-days parameter sets the
+number of days. A value of -1 disables this feature, and it is the default.
+  Default Group:
+You set the name of GID of the user's default group with the -g default-group option.
+  Additional Group:
+The -G group[,...] parameter sets the names of GIDs of one or more groups to which the user belongs.
+  Home Directory Options:
+The /etc/login.defs file specifies whether or not to create a user's home directory when the account is created via the CREATE_HOME 
+setting. If set to yes, the -m option has no effect. If set to no, the -m option toggles this specification and a user'shome directory
+is created.
+  No Home Directory Creation:
+The -M option forces the system NOT to create a home directory, even if /etc/login.defs specifies that this action is the default. You
+might use this option, often in conjunction with -u and -d, if a new account is for a user who's taking over the home directory of
+an existing user.
+  Hashed Password Specification:
+The -p password parameter passes the pre-hashed password for the user to the system. The password value is added unchanged, to the
+/etc/passwd or /etc/shadow file. This means that if you type an unhashed password, it won't work as you would probably expect. In
+practice, this parameter is most useful in scripts, which can hash a password (using crypt) and then send the hashed result through
+useradd. The default value disables the account, so you must run passwd to chane the user's password.
+  Default Shell:
+Set the name of the user's default login shell wiht the -s shell option. By default /bin/bash is the default shell.
+  UID:
+The -u UID parameter creates an account with the specified user ID value. This value must be a positive integer, and it's normally
+greater than 1000 for user accounts. The -o option allows the number to be reused so that two usernames are associated with a single UID.
+  System Account Creation:
+The -r parameter specifies the creation of a system account-an account with a value less than UID_MIN, as defined in /etc/login.defs.
+The useradd command doesn't create a home directory for system account. Example Dameon account
+  No User Group:
+In some distribution the system creates a group with the same name as the specified username. The -N parameter disables this behavior.
+
+
+
+      Password
+      
+Although useradd provides the -p parameter to set a password, this tool isn't very useful when directly adding a user because it requires
+a pre-hashed password. Easiest to create an account in disabled form (by not using -pwith useradd) and set the password after creating
+the account. You can do this with the passwd command.
+    passwd [option] [username]
+
+                                                    passwd options:
+  Update Expired Accounts:
+The -k parameter indicates that the system should update an expired account.  
+  Lock Accounts:
+The -l parameter locks an account by prefixing the hashed password with an exclamation mark (!). The result is that the user can no
+longer log into the account but the files are still available.
+  Unlock Accounts:
+The -u parameter unlocks an account by removing a leading exclamation mark. Be aware that the useradd command creates accounts that are
+locked and have no password, unless its -p parameter is specified. Therefore, using this but also results in an account with no password.
+passwd doesn't allow this-it returns an error if you attempt it. Adding -f forces passwd to turn the account into one with no password.
+  Remove an Account's Password:
+The -d parameter removes the password from an account, rendering it password-less. No warning messages are given.  
+  Display Account Information:
+The -S option displays information about the password for an account. Information displayed includes whether it's set and what type of
+algorithm was used to hash the password.
+  
+Many passwd parameters may be used only by root. Specifically, -l, -u, -f, and -d are all off-limits to ordinary uers. Similarly, only
+root may specify a username to passwd.
+
+  
