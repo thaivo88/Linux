@@ -270,11 +270,118 @@ Deleting user accounts is easy. You may use the userdel command to do the job of
 if the system use shadow password, /etc/shadow as well. The userdel command takes just three parameters:
 
   Remove User files:
-  
+The -r or --remove parameter causes the system to remove the user's mail spool, all files in the user's home directory, and the
+user's home directory itself.
   Force Deletion:
+You can force deletion of the account while a user is logged in by using the -f or --force option in conjunction with -r.  
   Get Help:
+The -h or --help option summarizes userdel options.
+
+To locate all such files, you can use the 'find' command with its -uid parameter (or -user, if you use find before deleting the account)
+Using the smbpasswd command and its -x opton, as in smbpasswd -x [username] to delete the [username] account from Samba's database.
+
+
+
+                                                  Configuring Groups
+                           
+                           groupadd
+                           
+Linux provides the groupadd command to add a new group.
+        groupadd [option] [groupname]
+        
+  Specify a GID:
+You can provide a specific GID with the -g GID parameter. If you omit this parameter, groupadd uses the next available GID.
+  Create a System Group:
+The -r parameter instructs groupadd to create a group with a GID of less than SYS_GID_MIN, as defined in /etc/login.defs. Groups with
+GIDs in this range are considered system groups, which are similar to system accounts. System groups are normally used by system tools
+or to help control access to system resources, such as hardware device files.
+  Force Creation:
+Normally, if you try to create a group that already exists, groupadd returns an error message. The -f parameter suppresses that error.
+  
+                          groupmod
                     
-              
-              
+The groupmod command modifies  an existing group's settings
+        groupmod [opton] [groupname]
+
+  Specify a GID:
+Specify the new group ID using the -g GID option. The groupmod returns an error if you specify a new group ID that's already in use.
+  Specify a Group Name:
+Specify a new group name with the -n [newgroupname] option.  
+
+                          gpasswd
+                          
+The gpasswd command is the group equivalent to passwd. To assign group administrators-users who may perform some group-related 
+administrative functions for their groups.
+        gpasswd [option] [groupname]
+        
+  Add a User:        
+The -a user option adds the specified user to the specified group
+  Delete a User:
+The -d user option deletes the specified user from the specified group.
+  Disallow [newgrp] Additions:
+The -R option configures the group not to allow anybody to become a member through newgrp.
+  Remove Password:
+The -r options remove the password from a group.
+  Add group Administrators:
+The root user may use the -A user[,...] parameter to specify group administrators. Using this parameter completely overwrites the list
+of administrators, so if you want to add an administrator to an existing set of group administrators, you must specify all usernames.
+  Add Users:
+The -M user[,...] option works like -A, but it also adds the specified user(s) to the list of group memebers.
+
+If entered without any parameters except a group name, gpasswd changes the password for the group.
+
+
+
+        Understanding the group configuration files
+
+Group information is stored primarily in the /etc/group file.
+      docker:x:504:voth,thai,sally
+      [groupname]:[password]:[GID]:[users_in_group]
+      
+  Group Name: The name of the group
+  Password: The group's password. Distributions that use shadow passwords typically place an x in this field. Non-shadow password
+will have a hashed password in this fielf.
+  GID: The group's ID number
+  User List: list of group member comma-delimited.
+  
+User may also be members of a group based on their own /etc/passwd file primary group specification. For instance, if user voth has
+docker listed as his primary group, he need not be listed in the docker line in /etc/group. If user voth uses newgrp to change to 
+another group, though, he won't be able to change back to docker unless he's listed in the docker line in /etc/group.
+
+Systems with shadow passwords also uses another file, /etc/gshadow, to store shadow password information about groups. This file
+stores the shadow password and information for group administrators.
+
+
+
+        Deleting Group
+         
+Deleting groups is done via the groupdel command.
+It's better to use groupdel, because groupdel checks to see whether the group is any user's primary group. If it is, groupdel refuses
+to remove the group; you must change the user's primary group or delete the user account first. As with deleting users, deleting
+groups can leave files that no  longer belong to a group. They only have a GID.
+
+Once you've found any files with the deleted group's ownership, you must decide what to do with them. If the GID is ever reused,
+it can lead to confusion and even security breaches. Therefore, it's usually best to delete the files or assign them other group
+ownership using the chown or chgrp command.
+
+
+
+        getent with nsswitch | get entry > getent 
+        
+You can use grep to view account records. Another method for record retrieval uses the get entry command, getent command allows
+you to access records stored in one of the system database. Only databases configured in the Name Service Switch (NSS) file,
+/etc/nsswitch.conf, canbe accessed.
+
+The database parameter can be any of the NSS configured system database:
+  passwd  /etc/passwd
+  shadow  /etc/passwd
+  group   /etc/passwd
+  
+      getent [database] [groupname|username]
+      getent group voth
+        voth:x:503:
+        
+
+
               
               
