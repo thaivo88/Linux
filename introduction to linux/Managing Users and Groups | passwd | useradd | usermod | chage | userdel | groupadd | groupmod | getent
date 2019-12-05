@@ -146,6 +146,135 @@ having to list any old groups in the command.
 If you only use the usermod -G option without the -a option, you must list all of the user's current groups along with any 
 additional new groups. Omitting any of the user's current groups will remove the user from those groups. It's best to use the
 -a option to avoid hassle.
+
+
   
+        chage
+        
+The chage command allow you to modify account settings relating to account expiration. It's possible to configure Linux accounts so
+that they automatically expire if either of two conditions is true:
+  1:  The password hasn't been changed in a specified time period.
+  2:  The system date is past a predetermined time.
+        chage [option] [username]
+        
+                                        chage option:    
+                                        
+  Display Information:
+The -l option causes chage to display account expiration and password aging information for a particular user.
+  Setting Minimum Time between Password changes:
+The -m mindays parameter sets the minimum number of days between password changes. 0 indicates that a user can change a password
+multiple times in a day, 1 means that a user can change a password once a day, 2 means that a user may change a password once
+every two days, and so on. It is best to set this field to at least 5 days. Leaving it at 0 will allow a user to change their
+password right back to the original password after a required password change.
+  Setting Maximum Time between Password Changes:
+The -m maxdays parameter sets the maximum number of days that may pass between password changes.
+  Setting the Maximum Inactive Days:
+The -I inactivedays parameter sets the number of days between password expiration and account disablement. An expired account may
+not be used or may force the user to change the password immediately upon logging in. A disabled account is completely inoperative.
+  Setting the Expiration Data:
+You can set an absolute expiration date with the -E expiredate option. A value of -1 represents no expiration date.
+  Setting the Number of Warning Days:
+The -W warndays option sets the number of days before account expiration that the system will send impending expiration warnings
+to the user.
+
+The chage command can normally be used only by root.
   
+##################################################################
+To change user password expiry information use the chage command on Linux as follows:
+
+chage [username]
+chage [options] [username]
+chage -l voth
+chage [username] -d [date]
+
+Options:
+  -d, --lastday LAST_DAY        set date of last password change to LAST_DAY
+  -E, --expiredate EXPIRE_DATE  set account expiration date to EXPIRE_DATE
+  -h, --help                    display this help message and exit
+  -I, --inactive INACTIVE       set password inactive after expiration
+                                to INACTIVE
+  -l, --list                    show account aging information
+  -m, --mindays MIN_DAYS        set minimum number of days before password
+                                change to MIN_DAYS
+  -M, --maxdays MAX_DAYS        set maximim number of days before password
+                                change to MAX_DAYS
+  -R, --root CHROOT_DIR         directory to chroot into
+  -W, --warndays WARN_DAYS      set expiration warning days to WARN_DAYS
+##################################################################
+
+Run the pwck utility to verify the files and make sure that they are in sync with each other.
+
+
+                                /etc/passwd
+
+/etc/passwd : each record begins with a username and continues with a set of fields, delimited by colons (:)
+A typical /etc/passwd record entry resembles the following:
+        voth:x:1029:503:Thai Vo:/home/usr6/voth:/bin/bash
+        [username]:[password]:[UID]:[Primary GID]:[Comment]:[Home Directory]:[Default Shell]
+  -Username: User's account name
+  -Password: Most Linux system use /etc/shadow password system, where 'x' indicate that shadow password is in use. If the system doesn't use
+shadow passwords, a hashed password appears here instead.
+  -UID: Account's user ID
+  -Primary GID: The default login group ID.
+  -Comment: Some systems place additional information here, in a comma-separated list.
+  -Home Directory: The user's home directory.
+  -Default Shell: Default is /bin/bash you can use other shell like /bin/tcsh
   
+Some systems include a shutdown account with /bin/shutdown as the default shell. If you log into this account, the computer immediately
+shuts down. You can create user account with a default shell of /bin/false, which prevents users from logging in as ordinary users.
+
+
+
+                                /etc/shadow
+          voth:$6$5lvfWcSW$BI5L9konFqcIRukmIsJ6X5uYY7pjXXdclx9.:17778:0:180:14:14::
+          voth:!!$6$5lvfWcSW$BI5L9konFqcIRukmIsJ6X5uYY7pjXXdclx9.:17778:0:180:14:14::
+:::::::: == [USERNAME]:[ENCRYPTION_TYPE][PASSWORD]:[LASTCHANGED]:[MIN]:[MAX]:[WARNING]:[INACTIVE]:[EXPIRE]:
+
+  Username: 
+User's username, note that the UID is not used in the /etc/shadow file; the username links entries in this file to /etc/passwd
+  Encryption type:
+$1$ is MD5
+$2a$ is Blowfish
+$2y$ is Blowfish
+$5$ is SHA-256
+$6$ is SHA-512
+  Password:
+The password is stored in hashed form. 
+An asterisk (*) in the password field indicates an account that does not accpet logins.
+An exclamation mark (!) in front of the password hash denotes that the account is locked.
+Both "!" and "!!" being present in the password field mean an account is locked.
+"!!" in an account entry in shadow means the account of an user has been created, but not yet given a password. 
+Until being given an initial password by a sysadmin, it is locked by default.
+  LASTCHANGED: 
+Last password change: Days since Jan 1, 1970 that password was last changed
+  MIN: 
+The minimum number of days required between password changes i.e. the number of days left before the user is 
+allowed to change his/her password.
+  MAX: 
+The maximum number of days the password is valid (after that user is forced to change his/her password)
+  WARNING: 
+The number of days before password is to expire that user is warned that his/her password must be changed
+  INACTIVE: 
+The number of days after password expires that account is disabled
+  EXPIRE: 
+Days since Jan 1, 1970 that account is disabled i.e. an absolute date specifying when the login may no longer be used.
+  Special Flag:
+This field is reserved for future use and normally isn't used or contains a meaningless value. This field is empty mainly.
+
+For fields relating to day counts, a value of -1 or 99999 indicates that the relevant feature has been disabled.
+  
+
+
+                          Deleting Accounts
+Deleting user accounts is easy. You may use the userdel command to do the job of removing a user's entries from /etc/passwd and,
+if the system use shadow password, /etc/shadow as well. The userdel command takes just three parameters:
+
+  Remove User files:
+  
+  Force Deletion:
+  Get Help:
+                    
+              
+              
+              
+              
