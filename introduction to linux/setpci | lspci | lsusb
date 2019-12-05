@@ -1,0 +1,61 @@
+          Configuring PCI Cards
+You can tweak how PCI devices are detected in several ways:
+  -The linux kernel has several options that affect how it detects PCI devices; the kernel configuration screens under bus options.
+  -Most firmware iplementations have PCI options that change the way PCI resources are allocated.
+  -Some linux drivers support options that cause them to configure the relevant hardware to use particular resources. You must then pass
+these options to the kernel using a boot loader.
+  -You can use the 'setpci' utility to query ad adjust PCI devices' configurations directly.
+
+You can check your PCI devices by using 'lspci' command; it displays all of the information about the PCI busses on your system and all
+of the devices connected to those busses.
+
+            lspci
+Option    Effect
+-v        Increases verbosity of output. May be doubled (-vv) or tripled (-vvv) to produce more output
+-n        Displays information innumeric codes rather than translating the codes to manufacturer and device names.
+-nn       Displays both the manufacturer and device names and their associated numeric codes.
+-x        Displays the PCI configuration space for each device as a hexadecimal dump. May be triple (-xxx) or quadrupling (-xxxx)
+-b        Shows IRQ numbers and other data as seen by devices rather than as seen by the kernel
+-t        Displays a tree view depicting the relationship between devices.
+-s [domain:bus:slot.function]  Displays only devices that match the listed specification. This can be used to trim the results of the output
+-d [vendor:device]  Shows data on the specified devices
+-i [file]  Uses the specified file to map vendor and device IDs to names. (default /usr/share/misc/pci.ids)
+-m        Dumps data in a machine-readable form intended for use by scripts. -m backward-compatible format; -mm newer format
+-D        Displays PCI domain numbers. These numbers normally aren't displayed.
+-M        Scan in bus-mapping mode, which can reveal devices hidden behind a misconfigured PCI bridge.
+--version Displays version information
+
+          
+          
+
+
+
+                    USB Driver: lsusb
+          Be verbose: -v
+Produces extended information about each product.
+          Restrict bus and device number: -s [bus:devnum]
+restricts output to the specified bus and device number
+          restict vendor and product: -d [vendor:product]
+Limit output to a particular vendor and product; vendor and product are the codes just after ID on each line of the basic lsusb output
+          display device by filename: -D [filename]
+displays information about the device that's accessible via [filename], which should be a file in the /proc/bus/usb directory.
+          tree view: -t
+displays the device list as a tree so that you can see what devices are connected to specific controllers more easily.
+          version: -V or --version
+displays the version of the lsusb utility     
+
+                    USB Manager Application
+Two tools in particular are used for managing USB devices:
+          usbmgr
+          hotplug
+          
+'usbmgr' runs in the background to detect changes on the USB bus; detects changes, it loads or unloads the kernel modules that are 
+required to handle the devices. 'usbmgr' uses configuration files in /etc/usbmgr to handle specific devices and use /etc/usbmgr/usbmgr.conf
+to control the overall configuration.
+
+'hotplug' which relies on kernel support. This system uses files stored in /etc/hotplug to control the configuration of specific USB device.
+/etc/hotplug/usb.usermap contains a database of USB device IDs and pointers to scripts in /etc/hotplug/usb that are run when devices are 
+plugged in or unplugged.
+          
+                    
+                    
