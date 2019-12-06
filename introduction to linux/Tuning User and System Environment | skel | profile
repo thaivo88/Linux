@@ -16,3 +16,7 @@ You can also see all of your current environment variables by using the env, pri
 When using useradd command, useradd copies files from the skeleton directory (/etc/skel by default) into a newly created home directory.
 The skeleton directory is the blueprint to create new user's home directory, most of the files are the hidden files with the dot in
 front of the file name.
+
+Changes you make to the skeleton directory files won't automatically be moved into existing users' directories. The file change will
+affect only new users. This fact makes the global files (such as /etc/profile) preferable to /etc/skel files for any changes to system
+defaults that you want to implement system-wide.
