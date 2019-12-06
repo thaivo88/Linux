@@ -123,8 +123,108 @@ You should terminate such input by pressing Ctrl+D
 
         Rotating log files
         
+Log files can therefore grow to consume all of the availalbe partition space on which they reside. To avoid this problem, Linux employs
+log file rotation tools. These tools rename and optionally compress the current log files, delete old log files, and force the logging
+system to begin using new log files. 
+The most common log rotation tool is a package called logrotate.
+The logrotate program consults a configuration file called /etc/logrotate.conf, which includes several default settings and typically
+refers to files in /etc/logrotate.d to handle specific log files.
+
+  Sample of /etc/logrotate.conf file:
+-----------------------------------------------------------
+# Rotate log weekly
+weekly
+# keep 4 weeks of old logs
+rotate 4
+# create new log files after rotation
+create
+# compress old log files
+compress
+# refer to files for individual package
+include /etc/logratate.d
+# setmiscellaneous options
+notifempty
+nomail
+noolddir
+# rotate wtmp, which isn't handled by a specific program
+/var/log/wtmp {
+  monthly
+  create 0664 root utmp
+  rotate 1
+}
+-----------------------------------------------------------
+
+These definitions begin with the filename for the file (multiple filenames may be listed, separated by spaces), followed by an open
+curly brace ({). They end in a close curly brace (}). Intervening lines set options that may override the defaults.
+
+Features that are often set in these /etc/logrotate.d definitions:
+
+  Rotated File Naming:
+Ordinarily, rotated log files acquire numbers in their names, such as messages.1 for the first rotation of the messages log file. 
+Using the dateext option causes the rotated log file to obtain a data code instead, as in message-20130210 for the rotation 
+performed on February 10, 2013.
+  Compression Options:
+As already noted, 'compress' causes logrotate to compress log files to save space. This is done using gzip by default, but you can 
+specify another program with the 'compresscmd' keyword, as in 'compresscmd bzip2' to use bzip2. The 'compress options' keywork enables
+you to pass options to the compression command.
+  Creation of New Log Files:
+The 'create' options causes logrotate to create a new log file for use by the system logger or program. This option takes a file mode,
+an owner, and a group as additional options. Some programs don't work well with this option, though. Most of them use the 'copytruncate'
+option instead, which tells logrotate to copy the old log file to a new name and then clear all of the data out of the original file.
+  Time Options:
+The 'daily', 'weekly', and 'monthly' options tell the sytem to rotate the log files at the specified intervals. These options aren't
+always used. Some configurations use a size threshold rather than a time threshold for when to rotate log files.
+  Size Options:
+The 'size' keywork sets a maximum size for a log file. It takes a size in bytes as an argument (adding K, M, or G to the size changes
+it to kilobytes, megabytes, or gigabytes, respectively). For instance, 'size 100k' causes logrotate to rotate the file when it reaches
+100kB in size.
+  Rotation Options:
+The rotate x option causes x copies of old log files to be maintained. For instance, if you set rotate 2 for the /var/log/messages file,
+logrotate will maintain /var/log/messages.1 and /var/log/messages.2 in addition to the active /var/log/messages file. When that file is
+rotated, the following occurs in the /var/log/ directory:
+            messages.2 is deleted
+            messages.1 is renamed to messages.2
+            messages is renamed to messages.1
+            A new messages file is created
+  Mail Options:
+If you use 'mail address', logrotate will email a log file to the specified address when it's rotated out of existence. Using 'nomail'
+causes the system not to send any email; the log is quietly deleted.
+  Scripts:
+The 'prerotate' and 'postrotate' keywords both begin a series of lines that are treated as scripts to be run immediately before or 
+after log file rotation, respectively. In both cases, these scripts end with the 'endscript' keyword. These commands are frequently
+use to force 'syslogd' or a server to begin using a new log file.
+
+      To Monitor Log file:      tail -f /var/log/messages
+
+
+
+                                                          systemd
+                                                          
+The systemd journal service provides backward compatibility for most syslogd functionality. Special configuration files, different log
+file search utilities, and a vastly more secure logging function are just a few of the modifications.
+
+The three primar systemd journal service components:
+  1:  Daemon: The systemd journaling service is handled by the systemd-journald daemon.
+  2:  Configuration file: The journal service's configuration is set in the /etc/systemd/journald.conf file.
+  3:  Search utility: The program used to search through the journal log files is 'journalctl'.
+  
+        systemd-journald  
+  
+The systemd-journald daemon is a system service that brins together and stores logging data. What differentiates it from the
+rsyslogd and syslogd daemons is that it provides structure and indexed log files (called journals) in a secure manner. Therefore,
+not only are the journal files easier to search, it is harder for system intruders to cover their tracks.
+
+Another advantage of using the systemd-journald service over traditional logging daemons is that journal files are automatically
+rotated if they grow above certain limits. This reduces log file maintenance issues and complexity.
+There are two types of journal message data files:
+  1:  system
+  2:  user
+System journal message data files are owned by a special group, systemd-journal. The systemd-journal members can read the journal
+message data files but not write to them. Only the systemd-journald daemon can write message data to the journals. By default,
+each user who logs into the system has journal message data collected and stored. Users do not own their journal message data files,
+nor can they manually write data to them. They can, however, read their files. Once up and running, the service stores persistent
+journal data in the /var/log/journal/ directory, if configured to do so.
+
+        Configuring systemd-journald
         
-  
-  
-  
-  
+        
