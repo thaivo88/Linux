@@ -1,0 +1,130 @@
+Linux maintains log files that record various key details about system operation. These log files are typically stored in the
+/var/log directory. The /var directory is part of the File Hierarchy Standard (FHS). It is important to know how to change the
+log file configuration. You do this by configuring the syslogd daemon.
+
+If your computer doesn't properly manage existing log files, they can grow to consume all of your available disk space.
+The daemon for journaling is systemd-journald
+
+
+
+                                                          syslogd
+
+Most Linux systems employ a special daemon to handle log maintenance in a unified way. The traditional Linux daemon log manager 
+is syslogd, the syslogd daemon handles messages from servers and other user-mode programs. The klogd daemon manages logging of
+kernel messages
+
+The basic idea behind a system logger is to provide a unified means of handling log files. The daemon runs in the background 
+and accepts data delivered from servers and other programs that are configured to use the log daemon. The log daemon must
+be configured. In the case of syslogd, this is done through the /etc/syslog.conf file. The rsyslogd configuration file is
+/etc/rsyslog.conf
+
+
+
+        Setting Logging Options
+
+The format of the /etc/syslog.conf file:
+  1:  facility
+      The facility parameter is the type of program or tool that generated the message to be logged. 
+  2:  priority
+      The priority is the parameter for the importance of this message. 
+  3:  action
+      The action is a file, remove computer, or other location that's to accept the message. 
+  3:  selector
+      The facility and priority are often referred to collectively as the selector.
+
+
+
+      Facility parameters:
+-----------------------------------------------------      
+authpriv          security and authorization messages
+cron              cron daemon messages
+daemon            various system daemon messages
+kern              kernel messages
+lpr               printing system messages
+mail              mail system messages
+news              news daemon messages
+syslog            internally generated syslog messages
+user              user-level messages
+uucp              unix-t0-unix copy program (uucp) daemon messages
+local0 - local7   locally defined application messages
+----------------------------------------------------- 
+For the facility parameter in the /etc/syslog.conf file, an asterisk (*) refers to all facilities. You can specify multiple
+facilities in one selector by separating the facility names with commas (,).
+
+
+
+    Priority parameters:
+-----------------------------------------------------  
+debug         debugging level messages for application development  (least importance)
+info          normal operation messages
+notice        abnormal messages that are not a concern
+warning       messages that indicate an error will occur if action is not taken
+err           non-urgent failure and error messages
+crit          urgent failure and error messages concerning secondary systems
+alert         urgent failure and error messages concerning primary systems
+emerg         panic messages indicating system is unusable  (most importance)
+----------------------------------------------------- 
+These priorities represent ascending levels of importance.
+
+When a program sends a message to the system logger, it includes a priority parameter; the logger logs the message to a file if
+you've configured it to log messages of that level of higher. Thus, if you specify a priority code of alert, the sytem will log
+messages that are classified as alert or emerg but not messages of crit or bleow.
+
+An exception to this rule is if you precede the priority parameter by an equal sign (=), as in =crit, which describes what to do 
+with messages of crit priority only. An exclmaion mark (!) reverses the meaning of a match. 
+!crit causes messages below crit priority to be logged. A priority of * refers to all priorities.
+
+You can specify multiple selectors for a single action by separating the selectors with a semicolon (;). Commas are used to separate
+multiple facilities within a single selector. Semicolons are used to separate multiple selectors as a whole.
+
+Most commonly, the action parameter is a filename, typically in the /var/log directory tree. The messages, syslog, and secure files
+in this directory are three common and important log files. Another possible logging location includes a remote machine name 
+preceded by an at sign (@) to log data to the specified system. You can also have a username list of individuals who should see the 
+message, if they're logged in. For this last option, an asterisk (*) means all logged-in users.
+
+  mail.*  /var/log/mail
+This line sends all log entries identified by the origination program as related to mail to the /var/log/mail file.
+
+  *.emerg     *
+This line send all emerg-level messages to all users who are logged into the computer using text-mode tools.
+
+
+
+      Logging Data
+      
+You may want to create a log entry manually or have a script do so. The tool for this job is known as logger:
+  logger [-isd] [-f file] [-p pri] [-t tag] [-u socket] [message...]
+
+logger option
+  Record logger PID:  
+The -i option records the process ID (PID) of the logger process along with other data.
+  Output to Standard Error:
+You can echo data to standard error as well as to the log file by using the -s option. An interactive script might use this feature 
+to alert users to problems.
+  Log Using Datagrams:
+The -d options cause logger to use datagrams rather than a stream connection to the sytem logger socket. This is an advanced feature
+that you should use only if you're instructed to do so in documentation or if you understand the networking issues involved.
+  Log A File:
+You can log the contents of a file by using the -f file option. Be cautious with this option; if [file] is big, your system log
+file can grow to a ridiculous size.
+  Identify a Priority:
+The -p [priority] option specifies a priority, as described earlier.  
+  Log Tags:
+You can add a tag with the -t [tag] option. This is useful if you want to identify a script or other program that created the log entry.
+  Specify a Socket:
+Ordinarily, logger calls the default system log tools to do its job. You can log directly to a network socket using the -u [socket]
+option if you prefer.
+  Specify a Message:
+If you don't specify a file using -f [file], logger will log whatever you type after other options as the message to be logged. If you
+don't provide a message on the command line, logger accepts the input you type on subsequent lines as informatin to be logged.
+You should terminate such input by pressing Ctrl+D
+
+
+
+        Rotating log files
+        
+        
+  
+  
+  
+  
