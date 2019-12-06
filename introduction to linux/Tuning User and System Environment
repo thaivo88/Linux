@@ -1,0 +1,18 @@
+Text-mode user environments are controlled through shell configuration files. For bash, these may include the following files:
+/etc/profile
+Files in the /etc/profile.d directory
+/etc/bash.bashrc
+/etc/bashrc
+~/.bashrc
+~/.bash_profile
+~/.bash_login
+~/.profile
+
+The files in /etc are global configuration files, which affect all users. The configuration files located in users' home directories
+affect individual users' accounts and can be customized by individual users.
+
+You can also see all of your current environment variables by using the env, printenv, or set command.
+
+When using useradd command, useradd copies files from the skeleton directory (/etc/skel by default) into a newly created home directory.
+The skeleton directory is the blueprint to create new user's home directory, most of the files are the hidden files with the dot in
+front of the file name.
