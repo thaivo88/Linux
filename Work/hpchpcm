@@ -74,7 +74,82 @@ hpchpcm /thai_notes
 
 
 
-#### Setting/Config nodes on hpchpcm ####
+################### Setting/Config nodes on hpchpcm #################
+
+
+
+#######################################
+# on hpchpcm console to the node
+console kratosn01
+# check all the drive, there is two drive the first will be the OS so parted the second drive so the discover will only see one blank drive
+lsblk
+parted /dev/sda p
+parted /dev/sdb p
+parted /dev/sdb mklabel gpt
+mkpart
+primary
+xfs
+1049kb
+-1
+parted gpt
+quit
+
+# on hpchpcm
+ipmiwrapper kratosn01 power off
+
+# discover by node by default it will install rhel7.6
+
+# on hpchpcm check to see if the image is loading
+cinstallman --show-nodes --boot-info --node kratosn01
+
+# go to hpchou-login check to see when the named is gone, when it is restart named
+ps -edf | grep named
+systemctl restart named
+
+# check the nic interface if its wrong from the configure file you must update the file and rediscover
+
+# on hpchpcm
+ipmiwrapper kratosn01 power off
+
+# discover node while its off
+discover --node [service_number] --configfile /root/[new_cluster_config_file from above]
+
+# go to hpchou-login check to see when the named is gone, when it is restart named
+ps -edf | grep named
+systemctl restart named
+
+# create /lvol on second drive
+
+# on the node check the boot order
+efibootmgr
+efibootmgr -o "0000"
+	eth PXE IPv4
+	SGI slot chooser
+	
+# then go to hpchpcm clone image
+cinstallman --create-image --clone --source rhel7.6-mlnx-AMD-hpc --image rhel7.-mlnx-kratos-hpc --repo-group leto
+
+# then create a repo group, show leto group to check the repo that is installed on it then copy it over to the new created group
+crepo --show-group leto
+crepo --add-group kratos [leto repo]
+
+# add cluster for PSB file
+cd images/generic-customization/etc/array
+vi array.service
+
+# copy the array into the image
+cp arrayd.con /opt/clmgr/image/images/rhel7.-mlnx-kratos-hpc/etc/array
+
+# edit and copy over roundrobin and after.local into the image directory
+
+# now its time to assign the new image to the discoved node
+cinstallman --show-image
+cinstallman --assign-image --image rhel7.6-mlnx-kratos-hpc --node kratosn01 --kernel (the kernel listed next to the image from show image)
+cinstallman --next-boot image --node kratosn02
+
+# check to see if the bios boot order is set to pxe and sgi
+
+need update HDR firmware
 
 ############################################# Discovering new node into HPCHPCM / PBS #############################################
 # Notes:
