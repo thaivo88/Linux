@@ -1,0 +1,96 @@
+                                      Maintaining the System Time
+
+Linux depends on its system clock. Tools such as 'cron' and 'at' run programs at specified times, the 'make' development tool uses file's 
+time stamps to determine which ones need attention, and so on.
+
+The x86 and x86-64 computers that most often run Linux, as well as most other computers of this general class, have two built-in clocks.
+  1:  Hardware clock: maintains the time while the computer is turned off.
+  2:  Software clock: When you boot Linux, it reads the hardware clock and set the software clock to the value it retrieves.
+*Software clock is what Linux uses for most purposes while it's running.  
+
+Linux sets its clock to Coordinate Universal Time (UTC). For most purposes, UTC is identical to Greenwich mean time (GMT).
+GMT is the time in Greenwich, England, unadjusted for daylight savings time, and is maintained by a series of atomic clocks stationed 
+around the world. When you type ls -l to see a file listing complete with time stamps, Linux reads the time stamp in UTC. It then adds
+or subtracts the appropriate amount of time so that the time stamp displays using your local time. Local time is occasionally called
+"wall clock" time.
+
+Both the hardware clock and the software clock are notoriously unreliable on standard x86 and x86-64 hardware. The hardware clock depends
+on battery power and tends to drift. The software clock, after being updated to the hardware clock's time at boot, is maintained in
+software. Thus, your clock can easily end up being several minutes off the correct time within a month or two of being set. To deal with
+this problem, Linux supports various network protocols for setting the time. The most popular is these is the Network Time Protocol (NTP).
+
+      Manually Setting the Time
+      
+The main tool to set the software clock is date
+  date [-u|--utc|--universal] [MMDDhhmm[[CC]YY][.ss]]
+  
+Because x86 and x86-64 hardware maintains both software and hardware clocks, Linux provides tools to synchronize the two. Specifically, 
+the hwclock utility lets you set the hardware clock from the software clock, or vice versa, as well as to do a few other things.
+  hwclock [options]
+  
+  Show the Hardware Clock:  To view the hardware clock, pass the -r or --show option. The time is displayed in lock time, even if the 
+hardware clock is set to UTC.
+  Set the Hardware Clock Manually:  To set the hardware clock to a date ou specify, you need two options: --set and --date=newdate :  
+newdate option is in the date format that the date program accepts.
+  Set the Hardware Clock Based on the Software Clock: If you've set the software clock, you can synchronize the hardware clock to the
+same value with the --systohc option.
+  Set the Hardware Clock Based on the Hardware Clock: If your hardware clock is accurate but your software clock is not, you can use
+the --hctosys option to set the software clock to the hardware clock's value. 
+  Specify UTC or local time:  You can tell linux to treat te hardware clock as storing UTC by using the --utc option or to treat it as 
+holding local time by using the --localtime option. The default is whichever was last used when the hardware clock was set.
+
+      Understanding NTP Basics
+      
+These time sources include atomic clocks or radio receivers that pull their times from broadcast time signals based on atomic clocks.
+These are referred to as stratum 0 time servers, but they aren't directly accessible to any but the stratum 1 time servers to which
+they're connected. These stratum 1 computers run NTP servers that deliver the time to stratum 2 servers, which deliver the time to 
+stratum 3 servers, and so on, for an arbitrary number of strata.
+
+NTP works by measuring the round-trip time for network packets between the server and the client. The two systems exchange packets with
+embedded time stamps. The client then adjusts its time so that it is synchronized with the server. This time adjustment is based upon
+both the source's time stamp and the packet's estimated travel time. For this reason, when you select an NTP source, you should pick
+one with the shortest possible network time delay, all other things bring equal. The NTP daemon, ntpd, monitors for and adjusts the clock
+drift that's common in computers' clocks. /var/lib/ntp/ntp.drift or /etc/ntp.drift
+
+Locating a Time Source:
+-Your ISP
+-Your Distribution's NTP server
+-Public NTP Server List
+-Public NTP Server Pool  (pool.ntp.org)
+
+      Configuring NTP Servers
+      
+Most Linux distribution ship the NTP software in a package called nntp or ntpd. If you don't install your distribution's own NTP package,
+you'll need to create your own system initialization startup script or start the NTP daemon in some other way. Once NTP is installed,
+look for its configuration file, /etc/ntp.conf
+
+Each of these lines points to an NTP server pool. When your local NTP daemon starts up, it contacts all of the servers specified in
+/etc/ntp.conf, measures their accuracy against each other, and settles on one as its primary time source. Typically, you list about
+three NTP servers in your primary NTP server system's /etc/ntp.conf file. If any NTP client has a system time that varies 17 minutes 
+or more from the NTP server's time, all NTP requests will be ignored. This is called insane time.
+To eliminate the chances of insane time, you can do a manual time synchronization. 
+Some distributions have the 'ntpdate' command for this function, which others use the 'netdate' utility.
+
+The recommended method for manual time synchronization is to use the ntpd -gq command.
+The NTP daemon will let you perform manual time synchronization in an insane time situation if you use the -g option.
+Also needed is the -q opton, which allows this one-time operation to occur and returns you to the command prompt.
+
+ntpdate utility or netdat utility; for both commands, you must append a time server's URL to the command
+  ntpdate 0.us.pool.ntp.org
+  
+To operate it in interactive mode, simply type ntpq:
+  $ ntpq
+  ntpq>
+To check on your NTP server, type the peers command at the prompt.
+To exit interactive mode, type exit
+
+ntpq -p display the servers to which your NTP server is connected.
+
+refid column shows the server to which each system is synchronized
+st column shows the stratum of the server
+(*) synchronized
+(+) good times
+(x)|(-) discarded from consideration
+
+You may want to ensure that your NTP clients can't be accessed as servers. This is a security measure. You can do this by using the
+'restrict default ignore' line in the ntp.conf file.
