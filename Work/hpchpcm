@@ -145,9 +145,27 @@ cinstallman --show-image
 cinstallman --assign-image --image rhel7.6-mlnx-kratos-hpc --node kratosn01 --kernel (the kernel listed next to the image from show image)
 cinstallman --next-boot image --node kratosn02
 
-# check to see if the bios boot order is set to pxe and sgi
 
-need update HDR firmware
+
+# on hpchpcm
+# creating node for pbs using qmgr
+for NODE in 'seq 1 4' ; do qmgr -c 'create node kratosn0${NODE}" ; done
+pbsnodes -av | egrep '^kratos'
+
+# define sales_op and cluster
+for NODE in 'seq 1 4' ; do qmgr -c 'set node kratosn0${NODE} resource_available.cluster = kratos" ; done
+for NODE in 'seq 1 4' ; do qmgr -c 'set node kratosn0${NODE} resource_available.sales_op = none" ; done
+
+# create the frequency queues
+cd /
+sh fqgen.sh 'ssh kratosn01 cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies`
+
+# If the output is good pipe it to qmgr to add it to PBS queues
+sh fqgen.sh `ssh r01n01 cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies` | qmgr
+
+# Then update the /etc/motd on hpchou-login
+vi /etc/motd
+
 
 ############################################# Discovering new node into HPCHPCM / PBS #############################################
 # Notes:
