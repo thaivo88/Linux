@@ -46,6 +46,9 @@ mlx5_3 port 1 ==> ib3 (Up)
 # To find the bus id
     lspci | grep Mellanox
     Example: 37:00.0 Infiniband controller: Mellanox Technologies MT27800 Family  
+
+# To find the part number and serial number of the card
+    lspci -vv -s [bus_id] | grep "Part number" -A 3
   
 # To find the serial number and part number
     lspci -s [bus id] -vvv
