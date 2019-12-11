@@ -86,12 +86,8 @@ lsblk
 parted /dev/sda p
 parted /dev/sdb p
 parted /dev/sdb mklabel gpt
-mkpart
-primary
-xfs
-1049kb
--1
-parted gpt
+parted
+mkpart primary xfs 1049kb -1
 quit
 
 # on hpchpcm
@@ -119,6 +115,8 @@ ps -edf | grep named
 systemctl restart named
 
 # create /lvol on second drive
+mkfs.xfs -f /dev/sdb1
+xfs_admin -L "lvol" /dev/sdb1
 
 # on the node check the boot order
 efibootmgr
@@ -126,21 +124,21 @@ efibootmgr -o "0000"
 	eth PXE IPv4
 	SGI slot chooser
 	
-# then go to hpchpcm clone image
-cinstallman --create-image --clone --source rhel7.6-mlnx-AMD-hpc --image rhel7.-mlnx-kratos-hpc --repo-group leto
+			# then go to hpchpcm clone image
+			cinstallman --create-image --clone --source rhel7.6-mlnx-AMD-hpc --image rhel7.-mlnx-kratos-hpc --repo-group leto
 
-# then create a repo group, show leto group to check the repo that is installed on it then copy it over to the new created group
-crepo --show-group leto
-crepo --add-group kratos [leto repo]
+			# then create a repo group, show leto group to check the repo that is installed on it then copy it over to the new created group
+			crepo --show-group leto
+			crepo --add-group kratos [leto repo]
 
-# add cluster for PSB file
-cd images/generic-customization/etc/array
-vi array.service
+			# add cluster for PSB file
+			cd images/generic-customization/etc/array
+			vi array.service
 
-# copy the array into the image
-cp arrayd.con /opt/clmgr/image/images/rhel7.-mlnx-kratos-hpc/etc/array
+			# copy the array into the image
+			cp arrayd.con /opt/clmgr/image/images/rhel7.-mlnx-kratos-hpc/etc/array
 
-# edit and copy over roundrobin and after.local into the image directory
+			# edit and copy over roundrobin and after.local into the image directory
 
 # now its time to assign the new image to the discoved node
 cinstallman --show-image
