@@ -86,7 +86,10 @@ mlx5_3 port 1 ==> ib3 (Up)
 
 # Change the port type to Ethernet (LINK_TYPE = 2) | infiniband (LINK_TYPE =1)
     mlxconfig -d /dev/mst/mt4119_pciconf0 set LINK_TYPE_P1=2 LINK_TYPE_P2=2
-    mstconfig -d [slot|5c:00.0] -y set LINK_TYPE_[P1|P2]=[1|2]
+      # or
+    mstconfig -d [slot] -y set LINK_TYPE_[P1|P2]=[1|2]
+      # example:
+    mstconfig -d 08:00.0 -y set LINK_TYPE_P1=2
       # Note that the LINK_TYPE_P1 and LINK_TYPE_P2 equal 1 (InfiniBand) by default.
  
 # show OFED info  
