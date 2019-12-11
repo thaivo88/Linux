@@ -227,4 +227,81 @@ journal data in the /var/log/journal/ directory, if configured to do so.
 
         Configuring systemd-journald
         
-        
+The systemd-journald service is configured using the /etc/systemd/journald.conf file.
+    
+Setting in journald.conf:
+    
+    Setting the Journal Data Location:
+The 'Storage' option setting determines where to store the journal data. The primary values for this option are 'auto', 'persistent',
+'volatile', and 'none'. 
+Most systems have the 'Storage' option set to 'auto'. The 'auto' value will configure journald to store journal
+log data in the /var/log/journal/ directory. However, the diretory must already exist and have the proper permissions set. If it does
+not exist, then journal data is stored in the volatile /run/log/journal/ directory, and the data is erased when the system shuts down.
+The 'persistent' value is similar to 'auto'; however, it automatically creates the /var/log/journal/ directory if needed.
+The 'volatile' value keeps the journal data only in the /run/log/journal/ directory.
+The 'none' values sets no data to be kept, and any data received by the systemd-journald daemon is discarded.
+    Compressing the Journal data:
+You can reduce journal file space consumption via compression. The 'compress' option set to 'yes' will compress journal log data
+using xz compression.
+    Controlling Journal Data Filesystem Space Usage:
+There are six /etc/systemd/journald.conf options that control filesystem space usage.
+Three options have the 'System' prefix in their name and are used only for /var/log/journal/ data. 
+The other three options have the 'Runtime' prefix and 'RuntimeMaxUse' options determine the maximum filesystem space amount that the
+journal data may consume. It is stated as a percentage and defaults to 10%.
+The 'SystemKeepFree' and 'RuntimeKeepFree' options determine the minimum amount of filesystem space that must be available for other 
+applications or uses. It is stated as a percentage and defaults to 15%. This setting may be modified by the systemd-journald daemon
+at system boot time if the current free filesystem space is below the configured setting.
+  Rotating Journal Data Files:
+The journald daemon rotates journal data files if you simply set an option in the /etc/systemd/journald.conf configuration file. One
+option is SystemMaxFileSize. Data file rotation is then triggered by journal data file 'size'. By default, the size of the 
+SystemMaxFileSize is set to 1/8 of the SystemMaxUse size setting. You con specify the size value in bytes or use size unit suffixes 
+such as K, M, G, T, and so on.
+The other option, MaxFileSec, determines the rotation scedule via a 'time increment'. The MaxFileSec value is often set to 1month,
+indicating that file rotation will occur after the data is one month old. The various time settings are suffixed by time units, such
+as year, month, week, and so on.
+  Sharing Journal Data:
+For backward compatibility purposes, you can set the journald daemon to share data with the syslogd, rsyslogd, or klogd daemons. This
+is accomplished via the ForwardToSyslog and ForwardToKMsg options.
+When the FowardToSyslog option is set to yes, messages received by the journal daemon are forwarded to the syslogd or rsyslogd. When
+the ForwardToKMsg option is set yes, data received by journald is forwarded to kernel log buffer.
+
+
+
+        Journalctl
+
+To view all of the systemd-journald collected data, the journalctl utility is used.
+To view the collected system journal data useing journalctl, you canoperate as a superuser. An even better technique is to add users
+who need access to system journal data to the systemd-journal group.
+Remember, users do not need to belong to the special group to view their own journal data.
+If you just want to view all of the journal data entries starting with the oldest first, simply use journalctl with no options.
+
+  
+  
+          journalctl [options...] [matches...]
+  
+  journalctl options:
+-a  Display all data fields, including long fields and unprintable characters.
+-e  Jump to the data file's end inside the pager utility.
+-l  Display all printable data fields fully.
+-n [number] Show the most recent journal data and limit it to [number] of lines. 
+    If [number] is not specified, it shows 10 recent data lines.
+-r  Reverse the output of the journal data so that the newest data shows first.
+
+  journalctl matches:
+The matches option can specify any special journal fields or fields that are aplication defined. All of the special journal fields can
+be found in the systemd.journal-fields man pages and fall into four main categories.
+  1:  User  - Fields passed directly from a client application and stored in the journal data.
+  2:  Trusted - Trusted fields added only by the systemd-journald daemon.
+  3:  Kernel  - Kernel messages stored in the journal data.
+  4:  Fields logged on a different program's behalf - Its category name says it all.
+  
+  Fields used as matches options:
+PRIORITY=value: Compatible with the syslogd priority setttings, the 'value' parameter is set between 0 for emerg and 7 for debug to find
+journal data for thses priority.
+_UID=user_id: user_id is set to a particular user's UID to find journal data concerning a particular user.
+_HOSTNAME=hostname: Journal data messages are found that concern a particular originating host.
+_TRANSPORT=transport: Journal data received from the 'transport' parameter is displayed. The 'transport' parameter is set to driver,
+syslog, journal, stdout, or kernel.
+_UDEV_SYSNAME=device_name:  Displays journal data kernel messages for device_name. Valid device_name settings show in the /sys/ directory.
+OBJECT_PID=process_ID:  Journal message data related to a program with the PID of process_ID.
+
