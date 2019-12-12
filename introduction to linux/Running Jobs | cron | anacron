@@ -1,1 +1,183 @@
+                                                cron
+
+Linux provides a means of scheduling task to run at specified times. This tool is the 'cron' program, which runs what are known as
+cron jobs. A related tool is 'at', which enables you to run a command on a one-time basis at a specified point in the future, as
+opposed to doing so on a regular basis as cron does.
+
+              Understanding the role of cron
+              
+The cron program is a daemon, so it runs continuously, looking for events that cause it to spring into action. Unlike most daemons,
+which are network servers, cron responds to temporal events. Specifically, it "wake up" once a minute, examines configuration files
+in the /var/spool/cron/ and /etc/cron.d/ directories and the /etc/crontab file, and executes commands specified by these configuration
+files if the time matches the time listed in the flies.
+There are two types of cron jobs
+  1:  system cron jobs
+  2:  user cron jobs
+System cron jobs are run as root and perform system-wide maintenance tasks. By default, most Linux distributions include system cron
+jobs that clean out old files from /tmp, perform log rotation.
+Ordinary users can create user cron jobs, which might run some user programs on a regular basis. You can also create a user cron job 
+as root. This might be handy if you need to perform some task at a different time than is supported by the system cron jobs, which
+are rigidly scheduled.
+
+              Creating system cron jobs
+              
+The /etc/crontab file controls system cron jobs.
+
+  02 4 * * * root run-parts /etc/cron.daily
+The minute of the hour (0-59)
+The hour of the day (0-23)
+The day of the month (1-31)
+The month of the year (1-12)
+The day of the week (0-7)
+
+For the day of the week, both 0 and 7 correspond to Sunday.
+For both the month of the year and the day of the week values, you can use the first three letters of the name rather than a number.
+The hour of the day is listed in military time.
+
+An asterisk (*) matches all possible values.
+A list separated by commas (such as 0,6,12,18) matches any of the specified values.
+Two values separated by a dash (-) indicate a range. 0-5
+A slash, when used in conjunction with some other multi-value option, specifies stepped values. A stepped value is a range in which
+some members are skipped. For instance, */10 in the minute field indicates a job that's run every 10 minutes.
+
+After the first five fields, /etc/crontab entries continue with the account name to be used when executing the program in the sixth
+field. In the record's seventh field, the command to be run, and any included options or parameters, is listed.
+
+The default /etc/crontab entries generally use run-parts, cronloop, or a similar utilit that runs any executable scripts within a directory.
+Most distributions include monthly, daily, weekly, and hourly system cron jobs. These cron jobs each correspond to a script in a directory
+called /etc/cron.interval/ or /etc/cron.d/interval/, where interval is a word associated with the run frequency.
+System cron job storage directories should be owned by root, and only root should be able to write to them.
+
+              Creating user cron jobs
+              
+To create a user cron job, you use the crontab utility, not to be confused with the /etc/crontab configuration file.
+  crontab [-u user] [ -l | -e | -r ] [file]
+If given without the -u user parameter, crontab modifies the cron job file (sometimes called the usr crontab) associated with the
+current user.
+
+If you want to work directly on a user crontab file, use the following crontab utility options:
+  -l  causes the crontab utility to display the current user crontab file.
+  -r  removes the current user crontab file.
+  -e opens an editior so that you can edit the current user crontab file.
+  
+Alternatively, you can create a cron job configuration file and pass the filename to crontab using the file parameter. For instance,
+  crontab -u tbaker my-cron
+causes the crontab program to user my-cron for tbaker's cron jobs.
+
+Whether you create a user crontab file and submit it via the file parameter or edit it via -e, the format of the user crontab file is
+similar to that described earlier. You can set environment variables by using the form VARIABLE=value. You also can specify a command
+preceded by five numbers or wildcards to indicate when the job is to run. In a user crontab, you do not specify the username used to
+execute the job, as you do with system cron jobs. That information is derived from the crontab file's owner.
+
+The word crontab has three related meanings:
+  1:  crontab program
+  2:  /etc/crontab file
+  3:  file that holds user cron jobs
+
+#### A sample user crontab file: ####
+SHELL=/bin/bash
+MAILTO=tbaker
+HOME=/home/tbaker
+0,30 * * * * /usr/bin/fetchmail -s
+0 2 * * mon /usr/local/bin/clean-adouble $HOME
+#### End ####
+
+User crontab files are stored in one of the following directories:
+  /var/spool/cron/[username]
+  /var/spool/cron/tabs/[username]
+  /var/spool/cron/crontabs/[username]
+  
+You shouldn't directly edit the files in this directory; instead, use the crontab utility to make changes.
+
+Access to the cron facility may be restricted in several ways:
+
+  Executable Permissions:
+The permissions on the cron and crontab programs may be restricted using standard linux permissions mechanism. Users who need to 
+schedule jobs using cron should be added to the appropriate group. This group is often called cron. You should check the group owner
+and permissions on the /usr/sbin/cron and /usr/bin/crontab program files to be sure.
+  Allowed User List:
+The /etc/cron.allow file contains a list of users who should be permitted access to cron. If this file is present, only users whose
+names appear in the file may use cron. All other users are denied access. If this file isn't present, anybody may use cron, assuming
+access isn't restricted by executable permissions or a disallowed-users list.
+  Disallowed-Users List:
+The /etc/cron.deny file contains a list of users who should be denied access to cron. If this file is present, any user whose name
+appears in the file is denied access to cron. Users not listed may use cron, assuming executable permissions and the allowed-users
+list don't restrict access.
+
+
+
+
+                                                anacron
+                                                
+The cron utility is great tool for performing certain tasks (such as rotation log files) on systems that are up most of all of the time.
+Anacron utility, this program is designed as a supplement to cron to ensure that regular maintenance jobs are executed at reasonable
+intervals. The anacron utility works by keeping a record of programs that it should execute and how frequently it should do so. The
+frequency is set by number of days. Whenever anacron runs, it checks to see when it last executed each program that it's configured
+to manage. If a period greater than the program's execution interval has passed, anacron runs the program.
+
+No matter how you run anacron, you should be sure to disable any cron jobs that anacron now handles.
+
+Like cron, the anacron utility is controlled through a configuration file named after itself: /etc/anacrontab. This file consists of
+three main line types:
+  1:  Comment lines denoted by a leading hash mark (#)
+  2:  Environment variable assignments
+  3:  Job definition records
+The job definition record contains four fields:
+  1:  period
+  2:  delay
+  3:  identifier  
+  4:  command
+  
+The first field, period, is how frequently, in days, the command should be run.
+The second field, delay, is a delay period, in minutes, between the time anacron starts and the time the command is run, if it should run.
+The third field, identifier, is a string that identifies the command.
+Finally, the fourth field, command, is the command to be run.
+
+#### A sample /etc/anacrontab ####
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+# format: period delay job-identifier command
+1 5 cron.daily  run-parts /etc/cron.daily
+7 10 cron.weekly  run-parts /etc/cron.weekly
+30 15 cron.monthly  run-parts /etc/cron.monthly
+#### End ####
+
+Anacron utility must be called itself. This is typically done in one of two ways:
+  1:  Via a Startup Script
+  2:  Via a cron Job
+  
+  
+  
+                                                  at
+                                                  
+Sometimes cron and anacron are overkill. You may simply want to run a single command only once at a specific future time. For this task,
+linux provides another command: at.
+This command only needs a single option: a time to run. This time can take any of several forms:
+
+  Time of Day:
+You can specify the time of day as HH:MM, optionally followed by AM or PM if you use a 12-hour format.  
+  Time Keywords:
+The keyworks noon, midnight, or teatime stand for what you'd expect. (teatime is 4:00 p.m.)
+  Day Specification:
+To schedule an at job more than 24 hours in advance, you must add a date specification after the time-of-day specification.
+format MMDDYY, MM/DD/YY, or DD.MM.YY
+  A Specified Period in the Future:
+You can specify a time using the keywork now, a plus sign (+), and a time period, as in now + 2 hours to run a job in two hours.
+
+The at command relies on a daemon, atd to be running. at daemon = atd
+
+You can pass a file with commands by using the -f parameter to at.
+  at -f commands.sh noon
+This command will run at at noon using the command.sh file
+
+The at utility's support programs include atq, which lists pending at jobs. at queue = atq
+
+The atrm command removes an at job from the queue. Use the program name or the at job number. at remove = atrm
+
+The at facility supports access restrictions similar to those of cron. Specifically, the /etc/at.allow and /etc/at.deny file are used.
+However, there are a few different rules with at access:
+  If neither at.allow nor at.deny exists, only root may use the at command
+  If at.allow exists, the users it lists may use the at command
+  If at.deny exists, everybody except those mentioned in this file may use the at command
+
 
