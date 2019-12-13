@@ -7,12 +7,25 @@ Dynamic Host Configuration Protocol (DHCP)                        UDP         67
 Trivial File Transfer Protocol (TFTP)                             UDP         69
 Hypertext Transfer Protocol (HTTP)                                TCP         80
 Post Office Protocol (POP) version 3                              TCP         110
+Portmapper                                                        TCP/UDP     111
+auth/ident                                                        TCP         113
+Network News Transfer Protocol (NNTP)                             TCP         119
 Network Time Protocol (NTP)                                       UDP         123
 NetBIOS                                                           TCP/UDP     137(Netbios name resolution UDP) / 138(Netbios Datagram service UDP) / 139(Netbios Session service TCP)
+NetBIOS Session (Windows file sharing)                            TCP         139
 Internet Message Access Protocol (IMAP)                           TCP         143
 Simple Network Management Protocol (SNMP)                         TCP/UDP     161(SNMP agents) / 162(SNMP Trap: send alerts to the SNMP manager)
+XDMCP                                                             UDP         177
 Border Gateway Protocol (BGP)                                     TCP         179
 Lightweight Directory Access Protocol (LDAP)                      TCP/UDP     389
 Hypertext Transfer Protocol over SSL/TLS (HTTPS)                  TCP         443
+Microsoft Directory Services (DS)                                 TCP         445
+SMTP over SSL/URL Rendezvous Directory (URD)                      TCP         465
+Remote system loggin                                              UDP         514
+Internet Printing Protocol (IPP)                                  TCP         631
 Lightweight Directory Access Protocol over TLS/SSL (LDAPS)        TCP/UDP     636
+IMAP over SSL                                                     TCP         993
+POP3 over SSL                                                     TCP         995
 FTP over TLS/SSL                                                  TCP         989(data transfer) / 990(control)
+Remote Framebuffer (RFB)                                          TCP         5900+
+The X Window System                                               TCP         6000-6007
