@@ -13,3 +13,6 @@ install nfs-common to resolve this issue
 
 install exfat to mount exfat files
   sudo apt-get install exfat-fuse exfat-utils
+
+To mount a device with certain rights:
+  mount -t [deviceFileFormat] -o umask=[filePermissions],gid=[ownerGroupID],uid=[ownerID] /[device] /[mountpoint]
