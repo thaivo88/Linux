@@ -13,6 +13,9 @@ mlx5_2 port 1 ==> ib2 (Up)
 mlx5_3 port 1 ==> ib3 (Up)
 ############# end ############
 
+# show link diagnostic on HPE IB switch
+    show interface ethernet link-diagnostics
+
 # status for OPA card
     ibstat 'hfi1_0'
 
