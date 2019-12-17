@@ -103,3 +103,104 @@ This command enables IP forwarding. Permanently setting this option requires mod
 it in /etc/sysctl.conf:
   net.ipv4.ip_forward = 1
 Other distributions use other configuration files and options, such as /etc/sysconfig/sysctl and its IP_FORWARD line.
+
+Fedora and Redhat ship with a custom GUI tool called Network Configuration (system-config-network)
+SUSE has a text-mode and GUI tool called YaST
+
+The ifup and ifdown commands are useful for verifying that the network settings are configured properly for the next time it boots.
+  ifup [NIC_interface]
+  ifdown [NIC_interface]
+  
+Configuring Hostnames
+  On DNS:
+Remote systems' /etc/hosts files can be modified to include your system.  
+  On Your Local Computer:  
+The most basic tool for setting your hostname locally is called, appropriately enough, hostname. Type the command alone to see what
+your hostname is, or type it with a new name to set the system's hostname to that name:
+  hostname [hostname]
+Similar commands, domainname and dnsdomainname, display or set the computer's domain name. The domainname command sets the domain name
+as used by Network Information System (NIS), where as dnsdomainname sets the domain name as used by DNS.
+Many linux distributions look in the /etc/hostname or /etc/HOSTNAME file for a hostname to set at boot time.
+Fedora uses /etc/sysconfig/network for this purpose.
+
+
+
+                                              Diagnosing Network Connections
+                                              
+Network troubleshooting tools:
+1: ping
+2: traceroute
+3: tracepath
+4: netstat
+5: tcpdump
+                                      
+                 ping
+                                      
+The most basic network test is the ping command, which sends a simple ICMP packet to the sytem you name and waits for a reply.
+Limit the number of ping with -c [number]
+For IPv6 addresses, you'll need to use the ping6 command. However, if you have multiple interfaces on your linux system, you must
+be careful if using a link-local IPv6 address.
+The problem is that the system doesn't know which interface to use to access the link-local address. To solve this, you can add the
+interface name after the link-local address, separated by a percent sign:
+  ping6 -c 4 fe80::c419:2ed0:aead:cbce%eth0
+By pinging systems on both local and remote networks, you can isolate where a network problem occurs. For instance, if you can ping
+local computers but not remote systems, the problem is most probably in your router configuration. If you can ping by IP address
+but not by name, the problem is with your DNS configuration.
+
+                tracing a route
+                
+traceroute command, which sends a series of three test packets to each computer between your system and a specified target system.
+  traceroute -n [ipaddress]
+The -n option to this command tells it to display target computers' IP addresses rather than their hostnames.
+For IPv6 addresses, use the traceroute6 command.
+You can only trace global addresses; link-local addresses are nonroutable.
+Highly variable times and missing times can indicate a router that's overloaded or that has an unreliable link to the previous system
+on the list. If you see a dramatic jump in times, it typically means that the physical distance between two routers is great. Such 
+jumps don't necessarily signify a problem unless the two systems are close enough that a huge jump isn't expected.
+Some routers are configured in such a way that traceroute isn't a useful tool; these routers block all traceroute data, either to
+themselves only or for all packats that pass through them. If your traceroute output contains one or two lines of all asterisks but
+everything else seems OK, chances are that your've run into such a system. If you see nothing but asterisks after a certain router
+but diagnostic tools such as ping still work, a router is probably blocking all traceroute operations.
+
+The tracepath program (and the IPv6 tracepath6 program) is an alternative to traceroute. In basic operation, it's similar, although
+it produces one line of output for each test packet and so yields longer outputs than traceroute.
+
+              netstat
+              
+  Interface Information:  --interface or -i
+To obtain information about your network interfaces similar to what ifconfig returns.
+  Routing Information:  --route or -r
+To obtain routing table
+  Masquerade Information: --masquerade or -M
+To obtain information about connections mediated by Linux's NAT features, which often go by the name IP masquerading.
+  Program Use:  --program or -p
+Attempts to provide information about the programs that are using network connections.
+  Open Ports:
+Return open ports without any parameters.
+  All Connections:  --all or -a
+  
+              Examining Raw Network Traffic
+              
+One advanced network troubleshooting tool is tcpdump. This utility is a packet sniffer, which is a program that can intercept network
+packets and log them or display them on the screen. Packet sniffers can be useful diagnostic tools because they enable you to verify 
+that a computer is actually receiving data from other computers.
+Unscrupulous individuals can run packet sniffers to capture passwords that others send over the network. Many organizations have
+policies forbidding the use of packet sniffers except under limited circumstances.
+The first thing to note about this command is that you must run it as root.
+You can pass the -c [num] option to have it display [num] packets and then quit.
+
+-A  to display packet contents in ASCII
+-D  to display a list of interfaces to which tcpdump can listen
+-n  to display all addresses numerically
+-v  (up to -vvv) to display additional packet information
+-w [file] to write the captured packets to the specified file.
+
+              telnet
+              
+One of the most useful of these may be telnet. This program and protocol is mainly a remote login tool; type the program name followed
+by the name of a remote system to receive a login prompt on that system.
+Telnet is a poor choice as a remote login protocol because it's entirely unencrypted.
+Telnet client can also be a handy tool for debugging.
+You can use telnet to debug network protocals; if you give it a port number after the remote hostname, the telnet program connects
+to that port, enabling you to interact with the server.
+
