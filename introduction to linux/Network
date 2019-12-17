@@ -1,0 +1,105 @@
+The Domain Name System (DNS) is a distributed database of computers that converts between IP addresses and hostnames. Every domain
+must maintain at least two DNS servers that can either provide the names for every computer within the domain or redirect a DNS 
+query to another DNS server that can better handle the request.
+
+nslookup
+The program performs DNS lookups and returns the results.
+
+host  [target.name]
+This perogram serves as a replacement for the simpler users of nslookup, but it lacks an interactive mode.
+
+dig
+This program performs more complex DNS lookups than host.
+
+whois
+You can look up information on a domain as a whole which this command.
+
+/etc/hosts 
+This file holds mappings of IP addresses to hostnames on a one-line-per-mapping basis. 
+For local computers that aren't in the global DNS database.
+The first name is a full hostname, including the domain portion; subsequent names on the line are aliases-typically the hostname
+without its full domain specification.
+Linux normally performs lookups in /etc/hosts before it uses DNS. You can modify this behavior by editing the /etc/nsswitch.conf file,
+which configures the Name Service Switch (NSS) service. More specifically, you must adjust the hosts line. This line lists the
+order of the files and dns options, which stand for /etc/hosts and DNS.
+In addition to /etc/hosts, Linuse supports a file called /etc/networks. It works much like /etc/hosts, but it applies to network
+addresses and it reverses the order of the name and the IP address on each line.
+
+One key distinction in TCP/IP ports is that between privileged ports and unprivileged ports. The former have numbers less than 1024.
+Linus systems restrict access to privileged ports to root.
+You may need to configure the system to link the servers to the correct ports. This can sometimes involve editing the /etc/services file,
+which maps port numbers to names, enable you to use names in srver configurations and elsewhere.
+
+If your network hardware isn't correctly detected, to correct this problem, you must load your network hardware driver. You can do this
+with the modprobe command. You must know the name of your network hardware's kernel module.
+
+When a computer running a DHCP client boots up, it sends a broadcast is search of a DHCP server. The server replies (using nothing but
+the client's hardware address) with the configuration information the client needs to enable it to communicate with other computers on
+the network-most important, the client's IP address and netmask and the network's gateway and DNS server addresses. The IP address isn't
+assigned permanently; it's referred to as a DHCP lease, and if it's not renewed, the DHCP server may give the lease to another computer.
+Therefore, from time to time the client checks back with the DHCP server to renew its lease. 
+Three DHCP clients are in common use on linux: pump, dhclient, and dhcpcd (not to be confused with the DHCP server, dhcpd)
+The DHCP client runs at system bootup. This is usually handled either by its own startup script.
+(Typically a startup script called network or networking)
+RedHat and Fedora set this option in a file called /etc/sysconfig/network-scripts/ifcfg-name, where name is the name of the network interface.
+  BOOTPROTO="dhcp"
+Ubuntu uses the /etc/network/interfaces file for a similar purpose, but the details differ.
+  iface eth0 inet dhcp
+If you need to run a DHCP client manually, you can usually do so by typing its name (as root), optionally followed by a network identifier,
+as in 'dhclient eth0', to have the DHCP client attempt to configure eth0 with the help of anyt DHCP server it finds on that network.
+
+
+
+
+                                Configuring network
+
+To set them in the long term, you adjust a configuration file such as /etc/sysconfig/network-scripts/ifcfg-name or /etc/network/interfaces
+  DEVICE=eno1
+  BOOTPROTO=static
+  IPADDR=10.100.1.140
+  NETMASK=255.255.0.0
+  NETWORK=10.100.0.0
+  BROADCAST=10.100.255.255
+  GATEWAY=10.100.0.5
+  ONBOOT=yes
+
+  IP Address:
+You set the IP address manually via ifconfig command or via the IPADDR section in the configuration file
+  Network Mask:
+You set it manually via the ifconfig command or via the NETMASK section in the configuration file
+  Gateway Address:
+You can manually set the gateway via the 'route' command. To set it permanently, you need to adjust the configuration file at 
+/etc/sysconfig/network/routes or via GATEWAY section in the configuration file.
+  DNS Setting:
+Specify at least one DNS server in the /etc/resolv.conf file. Precede the IP address of the DNS server by the keyword nameservers.
+Up to three nameserver lines in this file. You can also set your computer's local domain name in this file using the domain option.
+
+  ifconfig [interface] {up|down} [address] netmask [mask]
+  ifconfig eth0 up 10.100.0.130 netmask 255.255.0.0
+To link an IPv6 address to the device, use the inet6 and add optons:
+  ifconfig eth0 up inet6 add 4201:ee94::23a4:1fb5:002a/10
+The ifconfig doesn't set up a route for traffic, you will need to set the gateway with route
+  route add default gw 10.100.0.5
+  
+      
+      
+                                            Configuring routing
+                                            
+Linux can function as a router, which means it can link two or more networks together, directing traffic between them on the basis
+of its routing table. This is handled, in part, by the route command.
+  route {add | del} [-net | -host] [target IP|hostname] netmask [netmask] gw [gateway] [reject] {dev} [interface]
+You specify add or del along with a target parameter and optionally other parameters. 
+The -net and -host options force route to interpret the target as a network or computer address. 
+The netmask option lets you set a netmask as you desire.
+gw lets you specify a router through which packets to the specified target parameter should go.
+The reject keyword installs a blocking route, which refuses all traffic destined for the specified network.
+route can usually figure out the interface device on its own, you can forec the issue with dev option
+
+One more thing you may need to do if you're setting up a router is to enable routing. A linux system won't forward packets it receives
+from one system that are directed to another system. If linux is to act as a router, though, it must accept these packets and send them
+on to the destination network. To enable this feature, you must modify a key file in the /proc filesystem:
+  echo "1" > /proc/sys/net/ipv4/ip_forward
+This command enables IP forwarding. Permanently setting this option requires modifying a configuration file. Some distributions set
+it in /etc/sysctl.conf:
+  net.ipv4.ip_forward = 1
+Other distributions use other configuration files and options, such as /etc/sysconfig/sysctl and its IP_FORWARD line.
