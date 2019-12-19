@@ -23,5 +23,6 @@
 #     5 = (4: read) + (1: execute)
 #     4 = (4: read)
 
-
+# finding all file owned by one user and changing it to a new users
+  find / -uid [oldowner] -exec chown [newuser]:[newgroup] {} +
 
