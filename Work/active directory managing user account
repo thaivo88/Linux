@@ -128,7 +128,54 @@ Options:
   -W, --warndays WARN_DAYS      set expiration warning days to WARN_DAYS
   
 ############################################
+passwd [OPTION] [USER]
 
+-a, --all	When used with -S (see below), this option will show the password status for all users. 
+     This option will not work if used without -S.
+-d, --delete	Delete a user's password (make it empty). This option is a quick way to disable logins for an account, 
+     without disabling the account itself.
+-e, --expire	Immediately expire an account's password. This forces a user to change their password the next time they log in.
+-h, --help	Display information about how to use the passwd command.
+-i, --inactive INACTIVE	This option is used to disable an account after the password has been expired for a number of days. 
+     After a user account has had an expired password for integer INACTIVE days, the user may no longer sign on to the account.
+-k, --keep-tokens	Keep password tokens. Indicates that this user's password should only be changed if it has expired.
+-l, --lock	Lock the password of the named account. This option disables a password by changing it to a value which matches no 
+     possible encrypted value. It does this by adding a character at the beginning of the encrypted password.
+
+     Note that this does not disable the account. The user may still be able to log in using another authentication method 
+     (an SSH key, for example). To disable the account, the superuser can use the usermod command with the option --expiredate 1. 
+     This option will set the account's expiration date to a date in the past — namely Jan 2, 1970.
+
+     Users with a locked password are not allowed to change their password.
+
+-n, --mindays MIN_DAYS	Set the minimum number of days between password changes to MIN_DAYS. 
+     A value of zero for this field indicates that the user may change his/her password at any time.
+-q, --quiet	Quiet mode; passwd will operate without displaying any output.
+-R, --root CHROOT_DIR	For advanced users: this option will apply changes in the chroot directory CHROOT_DIR and use the 
+     configuration files from the CHROOT_DIR directory.
+-S, --status	Display account status information. The status information consists of 7 fields:
+
+     The user's login name
+     password usability: L if the account has a locked password, 
+                         NP if the account has no password, or 
+                         P if the account has a usable password
+     date of the last password change
+     minimum password age
+     maximum password age
+     password warning period
+     password inactivity period
+
+     In fields 4 through 7, password ages are expressed in days.
+
+     Specifying -a in addition to -S displays password status for all users.
+     
+-u, --unlock	Unlock the password of the named account. This option re-enables a password by changing the password back to its 
+     value before the -l option was used to lock it.
+-w, --warndays WARN_DAYS	Set the number of days of warning before a password change is required. WARN_DAYS is the number of days 
+     prior to the password expiring that a user will be warned that their password is about to expire.
+-x, --maxdays MAX_DAYS	Set the maximum number of days a password remains valid. After MAX_DAYS, the password must be changed.
+
+############################################
 Verify integrity of password files
 Use the pwck command verifies the integrity of the users and authentication information. 
 It checks that all entries in /etc/passwd and /etc/shadow have the proper format and contain valid data. 
