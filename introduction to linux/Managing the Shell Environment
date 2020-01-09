@@ -14,4 +14,58 @@ Using the semicolon (;) list operator, you can combine these two commands into o
 You can further combine these two commands into one command for even more brevity:
   export HOSTNAME=carson.example.com
   
-  
+You can refer to an enviroment variable by using the echo command to examine a single variable (as in 'echo $HOSTNAME).
+To see all of the environment variables, use one of these commands: env, set, or printenv.
+
+The 'set' command displays both environment variables and user-defined variables in an alphabetically sorted list.
+The 'env' and 'printenv' commands do not sort their output and do not show userdefined variables.
+The 'env' command has addditional functionality that the 'printenv' command does not have.
+
+Setting an environment variable as just described sets it for the shell or (when used with export) for subshells you create.
+Keep in mind that these variable settings disappear when you log out because they are not persistent.
+
+Common Environment Variables:
+###################################################################################################################################
+Variable Name       Explanation
+----------------------------------------------------------------------------------------------------------------------------------
+DISPLAY             This variable identifies the display used by the X windows server. It's usually set to :0.0, which indicates
+                    the first display on the current computer. You can run multiple X sessions on one computer, in which case each
+                    one gets a different DISPLAY number-for instance, :0.0 for the first session and :1.0 for the second session.
+                    
+                    When you use X in a network environment, this value may be preceded by the name of the computer at which you're
+                    sitting, as in machine4.luna.edu:0.0. This value is set automatically when you log in, but you may change it if
+                    necessary.
+----------------------------------------------------------------------------------------------------------------------------------
+EDITOR              Some programs launch the program pointed to by this environment variable when they need to call a text editior
+                    for you to use. Thus, changing this variable to your favorite editor can help you work in Linux. It's best to 
+                    set this variable to a text-mode editor because GUI editors may cause problems if they're called from a program
+                    that was launched from a text-mode login.
+----------------------------------------------------------------------------------------------------------------------------------
+HISTSIZE            
+----------------------------------------------------------------------------------------------------------------------------------
+HOME
+----------------------------------------------------------------------------------------------------------------------------------
+HOSTNAME
+----------------------------------------------------------------------------------------------------------------------------------
+LANG
+----------------------------------------------------------------------------------------------------------------------------------
+LD_LIBRARY_PATH
+----------------------------------------------------------------------------------------------------------------------------------
+LOGNAME
+----------------------------------------------------------------------------------------------------------------------------------
+MAIL
+----------------------------------------------------------------------------------------------------------------------------------
+PAGER
+----------------------------------------------------------------------------------------------------------------------------------
+PATH
+----------------------------------------------------------------------------------------------------------------------------------
+PS1
+----------------------------------------------------------------------------------------------------------------------------------
+PWD
+----------------------------------------------------------------------------------------------------------------------------------
+SHELL
+----------------------------------------------------------------------------------------------------------------------------------
+TERM
+----------------------------------------------------------------------------------------------------------------------------------
+TZ
+###################################################################################################################################
