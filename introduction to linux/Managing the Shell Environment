@@ -41,23 +41,30 @@ EDITOR              Some programs launch the program pointed to by this environm
                     set this variable to a text-mode editor because GUI editors may cause problems if they're called from a program
                     that was launched from a text-mode login.
 ----------------------------------------------------------------------------------------------------------------------------------
-HISTSIZE            
+HISTSIZE            This variable determines the number of commands that will be saved in your history life.
 ----------------------------------------------------------------------------------------------------------------------------------
-HOME
+HOME                This variable points to your home directory. Some programs use it to help them look for configuration files or
+                    as a default location in which to store files.
 ----------------------------------------------------------------------------------------------------------------------------------
-HOSTNAME
+HOSTNAME            This is the current TCP/IP hostname of the computer.
 ----------------------------------------------------------------------------------------------------------------------------------
-LANG
+LANG                The system holds your current language, specified as a locale, using this variable. 
 ----------------------------------------------------------------------------------------------------------------------------------
-LD_LIBRARY_PATH
+LD_LIBRARY_PATH     A few programs use this environment variable to indicate directories in which library files may be found.
+                    It works much like PATH
 ----------------------------------------------------------------------------------------------------------------------------------
-LOGNAME
+LOGNAME             This variable holds your username when you are logged into the system.
 ----------------------------------------------------------------------------------------------------------------------------------
-MAIL
+MAIL                This variable holds the location of the user's mail spool. It's usually /var/spool/mail/username
 ----------------------------------------------------------------------------------------------------------------------------------
-PAGER
+PAGER               If set, this variable determines the pager to use for output by programs, such as man.
 ----------------------------------------------------------------------------------------------------------------------------------
-PATH
+PATH                This is an unusually important environment variable. It sets the path for a session, which is a colon-delimited
+                    list of directories in which Linux searches for executable programs when you type a program name. For instance,
+                    if PATH is /bin:/usr/bin and you type 'ls', Linux looks for an executable program called 'ls' in /bin and then
+                    in /usr/bin. If the command you type isn't on the path, Linux responds with a command not found error. The PATH
+                    variable is typically built up in several configuration files, such as /etc/profile and the .bashrc file in the
+                    user's home directory.
 ----------------------------------------------------------------------------------------------------------------------------------
 PS1
 ----------------------------------------------------------------------------------------------------------------------------------
