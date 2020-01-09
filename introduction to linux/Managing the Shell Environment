@@ -66,13 +66,32 @@ PATH                This is an unusually important environment variable. It sets
                     variable is typically built up in several configuration files, such as /etc/profile and the .bashrc file in the
                     user's home directory.
 ----------------------------------------------------------------------------------------------------------------------------------
-PS1
+PS1                 This is the default prompt in bash. It generally includes variables of its own, such as \u (for the username),
+                    \h (for the hostname), and \W (for the current working directory). This value is frequently set in /etc/profile,
+                    but users often override it.
 ----------------------------------------------------------------------------------------------------------------------------------
-PWD
+PWD                 This is the present working directory. This environment variable is maintained by the system. Programs may use 
+                    it to search for files when you don't provide a complete pathname.
 ----------------------------------------------------------------------------------------------------------------------------------
-SHELL
+SHELL               This variable holds the path to the current command shell.
 ----------------------------------------------------------------------------------------------------------------------------------
-TERM
+TERM                This variable is the name of the current terminal type. To move a text-mode cursor and display text effects for 
+                    programs like text-mode editors, Linux has to know what commands the terminal supports. The TERM environmnet 
+                    variable specifies the terminal in use. This information is combined with data from additional files to provide
+                    terminal-specific code information. TERM is normally set automatically at login, but in some cases you may need
+                    to change it.
 ----------------------------------------------------------------------------------------------------------------------------------
-TZ
+TZ                  You can set this environment variable to your own time zone, which is most useful if that's different than the
+                    computer's time zone-for instance, if you're using a computer remotely.
+                    
+----------------------------------------------------------------------------------------------------------------------------------
+USER or             This is your current username. It's a variable that's maintained by the system.
+USERNAME
 ###################################################################################################################################
+
+The PATH variable sometimes include the current directory indicator (.) so that you can easily run programs in the current directory.
+This practice poses a security risk, though, because a troublemaker can create a program with the same name as some other program 
+(such as ls) and trick another user into running it by simply leaving it in a directory the victim frequents.
+It's best to omit the current directory from the PATH variable, especially for the superuser.
+
+
