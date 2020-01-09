@@ -1,0 +1,17 @@
+Environment variables provide the means to pass named data (variables) to programs launched from a shell or a subshell.
+A subshell is a child process that is created by either the shell or a shell script when a program is initiated.
+Shells themselves also rely on environment variables. For instance, $HOSTNAME conventionally holds the computer's name.
+A program that needs to know the computer's name can refer to $HOSTNAME to obtain this information.
+
+You set an environment variable manually via an equal-sign assignment operator. To make the variable available to subshells, 
+you thne use the 'export' command:
+  HOSTNAME=carson.example.com
+  export HOSTNAME
+  
+Using the semicolon (;) list operator, you can combine these two commands into one line as follows:
+  HOSTNAME=carson.example.com ; export HOSTNAME
+  
+You can further combine these two commands into one command for even more brevity:
+  export HOSTNAME=carson.example.com
+  
+  
