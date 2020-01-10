@@ -1,3 +1,5 @@
+                                                Environment Variables
+
 Environment variables provide the means to pass named data (variables) to programs launched from a shell or a subshell.
 A subshell is a child process that is created by either the shell or a shell script when a program is initiated.
 Shells themselves also rely on environment variables. For instance, $HOSTNAME conventionally holds the computer's name.
@@ -94,4 +96,35 @@ This practice poses a security risk, though, because a troublemaker can create a
 (such as ls) and trick another user into running it by simply leaving it in a directory the victim frequents.
 It's best to omit the current directory from the PATH variable, especially for the superuser.
 
+Environment variable names are usually preceded by a dollar sign ($) in scripts and on shell command lines. EXCEPT WHEN THEY'RE ASSIGNED
 
+If you want to know the value of one variable, you can use the echo command, which echoes what you type to the screen. If you pass to it
+a variable name preceded by a dollar sign ($), echo returns the value of the variable.
+
+
+
+                                                  Aliases
+                                                  
+Most Linux shell, including bash, support command 'aliases', which are new names that you can give to regular commands.
+Use aliases as follows:
+  - To assign easier-to-remember names to obscure commands
+  - To implement desirable command options as a command's default
+  - To create a shortened version of a command to minimize typing
+  
+You can define aliases at any bash prompt, but that won't make them persistent. To make aliases persistent, you need to include them
+in your bash startup script.
+
+To implement an alias, you use the following syntax:
+  alias [alias_name]='[command]'
+  alias ls='ls -laF'
+  
+If you want to see if a particular command has an alias set, you can also use the alias command as follows:
+  alias ls
+  alias ls='ls -laF'
+
+To remove an alias setting, use the unalias command:
+  unalias ls
+  alias ls
+  bash: alias: ls: not found
+  
+  
