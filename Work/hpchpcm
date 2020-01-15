@@ -153,8 +153,8 @@ for NODE in 'seq 1 4' ; do qmgr -c 'create node kratosn0${NODE}" ; done
 pbsnodes -av | egrep '^kratos'
 
 # define sales_op and cluster
-for NODE in 'seq 1 4' ; do qmgr -c 'set node kratosn0${NODE} resource_available.cluster = kratos" ; done
-for NODE in 'seq 1 4' ; do qmgr -c 'set node kratosn0${NODE} resource_available.sales_op = none" ; done
+for NODE in 'seq 1 4' ; do qmgr -c "set node kratosn0${NODE} resources_available.cluster = kratos" ; done
+for NODE in 'seq 1 4' ; do qmgr -c "set node kratosn0${NODE} resources_available.sales_op = none" ; done
 
 # create the frequency queues
 cd /
