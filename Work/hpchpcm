@@ -79,6 +79,30 @@ hpchpcm /thai_notes
 
 
 #######################################
+# DO NOT TRY TO DISCOVER MORE THAN ONE NODE AT A TIME.
+
+# Add node to array (mpi crosstalk) before discovering them:
+# on hpchpcm
+	cd /opt/clmgr/image/images
+	cd generic-customizations
+	vi arrayd.conf
+# add node to file
+
+# copy arrayd file into all image : /opt/clmgr/image/images
+	cp arrayd.conf 	[image directory]/etc/array/
+	# example: cp arrayd.conf 	/opt/clmgr/image/images/rhel7.6-mlnx-zeus-hpc/etc/array/
+
+# Copying array file to hpchou-login which runs the file
+	scp arrayd.conf root@hpchou-login:/etc/array/
+	
+# On hpchou-login
+	systemctl restart array
+	array uptime
+# Check to see if the nodes show up
+
+# Copying array file to all the nodes
+	pdcp -w zeusn0[40-42] /etc/array/arrayd.conf /etc/array/arrayd.conf 
+
 # on hpchpcm console to the node
 console kratosn01
 # check all the drive, there is two drive the first will be the OS so parted the second drive so the discover will only see one blank drive
@@ -166,6 +190,9 @@ sh fqgen.sh `ssh r01n01 cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_availab
 # Then update the /etc/motd on hpchou-login
 vi /etc/motd
 
+# On hpchpcm
+# To remove all entry of a node	
+	cadmin --db-purge --node [service_number]	
 
 ############################################# Discovering new node into HPCHPCM / PBS #############################################
 # Notes:
