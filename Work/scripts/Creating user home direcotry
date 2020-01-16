@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Script to create new user home directory
-# User account request command is broken
+# User Account Request Command is broken
 # it no longer create home directory
 #
 # owner: thai.vo@hpe.com
@@ -11,6 +11,13 @@
 #
 # ./homedirect.sh [first_parameter] [second_parameter]
 # example:      ./homedirect.sh 2 sally
+#
+# added new line to: /admin/srv_common/www/cgi-bin/accountRequest
+# /admin/cronjobs/homedirect.sh $(($RANDOM  %6 +1)) $username
+# $(($RANDOM  %6 +1)) will output an interger from 1-6
+#
+# The Account Request Command email will now have two commands
+# one to build the user's account and the other to build home directory
 #
 usermod -d /usr$1/$2 $2
 mkdir /usr$1/$2
