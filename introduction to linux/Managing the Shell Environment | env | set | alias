@@ -127,4 +127,39 @@ To remove an alias setting, use the unalias command:
   alias ls
   bash: alias: ls: not found
   
+                                      
+                                      
+                                          Modifying Shell Configuration file
+                                          
+Files may be global files that affect all users of a shell or local files that affect just one user.
+Files may be login files that are launched only by a login process or non-login files that are launched by other processes.
+
+Common bash configuration files
+--------------------------------------------------------------------------------------------------------
+Type of file        Login file location                                 Non-login file location
+--------------------------------------------------------------------------------------------------------
+Global              /etc/profile and /etc/profile.d                     /etc/bashrc or /etc/bash.bashrc
+User                ~/.bash_login, ~/.profile, ~/.bash_profile          ~/.bashrc
+--------------------------------------------------------------------------------------------------------
+
+In a user directory, you may find all three user login bash configuration files, depending on your distribution. If you have two or
+more user bash configuration files, the first file found in the following ordered list is run and the rest are ignored:
+  ~/.bash_profile
+  ~/.bash_login
+  ~/.profile
   
+Global configuration files affect all users of a system. However, their settings may be overridden by individual users, either in user
+configuration files or in commands the users type themselves.
+The /etc/skel directory holds files that are copied to individual usesrs' home directories when their accounts are created. These files
+are sometimes called skeleton files.
+  Changes to these files affect only new accounts - not existing accounts.
+If you want to make a change that affects both existing and new users, you should edit a global configuration file instead.
+Just as shells have startup scripts, they may also hae logout scripts - scripts that run when the user logs out.
+  For bash, this script is ~/.bash_logout
+  
+One problem with logout scripts is that they may not work well when users log in multiple times.
+Global bash configuration file is the /etc/inputrc file for keyboard customization and setting terminal behavior. Users can create or 
+modify their own keyboard configuration file, which is the ~/.inputrc file or the value of $INPUTRC if set.
+
+The GUI users its own keyboard input routines, so the /etc/inputrc and ~/.inputrc files don't affect programs run in the GUI.
+
