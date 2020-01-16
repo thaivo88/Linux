@@ -103,17 +103,6 @@ hpchpcm /thai_notes
 # Copying array file to all the nodes
 	pdcp -w zeusn0[40-42] /etc/array/arrayd.conf /etc/array/arrayd.conf 
 
-# on hpchpcm console to the node
-console kratosn01
-# check all the drive, there is two drive the first will be the OS so parted the second drive so the discover will only see one blank drive
-lsblk
-parted /dev/sda p
-parted /dev/sdb p
-parted /dev/sdb mklabel gpt
-parted
-mkpart primary xfs 1049kb -1
-quit
-
 # on hpchpcm
 ipmiwrapper kratosn01 power off
 
@@ -137,6 +126,22 @@ discover --node [service_number] --configfile /root/[new_cluster_config_file fro
 # go to hpchou-login check to see when the named is gone, when it is restart named
 ps -edf | grep named
 systemctl restart named
+
+# on hpchpcm console to the node
+# the default password for the base image is cmdefault
+console kratosn01
+
+# check all the drive, there is two drive the first will be the OS so parted the second drive so the discover will only see one blank drive
+lsblk
+parted /dev/sda p
+parted /dev/sdb p
+parted /dev/sdb mklabel gpt
+parted
+mkpart primary xfs 1049kb -1
+quit
+
+# or kill one drive with
+sgdisk --zap-all /dev/sd[x]
 
 # create /lvol on second drive
 mkfs.xfs -f /dev/sdb1
