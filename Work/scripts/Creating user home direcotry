@@ -1,0 +1,13 @@
+#!/bin/bash
+#
+# Script to create new user home directory
+# User account request command is broken
+# it no longer create home directory
+#
+# First parameter $1 = usr[1-6]
+# Second parameter $2 = username
+usermod -d /usr$1/$2 $2
+mkdir /usr$1/$2
+cp /etc/skel/.* /usr$1/$2/
+chown $2:users /usr$1/$2
+chown $2:users /usr$1/$2/.*
