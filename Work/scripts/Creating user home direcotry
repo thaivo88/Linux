@@ -4,8 +4,14 @@
 # User account request command is broken
 # it no longer create home directory
 #
+# owner: thai.vo@hpe.com
+#
 # First parameter $1 = usr[1-6]
-# Second parameter $2 = username
+# Second parameter $2 = $username
+#
+# ./homedirect.sh [first_parameter] [second_parameter]
+# example:      ./homedirect.sh 2 sally
+#
 usermod -d /usr$1/$2 $2
 mkdir /usr$1/$2
 cp /etc/skel/.* /usr$1/$2/
