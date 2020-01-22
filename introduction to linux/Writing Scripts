@@ -53,7 +53,63 @@ method. It does not create a subshell but instead replaces the current shell wit
 A script execution method must be included in the exec command line in order to run a script. Cannot source a script using exec,
 however. Only execution methods that create a subshell will work with the exec command.
   exec ./my_script.sh
+  exec bash my_script.sh
       exec source my_script.sh == not found
       exec . my_script.sh == not found
       
-      
+The exec program's primary value is not in running scripts. Instead, it is often used to run a program from within a script.
+
+There are only two methods listed previously that are considered sourcing methods:
+  -The source command
+  -The dot (.)
+  
+Using a sourcing method that causes a script to run in the current shell, as opposed to launching a new instance of the shell 
+(subshell), has some important implications:
+  - When you source a script, it will have access to environment variables set in the calling shell. This is true even if you haven't
+  exported them. Without scourcing, only environment variables that you explicitly export become available to scripts you run.
+  - If you source a script and if that script sets an environment variable, that variable will become available (or will be changed)
+  in the calling shell's environment. If you run the script without using a sourcing method, any environment variables it sets will
+  remain local to it and to the programs that it calls. This is true even if the script exports the variables.
+  - Running a script without sourcing imposes overhead costs associated with launching the new shell instance (subshell). These costs
+  are normally negligible, but if a script calls itself recursively or calls many other scripts, sourcing those scripts within the first
+  script may improve performance.
+  - Sourcing a script causes it to execute in the calling shell's language, whereas running a script normally causes it to use the shell
+  language specified on the shebang line.
+  
+Variables' values can be passed as parameters to scripts, generated internally to te scripts, or extracted from the script's environment.
+
+
+
+                                            Positional Parameter Variables
+                                            
+Variables that are passed to the script are frequently called positional parameters. The individual parameters are represented by a
+dollar sign ($) followed by a number from 0 to 9. $0 stands for the name of the script, $1 is the first parameter to the script,
+$2 is the second parameter, and so on.
+
+cat homedirect.sh
+    # First parameter $1 = usr[1-6]
+    # Second parameter $2 = $username
+    #
+    # ./homedirect.sh [first_parameter] [second_parameter]
+    # example:      ./homedirect.sh 2 sally
+    #
+    usermod -d /usr$1/$2 $2
+    mkdir /usr$1/$2
+    cp /etc/skel/.* /usr$1/$2/
+    chown $2:users /usr$1/$2
+    chown $2:users /usr$1/$2/.*
+                                            
+
+
+                                            User-Defined Variables
+                                            
+A user-defined variable is a variable defined by a user for various purposes, such as temprarily storing data. It can be used within a
+script or at the command lin.
+  example:
+    ]$ My_Var="Hello World"
+    ]$ echo $My_Var
+    Hello World
+    
+    
+                                            
+                                            
