@@ -13,7 +13,11 @@ and the other was created second. You can't create a hard link from your root (/
 The symbolic link is a separate file whose contents point to the linked-to file. Accessing a symbolic link works just like accessing the
 origainal file. You can point from the root (/) directory to a separate directory that you've mounted on it.
 
-      ln [options] [source] [link]
+      ln [options] [source_directory] [link (aka shortcut)]
+     
+      ln -s /usr/local/cuda-10.2 cuda
+
+
 Options:      
 Remove Target files: -f or --force
   Remove any existing links or files that have the target link name.
@@ -38,3 +42,6 @@ Using the -i option with the list command ls can also be used to show files' ino
 
 Unlike hard link, the symbolically linked files' link counts do not increase. The ls -l command shows the symbolically linked files
 with an arrow (->)
+
+To unlink a link
+  unlink [link_path]
