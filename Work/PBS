@@ -5,6 +5,8 @@
   pbsnodes -l	 
 
 # will replinish	
+# First remove comments: leaving comments blank
+  pbsnodes -o  [hostname] -C ""
   pbsnodes -r [hostname]   
   	 	 
 # Will offline the node
