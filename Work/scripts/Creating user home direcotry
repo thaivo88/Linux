@@ -24,3 +24,4 @@ mkdir /usr$1/$2
 cp /etc/skel/.* /usr$1/$2/
 chown $2:users /usr$1/$2
 chown $2:users /usr$1/$2/.*
+rm -r /$1
