@@ -64,6 +64,15 @@ nvidia-smi -q | grep Driver
   rmmod nvidia-uvm
   rmmod nvidia-nvidia
   
+# To Turn off the ECC RAM, just do a
+  nvidia-smi -g 0 --ecc-config=0
+# (repeat with -g x for each GPU ID)
+# To Turn back on ECC RAM, just do
+  nvidia-smi -g 0 --ecc-config=1
+# (repeat with -g x for each GPU ID)  
+  
+  
+  
 #quitting nvidia cuda
   nvidia-cuda-mps-control -quit
 
