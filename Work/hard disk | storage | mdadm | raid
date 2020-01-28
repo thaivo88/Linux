@@ -1,0 +1,160 @@
+lsblk
+blkid
+
+# find out top biggest directories
+du -a /home | sort -n -r | head -n 5
+
+# turn on led light for the drives
+lsmcli local-disk-ident-led-on --path /dev/mapper/ S4P3E019
+
+# search for the biggest file
+du -a / 2>/dev/null | sort -n -r | head -n 20 
+
+#get serial number of hard drive sda
+udevadm info --query=all --name=/dev/sda | grep -i ID_SERIAL
+
+# The df command is primarily intended to report file system disk space usage. 
+df
+
+# The lsblk command with out any argument will print out the block devices in a tree format.
+lsblk
+lsblk -o NAME,FSTYPE,SIZE,MOUNTPOINT,LABEL               #with arguments
+
+# blkid will print out several different attributes about the block devices.
+blkid
+
+# lshw, which can print out detailed information about your hardware
+lshw | grep -i [drive | storage | disk]
+lshw -class disk
+
+# fdisk is a popular command mostly used to manipulate the partition table. 
+fdisk -l
+
+# list the size of a partition, list the partitions on a device, check the partitions on a device, and (very dangerous) repartition a device.
+sfdisk
+
+# cfdisk is a partition utility
+cfdisk
+
+# parted is another partition table manipulation utility; -l command line option to print out the devices or disks and all its info.
+parted -l
+
+# print out the contents of the /proc/partitions/ folder. This will print out all known devices and partitions in the system.
+cat /proc/partitions
+
+
+
+
+
+########################################################
+#To stop a raid
+  mdadm --stop /dev/md0
+# Here's how to zero the superblocks.
+#Just do that for each drive in the array.
+  mdadm --zero-superblock /dev/sd[a1]
+#######################################################
+
+
+
+
+
+#######################################################
+# create raid
+
+# Wipe out the partation /dev/sda
+    dd if=/dev/zero of=/dev/sda bs=1024 count=10000 
+    dd if=/dev/zero of=/dev/sdc bs=1024 count=10000
+# Shows that the disk is wiped
+    parted /dev/sda p
+    parted /dev/sdc p
+    reboot
+# Makes label "gpt"
+    parted /dev/sda mklabel gpt 
+    parted /dev/sdc mklabel gpt 
+# Make disk (parted start at 1049 Bits)
+    parted /dev/sda mkpart primary xfs 1049 -1
+    parted /dev/sdc mkpart primary xfs 1049 -1
+
+# Create a raid between both sda and sdc
+    mdadm --create /dev/md0 -l raid0 -n2 /dev/sda1 /dev/sdc1
+
+# Shows the software array
+    cat /proc/mdstat
+############ Output #########
+        Personalities : [raid0]
+        md0 : active raid0 sdc1[1] sda1[0]
+            937435136 blocks super 1.2 512k chunks
+
+        unused devices: <none>
+############ End ############
+
+# Shows details of the soft array
+    mdadm --detail /dev/md0
+########### Output #############
+Personalities : [raid0]
+md0 : active raid0 sdc1[1] sda1[0]
+      937435136 blocks super 1.2 512k chunks
+
+unused devices: <none>
+[root@harmonian001 ~]# mdadm --detail /dev/md0
+/dev/md0:
+           Version : 1.2
+     Creation Time : Tue Apr 30 13:25:25 2019
+        Raid Level : raid0
+        Array Size : 937435136 (894.01 GiB 959.93 GB)
+      Raid Devices : 2
+     Total Devices : 2
+       Persistence : Superblock is persistent
+
+      Update Time : Tue Apr 30 13:25:25 2019
+             State : clean
+    Active Devices : 2
+   Working Devices : 2
+    Failed Devices : 0
+     Spare Devices : 0
+
+        Chunk Size : 512K
+
+Consistency Policy : none
+
+              Name : harmonian001:0  (local to host harmonian001)
+              UUID : aa4566f5:e67f3995:d37a141e:4ff6ab1f
+            Events : 0
+
+    Number   Major   Minor   RaidDevice State
+       0       8        1        0      active sync   /dev/sda1
+       1       8       33        1      active sync   /dev/sdc1
+################# End #################
+
+# create the array conf file 
+    mdadm --detail --scan --verbose >> /etc/mdadm.conf 
+# cat /etc/mdadm.conf
+############# Output ################
+ARRAY /dev/md0 level=raid0 num-devices=2 metadata=1.2 name=harmonian001:0 UUID=aa4566f5:e67f3995:d37a141e:4ff6ab1f
+   devices=/dev/sda1,/dev/sdc1
+############# End ###############   
+
+# checking raid device name
+    lsblk
+# Now create a file system on md0
+    mkfs.xfs -f /dev/md0
+# adding label to raid drive
+    xfs_admin -L "lvol" /dev/md0
+######### output ######
+writing all SBs
+new label = "lvol"
+####### End ######
+# ADD NEW DIR
+    mkdir /lvol
+    chmod 777 /lvol
+    
+# adding entry to /etc/fstab
+    echo 'LABEL=lvol                          /lvol           xfs rw,defaults 0 0' >> /etc/fstab
+# or
+    vi /etc/fstab
+# add this to the end of the file:
+    LABEL=lvol                          /lvol           xfs rw,defaults 0 0
+    
+# mount raid drive
+    mount /dev/md0 /lvol
+#######################################################
