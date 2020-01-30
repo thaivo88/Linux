@@ -110,6 +110,111 @@ script or at the command lin.
     ]$ echo $My_Var
     Hello World
     
-    
-                                            
-                                            
+Once the variable has been set, various programs or other commands can use it, such as the echo command. There is no dollar sign ($) in
+the variable's name. However, when used with the echo command, the dollar sign must be included.
+
+Doing thing WITH the varible, use the dollar sign.
+Doing anything TO the variable, such as assigning a value to it, don't use the dollar sign.
+
+                   unset command:
+
+You can remove both environment and user-defined variables. The unset command accoplishes this task.
+
+Variables are often assigned within scripts. They may hold data pertinent for a script's execution. Script variables can also be set 
+from a command's output, which is useful! You can then use these variables' values in conjunction with normal commands as if they were
+command parameters.
+
+Be careful when creating new variable names. It is best to use either all lowercase names or mixed-case names. Remember that most
+environment variable names are all uppercase letters.
+
+                  Command Substitiution
+                  
+You can capture a command's results by placing the command between two parentheses and preceding it with a dollar sign. Instead of its
+output going to the display (STDOUT), it is redirected to the User_Record variable. This method of storing a command's results in a 
+variable is sometimes called "command substitution".
+  User_Record=$(grep $Username /etc/passwd)
+The variable User_Record is now set to grep $Username /etc/passwd
+
+There is an older method for storing a command's results in a variable using back-tick (`) characters. Back-tick characters are not
+single quotes ('). The back-tick key is typically shared with the tilde (~) character on the keyboard.
+  `grep $Username /etc/passwd`  ==  $(grep $Username /etc/passwd)
+                  
+                  Read Command
+                  
+In addition to assigning variables with the assignment operator (=), you can read variables from standard input using the read command,
+as in read response_variable, to read input. The script user's response is stored in the response_variable for later access as
+$response_variable. The read command accepts the user's input and stores it in the variable.
+
+                  echo command 
+                  
+The -e option enables the interpretation of backslash escapes
+The \c option will stop output from echo command.
+  echo -e Hello World \c >> hi.txt
+
+                  Environment Variables in Scripts
+                  
+Environment variables are assigned and accessed just like other shell script variables. The difference is that the script or command
+that sets an environment variable uses the export command. Suppose you set an environment variable in Script-A and Script-A starts 
+Script-B in a manner that creates a subshell. Script-B can use the environment variable too.
+Remember, most environment variable names are all uppercase, whereas non-environment shell script variables should all be lowercase 
+or mixed case.
+
+                                                      Conditional Expressions
+                                                      
+Scripting languages support several types of conditional expressions. These expressions enable a script to perform one of several
+actions contingent upon some condition-typically the value of a variable.
+
+                  if-then
+
+One common command that uses conditional expressions is the if-then statement. fi to designate the end of the statement.
+  if [condition]
+  then
+    [command]
+  fi
+
+                if-then-else
+                
+You can also add an else section to your if-then statement                
+  if [condition]
+  then
+    [command]
+  else
+    [command]
+  fi
+  
+                test command
+                
+This basic if-then-else statement syntax has limited use. Where it really becomes valuable is when you can test a variable's value.
+The test command:
+  test [condition]
+If the condition (condition) listed in the test command evaluates to true, the test command exits with a zero status code. If the
+condition evaluates to false, the test command exits with a nonzero status code.
+  test == if-then-else
+Both the test condition and test command can evaluate three condition types:
+  1: Numeric comparisons
+  2: String comparisons and tests
+  3: File comparisons and tests
+  
+To test if two numbers are equal, the number comparison users the -eq comparison syntax. To test if two strings are equivalent,
+the string comparison use the = comparison syntax.
+For varibales that will be used to store integers, you should use the declare command as follows: declare -i [variable]
+You can also test a variable's contents without a comparison. 
+  For example: 
+To test if a string has a length of zero, use the -z syntax. 
+To test if a file exits, use the -f syntax.
+  
+The [ condition ] must have a space after the first bracket [ and before the closing brecket ].
+Test conditions may be combined with the logical "and" (&&) or logical "or" (||) operatiors. When conditionals are combined with 
+&&, both sides of the operator must be true for the conditon as a whole to be true. When || is used, if either side of the 
+operator is true, the condition as a while is true.
+
+                nested if
+
+If a variable can have two or more values, you can use nested if statements to test for these conditions.
+  if [ condition1 ]
+  then
+    [command]
+  elif [ condtion2 ]
+    [command]
+  fi
+  
