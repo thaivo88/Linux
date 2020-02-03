@@ -46,3 +46,14 @@ network:
 # Search for preserve_hostname and change the value from false to true:
         preserve_hostname: true
 ############## End ###################
+
+
+
+
+
+############# Disable auto update ####################
+# 0 disable
+# 1 enable
+    sed -i 's/APT::Periodic::Update-Package-Lists "1";/APT::Periodic::Update-Package-Lists "0";/' /etc/apt/apt.conf.d/20auto-upgrades
+
+############## End ###################
