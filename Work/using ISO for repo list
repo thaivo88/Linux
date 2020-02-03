@@ -45,6 +45,16 @@ yum -y install ypbind
 yum install ntp									
 
 ##############################################################
+127.0.0.1 local
+
+name=RHEL 7.5 local
+baseurl=http://127.0.0.1/repos/RHEL
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+enabled=1
+gpgcheck=1
+http_caching=packages
+
+##############################################################
 For RHEL8
 
 Step:1) Mount RHEL 8 ISO file / Installation DVD
