@@ -1,0 +1,80 @@
+Understanding Email
+
+Several protocols exist to manage email. The most common of these is the Simple Mail Transfer Protocol (SMTP), which is designed as
+a 'push' mail protocol, meaning that the sending system initiates the transfer. This design is good for sending data, so SMTP
+is used through most of a mail delivery system. The final stage, though, often employs a 'pull' mail protocol, such as the 
+Post Office Protocol (POP) or the Internet Massage Acces Protocol (IMAP). With these protocols, the receiving system initiates the 
+transfer. This is useful when the receiving system is an end user's workstation, which may not be powered on at all times or able to
+receive incoming connections.
+
+SMTP was designed to enable a message to be relayed through an arbitrary number of computers. For instance, an end user may compose a
+message, which is sent to the local SMTP server. SMTP servers are also known as Mail Transfer Agents (MTAs). The MTA looks up a recipient
+system and sends the message to that computer. This system may use its own internal routing table to redirect the message to another 
+local computer from which the message may be read, either directly or via a POP or IMAP server. These servers are also known as 
+Mail User Agents (MUAs).
+
+The basic steps for the creation, transfer, and delivery of emails are as follows:
+1.  A user creates an email message using and email client, called a Mail User Agent (MUA).
+2.  The MUA gives the email to a Mail Submission Agent (MSA).
+3.  The MSA then hands off the email to a Mail Transfer Agent (MTA).
+4.  The MTA is responsible for transferring the email to the Mail Delivery Agent (MDA).
+5.  The Mail Delivery Agent handles delivering the email to the Mail User Agent (MUA)
+6.  The recipient user then reads the email message via the MUA.
+
+MTA can function as both a server (receiving mail rom other systems) and a client (sending mail to other systems). Therefore, you must
+deal with both sides of the configuration equation.
+ __________________    __________________    __________________    __________________    __________________
+|                  |  |                  |  |     Email is     |  |      User        |  |                  | 
+|User creates email|>>| User sends email |>>|    transferred   |>>|  receives email  |>>| User reads email |
+|     using MUA    |  |    using MSA     |  |     using MTA    |  |    using MDA     |  |    using MUA     |
+|__________________|  |__________________|  |__________________|  |__________________|  |__________________|
+
+
+
+Email Software
+
+Four email MTA servers are popular on linux:
+1:  Sendmail
+    It's very powerful, but it can be hard to configure because its configuration file formats are rather difficult.
+2:  Postfix
+    Designed as a modular. Postfix uses multiple programs, each of which handles its own specific small task.
+3:  Exim
+    Huge server like sendmail, it has a much simpler configuration file format and so is easier to configure.
+4:  Qmail
+    Is a modular server with security as a major design goal.
+    
+You can also look for executable files for each email MTA server in /usr/bin or /usr/sbin. Be aware that many Linux email servers
+include a program called 'sendmail'. This program is not the sendmail program discussed earlier, but instead an interface to other 
+email server.
+
+
+
+Working with email
+
+Tasks involve sending and receiving mail using the 'mail' utility, email queue management, configuring aliases, and forwarding email.
+'mail' command-line based program
+This tool is a very basic command-line email utility. It has the advantage of being usable from a script. Therefore, you can write
+a script to handle some email task automatically, and perhaps even run that script automatically.
+The 'mail' program is intended to be used on the command-line to send or receive messages. 
+
+The basic syntax for 'mail', including its most useful options for sending email, is as follows:
+  mail [-v] [-s subject] [-c cc-address] [-b bcc-address] to-address
+The basic syntax for receiving email as follows:
+  mail [-v] [-f [name] | -u user]
+  
+Unlike most email readers, the 'mail' command supports reading only the local email queue, not email stored on remote servers and read
+via the POP or IMAP protocols.
+
+mail options:
+
+  Use Verbose Operation:  The -v option produces more verbose output.
+  Specify a Subject Line: The -s subject option enables you to specify a subject line.
+  Set a Carbon Copy Address:  You can send a message to multiple people by using the -c and -b option.
+  Set the Recipient's Address:  The main recipient's email address is required and terminates the 'mail' command's 
+line for an outgoing email.
+  Read Email: To read your email, optionally pass the -f option to the program followed by the name of the mail spool file. 
+Alternatively, you can use the -u option to read the mail of the specified user.
+    
+
+
+
