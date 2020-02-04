@@ -14,7 +14,7 @@
   wasup                       (shows job/queue information)
   scontrol show job <JOBID>         (show jobs)
   sinfo                     (information on the status of each computer on your local network.)
-  bhosts                        (shows current status of nodes in the cluster)
+  bhosts/shosts                       (shows current status of nodes in the cluster)
   lshosts                       (shows host constraint/feature information)
   ssacli	                   HPE Command Line Smart Storage Administration Utility
   ssaducli	           HPE Command Line Smart Storage Administration Diagnostics
