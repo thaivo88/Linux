@@ -55,6 +55,12 @@ hpchpcm /thai_notes
 
 #  show repo of the group
   crepo --show-groups
+  
+# remove nodes from pbs
+ qmgr
+# you will enter qmgr interface use the d for delete and n for node
+ d n [hostname]
+ quit
 
 #################################### Adding node to sales op ###################################
 # set sales op per node
