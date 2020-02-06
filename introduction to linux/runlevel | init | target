@@ -42,5 +42,6 @@
 #            +m option specifies the amount of time (in minutes) before shutting down or replace it with a time hh:mm
 #            -h|-r option = halt | reboot
 #            example: shutdown 12:00 -r please save all work, system shut down at noon
+#                     shutdown +5 -h "system shutdown in 5min"
 #            shutdown -c (cancel shutdown)
 
