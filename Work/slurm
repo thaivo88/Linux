@@ -182,3 +182,35 @@ Check the value of "Last slurmctld msg time" to determine if the slurmctld is ab
 4. If slurmd is running but not responding (a very rare situation), then kill and restart it (typically as user root using the 
 commands "/etc/init.d/slurm stop" and then "/etc/init.d/slurm start").
 ##################################################
+
+# Slurm configuration:
+
+# NIS already has a slurm users, it will cause an error so moving useradd or adduser and userdel or deluser temporary
+# check to see which add and del bin file you have
+  which adduser
+  which useradd
+  mv /usr/sbin/adduser /usr/sbin/adduser.bak
+  mv /usr/sbin/deluser /usr/sbin/deluser.bak
+
+# create new useradd and userdel to return 0
+  vi /usr/sbin/useradd
+        #################  
+          #!/bin/bash
+          exit 0
+        #################
+
+# changing permission bit and copying a userdel
+  chmod u+x /usr/sbin/useradd
+  cp /usr/sbin/useradd /usr/sbin/userdel
+
+# adduser slurm
+  adduser slurm
+
+# install slurm and slurm-client
+  apt-get install munge
+  apt install slurm slurm-client
+
+
+
+
+
