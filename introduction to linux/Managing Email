@@ -75,6 +75,37 @@ line for an outgoing email.
   Read Email: To read your email, optionally pass the -f option to the program followed by the name of the mail spool file. 
 Alternatively, you can use the -u option to read the mail of the specified user.
     
+After you type the 'mail' command, the program waits for input via standard input, but there's no prompt. You signal the end of the 
+message by pressing Ctrl+D. This example shows a simple one-line message. After you press Ctrl+D, the progmam displays EOT, which
+stands for End of Transmission, and the message is on the way.
+
+To use mail in script, you can use input redirection to pass it the contents of a file to be mailed:
+ mail -s ["subject"] < [file] [users]
+ mail -s "Automated Alert!" < /tmp/alert.txt john
+This line, if included in a script, sends the contents of the /tmp/alert.txt file to the user john with the "Automated Alert!" subject.
+
+You can use the 'mail' to read incoming email too, but only if it's stored on a local linux mail spool. You'll normally use 'mail'
+interactively. Type 'mail', and you'll see the contents of your mail spool. Each message has a summary line that lists the sender, date,
+and subject, among other things:
+ 0046 sally@luna.edu Sun Jan 13 18:27 116/4262 Priorities
+This is mesaage number 46, it's from sally@luna.edu, it arrived on Jan 13 at 18:27, it has 116 lines and 4262 bytes (including headers),
+and its subject is Priorities.
+
+To read a message, type its number, you can then delete the message by typing 'd' or reply to it by typing 'r'
+The mail server holds incoming messages for each user, typically in a file in the /var/spool/mail/ directory. Some email servers store
+incoming mail in user's home directories, such as ~/maildir. This incoming mail file or directory is referred to as the user's mail
+spool.
+
+Checking Email Queue
+
+As email server manages a queue of email messages that it must deliever. The email server sends email messages to another computer
+or stores them in local users' mail spools. Various problems can lead to a temporary or permanent inability to deliver messages.
+When a problem seems to be temporary, such as a network routing failure, the email server must store the message and try to deliever
+it again later.Thus, a linux server's email queue may contain undelivered messages. Knowing how to identify these messages and manage 
+the queue can help you keep your email subsystem working smoothly.
+
+the 'mailq' program is the main tool to help in email queue management. This program was originally part of the sendmail package, but
+Postfix, Exim, qmail, and other linux. MTA servers have all implemented compatible commands.
 
 
 
