@@ -106,6 +106,40 @@ the queue can help you keep your email subsystem working smoothly.
 
 the 'mailq' program is the main tool to help in email queue management. This program was originally part of the sendmail package, but
 Postfix, Exim, qmail, and other linux. MTA servers have all implemented compatible commands.
+Typing 'mailq' is equivalent to typing 'sendmail -bp'
 
+If you want to clear the queue, you can do so; typing 'sendmail -q' will do the job with most MTA servers. Some have other equivalent 
+commands, such as postqueue in Postfix or 'runq' in Exim.
+
+Redirecting Email
+
+Email aliases enable one address to stand in for another one. For instance, all email servers are supposed to maintain an account called
+postmaster. Somebody who's responsible for maintaining the system should read email to this account. One way to do this is to set up an
+alias linking the postmaster name to the name of a real account. You can do this by editing the aliases file, which usually resides in 
+/etc/ or sometimes in /etc/mail/.
+ aliases        name: address1[,addres2[,...]]
+ 
+Each address (address1, address2, and so on) can be one of the following:
+ - A local account name to which the messages are forwarded
+ - A local file name in which messages are stored (denoted by a leading slash)
+ - A command through which messages are piped (denoted by a leading vertical bar character)
+ - A file name whose contents are treated as a series of addresses (denoted by a leading :include: string) or a full email address
+ (such as fred@example.com)
+ 
+ Reading mail as root is inadvisable because doing so increases the odds of a security breach or other problems due to mail reader bugs.
+ Thus, you may want to set up an alias line as follow:
+  root: [username]
+  
+This redirects all of root's mail, including mail directed to root via another alias, [username]. The [username] value is most likely
+to be a local username or a valid remote email address.
+Some mail servers, including sendmail, Postfix, and qmail, require you to compile /etc/aliases into a binary file before an alias
+will take effect. To do so, use the 'newaliases' command.
+
+Another approach to redirecting mail is to do so at the user level. You can edit the ~/.forward file in a user's home directory to have
+mail for the user sent to another address. The ~/.forward file should contain only the new address.
+Forwarding email has the advantage that individual user can employ it.
+
+A drawback of forwarding email is that is that it can't be used to set up aliases for nonexistent accounts of for accounts that lack
+home directories.
 
 
