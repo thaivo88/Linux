@@ -1,0 +1,14 @@
+The Structured Query Language SQL, is a language used for retrieving data from a database.
+SQL is a language for accessing data, and specific SQL packages implement that language.
+
+  MySQL
+Oracle owns this SQL implementation
+  PostgreSQL
+A compressed form of post-ingres SQL. Available under the BSD license.
+  SQLite
+Is a library that implements SQL. It's not a stand-alone database; instead, it's intended to provide programs with a way to store data
+using SQL interface within the program.
+
+Some SQL packages, including MySQL and PostgreSQL, operate on a client-server model: one program (the server) manages the database, while
+another (the client) provides users and programs with access to the database. Such implementations can work over a network, enabling users
+at multiple client systems to access a centralized database server.
