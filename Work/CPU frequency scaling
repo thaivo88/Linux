@@ -90,4 +90,52 @@ pdsh -w [nodes] conrep -l -f [file path]
 # To monitor cpu speed in real time, run:
   watch grep \"cpu MHz\" /proc/cpuinfo
 
+######################################
+
+
+
+
+
+################ acpi cpufreq driver ###############
+# Install conrep. hp-scripting-tools-11.30-29.rhel7.x86_64.rpm
+# Save the current BIOS settings just in case:
+   conrep --save --filename ${HOSTNAME}-before.xml
+
+# In the BIOS, change
+      Workload_Profile -> Custom
+      Power_Regulator -> OS_Control_Mode
+      Energy/Performance Bias -> Maximum_Performance
+# There's an XML file at znode53:/root/acpi_cpufreq-bios.xml to make these changes with conrep.  Copy it over to the node and do
+   conrep --load --filename acpi_cpufreq-bios.xml
+
+# Edit /etc/default/grub and add "intel_pstate=disable" to GRUB_CMDLINE_LINUX.  For example, on znode53, the new string became:
+  GRUB_CMDLINE_LINUX="crashkernel=auto rhgb quiet nouveau.modeset=0 rd.driver.blacklist=nouveau intel_pstate=disable"
+
+# Regenerate the grub config:
+  grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
+
+# Reboot
+# After the reboot is complete, check to make sure the acpi-cpufreq driver is loaded:
+  cpupower frequency-info | grep driver
+    driver: acpi-cpufreq
+# Now you can set the frequency to any of the values in 
+  cpupower frequency-info | grep 'available frequency steps'
+    the available frequencies are 2.50 GHz, 2.40 GHz, 2.30 GHz, 2.20 GHz, 2.10 GHz, 2.00 GHz, 1.90 GHz, 1.70 GHz, 1.60 GHz, 1.50 GHz, 1.40 GHz, 1.30 GHz, 1.20 GHz, 1.10 GHz, 1000 MHz.
+
+# Change the frequency to the highest available and set the performance governor to "performance":
+  cpupower frequency-set -g performance --min 2500MHz --max 2500MHz
+
+# turbo
+  cpupower frequency-set -g performance --min 2501MHz --max 2501MHz
+
+# check that all the CPUs are running in turbo with:
+  cpupower frequency-info -o
+# All the CPUs should say 2501000 KHz.  If turbo isn't on, they'll say 2500000 kHz.
+  
+  
+# Make sure all the cores have the frequency you set:
+  grep MHz /proc/cpuinfo
+
+####################################################
+
 
