@@ -12,3 +12,55 @@ using SQL interface within the program.
 Some SQL packages, including MySQL and PostgreSQL, operate on a client-server model: one program (the server) manages the database, while
 another (the client) provides users and programs with access to the database. Such implementations can work over a network, enabling users
 at multiple client systems to access a centralized database server.
+
+Understanding SQL Basics
+
+SQL is a tool for accessing databases, and more specifically, relational database. Each row (sometimes known as a tuple) represents a
+single object or other item, and each column (sometimes referred to as an attribute or field) represents a specific feature. The combination
+of rows and columns is referred to as a table. Each database may contain multiple tables, and SQL supports multiple databases. To access 
+data, you must first select a database and a table.
+
+A database enables retrieval of information that matches specific criteria. You can search, insert, delete, and update information in a 
+table. SQL supports multiple tables, so you can have, for example, different tables for office property and for employees who work in
+your office.
+
+Columsn (attributes) in a database hold specific types of data, and swapping them around makes little sense. The restrictions placed on
+what may appear in a column are known as a domain or a data type. Mathematic operators can manipulate the numeric data types (INTERGER,
+DECIMAL, and so on).
+
+Common SQL data type
+----------------------------------------------------------------------------------------------------------------------------
+Data Type Name            Purpose
+INTEGER (INT)             4-byte integer value
+SMALLINT                  2-byte integer value
+DECIMAL                   Precision storage of decimal values
+NUMERIC                   Precision storage of decimal values
+FLOAT                     Floating-point number
+DOUBLE PRECISION          Floating-point number stored with twice the precision of FLOAT
+DATETIME                  A date and time
+DATE                      A date
+TIME                      A time, in HH:MM:SS format; may be a time of day or a period of time
+CHAR                      One or more characters
+VARCHAR                   A variable number of characters
+ENUM                      An enumerated list, such as small, medium, or large
+SET                       Data that may have zero or more values, as in any of the set of nuts, sprinkles, fudge, 
+                          and cherry for ice cream toppings.
+----------------------------------------------------------------------------------------------------------------------------
+
+To begin a SQL session type 'mysql'
+  mysql
+To learn what's defined, you can use the SHOW DATABASES command
+  SHOW DATABASES
+Commands are terminated by semicolons (;)
+SQL commands are conventionally shown in uppercase. However, SQL commands are case insensitive.
+
+To create a database:
+  CREATE DATABASE
+Although SQL commands are case insensitive, database names are not.
+To use the new created database use the use command
+  USE [database_name]
+Within each database, tables must be created and selected for use. The command to do so are similar to the commands used to create and
+select database.
+The response Empty set denotes an empty database. To fill the database with data, you must first decide on a table structure-what sort
+of data you want to record.
+  
