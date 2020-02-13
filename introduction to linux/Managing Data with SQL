@@ -63,4 +63,97 @@ Within each database, tables must be created and selected for use. The command t
 select database.
 The response Empty set denotes an empty database. To fill the database with data, you must first decide on a table structure-what sort
 of data you want to record.
+
+mysql> CREATE TABLE objects (name VARCHAR(30), color VARCHAR(20), size FLOAT, hardness ENUM('soft','medium','hard'), value DECIMAL(10,2));
+
+The 'name' VARCHAR data type may be up to 30 characters
+The 'color' VARCHAR data type may be up to 20 characters
+If these were defined as CHARs, each name whould have to be precisely 30 characters in size.
+A limited set of colors can be specified using an ENUM data type rather than a VARCHAR data type.
+The 'size' column is a FLOAT data type, which is less precise than an integer data type, but it can hold real (non-integer) number.
+(But in practice you'll need to convert everything to one unit)
+ENUM data type: the list of values as a whole is enclosed in parentheses (), and each enumerated value is enclosed in single quotes (')
+and separated from other values by a comma (,)
+The DECIMAL value includes a specification of the number of digits (10 in this example) and the number of digits after the decimal point
+(2 in this example), separated by a comma.
+
+With the table created, you may want to verify that it's  been created correctly. You can do so by typing the DESCRIBE objects; command.
+The result should be a summary of the fields that you've just created for the objects table.
+
+Storing Data
+
+You can now begin to store data in your database. To do so, use the INSERT INTO command:
+  mysql> INSERT INTO objects VALUES('lizard','green',6,'soft',10.00);
   
+You can verify that the database now holds this information by typing the SELECT * FROM object; command
+If you entered incorrect dataa for one filed you can correct this error by using UPDATE:
+  mysql> UPDATE objects SET size=5 WHERE name='lizard';
+  
+The keyword UPDATE and the table name (objects). MySQL what to update: SET size=5, setting the size field to 5. The WHERE keyword begins
+a specification of which rows to change. You must provide enough criteria to identify the column uniquely that you want to change.
+
+Retrieving data
+
+The whole point of having a database is to be able to retrieve data from it. The main command for doing so has already been described:
+SELECT. This command's power lies in its ability to accept specifications of waht to select.
+  SELECT files(s) FROM table [ WHERE conditions ] [ ORDER BY field ]
+
+SELECT have used an asterisk (*) as field(s), meaning that the command returns all of the columns that match the remaining criteria.
+
+A more interesting way to retrieve data is to use WHERE conditions. You can use conditions to retrieve specific data in several ways:
+  -Exact Matches: Using a column name, an equal sign, and a value to match returns only for those rows that match the specified value.
+      SELECT * FROM objects WHERE color='green';
+  -Numeric Test:  You can retrieve data that match certain numeric criteria.
+      SELECT * FROM objects WHERE size>10;
+  -Alphabetic Test: The greater-than (>) and less-than (<) operators work on letters as well as numbers. This fact can be used to 
+  retrieve data based on the first letter of a string.
+      SELECT * FROM objects WHERE name>'b';
+  -Multiple Test: You can combine multiple criteria using the AND and OR operators.
+      SELECT * FROM objects WHERE hardness='soft' AND value>7.50;
+      
+You can have MySQL return the data as an ordered list by specifying a field name after the ORDER BY keyword:
+  mysql> SELECT * FROM objects WHERE hardness='soft' ORDER BY values;
+  
+Combining data from multiple tables
+
+A database may contain multiple tables. This feature of SQL enables you to create tables for different funcions. You may need to combine
+these two tables to create a master table on which you can perform queries. For you to do so, the two tables must have one matching field.
+This matching field is used to bind the two tables together. Each table must have one field whose value uniquely identifies each row.
+This uniquely identifying field is known as a primary key.
+  mysql> SELECT objects.name, objects.color, locations.location FROM objects, locations 
+      -> WHERE objects.name=locations.name AND objects.color='green';
+
+objects.name, objects.color, locations.location      
+This SQL is selecting the name and color column from object table & location column from locations table FROM objects, and locations.
+WHERE objects.name=locations.name
+where the name column from objects table equal name column from locations table
+AND all the color of green from the color column from objects table.
+
+A second way to combine data from multiple tables is to use JOIN. This approach is very similar to the preceding one, but you specify
+one table using FROM and the other using JON:
+  mysql> SELECT objects.name, objects.color, locations.location
+      -> FROM objects
+      -> JOIN loctions
+      -> WHERE objects.name=locations.name AND objects.color='green';
+
+By splitting the data across tables, each table can be much smaller, thus reducing storage space. A retrieval command that requires
+special mention is GROUP BY. This command is used in conjunction with mathematical operators, such as SUM(), to restrict the 
+selection to specified column.
+  mysql> SELECT objects.name, objects.value, SUM(value)
+         FROM objects, locations
+         WHERE locations.name=objects.name
+         GROUP BY value;
+         
+Deleting data
+
+You'll use the DELETE command.
+  DELETE FROM table WHERE conditions
+  mysql> DELECT FROM locations WHERE name='tree' AND location='backyard';
+  
+Before deleting data, try using SELECT to see what data your WHERE conditions match. Doing this will help you to avoid accidenetallly
+deleting too much data.
+
+You can delete all of the data from a table by using a variant of the DELETE command:
+DELETE * from LOCATIONS; This command deletes all of the table's data without deleting the table itself.
+An even more drastic deletion operation is DROP: DROP TABLE locations; This eliminates the locations table.
+
