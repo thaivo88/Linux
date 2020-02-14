@@ -1,0 +1,6 @@
+# Edit the ssh daemon config file, set UseDNS to no
+  vi /etc/ssh/sshd_config
+    UseDNS no
+# restart ssh daemon & login daemon
+  systemctl restart sshd
+  systemctl restart systemd-logind
