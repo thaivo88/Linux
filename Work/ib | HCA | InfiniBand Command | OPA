@@ -18,6 +18,26 @@ mlx5_3 port 1 ==> ib3 (Up)
 
 # status for OPA card
     ibstat 'hfi1_0'
+    
+#show version and firmware for OPA
+    hfi1_eprom -V -c | grep version && opatmmtool fwversion
+        config file version: etnIRFWl
+        Current Firmware Version=10.1.0.0.101
+
+# Show OPA info
+    opahfirev
+        ######################
+        cronusn001  - HFI 0000:37:00.0
+        HFI:   hfi1_0
+        Board: ChipABI 3.0, ChipRev 7.17, SW Compat 3
+        SN:    0x0071e40c
+        Location:Discrete  Socket:0 PCISlot:00 NUMANode:0  HFI0
+        Bus:   Speed 8GT/s, Width x16
+        GUID:  0011:7501:0171:e40c
+        SiRev: B1 (11)
+        TMM:   10.1.0.0.101
+        ######################
+    
 
 # Performing Adapter Device Self test
     cd /usr/bin
