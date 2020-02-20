@@ -1,4 +1,10 @@
 //connect to ilo cli
+ssh [ilo_ip_address] -l [username]
+exampe: ssh 10.100.1.148 -l admin
+
+//to reset ilo
+cd /map1
+reset
 
 //to show LED status
 show /system1/led1
