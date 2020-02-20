@@ -1,0 +1,79 @@
+Using Super Server Restrictions
+
+Many network server programs directly open network ports and listen for connections. Some distributions have network server programs that
+work through an intermediary: a super server or super daemon. This is a program that listens for network connections on behalf of another
+program. When a connection is initiated, the super server hands off control of that connection to the intended server.
+Linux has two primary super daemon:
+  1:  inetd
+  2:  xinetd
+  
+In the case of inetd, security is handled by a package called TCP wrappers.
+xinetd's security features are built into xinetd itself.
+
+Use both a server's own security features and the super daemon's security features to block unwanted access. If a problem emerges in the 
+super server configuration, the secondary block will probably halt the attacker.
+
+Configuring/setting up inetd
+
+The inetd package is a legacy super daemon in Linux.
+Services that launched via inetd were controlled through the /etc/inetd.conf file or files in /etc/inetd.d/. The /etc/inetd.conf file 
+consisted of a series of lines, one for each server.
+A typical line for /etc/inetd.conf:
+  ftp stream tcp nowait root /usr/sbin/tcpd /usr/sbin/in.ftpd -l
+  
+Instead of using a single monolithic /etc/inetd.conf file, later versions of inetd enabled you to split the configuration into several 
+files in the /etc/inetd.d/ directory. Doing so allowed easier addition or deletion of server configurations by adding or deleting their
+configuration files.
+
+Service Name
+  The first field (ftp) was the name of the service as it appeared in the /etc/services file
+Socket Type
+  The socket type entry told the system what type of connection to expect-a reliable two-way connection (stream), 
+  a less reliable connection with less overhead (dgram), 
+  a low-level connection to the network (raw), 
+  or various other.
+Protocal
+  This was the TCP/IP transport layer protocol used, usually tcp or udp.
+Wait/No Wait
+  For dgram socket types, this entry specified whether the server connected to its client and freed the socket (nowait) or processed all
+  of its packets and then timed out (wait). Servers that used other socket types would specify nowait in this field.
+User
+  This was the username used to run the server. The root and nobody users were common choices, but others were possible as well. As a
+  general rule, servers were run with a low-privilege user whenever possible as a security precaution. Some servers required root access.
+Server Name
+  This was the server's filename. In the preceding example, the server is specified as /usr/sbin/tcpd, which is the TCP wrappers binary.
+  This program was an important security tool and was usually included as the means of launching programs via inetd.
+Parameters
+  Everything after the server name consisted of parameters that were passed to the server. If you used TCP wrappers, you would pass the
+  name of the true target server (/usr/sbin/in.ftpd) in this field, along with its parameters.
+  
+After modifying inetd.conf, you had to restart the inetd super daemon.
+  /etc/init.d/inetd restart
+  
+Controlling Access via TCP Wrappers
+
+The TCP wrappers package  provides a library known as libwrap. Older TCP wrappers packages used with inetd provided a program known as 
+tcpd. The inetd did not call a server directly; instead, inetd called tcpd, which did two things: It checked whether a client was
+authorized to access the server, and if the client had this authorization, tcpd called the server progarm.
+
+The FTP server, vsftpd, uses TCP wrapper. You can determine if a network service uses TCP wrappers or not by typing
+  Idd NetworkServiceDaemon | grep libwrap
+  
+TCP wrappers is configured through two files: /etc/hosts.allow and /etc/hosts.deny. The first of thes specifies computers that allowed 
+access to the service. Systems not listed in hosts.allow are not permitted access. By contast, hosts.deny lists computers that are not 
+allowed access; all other systems are granted access to the service. If a computer is listed in both files, hosts.allow takes precedence.
+Both files use the same basic format.
+The file consists of lines in the followig form:
+  daemon-list : client-list
+
+The daemon-list variable is a list of servers using the names for the servers that appear in /etc/services. Wildcards are also available,
+such as ALL for all servers.
+The client-list variable is a list of computers to be granted or denied access to the specified daemons. You can specify computers by 
+name or by IP address. Also, you can specify a network by using a leading or tailing dot (.) when identifying networks by name or IP 
+address block. For instance, .ivytech.edu refers to all computers in the ivytech.edu domain, and 192.168.7. refers to all computers in 
+the 192.168.7.9/24 network. You can also use various wildcard options in the client-list variable, such as ALL (all computers).
+The EXCEPT operator creates an execption. The following client-list setting is placed in the hsots.deny file:
+  [...]: 192.168.7. EXCEPT 192.168.7.105
+Client-list setting would block all computers in the 192.168.7.0/24 network. However, an exception would be made for 192.168.7.105
+
+
