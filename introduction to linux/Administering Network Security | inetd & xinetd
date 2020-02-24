@@ -76,4 +76,50 @@ The EXCEPT operator creates an execption. The following client-list setting is p
   [...]: 192.168.7. EXCEPT 192.168.7.105
 Client-list setting would block all computers in the 192.168.7.0/24 network. However, an exception would be made for 192.168.7.105
 
+Configuring xinetd
+
+The xinetd program is an extended super daemon. It provides the functionality of the legacy inetd, plus security options that are
+similar to those of TCP wrappers.
+
+The /etc/xinetd.conf file controls the xinetd super daemon.
+
+xinetd configuration file example:
+#################################
+# default: off
+[...]
+service rsync
+{
+  disable = yes
+  flags            = IPv6
+  socket_type      = stream
+  wait             = no
+  user             = root
+  server           = /usr/bin/rsync
+  server_args      = --daemon
+  log_on_failure   += USERID
+}
+$
+##################################
+
+If you include the line disable = yes in a service definition, xinetd ignores this sserver. You must edit the file and change the 
+entry to read disable = no to enable the server. You can also temporarily disable a set of servers by listing their names in the 
+defaults section of the main xinetd.conf on a line called disable. After you make changes to xinetd's configuration, you must 
+either reload the configuration file or restart the super server.
+  /etc/init.d/xinetd restart
+  
+Controlling access via xinetd
+
+Security is handled on a server-by-server basis through the use of configuration parameters in either /etc/xinetd.conf or the 
+server-specific configuration files.
+  hosts.allow and hosts.deny
+  
+Network Interface:
+The bind option tells xinetd to listen on only one network interface for the service. For instance, you can specify bind = 192.168.23.7
+on a router to have it listen only on the Ethernet card associated with that address. This feature is extremely useful in routers, but
+it isn't as useful in computers with just one network interface. You can, however, use this option to bind a server only to the loopback 
+interface, 127.0.0.1, if a server should be available only locally. You might do this with a configuration tool like the Samba Web 
+Administration Tool (SWAT). A synonym for this option is interface.
+Allowed IP or Network Addresses:
+Disallowed IP or Network Addresses:
+Access Times:
 
