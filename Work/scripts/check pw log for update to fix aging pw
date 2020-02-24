@@ -18,4 +18,6 @@ read yn
 if [ "$yn"=="y" ];
   then
     chage -d $(date +%F) $1
+      passwd -u $1
+        echo Aging password has been reset
 fi
