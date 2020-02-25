@@ -1,6 +1,9 @@
-# Edit the ssh daemon config file, set UseDNS to no
+# Edit the ssh daemon config file, set UseDNS and IPAddressDeny to no and null
   vi /etc/ssh/sshd_config
+    #UseDNS yes
     UseDNS no
+    #IPAddressDeny=any
+	  IPAddressDeny=
 # restart ssh daemon & login daemon
   systemctl restart sshd
   systemctl restart systemd-logind
