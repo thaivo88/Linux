@@ -113,13 +113,43 @@ Security is handled on a server-by-server basis through the use of configuration
 server-specific configuration files.
   hosts.allow and hosts.deny
   
-Network Interface:
+    Network Interface:
 The bind option tells xinetd to listen on only one network interface for the service. For instance, you can specify bind = 192.168.23.7
 on a router to have it listen only on the Ethernet card associated with that address. This feature is extremely useful in routers, but
 it isn't as useful in computers with just one network interface. You can, however, use this option to bind a server only to the loopback 
 interface, 127.0.0.1, if a server should be available only locally. You might do this with a configuration tool like the Samba Web 
 Administration Tool (SWAT). A synonym for this option is interface.
-Allowed IP or Network Addresses:
-Disallowed IP or Network Addresses:
-Access Times:
+    Allowed IP or Network Addresses:
+You can use the only_from option to specify IP addresses, networks, or computer names on this line, separated by spaces. The result is 
+that xinetd will accept connections only from these addresses, similar to TCP wrappers' hosts.allow entries.
+    Disallowed IP or Network Addresses:
+The no_access option is the opposite of only_from; you list computers or networks here that you want to blacklist. This is similar to 
+the hosts.deny file of TCP wrappers.
+    Access Times:
+The access_times option sets times during which users may access the server. The time range is specified in the form hour:min-hour:min,
+using a 24-hour clock. Note that this option affects only the times during which the server will respond. If the xinetd access_times 
+option is set to 8:00-17:00 and somebody logs in at 4:59 p.m. (one minute before the end time), that user may continue using the 
+system well beyond the 5:00 p.m. cutoff time.
+
+You should enter these options into the configuration files in /etc/xintd.d/ that correspond to the servers you want to protect. Place
+the lines between the opening brace ({) and closing brace (}) for the service. If you want to restrict all of your xinetd-controlled
+servers, you can place the entries in the defaults section in /etc/xinetd.conf.
+
+Disabling unused servers
+
+For security reasons, you should periodically audit your servers' network services and disable any service that you find isn't necessary.
+Several audit tools exist, such as netstat, lsof, and remote network scanners.
+
+Netstat
+
+Auditing network scurity is to look for network activity or open ports on a computer. One older tool that can help in this respect is 
+netstat. This useful program provides many different options and output formats to deliver information about routing tables, interface
+statistics, and so on.
+
+For spotting unnecessary servers, you can use netstat with its -a and -p options. The -a option shows all network sockets. The -p option
+shows the PID and program name that owns a shown socket.
+
+
+
+
 
