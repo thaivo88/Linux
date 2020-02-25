@@ -410,6 +410,11 @@ The database parameter can be any of the NSS configured system database:
         voth:x:503:
         
 
+NAME_REGEX
+Please follow the format ([a-z_][a-z0-9_]{0,30}) for username convention.
+First character can start with a lowercase letter from ‘a’ to ‘z’ or underscore ‘_’
+Then after the first character can have any mix match of letters from ‘a’ to ‘z’, numbers ‘0’ to ‘9’, and/or underscore ‘_’ 
+and must not exceed 30 characters.
 
               
               
