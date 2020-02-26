@@ -1,0 +1,207 @@
+--------------------------------------------------------------------------
+# ofed_info -s
+--------------------------------------------------------------------------
+Find Mellanox Adapter Type and Firmware/Driver version
+ConnectX-4 card
+
+# lspci | grep Mellanox
+0a:00.0 Network controller: Mellanox Technologies MT27500 Family [ConnectX-3]
+# lspci -vv -s 0a:00.0 | grep "Part number" -A 3
+# lspci | grep Mellanox | awk '{print $1}' | xargs -i -r mstvpd {}
+
+find the adapter card's PSID
+# ibv_devinfo | grep board_id
+
+MLNX_OFED installed, "mlxfwmanager"
+# mst start
+
+two ports one Ethernet and the second InfiniBand
+# ibv_devinfo
+
+maps the adapter port to the net device
+# ibdev2netdev
+# ibdev2netdev -v
+--------------------------------------------------------------------------
+HowTo Dump Driver Configuration (via ethtool)
+
+MST dump + Ring dump (1+2) 
+# ethtool -W ens1f0 3
+ 
+filename for the dump
+# ethtool -w ens1f0 data /tmp/dump.bin
+
+Get the flag value, version and size of the dump
+# ethtool -w ens1f0
+
+open the dump file -m for the mst dump file. -r for the ring dump file.
+# mlnx_dump_parser -f /tmp/dump.bin -m mst_dump_demo.txt -r ring_dump_demo.txt
+flag: 3, version: 1, length: 4312
+--------------------------------------------------------------------------
+
+Inbox Driver
+Find the Logical-to-Physical Port Mapping (Linux)
+
+MLNX_DEVICE may be eth2, eth3, ib0, ib1, etc.
+(e.g. mlx4_1, mlx4_2, etc) If there is more than one
+
+# cat /sys/class/net/eth2/dev_id
+0x0 --> Port 1
+
+# cat /sys/class/net/eth2/device/infiniband_verbs/uverbs0/ibdev
+mlx4_0
+--------------------------------------------------------------------------
+mlx5_ib, mlx5_core are used by Mellanox Connect-IB adapter cards
+ib_iser module is used by iscsi initiator
+ib_isert module is used by LIO iscsi target
+TGT, being a userspace implementation, does not need any of those kernel modules.
+
+check the value of a module parameter
+# cat /sys/module/mlx4_core/parameters/roce_mode
+2
+
+find the full list of kernel modules replaced by the MLNX_OFED RHEL7 OS
+# pwd
+/lib/modules/3.10.0-123.el7.x86_64/extra
+# find . * | grep .ko
+
+find the full list of kernel modules replaced by the  Ubuntu 14.04
+# pwd
+/lib/modules/3.13.0-33-generic/updates/dkms
+# ls
+--------------------------------------------------------------------------
+manage Mellanox Linux Driver modules and RPMs
+
+# lsmod | grep ib
+# lsmod | grep _en
+# lsmod | grep rdma
+# modinfo mlx4_en
+
+Load a module
+# modprobe xprtrdma
+
+remove a module
+# modprobe -r xprtrdma
+--------------------------------------------------------------------------
+tool dumps the steering rules
+
+# mst start
+
+get the device ID
+# mst status -v
+
+run the script
+# ./ofed_scripts/utils/mlx_fs_dump -h
+# ./ofed_scripts/utils/mlx_fs_dump -d /dev/mst/mt4119_pciconf0.1
+#./ofed_scripts/utils/mlx_fs_dump -d /dev/mst/mt4115_pciconf0
+
+GVMI Number:
+all the Physical Functions (PFs), then the Virtual functions (VFs) of PF0, VFs of PF1, etc
+
+--------------------------------------------------------------------------
+get the current QoS configuration
+#  mlnx_qos -i eth2 
+
+ set the Priority Flow Control (PFC) configuration on a port.enable any subset of priorities 0...7
+ -f, --pfc
+ 
+ # mlnx_qos -i eth2 -f 0,0,0,1,0,0,0,0
+ check the configuration
+ # mlnx_qos -i eth2
+--------------------------------------------------------------------------
+Mellanox ConnectX adapters have 2 parameters
+1. log_num_mtt  - The number of Memory Translation Table (MTT) segments per HCA. The default number ranges between 20-30. The value is the log2 of the number.
+2. log_mtts_per_seg - The number of MTT entries per segment. The default number of is 0. The value is the log2 of the number.
+
+application might fail due to not enough memory that can be registered by RDMA
+MPI Jobs may fail to run with the error message “MTT allocation error”. This error is caused from the HCA’s inability to register additional memory
+Increasing the MTT size might increase the number of “cache misses” and increase latency. Some applications require lower latency that could be achieved by reducing the MTT size
+
+The formula to compute the maximum value of pagepool when using RDMA
+max_reg_mem = 2^log_num_mtt  x  2^log_mtts_per_seg * x PAGE_SIZE
+if the physical memory on the server is 64GB, it is recommended to have twice this size (2x64GB=128GB) for the max_reg_mem.
+
+max_reg_mem = (2^ log_num_mtt) * (2^1) * (4 kB)
+128GB = (2^ log_num_mtt) * (2^1) * (4 kB)
+2^37 = (2^ log_num_mtt) * (2^1) * (2^12)
+2^24 = (2^ log_num_mtt)
+24 = log_num_mt
+
+    view the parameters value
+    # cat /sys/module/mlx4_core/parameters/log_num_mtt
+    23
+    # cat /sys/module/mlx4_core/parameters/log_mtts_per_seg
+    0
+    
+    change the file /etc/modprobe.d/mlx4_core.conf,Set the parameter of the mlx4_core module (to 24 for example)
+    options mlx4_core log_num_mtt=24
+    options mlx4_core log_mtts_per_segt=2
+      
+    Restart the driver after this change
+    # /etc/init.d/openibd restart
+   
+   --------------------------------------------------------------------------
+   Tune Your Linux Server for Best Performance Using the mlnx_tune Tool
+   
+   
+   # mlnx_tune -h
+   # mlnx_tune -v
+   Raise the verbosity level
+   # mlnx_tune -q
+   tune the server run mlnx_tune -p <profile>
+   # mlnx_tune -p HIGH_THROUGHPUT
+   
+   --------------------------------------------------------------------------
+   Perftest Package
+   InfiniBand/RoCE tools
+
+ # ib_send_bw -h
+  Usage:
+  ib_send_bw            start a server and wait for connection
+  ib_send_bw <host>     connect to server at <host>
+  
+ib_send_bw
+ib_send_lat
+ib_write_bw
+ib_write_lat
+ib_read_bw
+ib_read_lat
+ib_atomic_bw
+ib_atomic_lat
+--------------------------------------------------------------------------
+Perftest Package
+Raw Ethernet tools
+
+    raw_ethernet_bw
+    raw_ethernet_lat
+    raw_ethernet_burst_lat
+    
+    
+# raw_ethernet_bw -h
+Usage:
+  raw_ethernet_bw            start a server and wait for connection
+  raw_ethernet_bw <host>     connect to server at <host>
+
+ 
+--------------------------------------------------------------------------
+qperf is a Linux command that measures bandwidth and latency between two nodes
+It can work over TCP/IP as well as the RDMA transports
+For optimal RDMA performance please use perftest package, that is the formal Open Fabrics performance test package
+
+on server IP:21.21.21.7
+# qperf
+
+on client
+# qperf 21.21.21.7 tcp_bw tcp_lat
+--------------------------------------------------------------------------
+Install iperf and Test Mellanox Adapters Performance
+Two hosts connected back to back or via a switch
+Download and install the iperf package from the git location
+disable firewall, iptables, SELINUX and other security processes that might block the traffic
+
+on server IP:12.12.12.6
+#iperf -s -P8
+on client
+# iperf -c 12.12.12.6 -P8
+ 
+ We recommend using iperf and iperf2 and not iperf3.  iperf3 lacks several features found in iperf2, for example multicast tests, bidirectional tests, multi-threading, and official Windows support.  For testing our high throughput adapters (100GbE), we recommend to use iperf2 (2.0.x) in Linux and NTTTCP in Windows
+--------------------------------------------------------------------------
