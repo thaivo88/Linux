@@ -1,24 +1,41 @@
   #On the gate server/CMU copy over group, hosts, fstab files
-scp /etc/group /etc/hosts /etc/fstab \[username]@[nodename]:/tmp
+scp /etc/group /etc/hosts /etc/fstab /etc/nsswitch /etc/sudoers \[username]@[nodename]:/
 
   #On computing node rename orignal file to [file].old
 mv /etc/group /etc/group.old
 mv /etc/hosts /etc/hosts.old
 mv /etc/fstab /etc/fstab.old
+mv /etc/nsswitch /etc/nsswitch.old
+mv /etc/sudoers /etc/sudoers.old
 
-  #Add users to suoders
+  #Add syseng users to suoders (only on ubuntu18 or above since root is disabled)
 vi /etc/sudoers
-  #change root password if setup did not allow for root password
+  #change root password if setup did not allow for root password (only on ubuntu18 or above since root is disabled)
 passwd root
   #enter password
+  
+  #enable root login
+  sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config 
+  systemctl restart sshd
+  
+### ONLY for Ubuntu 18 and above ### 
+#Fix systemd-logind sandboxing issue with causes slow logins
+#Modify /lib/systemd/system/systemd-logind.service to remove the "any" statement
+	#IPAddressDeny=any
+	IPAddressDeny=
+	#UseDNS yes
+ 	UseDNS no
+#Restart daemons
+	systemctl daemon-reload
+	systemctl restart systemd-logind
 
   #Moving over HDD's UUID into fstab (NFS mount point)
 cat /etc/fstab.old >> /tmp/fstab    #the tmp fstab was copied over using scp command
 mv /tmp/fstab /etc/fstab            
 vi /etc/fstab                       #delete old UUID
 
-mv /tmp/group /etc/group
-mv /tmp/hosts /etc/hosts
+mv /group /etc/group
+mv /hosts /etc/hosts
 
 #################### NFS MOUNTS #######################
 hpcgate:/apps /apps nfs rsize=131072,wsize=131072,intr,bg,vers=3 0 0
@@ -41,44 +58,48 @@ hpchost3-a:/usr6 /usr6 nfs rw,tcp,hard,timeo=20,retrans=7,intr,bg,rsize=32768,ws
 #######################################################
 
 
-  #Install package
-apt-get install nis           #NIS daemon
-yum install nis
-  #plab NIS domain: partner       server: 10.100.0.5
-  #host NIS domain: benchmark     server: 10.0.0.10
-vi /etc/defaultdomain     #NIS domain
-domainname partner        #command to set domainname to partner
-vi /etc/yp.conf           #NIS server ip
-ypserver 10.100.0.5       #input this file into yp.conf
-  #search and install ypblind and yp-tool 
-ypbind-1.37.1-9.el7.aarch64.rpm
-yp-tools-2.14-5.el7.aarch64.rpm 
-systemctl enable ypbind
-service ypbind restart
-
-#to makesure ypbind is working
-ypwhich 
-
-#system file to mount fstab
-sudo yum install nfs-utils (Red Hat or CentOS)
-sudo apt-get install nfs-common (Ubuntu)
-sudo zypper install nfs-client
-
-
   #if you run into an error when installing a package
   #delete the info in statoverride file
 ############# error ###############
 #dpkg: unrecoverable fatal error, aborting:
 #syntax error: unknown user 'user' in statoverride file
 ##################################
-vi /var/lib/dpkg/statoverride
+rm /var/lib/dpkg/statoverride
+
+
+  #Install NIS package
+apt-get install nis           #NIS daemon
+yum install nis
+  #plab NIS domain: partner       server: 10.100.0.5
+  #host NIS domain: benchmark     server: 10.0.0.10
+
+vi /etc/defaultdomain     #NIS domain
+partner
+  #or
+domainname partner        #command to set domainname to partner
+
+vi /etc/yp.conf           #NIS server ip
+ypserver 10.100.0.5       #input this file into yp.conf
+
+  # enable ypbind on reboot and restart daemon
+systemctl enable ypbind
+service ypbind restart
+
+  #to makesure ypbind is working
+ypwhich 		# should say hpcgate-e
+
+  #system file to mount fstab
+sudo yum install nfs-utils (Red Hat or CentOS)
+sudo apt-get install nfs-common (Ubuntu)
+sudo zypper install nfs-client
+
 
   #create mount point for fstab
 mkdir /apps /home /scratch /mops /ml
 mount -a
 
   #editing file so new users can ssh into the system
-echo "+::::::/bin/false" >> /etc/passwd   # allow no one in unless added to the node
+echo "+::::::/bin/false" >> /etc/passwd    # allow no one in unless added to the node (used with PBS and Slurm)
 echo "+::::::" >> /etc/passwd              # allow anyone to ssh in
 echo "+::::::::" >> /etc/shadow
 echo "+:::" >> /etc/group
@@ -88,7 +109,7 @@ vi /etc/resolv.conf
   #add these domain ip address below
 nameserver 15.xx.xx.xx
 
-  #edit nsswitch file to config NIS
+  #edit nsswitch file to config NIS (should already have this infor if scp from hpcgate)
 vi /etc/nsswitch.conf 
 ######################################
 passwd:     compat files nis
@@ -234,18 +255,7 @@ aliases:    files nis
 	mkdir /lvol
 	chmod 777 /lvol
 
-#enable root login
-  sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config 
-  systemctl restart sshd
-  
-### ONLY for Ubuntu 18 and above ### 
-#Fix systemd-logind sandboxing issue with causes slow logins
-#Modify /lib/systemd/system/systemd-logind.service to remove the "any" statement
-	#IPAddressDeny=any
-	IPAddressDeny=
-#Restart daemons
-	systemctl daemon-reload
-	systemctl restart systemd-logind 
+
 
 #infiniband ip address ubuntu >18
 
