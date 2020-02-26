@@ -1,0 +1,129 @@
+Password Risk
+
+  -Use Strong Passwords
+  -Change Passwords Frequently
+  -Use Shadow Passwords: The /etc/passwd file is world-readable, so you should store passwords in /etc/shadow. This file is only readable 
+by the superuser. All major Linux distributions use shadow passwords by default. If yours doesn't, you can type pwconv to move all 
+password information from /etc/passwd file to the locked-down /etc/shadow file. It's a good idea to run the pwck utility after the 
+conversion to ensure that the files are in sync.
+  -Keep Passwords Secret
+  -Use Secure Remote Login Protocols: Telnet and FTP use unencrypted form, use SSH and SFTP.
+  -Be Alert to Shoulder Surfing
+  -Use Each Password on Just One System
+  -Be Alert to Social Engineering
+  
+  
+  
+Choosing a Good Password
+
+The best possible passwords are random collections of letters, digits, and punctuations.
+Older versions of Linux could handle passwords of no more than eight characters, but those limits have been lifted by the use of the MD5
+and SHA password hashes, which are the standard on modern Linux distributions. Many Linux systems require passwords to be at least four to
+six characters in lenght; the passwd utility won't accept anything shorter than the distribution's minimum.
+
+  -Adding Numbers or Punctuation
+  -Mixing Case
+  -Growing the Haystack: Making a password longer, by using longer words or phrases. Even a size increase that simply repeats a single
+character can be helpful.
+
+Another password security issue is password changes. Frequently changing passwords minimizes the window of opportunity for troublemakers
+to do damage. Some system administrators set up a honeypot account. A honeypot account is a system account with a fairly easy-to-creak 
+password. The account is locked down from accessing anything on the system, and it's also monitored. If a login occurs, you know that
+the /etc/shadow file has been compromised and you can take appropriate actions, such as having all your user change their passwords.
+
+One of the advantages of shadow passwords is that they support password aging and account expiration features. You can enable these
+features and set the times using the chage command.
+
+
+
+Limiting root Access
+
+Using su
+The single system administrator juse described can also use the su command to acquire root privileges. The su command's name stands for
+switch user, and it's used to switch to another user's account. If you just type su to access the root account, be aware that not
+everything may be set up correctly to perform tasks that require superuser privileges. It's better to type the command su - to switch to
+the root account. The dash (-) after the su command starts a new shell environment and exectues the root's profile.
+You can also type a username after su to acquire that user's privileges.
+To run a single program with root privileges, use -c to specify the program name. 
+For example:
+  su -c "lsof -i"     to run the lsof -i command as root
+  
+Using sudo
+A method of acquiring root access that is more secure than either direct logins or us is sudo.
+Logging in as the root user can set up what is called a repudiation environment. A repudiation environment means that a person can deny
+actions. Therefore, if a system administrator uses the root account to perform some illegal activity, they can legally deny being 
+responsible for that activity. Ssytems where every user has an account and password and no one can log into the root user's account
+sets up a non-repudiation environment. This means that actions are logged and responsibility for them cannot be easily denied.
+
+You can fine-tune what tasks users may perform using sudo. This is done via the /etc/sudoers configurtion file. You must edit this 
+configuration file via sudo.
+The /etc/sudoers file consists of two types of entries:
+  1: aliases
+  2: User specifications
+  
+Aliases are basically variables. You can use them to define groups of commands, groups of users, and so on.
+If you desire to set up a non-repudiation environment, be aware that some commands will need to be blocked within the /etc/sudoers files.
+To prevent this from occurring, add the command you wish to block preceded by an exclamation point (!).
+
+
+
+Auditing User Access
+
+For determining who is currently logged onto a system, there are two primary commands to uses:
+  1: who
+  2: w
+
+The who command simply shows you who is currently logged onto a system. It displays the username, their current erminal, and the time 
+they logged into the system.
+You can determine a great deal of additional information with the who command by using the -a option.
+The who command pulls its data from the /var/run/utmp or /run/utmp file.
+
+The w command shows not only who is logged into the system but also what they are doing as well as statistics concerning CPU usage.
+The w command uses the utmp file data for its display. Information stored in the /proc/directory is used by the w command as well.
+
+Determining Last Access to the System
+
+The last command can provide current and historical data concerning users loggin into and out of your system. The data displayed comes 
+from the /var/log/wtmp file. The last command displays the newest data first. In some cases, a user was logged into the sytem when the
+system shut down, as indicated by the down keyword.
+
+If you want to view just a particular user's log in and out activities, you can pass the username as a parameter.
+
+Failed login attempts are stored in the /var/log/btmp file.
+The lastb command shows all of the failed login attempts and uses all the same optionos as the last command.
+
+Another useful command in your auditing toolkit is the lastlog command. The lastlog utility pulls data from the /var/log/lastlog file.
+You can determine when a particular user last logged into the system by adding the -u [username] option.
+
+Be aware that if a particular user is logged into the sytem multiple times, lastlog will not display multiple login entries. It only 
+shows the last time a user logged into the system.
+
+
+
+Setting Login, Process, and Memory Limits
+
+Sometimes you may want to impose limits on how many times users may log in, how many CPU times they can consume, how much memory they
+can use, and so on. Imposing such limits is best done through a Pluggable Authentication Modules (PAM) modules called pam_limits.
+You will still need to configure pam_limits. You do so by editing its configuration file, /etc/security/limits.conf.
+The file contains limit lines with four fields:
+  domain type item value
+
+  The domain: The domain field describes the entity to which the limit applies. It can be a username; a group name, which takes the form 
+@groupname; or an asterisk (*) wildcar, which matches everybody.
+  Hard or Soft Limits: They type field specifies the limit as hard or soft. A hard limit is imposed by the system administrator and 
+cannot be exceeded under any circumstances, whereas a user may temporarily exceed a soft limit. You can also use a dash (-) to signify that a
+limit is both hard and soft.
+  The Limited Item: The item field specifies what type of item is being limited. 
+Item type: core data fsize nofile rss stack cpu nproc maxlogins priority.
+  The Value: the number value to set on the limited item.
+example: @limited hard cpu 2    applies a hard CPU limit of 2 minutes
+
+Another way to set limits on system resource use is via the ulimit command.
+  ulimit [option [limit]]
+
+Core File Limits:
+  
+
+
+
+
