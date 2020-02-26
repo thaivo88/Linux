@@ -149,7 +149,80 @@ statistics, and so on.
 For spotting unnecessary servers, you can use netstat with its -a and -p options. The -a option shows all network sockets. The -p option
 shows the PID and program name that owns a shown socket.
 
+The netstat command with the -ap options shows active network sockets that can reveal the presence of servers that are running on your
+computer. The Local Address and Foreign Address columns specify the local and remote addresses, including both the hostname or IP address
+and the port number or associated name from /etc/services. Entries that are not actively connected will show the local address and the 
+foreign address as asterisks (*).
 
+The State column specifies that the server is listening (LISTEN) for a connectionor that a connection is currently active (ESTABLISHED).
+The final column in this output, under the PID/Program name heading, indicates the process ID (PID) and program name of the service 
+using this port.
 
+To spot servers listening for connections quickly, type netstat -lp rather than netstat -ap. The result will show all servers that are
+listening for connections, omitting client connections and specific server instances that are already connected to clients.
 
+lsof
+
+The lsof program nominally lists open files. It can be used to identify what files are open in a directory, find who's accessing them,
+and so on. The definition of a file used by lsof is broad because it includes network connections. Thus, you can use lsof to audit your
+network prots. With the -i parameter, the lsof command will show you not only various services listening for connections, but also any 
+current network connections to those services.
+
+The NAME column takes the form *:service (LISTEN), where service is the service name or port number. 
+You can restrict the output ofvlsof by including an address after the -i options. 
+The address takes the following form:
+  [46][protocol][@hostname|hostaddr][:service|port] 
+The digit 4 or 6 that represents an IPv4 or IPv6 connection
+Protocol, which is a protocol type (TCP or UDP)
+Hostname or hostaddr, which is the computer hostname or IP address
+Service, which is a service name from /etc/services
+Port, which is the port number
+
+Using Remote Network Scanners
+
+Network scanners, such as Nmap, can scan for open ports on the local computer or on other computers. Nmap is a very easy to use utility 
+for conducting security audits on your systems.
+
+Many organizations have policies forbidding the use of network scanners except under specific conditions.
+
+Nmap is capable of performing basic checks for open ports. To conduct this simple audit using the nmap utility, add the -sT parameters.
+Your first scan should be done using the loopback address (127.0.0.1). This allows you to see what network services are being offered by
+your system without any firewall settings interfering with the results.
+
+The -sT opton allows you to scan for service using TCP. Some network services use UDP. To scan for these with nmap, use the -sU option.
+  nmap -sU [ip_address]
+Notice that superuser privileges are required to run a UDP scan, whereas they were not required for running a TCP scan.  
+
+Another scanning tool called Nessus, which is built atop Nmap, provides a graphical user interface. It also offers a means of performing
+automated and sophisticated tests. Nessus is a more sophisticated scanner in that it checks for known vulnerabilities. Nessus comes as 
+separate client and server components; the client enables you to control the server, which does the actual work.
+
+Using fuser
+
+Another handy network port auditing tool is the fuser command. You can use this tool to determine the processes currently using a 
+particular network port.
+Simply add the -v option on the fuser command to see all of the processes' information in one straightforward command. 
+  fuser [option] [port/[tcp|udp]]
+  fuser -v 22/tcp
+  
+The ACCESS column, display indicates whether or not the process has a file open (f) or a file open for writing (F).
+There is also another format of the fuser command to view network processes using a particular port. In the following example, the -n 
+option is used. 
+  fuser -nv tcp 22
+  
+Be aware that many startup scripts start entire subsystems that aren't directly network related. Thus, you'll probably see startup 
+scripts that you don't recognize. You should not automatically disable these scripts because they may be necessary even if you don't
+recognize the name. If in doubt, leave them in place until you can research the matter further.
+Unlike system startup scripts, super servers launch network servers only, not non-network services. Therefore, you should take a more
+aggressive approach to disabling entries that you don't recognize from your super server configuration than you do with system startup 
+scripts.
+
+Uninstalling or Reconfiguring servers
+
+First, you can disable the server by changing its startup script configuration or, if it uses the system's super daemon, disabling it in
+the daemon's configuration file. Change a server's startup script and/or the preceding sections on xinetd for details on how to disable
+xinetd via its configuration files.
+Second, you can completely uninstall the server using your distribution's package management tools or by other wise deleting its files.
+
+ 
 
