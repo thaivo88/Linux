@@ -69,7 +69,7 @@ rm /var/lib/dpkg/statoverride
 
   #Install NIS package
 apt-get install nis           #NIS daemon
-yum install nis
+yum install ypbind
   #plab NIS domain: partner       server: 10.100.0.5
   #host NIS domain: benchmark     server: 10.0.0.10
 
@@ -80,6 +80,9 @@ domainname partner        #command to set domainname to partner
 
 vi /etc/yp.conf           #NIS server ip
 ypserver 10.100.0.5       #input this file into yp.conf
+
+vi /etc/sysctl.conf	#add this line below if the setting keeps disapearing after reboot
+kernel.domainname=partner
 
   # enable ypbind on reboot and restart daemon
 systemctl enable ypbind
