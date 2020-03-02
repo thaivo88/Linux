@@ -119,3 +119,47 @@ Regenerate the kernel initramfs for Ubuntu:
   sudo update-initramfs -u
   reboot
 ###############################################
+
+
+
+
+
+
+###############################################
+If nvidia-smi only see a few GPU but lspci sees all GPU, then you will need to turn on dip switch 6 power on then power off and turn off
+dip switch 6.
+
+root@znode48:/# dmesg | grep -i nvidia
+[    6.074635] nvidia: loading out-of-tree module taints kernel.
+[    6.074642] nvidia: module license 'NVIDIA' taints kernel.
+[    6.152950] nvidia: module verification failed: signature and/or required key missing - tainting kernel
+[    6.278102] nvidia-nvlink: Nvlink Core is being initialized, major device number 238
+[    6.290955] nvidia 0000:15:00.0: enabling device (0140 -> 0142)
+[    6.303148] NVRM: This PCI I/O region assigned to your NVIDIA device is invalid:
+[    6.341774] nvidia: probe of 0000:15:00.0 failed with error -1
+[    6.354991] nvidia 0000:16:00.0: enabling device (0140 -> 0142)
+[    6.392783] NVRM: This PCI I/O region assigned to your NVIDIA device is invalid:
+[    6.432248] nvidia: probe of 0000:16:00.0 failed with error -1
+[    6.458125] nvidia 0000:3a:00.0: enabling device (0140 -> 0142)
+[    6.538874] nvidia 0000:3b:00.0: enabling device (0140 -> 0142)
+[    6.594313] nvidia 0000:89:00.0: enabling device (0140 -> 0142)
+[    6.594370] NVRM: This PCI I/O region assigned to your NVIDIA device is invalid:
+[    6.594379] nvidia: probe of 0000:89:00.0 failed with error -1
+[    6.594392] nvidia 0000:8a:00.0: enabling device (0140 -> 0142)
+[    6.594423] NVRM: This PCI I/O region assigned to your NVIDIA device is invalid:
+[    6.594428] nvidia: probe of 0000:8a:00.0 failed with error -1
+[    6.594448] nvidia 0000:b2:00.0: enabling device (0140 -> 0142)
+[    6.594480] NVRM: This PCI I/O region assigned to your NVIDIA device is invalid:
+[    6.594485] nvidia: probe of 0000:b2:00.0 failed with error -1
+[    6.594495] nvidia 0000:b3:00.0: enabling device (0140 -> 0142)
+[    6.594524] NVRM: This PCI I/O region assigned to your NVIDIA device is invalid:
+[    6.594528] nvidia: probe of 0000:b3:00.0 failed with error -1
+[    6.594550] NVRM: The NVIDIA probe routine failed for 6 device(s).
+[    6.594551] NVRM: loading NVIDIA UNIX x86_64 Kernel Module  440.33.01  Wed Nov 13 00:00:22 UTC 2019
+[    6.601982] nvidia-modeset: Loading NVIDIA Kernel Mode Setting Driver for UNIX platforms  440.33.01  Tue Nov 12 23:43:11 UTC 2019
+[    6.712905] [drm] [nvidia-drm] [GPU ID 0x00003a00] Loading driver
+[    6.713416] [drm] Initialized nvidia-drm 0.0.0 20160202 for 0000:3a:00.0 on minor 1
+[    6.713988] [drm] [nvidia-drm] [GPU ID 0x00003b00] Loading driver
+[    6.714452] [drm] Initialized nvidia-drm 0.0.0 20160202 for 0000:3b:00.0 on minor 2
+[   12.642474] nvidia-uvm: Loaded the UVM driver, major device number 511.
+##############################################
