@@ -121,7 +121,20 @@ example: @limited hard cpu 2    applies a hard CPU limit of 2 minutes
 Another way to set limits on system resource use is via the ulimit command.
   ulimit [option [limit]]
 
-Core File Limits:
+  Core File Limits: 
+The -c option limits the size of core dumps, which are files created for debugging purposes in certain types of program crashes.
+  File Limits: 
+The -f option limits the size of files that may be created by the shell, and -n limits the number of open file descriptions.
+  Process Limits: 
+The -u option limits the number of processes a user may run, and -t limits the total CPU time in seconds.
+  Memory Limits: 
+The -v option sets the total amount of virtual memory available to the shell, -s sets the maximum stack size, -m sets
+the maximum resident set size, -d limits programs' data set size, and -l sets the maximum size that may be locked into memory.
+  Hard and Soft Limits: 
+The -H and -S options modify other options, causing them to be set as hard or soft limits, respectively. Hard limits may not be 
+subsequently increased, but soft limits may be. If neither option is provided, ulimit sets both the hard and soft limits for the 
+feature specified.
+  Current Settings:
   
 
 
