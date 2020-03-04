@@ -135,7 +135,15 @@ The -H and -S options modify other options, causing them to be set as hard or so
 subsequently increased, but soft limits may be. If neither option is provided, ulimit sets both the hard and soft limits for the 
 feature specified.
   Current Settings:
-  
+Passing -a causes ulimit to report its current settings.
+
+The limit variable is typically a numeric value associated with the limit. The ulimit command is often found in system or user bash 
+startup scripts, typically as ulimit -c 0, in order to prevent creation of core files, which can sometimes clutter a filesystem. If
+your users perform software development, you may want to ensure that you do not set this limit, or at least set it as a soft limit
+(as in ulimit -Sc 0) so that users may override it when necessary.
+
+One particular interesting limit involves the use of the /etc/nologin file. If this file is present, only root may log into the 
+computer. Other users are shown the contents of this file when they attempt to log in.
 
 
 
