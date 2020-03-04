@@ -1,0 +1,211 @@
+Understanding SSH basics
+
+Linux supports remote login access through several different servers, including telnet, Virtual Network Conputing (VNC), and even X. 
+Unfortunately most of these methods suffer from a major drawback: they transfer data over the network in an unencrypted form.
+
+Inaddition to encryption, SSH provides file transfer features and the ability to tunnel other network protocols. This feature enables
+nonencrypted protocols to piggyback their data over an SSH connection, thus delivering SSH's encryption advantages to other protocols.
+
+If you make changes to your SSH configuration, you may need to pass the reload or restart option to the startup script, as in 
+  /etc/init.d/ssh reload
+  
+If you do need to make changes, though, these are mostly handled through the main SSH configuration file, /etc/ssh/sshd_config
+
+Configuring Basic SSH
+
+The /etc/ssh/sshd_config file consists mainly of option lines that take the following form:
+  [option] [value]
+  
+Don't confuse the sshd_config file with the ssh_config file. The former controls the OpenSSH server, whereas the latter controls the SSH
+client program, ssh.
+
+Most sample configuration files include a large number of SSH options that are commented out. These limes specify the default values, so
+removing a line's hash mark without otherwise changing the value will have no effect.
+
+  Protocol:
+This option specifies the protocol levels OpenSSH understands. Possible values are 1 and 2. You can confiugre OpenSSH to support both 
+protocols by separating them by a comma, as in 1,2 or 2,1, which are equivalent. OpenSSH protocol level 1 is no longer consider secure.
+Therefore, the safest configuration is to set Protocol 2. This limits the server's ability to communicate with older clients, though.
+  PermitRootLogin:
+By default, this option is set to yes, which enables OpenSSH to accept direct logins by root. This is safer than a similar configuration
+under Telnet, but for a bit of added security, set this value to no. The result will be that anybody wanting to perform remote work
+using superuser privileges will need first to log in as an ordinary user.
+  X11Forwarding:
+This options specifies whether OpenSSH's X tunneling features should be active. If you want to enable remote users to run GUI programs
+via SSH, you must set this option to yes. Doing so can slightly degrade ssecurity of the client's X display, though, depending on
+certain other options, hence the conservative default value of no.
+
+Managing SSH Key
+
+Part of SSH's security involves encryption keys. Each server system and each user has a unique number, or key, for identification 
+purposes. SSH uses a security system that involves two keys: a public key and a private key. These two keys are mathematically linked 
+in such a way that data encrypted with a particular public key may be decrypted only with the matching private key. When establishing
+an SSH connection, each side sends its public key to the other. Thereafter, each side encrypts data with the other side's public key,
+ensuring that only the intended recipient can decrypt the data. In total, four to six keys are needed: public and private keys for two
+or three encryption tools that SSH supports. These keys are normally stored in /etc/ssh and called ssh_host_rsa_key and ssh_host_dsa_key
+for private keys, depending on the encryption algorithm used. For public keys, the same filenames are used, except a .pub filename
+extensiion is added to the file's name. Some systems also add ssh_host_rsa1_key and its associated public key.
+
+If your system doesn't have these keys and you can't get the SSH server to start up, you can try generating the keys with the following 
+ssh-keygen command:
+  ssh-keygen -q -t rsa1 -f /etc/ssh/ssh_host_key -C '' -N ''
+  ssh-keygen -q -t rsa -f /etc/ssh/ssh_host_rsa_key -C '' -N ''
+  ssh-keygen -q -t dsa -f /etc/ssh/ssh_host_dsa_key -C '' -N ''
+  
+Typically, these files should have 0600 (-rw-------) permissions and be owned by root.
+The public key file (with .pub filename extensions) should be readable by all users.
+
+The ssh program records host keys for each individual user. (It stores these in the ~/.ssh/known_hosts files.) When you set up the client,
+you can populate the global ssh_known_hosts file, which is normally stored in /etc/ or /etc/ssh/. Doing so ensures that the public key 
+list is an accurate as the sources you use to populate the global file.
+
+The ssh command syntax requires the username to be placed before the @ symbol. After the @ symbol, the remote host's IP address or name
+is required. 
+  ssh [username]@[IP_Address|Hostname]
+  ssh [IP_Address|Hostname] -l [username]
+  
+  TCP Wrapper:  
+If you run SSH from a super server of if the server was compiled with TCP wrappers support, you can use the /etc/hosts.allow and 
+/etc/hosts.deny files to limit access by IP address. Note that if you launch SSH via a system startup script, this approach works only 
+if the server was compiled to support it. This support may or may not be present in your distribution's standard SSH package.  
+  Firewalls:
+As with all servers, you can restrict access by using a firewall. SSH uses TCP port 22. Technically, this isn't an SSH feature, but it's
+certainly useful for protecting an SSH server.
+  /etc/nologin:
+If this file is present, SSH honors it. This file's presence means that only root may login. When a non-root user tires to log in
+locally, the file's contents are displayed as an error message. OpenSSH doesn't do this.
+
+Copying Files via SSH
+
+Besides remote login access, SSH includes a file-copying command too: scp. This ommand works much like the cp command for copying files
+locally. However, you must specify the target computer, and optionally the username, just before the target filename.
+  scp [directory/filename] [username@hostname|IP_address][directory_location]
+  scp [username@hostname|IP_address][directory/file] [directory_location]
+  
+Configuring Logins without Passwords
+
+You can set up the SSH client with keys and give the client's public key to the server computer. With this configuration, the SSH client
+computer can identify itself, possibly obviating the need for you to type a password.
+
+1: Log into the SSH client system with the user who will be remoting in
+2: Generate version 2 SSH Key:
+  ssh-keygen -q -t rsa -f ~/.ssh/id_rsa -C '' -N ''
+3: Step 2 generates two files:
+  1 id_rsa
+  2 id_rsa.pub
+    Transfer the second of these files to the SSH server computer, copy the file under a temporary name, such as temp.rsa.
+4: Log into the SSH server system
+5: Add the contents of the file that you've transferred to the end of the ~/.ssh/authorized_keys files
+  cat ~/temp.rsa >> ~/.ssh/authorized_keys
+6: the file in step 5 might need to change the permission to 0600
+
+Using ssh-agent
+
+Another SSH authentication option is to use the ssh-agent program. This program requires a password to initiate connections. Its more
+secure than configurating logins without passwords; however, ssh-agent remembers your password, so you need to type it only once per
+local session.
+
+1: Follow the procedure for enabling no-password logins above but omit the -N '' option from the ssh-keygen in step 2. You'll be asked
+for a passphrase at this step. This passphrase will be your key for all ssh logins manged via ssh-agent.
+2: On the SSH client system
+  ssh-agent /bin/bash
+    This launches the ssh-agent, which in turn launches bash.
+3: In your new shell
+  ssh-add ~/.ssh/id_rsa
+    This adds your RSA key to the set that's managed by ssh-agent. You'll be asked to type your SSH passphrase.
+    
+You can edit /etc/passwd so that ssh-agent /bin/bash is ypur login shell.
+
+Using SSH Login Scripts
+
+An SSH text-mode login session runs the user's configured shell, which runs the shell's defined login scripts. The OpenSSH server also 
+supports its own login script, sshrc (stored in /etc/ or /etc/ssh). The OpenSSH server runs this script using /bin/sh, which is normally
+a symbolic link to bash.
+
+SSH Port Tunnels
+
+SSH has the ability to extend its encryption capabilities to other protocols. The way this is done is known as tunneling.
+The server computer runs two server programs: a server for the tunneled protocol and an SSH server.
+The client computer also runs two clients: one for the tunneled protocol and one for SSH.
+The SSH client also listens for connections for the tunneled procotol; it's effectively both a client and a server.
+
+The default configuration on the server enables tunneling, but to be sure, check the /etc/ssh/sshd_config file on the server for the 
+following option:
+  AllowTcpForwarding no
+If this line is present, change no to yes. If it's not present or if it's already set to yes, you shouldn't need to change your SSH
+server configuratino.
+
+  ssh -N -f -L 142:mail.luna.edu:143 benf@mail.luna.edu
+The -N and -f option tell ssh not to execute a remote command and to execute in the background after asking for a password.
+The -L option specifies the local port on which to listen, the remote computer to which to connect and the port on the remote computer
+to whicih to connect.
+The final parameter is the remote username and computer to which the tunnel goes.
+
+You should configure SSH to accept only protocol level 2 connections and to refuse direct root logins.
+The usual tool for encrypting emails is the GNU Privacy Guard Package (GPG or GnuPG) In addition to encrypting entire messages, GPG
+enables you to "sign" messages digitally.
+
+Generating Keys
+
+GPG keys are conecptually similar to SSH keys:
+You need a private key and a public key.
+You can sign your messages with your private key, and readers can verify it with your public key. Also, you can encrypt a message 
+with another user's public key, and it can be decrypted only with that user's private key.
+To generate keys, you use the gpg program with its --gen-key options:
+  gpg --gen-key
+  
+The keys are stored in a keyring (a file that holds keys) in the ~/.gnupg directory.
+A key size that is at least 2048 bits or larger.
+
+Once you've generated your keys, you can export your public key:
+  gpg --export [name] > gpg.pub
+  
+This command saves the public key associated with [name] in the file gpg.pub. You can use your email address as [name].
+Adding the --armor option to the gpg --export command produces ASCII output, which may be preferable if you intend to email the key file.
+
+One important method of distributing your public key is via a keyserver. This is a network server that functions much like a keyring.
+To send your public key to a keyserver, you can use the --keyserver [hostname] and --send-keys [keyname] option to gpg:
+  gpg --key-server pgp.mit.edu --send-keys jennie@luna.edu
+  
+To encrypt a file you send to others, you must obtain their public keys. You can add their keys to your keyring:
+  gpg --import [filename]
+  
+You can see what keys are available by using the --list-keys option to gpg:
+  gpg --list-keys
+
+Revoking a key
+
+To revoke a key, you use the: --gen-revoke [keyname]
+  gpg --gen-revoke jennie@luna.edu
+  
+gpg then generates a key block, you should copy this text into a file (like revocation.gpg) and import the file to your keyring:
+  gpg --import revocation.gpg
+
+If you've distributed public keys associated with the revoked key, you should distribute this revocation too. If you've sent ypur
+public keys to a GPG keyserver, you can pass your revocation along in the same way that you sent your original public key:
+  gpg --key-server pgp.mit.edu --send-keys jennie@luna.edu
+  
+Encrypting and decrypting data  
+
+To encrypt data, you use gpg with its --out and --encrypt options and, optionally, --recipient and --armor:
+  gpg --out encrypted-file --recipient uid --armor --encrypt [original-file]
+  
+You can use the UID from a gpg --list-keys output. If you haven't signed the recipient's key, you'll have to verify that you want 
+to use that key. The result is a new file, encrypted-file, which holds an encrypted version of [original-file]
+
+If you omit the --armor option, the resulting file is a binary file. If you include the --armor option, the output is ASCII.
+If you receive a message of file that was encrypted with your public key, you can reverse the encryption by using the --decrypt option:
+  gpg --out decrypted-file --decrypted encrypted-file
+  
+Signing Messages and verifying signatures
+  
+GPG can be used to sign messages so that recipients know that they come from you. To do so, use the --sign or --clearsign option to gpg:
+  gpg --clearsign [original-file]
+  
+The --sign opton creates a new file with the same name as the original, but with gpg appended to the filename. This file is encrypted 
+using your private key so that it may be decrypted only with your public key.  
+The --clearsign option works similarly, but it leaves the message text unencrypted and only adds an encrypted signature that can be
+verified by using your public key. The --clearsign option creates a file with a name that ends in .asc.
+If you receive a signed message, you can verify the signature using the --verify opton to gpg:
+  gpg --verify [received-file]
+  
