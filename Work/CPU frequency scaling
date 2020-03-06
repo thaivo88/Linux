@@ -112,7 +112,8 @@ pdsh -w [nodes] conrep -l -f [file path]
   GRUB_CMDLINE_LINUX="crashkernel=auto rhgb quiet nouveau.modeset=0 rd.driver.blacklist=nouveau intel_pstate=disable"
 
 # Regenerate the grub config:
-  grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
+  grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg     #(rhel)
+  update-grub     #(ubuntu)
 
 # Reboot
 # After the reboot is complete, check to make sure the acpi-cpufreq driver is loaded:
