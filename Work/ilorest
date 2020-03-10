@@ -8,47 +8,12 @@
   
 # Then run the utility and save the bios configuration into a file: 
   ilorest --nocache save --selector=Bios. -f  [Filename.json]
+  ilorest serverclone save --ilossa --quiet -f [Filename.json]
+  ilorest serverclone save -f [Filename.json]
   
 # Copy the file to the node you wish to change the bios setting: 
   scp [filename.json] \root@[hostname]:/[directory]
   
 # Then load the file: 
   ilorest load --selector=Bios. -f  [Filename.json]
-
-
-
-
-
-
-When loading a clone file taken from an HPE system with HPE Integrated Lights-Out 5 (iLO 5) firmware version 1.40 (or later), warning or error messages may be displayed.
-
-For example, when using the following command:
-
-
-ilorest iloclone load -f <clone_file.json>
-
-The following warning may be displayed:
-
-Patching:/redfish/v1/Managers/1/EthernetInterfaces/1/
-
-iLOresponse with code [400]: The request included a value for a read-onlyor unknown property.
-
-Patching:/redfish/v1/Managers/1/EthernetInterfaces/2/
-
-iLOresponse with code [400]: The request included a value for a read-onlyor unknown property.
-
-The patch URIs mentioned in the warnings above will not be updated using the iloclone load command.
-
-SCOPE
-Any HPE Gen10 system with iLO 5 firmware version 1.40 (or later).
-
-RESOLUTION
-The iloclone command has been deprecated in iLOrest 2.40 and will be removed in a later version. To perform the same functionality, use the new command "serverclone" available in iLOrest 2.40 (or later).
-
-Below is an example command line to save and load a configuration using serverclone.
-
-Save:
-ilorest serverclone save -f <clone_file.json>
-
-Load:
-ilorest serverclone load -f <clone_file.json>
+  ilorest serverclone load -f [Filename.jason]
