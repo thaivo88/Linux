@@ -119,6 +119,8 @@ pdsh -w [nodes] conrep -l -f [file path]
 # After the reboot is complete, check to make sure the acpi-cpufreq driver is loaded:
   cpupower frequency-info | grep driver
     driver: acpi-cpufreq
+# If cpupower frequency-info | grep driver shows no or unknown cpupower driver then you need to set the bios to 'OS Control'
+
 # Now you can set the frequency to any of the values in 
   cpupower frequency-info | grep 'available frequency steps'
     the available frequencies are 2.50 GHz, 2.40 GHz, 2.30 GHz, 2.20 GHz, 2.10 GHz, 2.00 GHz, 1.90 GHz, 1.70 GHz, 1.60 GHz, 1.50 GHz, 1.40 GHz, 1.30 GHz, 1.20 GHz, 1.10 GHz, 1000 MHz.
