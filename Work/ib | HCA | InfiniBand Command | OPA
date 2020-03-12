@@ -1,3 +1,6 @@
+# hpchpcm switch OPA to IB but cronusn does not boot correctly run cmd below:
+    pdsh -w cronusn[001-144] /admin/gbc/cronusfixme
+
 # xl270d Gen10 slot location for HCA
     14:00.0 = slot 12
     39:00.0 = slot 11
