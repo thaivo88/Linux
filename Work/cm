@@ -204,6 +204,9 @@ vi /etc/motd
 # On hpchpcm
 # To remove all entry of a node	
 	cadmin --db-purge --node [service_number]	
+	
+# hpchpcm switch OPA to IB but cronusn does not boot correctly run cmd below:
+    pdsh -w cronusn[001-144] /admin/gbc/cronusfixme
 
 ############################################# Discovering new node into HPCHPCM / PBS #############################################
 # Notes:
