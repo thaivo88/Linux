@@ -58,6 +58,30 @@ STAR-CCM+ / CDLMD
 ./lmgrd
 # start daemon
 
+##############################
+
+STAR-CCM+ Siemen upgrade software
+
+Download the files from Siemens website, winscp the file into hpchou-login:/
+Install unzip if needed, first check if unzip is installed
+                Which unzip
+                Yum install unzip
+Unzip the files that were downloaded from Siemens
+                Unzip STAR-CCM+15.02.007_02_linux-x86_64-2.12_gnu7.1.zip
+Backup the license.dat file
+                cp /hpcsw/isv/star/licensing/license.dat /hpcsw/isv/star/licensing/license.dat.backup[date]
+Change directory to the unzip folder
+                cd STAR-CCM+15.02.007_02_linux-x86_64-2.12_gnu7.1
+Run the installation script
+                ./ STAR-CCM+15.02.007_02_linux-x86_64-2.12_gnu7.1.sh
+When asked about the license.dat file location, point it to the license file located at:
+                /hpcsw/isv/star/licensing/license.dat
+When asked to where should the installation be installed, point it to:
+                /hpcsw/isv/star/
+Once complete edit the license file to point to the new hostname and mac address and restart license server
+                Vi /hpcsw/isv/star/licensing/license.dat
+                /hpcsw/isv/star/licensing/start_license_server.sh
+
 #############################
 
 PGI
