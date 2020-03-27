@@ -8,6 +8,8 @@
 # The script then ask if there was a success if so it then runs: chage -d [date] [username]
 # To reset their aging password
 #
+# Owner: thai.vo@hpe.com
+#
 grep -R -i passwd /var/log/* | grep $1
 
  echo Was there a successful password update log?
@@ -15,9 +17,12 @@ grep -R -i passwd /var/log/* | grep $1
 
 read yn
 
-if [ "$yn"=="y" ];
+if [ $yn = y ];
   then
     chage -d $(date +%F) $1
-      passwd -u $1
-        echo Aging password has been reset
+        passwd -u $1
+                echo Aging password has been reset
+else
+echo no changes
 fi
+
