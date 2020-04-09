@@ -17,3 +17,8 @@
 # Then load the file: 
   ilorest load --selector=Bios. -f  [Filename.json]
   ilorest serverclone load -f [Filename.jason]
+
+# AHS log From a nearby headnode
+  ilorest serverlogs --url=w.x.y.z -u username -p password --selectlog=AHS
+# AHS log From the host itself
+  ilorest serverlogs --selectlog=AHS
