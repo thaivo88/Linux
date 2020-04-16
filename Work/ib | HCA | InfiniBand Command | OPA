@@ -16,6 +16,9 @@ mlx5_2 port 1 ==> ib2 (Up)
 mlx5_3 port 1 ==> ib3 (Up)
 ############# end ############
 
+# changing MTU
+    ifconfig ib0 mtu 9000
+
 # show link diagnostic on HPE IB switch
     show interface ethernet link-diagnostics
 
