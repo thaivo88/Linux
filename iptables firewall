@@ -17,6 +17,8 @@
 #On versions of Ubuntu prior to 16.04, run this command instead:
   sudo invoke-rc.d iptables-persistent save
 
+#save iptables rules: 
+  dpkg-reconfigure iptables-persistent
 
 #CentOS 6 and Older
 #On CentOS 6 and older—CentOS 7 uses FirewallD by default—you can use the iptables init script to save your iptables rules:
