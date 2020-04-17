@@ -24,6 +24,10 @@
 #On CentOS 6 and older—CentOS 7 uses FirewallD by default—you can use the iptables init script to save your iptables rules:
   sudo service iptables save
   
+#blocking all ports beside port 80 for webservice on eno2  
+		iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+		iptables -A INPUT -i eno2 -p tcp --destination-port 80 -j ACCEPT
+		iptables -A INPUT -i eno2 -j DROP  
   
 #Allow Established and Related Incoming Connections
 #As network traffic generally needs to be two-way—incoming and outgoing—to work properly, it is typical to create a firewall rule 
