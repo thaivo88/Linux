@@ -1,0 +1,27 @@
+The first levels of software that control the hardware and manage these resource are associated with the operation system, 
+which is far more complex than the two layers. Each node has a local instance of an operation system controlling the physical 
+memory and processor resources of the node as well as the interface to the external (to the node) system area network. 
+An additional layer of the operation system, sometimes referred to as the middleware, logically integrated the many nodes and their 
+local operation systems into a single system image to which users can submit their application programs and access standard I/O channels. 
+In some supercomputers a separate front-end software environment running on a dedicated computer known as the host provides most of the 
+user interfaces and services other than the scalable computing itself. The layered operating system reflects and abstract or virtual 
+machine to the upper levels of the system, including the user programming interface. It ensures a standardized set of user services upon 
+which the application can depend, with common interface protocols independent of the specific system upon which it is performed. 
+Among these services is the files system than manages much of the persistent storage and presents a structured organization of the 
+diverse forms of user data. 
+
+Above the layers dedicated to resource management are those associated with the means of developing and executing user applications and 
+workloads, Here "workloads" are defined as a collection of loosely coupled applications, each performing a different aspect of the total 
+set of tasks that need to be computed. For example, one might have three applications, simulator, a data analyzer, and a visualization 
+package, with each of these three applications streaming data to the next function. The overall work management layer involves several 
+support capabilities, including the programming languages, additional libraries often for parallelism (e.g., MPI, OpenMIP), and compilers 
+that provide machine-readable code for the processor cores translated and optimized from the user code. Higher-level environments and 
+tools help in building more complex workflows and managing them. An important part of such environments are the many sophisticated 
+libraries of previously developed and highly optimized functions that many programs can use; these enhance programmer efficiency through 
+code reuse. 
+
+One last layer of the supercomputer system is the runtime system software. While this level tends to be a rather thin layer in 
+conventional HPC practices, in programming models such as Java it can be much more substantial, as in the JVM (Java Virtual Machine). 
+HPC runtime systems manage some aspects of resource management and task scheduling as well as communication. It is possible that in 
+future supercomputer runtime systems may play a far more significant role, but such claims are speculative at this time and await 
+confirmations through experimentation.  
