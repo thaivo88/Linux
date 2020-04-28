@@ -1,0 +1,28 @@
+A "metric" is a quantifiable observable operational parameter of a supercomputer.  
+Two fundamental measures are "time" and "number of operations" performed, both under prescribed conditions. 
+
+For HPC the most widely used metric is "floating-point operations per seconds" of "flops". A floating-point operation is a addition or 
+multiplication of two real (or floating-point) numbers represented in some machine-readable and manipulatable form. 
+A better measure than flops is how long a give problem takes to complete. But because there are literally thousands (millions?) of such 
+problems, this measure is not particularly useful broadly. Thus the HPC community selects specific problems around which to standardize. 
+Such standardized application programs are "benchmarks".  
+
+One particularly widely used supercomputer benchmark is "Linpack", or more precisely the "highly paralled Linpack" (HPL), which solves a 
+set of linear equations in dense matric form. A benchmark gives a means of comparative evaluation between two independent systems by
+measuring their respective times to perform the same calculation. Thus a second way to measure performance is time to completion of a 
+fixed problem. But other benchmarks are also employed to stress certain aspects of a supercomputer of represent a certain class of programs. 
+
+The main benchmark currently used to measure a supercomputer's peak performance is a dense linear algebra problem. 
+
+Performance is the driving requirement that differentiates HPC programming from other domains. It is second only to correctness and 
+repeatability, which are of serious concern. Performance is most significantly represented by the need for representation and exploitation 
+of computational parallelism: the ability to perform multiple tasks simultaneously. Parallel processing involves the definition of parallel
+tasks, establishing the criteria that determine when a task is performed, synchronization among task  in part to coordinate sharing, and 
+allocation to computing resources. A second aspect of programming for HPC is control of the relationship of allocations of data and tasks 
+to the physical resources of the parallel and distributed systems. 
+
+One dimension of differentiation is granularity of parallel workflow. Very coarse-grained workloads with no interactivity, sometimes 
+referred to as "embarrassingly parallel" or "job-stream" workflow, suggest one class of workflow managers. Fine-grained parallelism is 
+emphasized in multiple-thread shared-memory system programming interfaces such as OpenMP and Cilk++. Medium- to coarse-grained parallelism,
+as reflected by highly scaled massively parallel processors (MPPs) and clusters, is primarily represented by communicating sequential 
+processes such as the message-passing interface (MPI) and its many variants. 
