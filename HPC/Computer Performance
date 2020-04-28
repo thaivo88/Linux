@@ -1,0 +1,119 @@
+Peak performance of a system is the maximum rate at which operations can be accomplished theoretically by the hardware resources of a 
+supercomputer. Usually in HPC peak performance is measured in units of flops (megaflops, gigaflops, teraflops, petaflops), with peak 
+performance by the stands for "seconds". Different kinds of operations may have different peak rates. Integer operations, floating-point
+operations, and memory access (load-store) operations will take different times (instruction issue to instruction retires) and there 
+will be different numbers of such operations that can be performed concurrently. To complicate this, a give operations type may take 
+different amounts of time depending on the circumstances of the action (e.g., load operation through a cache hierarchy). 
+
+Peak performance is determined by the combination of the clock rate provided by the device technology and the hardware parallelism 
+determined by the computer architecture. Both are function of device density.  
+
+The system architecture determines the number of processor cores that together comprise the total system and contributes to the total 
+number of operations that can be performed at the same time. Thus peak performance in terms of operations per second is determined by 
+clock rate and architecture. 
+
+ 
+
+Sustained Performance: 
+
+Sustained performance is the actual or real performance achieved by a supercomputer system in running an application program. 
+While sustained performance cannot exceed peak performance, it can be much less and often is. Sustained performance represents the 
+total average performance of an application derived from the total number of operations performed during the entire program execution 
+and the time required to complete the program, sometimes referred to as "wall clock time" or "time to solution". Like peak performance, 
+it may be represented in terms of particular unit (kind of operation) of interest, such as floating-point operations, or it can include
+all types of operations available by the computing system, such as integers (of different sized), memory load and stores, and 
+conditionals. 
+
+Sustained performance is considered a better indicator of the true value of supercomputer than its specified peak performance. 
+But because it is highly sensitive to variations in the workload, comparison of different systems only has meaning if they are 
+measured running equivalent applications. Benchmarks are specific program created for this purpose. Many different benchmarks reflect 
+different classes of problems. The Linpack of HPL benchmark is one such application used to compare supercomputers: it is widely 
+employed and referenced, and is the baseline for the Top 500 list that tracks the fastest computers in the world (at least those so 
+measured) on a semiannual basis. 
+
+ 
+
+Scaling: 
+
+"Scaling" or alternatively "scalability" is a relationship of performance to some measure of the size (or "scale") of the HPC system. 
+It reflects the ability to achieve increased performance for an application by employing machines of ever-greater size. Although these 
+are many ways to quantify a system's size, a simple and widely used measure is the number of processor cores employed, recognizing that 
+there are multiple cores per processor socket and usually multiple processor sockets per system node. The added complexity of how these 
+are distributed in their use for a given application (e.g., how many of the cores in a given socket are actually used) is largely 
+ignored for this purpose, although it can in fact have a significant impact on the resulting performance. 
+
+An important subtlety associated with performance scaling is the application program size employed as the system size is modified. 
+The size of an application can be quantified as the amount of data used, such as the dimensions of a problem matrix (n by n). Weak 
+scaling has been an important way to take advantage of ever-larger systems where the size of the data (such as n) grows proportionally 
+with the size of the system (again, number of cores). This keeps the amount of work that a give core does about the same even as the 
+system scale increases.  Granularity of a given task (process or thread) stays about the same and so does efficiency, at least for 
+many regular problems. As systems grow in scale the amount of main memory incorporated does not grow proportionally due to costs. 
+As a result, the amount of memory per core has be going down, limiting the opportunity for weak scaling. 
+
+The Alternative to weak scaling is the much more challenging but important approach of strong scaling, where the application dataset 
+size remains constant in the presence of increased system size. The key measure for strong scaling is not flops but time of solution. 
+If a system were to be doubled in scale (twice as many cores), the ideal case would exhibit an execution time of half. The total work 
+performed would be the same, but with double the number of cores it should be possible to do this in half the time. As will be seen, 
+there are many reasons why this often is not possible, and some experts dismiss strong scaling as no longer being a viable approach. 
+
+ 
+
+Performance Degradation: 
+
+The causes that result in the degradation of performance from the (not to be exceeded) peak performance to the observed sustained 
+performance are many and varied. No single part of the system is responsible for this degradation, but rather it is the imperfect match 
+of the user application code, the compiler translation of the high-level application specification to low-level binary representation, 
+the potential intrusion and overheads of the operation system, and the manty facets of the computer architecture at the system and 
+microcore levels. It is no single element but rather the interplay of two or more such elements that together conspire against 
+perfection of operation. Four principal factors determine the delivered (sustained or actual) performance for a give application running
+on a target platform. This formalization of performance degradation is referred to through the acronym SLOW, which identifies the 
+sources as starvation, latency, overhead, and waiting for contention. 
+
+Starvation directly relates to a critical source of performance, parallelism. Peak performance is measured with the assumption that all
+functional units are operation simultaneously on separate operations. If sufficient application parallel work is not available at any 
+instance in time to support issuing instructions to all functional units every cycle, then less work will be performed than is possible.
+The achieved performance will be less than the possible peak performance. Starvation is this absence of work. Either there is not
+enough parallelism exhibited by the user application to keep all the system resources busy, or while there is enough work it is not 
+distributed evenly (load balanced). 
+
+Latency is the time it takes for information to travel from one part of the system to another. If an operation requires some data from 
+a remote resource to proceed, latency will contribute to the amount of time it takes for that data to be delivered and cause the 
+associated execution unit to stall or cease functioning until the data is available and it can continue. Latency occurs in many aspects 
+of system operation, including (but not limited to) local memory accesses, data transfer between separate nodes, and length of 
+execution pipeline (number of stages to completion of operation). To minimize its effects on performance, latency can be reduced 
+through exploitation of locality where everything is retained relatively close to each other. Or latency can be "hidden" by making 
+certain that clocking of functional unit operation does not occur, even in the presence of high-latency requests. This can be achieved 
+if a unit can temporarily work on some other task. Cache hierarchies and multithreading hardware are examples of ways of mitigating the 
+effects of latency. But locality management by the programmer and/or the system software dominates the means of limiting latency effects.
+
+Overhead is the amount of additional work beyond that actually required to perform the computation (such as on a pure sequential 
+processor). Overhead work is necessary to manage resources and task scheduling, control parallelism through synchronization, support 
+communication, handle address translation, and perform any other support functions that do not actually contribute to the operations 
+needed for the computation itself. Overhead degrades performance through a couple of mechanisms. It wastes operations, time, and 
+resources that are not directly associated with the computation; this alone is cause for concern and corrective measures. But there is 
+a subtle indirect effect as well. Overhead is associated directly with setting up individual tasks, and the duration of the overhead 
+puts a lower bound on the granularity (length) of the task it is controlling to achieve effective operation. For a fixed amount of task 
+work (for example for strong scaling), the amount of parallelism that can be exploited is depended in part on the fineness of 
+granularity that can be employed and therefore the total parallelism that may be available. Thus scalability (and starvation) is 
+indirectly affected by overhead. 
+
+Waiting on threads of action for shared resources due to contention of access degrades performance. When two or more request are made 
+at the same time to be serviced by the same single resource, either hardware or software, only one can proceed. The other(s) must wait 
+until the first request is retired and the required resource is freed. One effect is that the delayed actions are extended in time, 
+taking longer to complete. This has a cascading effect as follow-on actions dependent on this first one will also be extended in their 
+time of initiation. A second effect is that the hardware upon which the delayed action is being performed may be blocked and its 
+potential capability wasted for the duration of the delay. Both time and energy are lost. Finally, such events occur unpredictably 
+(in most cases) and create uncertainty in the execution, making optimization methods less effective. 
+
+ 
+
+Performance Improvement  
+
+With these factors in consideration, the HPC user can find a number of ways to improve delivered performance-referred to sometimes as 
+"performance debugging". Techniques to improve one's performance, including hardware scaling, parallel algorithms, performance
+monitoring, work and data distribution, task granularity control, and other sometimes subtle means. 
+
+Something as simple as increasing the number of nodes employed in the execution of an application can be a major method of improving 
+performance. But one will quickly experience limitations to scaling and efficiency due to contributing factors such as uniformity 
+(or irregularity) of tasks on processor cores, distribution of data across memory affecting bank conflicts, cache and translation 
+lookaside buffer (TLB) misses, and page fault.  
