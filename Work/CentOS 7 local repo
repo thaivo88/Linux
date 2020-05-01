@@ -1,3 +1,7 @@
+#create a file /etc/yum.repos.d/centos7.repo
+  vi  /etc/yum.repos.d/centos7.repo
+
+# input below:
 [base]
 name=CentOS-$releasever – Base
 #mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=os
