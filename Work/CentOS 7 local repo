@@ -8,3 +8,131 @@ name=CentOS-$releasever – Base
 baseurl=http://mirror.centos.org/centos/$releasever/os/$basearch/
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+
+################################################################################
+
+[root@server1 ~]# ls rhel*
+rhel-server-7.0-x86_64-dvd.iso
+
+Create a directory and mount the ISO file on that directory.
+
+[root@server1 /]# mkdir /mnt/iso
+[root@server1 ~]# echo "/root/rhel-server-7.0-x86_64-dvd.iso /mnt/iso iso9660 defaults 0 0" >> /etc/fstab
+[root@server1 ~]# mount -a
+mount: /dev/loop0 is write-protected, mounting read-only
+
+Now, RHEL 7 ISO has been persistently mounted at /mnt/iso. Let’s add Local Yum Repository now.
+
+[root@server1 ~]# cat >> /etc/yum.repos.d/localyum.repo << EOF
+> [localyum]
+> name=localyum
+> baseurl=file:///mnt/iso
+> enabled=1
+> gpgcheck=0
+> EOF
+
+Build cache of our yum server.
+
+[root@server1 ~]# yum clean all
+Loaded plugins: langpacks, product-id, subscription-manager
+This system is not registered to Red Hat Subscription Management. You can use subscription-manager to register.
+Cleaning repos: localyum
+Cleaning up everything
+[root@server1 ~]# yum makecache
+Loaded plugins: langpacks, product-id, subscription-manager
+This system is not registered to Red Hat Subscription Management. You can use subscription-manager to register.
+localyum                                                                                           | 4.1 kB  00:00:00
+(1/4): localyum/group_gz                                                                           | 134 kB  00:00:01
+(2/4): localyum/filelists_db                                                                       | 3.0 MB  00:00:02
+(3/4): localyum/primary_db                                                                         | 3.4 MB  00:00:01
+(4/4): localyum/other_db                                                                           | 1.3 MB  00:00:00
+Metadata Cache Created
+
+Our Local yum repository has been configured successfully. Since, we want to use this Local yum repository for other servers as well, therefore, we use an FTP Server to share this repository to other servers in network.
+
+Install an FTP Server using newly configured yum repository.
+
+[root@server1 ~]# yum install -y vsftpd
+Loaded plugins: langpacks, product-id, subscription-manager
+This system is not registered to Red Hat Subscription Management. You can use subscription-manager to register.
+Resolving Dependencies
+--> Running transaction check
+---> Package vsftpd.x86_64 0:3.0.2-9.el7 will be installed
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+==========================================================================================================================
+ Package                    Arch                       Version                         Repository                    Size
+==========================================================================================================================
+Installing:
+ vsftpd                     x86_64                     3.0.2-9.el7                     localyum                     166 k
+
+Transaction Summary
+==========================================================================================================================
+Install  1 Package
+
+Total download size: 166 k
+Installed size: 343 k
+Downloading packages:
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Installing : vsftpd-3.0.2-9.el7.x86_64                                                                              1/1
+  Verifying  : vsftpd-3.0.2-9.el7.x86_64                                                                              1/1
+
+Installed:
+  vsftpd.x86_64 0:3.0.2-9.el7
+
+Complete!
+
+Start and enable vsftpd service.
+
+[root@server1 ~]# systemctl start vsftpd.service ; systemctl enable vsftpd.service
+ln -s '/usr/lib/systemd/system/vsftpd.service' '/etc/systemd/system/multi-user.target.wants/vsftpd.service'
+
+Allow FTP service through Linux firewall.
+
+[root@server1 ~]# firewall-cmd --permanent --add-service=ftp ; firewall-cmd --reload
+success
+success
+
+Now create a directory in /var/ftp/pub and change the mountpoint of ISO in /etc/fstab.
+
+[root@server1 ~]# cd /var/ftp/pub/
+[root@server1 pub]# mkdir iso
+[root@server1 pub]# sed -i 's/\/mnt\/iso/\/var\/ftp\/pub\/iso/g' /etc/fstab
+[root@server1 pub]# umount /mnt/iso
+[root@server1 pub]# mount -a
+mount: /dev/loop0 is write-protected, mounting read-only
+
+Change SELinux mode to permissive.
+
+[root@server1 pub]# sed -i 's/^SELINUX=.*/SELINUX=permissive/g' /etc/sysconfig/selinux
+[root@server1 pub]# setenforce permissive
+
+Now connect to another server and configure its yum repository.
+
+[root@server2 pub]# cat >> /etc/yum.repos.d/localyum.repo << EOF
+> [localyum]
+> name=localyum
+> baseurl=ftp://192.168.116.11/pub/iso
+> enabled=1
+> gpgcheck=0
+> EOF
+[root@server2 pub]# yum clean all
+Loaded plugins: langpacks, product-id, subscription-manager
+This system is not registered to Red Hat Subscription Management. You can use subscription-manager to register.
+Cleaning repos: localyum
+Cleaning up everything
+[root@server2 pub]# yum makecache
+Loaded plugins: langpacks, product-id, subscription-manager
+This system is not registered to Red Hat Subscription Management. You can use subscription-manager to register.
+localyum                                                                                           | 4.1 kB  00:00:00
+(1/4): localyum/group_gz                                                                           | 134 kB  00:00:00
+(2/4): localyum/filelists_db                                                                       | 3.0 MB  00:00:00
+(3/4): localyum/primary_db                                                                         | 3.4 MB  00:00:00
+(4/4): localyum/other_db                                                                           | 1.3 MB  00:00:00
+Metadata Cache Created
