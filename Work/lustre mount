@@ -1,9 +1,15 @@
+Install MOFED and make sure there's an IP address set on the ib* interface
+Make sure you can ping another server over IB
+
 That version will work until we find a kernel that it no longer works for.
   /root/lustre-2.12.4.tar.gz
 
 copy file over to node
   scp /root/lustre-2.12.4.tar.gz \root@[hostname]:/
-
+  
+create directory for lustre
+  mkdir -p /lustre/ssd /lustre/nvme /lustre/hdd
+  
 Unpack
   tar zxvf lustre-2.12.4.tar.gz
 
@@ -11,25 +17,36 @@ install depend
   apt install module-assistant libreadline-dev libyaml-dev libselinux-dev libsnmp-dev mpi-default-dev libssl-dev
 
 To build it, unpack it and do 
-  ./configure --enable-dist --disable-server --enable-client
+  ./configure --disable-server --enable-client
 if it fail on the next step just run
   ./configure
   
 then add the debian packages in a "debs" directory. 
   make debs
- 
+
+Create a file named /etc/modprobe.d/lustre.conf that contains
+  vi /etc/modprobe.d/lustre.conf
+    options lnet networks=o2ib(ib0)
+    
 install them with 
   dpkg -i lustre-client-modules-4.15.0-91-generic_2.12.4-1_amd64.deb lustre-client-utils_2.12.4-1_amd64.deb lustre-dev_2.12.4-1_amd64.deb lustre-iokit_2.12.4-1_amd64.deb
 
 then 
-  depmod -a
+  modprobe lustre
   
-create directory for lustre
-  mkdir -p /lustre/ssd /lustre/nvme /lustre/hdd
-
 add entries to /etc/fstab (get them from another server).
   # Lustre
   #
   192.168.0.210@o2ib:/ssd         /lustre/ssd     lustre  rw,flock,retry=10000    0 0
   192.168.0.210@o2ib:/nvme        /lustre/nvme    lustre  rw,flock,retry=10000    0 0
   192.168.0.210@o2ib:/hdd         /lustre/hdd     lustre  rw,flock,retry=10000    0 0
+
+On some systems, I had to add
+  vi /lib/systemd/system/lnet.service 
+    ExecStart=/sbin/modprobe lustre
+  systemctl enable lnet
+  
+in order to load the lustre modules on boot.  I'm not sure why I needed to do that on some systems and not others.
+  depmod -a
+  reboot
+Make sure all three lustre file systems mount on boot.
