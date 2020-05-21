@@ -8,6 +8,7 @@ copy file over to node
   scp /root/lustre-2.12.4.tar.gz \root@[hostname]:/
 for rpm distro only:
   scp /home/hpcd/letsche/libyaml-devel-0.1.4-11.el7_0.x86_64.rpm \root@[hostname]:/ 
+  rpm -i libyaml-devel-0.1.4-11.el7_0.x86_64.rpm
   
 create directory for lustre
   mkdir -p /lustre/ssd /lustre/nvme /lustre/hdd
