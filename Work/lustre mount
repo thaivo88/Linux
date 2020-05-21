@@ -13,9 +13,7 @@ then add the debian packages in a "debs" directory.
   make debs
  
 install them with 
-  dpkg -i lustre-client-modules-4.15.0-91-generic_2.12.4-1_amd64.deb  
-  lustre-client-utils_2.12.4-1_amd64.deb  lustre-dev_2.12.4-1_amd64.deb  
-  lustre-iokit_2.12.4-1_amd64.deb
+  dpkg -i lustre-client-modules-4.15.0-91-generic_2.12.4-1_amd64.deb lustre-client-utils_2.12.4-1_amd64.deb lustre-dev_2.12.4-1_amd64.deb lustre-iokit_2.12.4-1_amd64.deb
 
 then 
   depmod -a
