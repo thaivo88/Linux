@@ -12,6 +12,9 @@ install depend
 
 To build it, unpack it and do 
   ./configure --enable-dist --disable-server --enable-client
+if it fail on the next step just run
+  ./configure
+  
 then add the debian packages in a "debs" directory. 
   make debs
  
