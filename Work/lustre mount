@@ -1,0 +1,25 @@
+That version will work until we find a kernel that it no longer works for.
+  /root/lustre-2.12.4.tar.gz
+
+To build it, unpack it and do 
+  ./configure --enable-dist --disable-server --enable-client
+then add the debian packages in a "debs" directory. 
+  make debs
+ 
+install them with 
+  dpkg -i lustre-client-modules-4.15.0-91-generic_2.12.4-1_amd64.deb  
+  lustre-client-utils_2.12.4-1_amd64.deb  lustre-dev_2.12.4-1_amd64.deb  
+  lustre-iokit_2.12.4-1_amd64.deb
+
+then 
+  depmod -a
+  
+create directory for lustre
+  mkdir -p /lustre/ssd /lustre/nvme /lustre/hdd
+
+add entries to /etc/fstab (get them from another server).
+  # Lustre
+  #
+  192.168.0.210@o2ib:/ssd         /lustre/ssd     lustre  rw,flock,retry=10000    0 0
+  192.168.0.210@o2ib:/nvme        /lustre/nvme    lustre  rw,flock,retry=10000    0 0
+  192.168.0.210@o2ib:/hdd         /lustre/hdd     lustre  rw,flock,retry=10000    0 0
