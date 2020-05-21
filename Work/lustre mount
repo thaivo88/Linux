@@ -1,6 +1,12 @@
 That version will work until we find a kernel that it no longer works for.
   /root/lustre-2.12.4.tar.gz
 
+copy file over to node
+  scp /root/lustre-2.12.4.tar.gz \root@[hostname]:/
+
+Unpack
+  tar zxvf lustre-2.12.4.tar.gz
+
 To build it, unpack it and do 
   ./configure --enable-dist --disable-server --enable-client
 then add the debian packages in a "debs" directory. 
