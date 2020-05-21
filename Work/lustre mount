@@ -7,6 +7,9 @@ copy file over to node
 Unpack
   tar zxvf lustre-2.12.4.tar.gz
 
+install depend
+  apt install module-assistant libreadline-dev libyaml-dev libselinux-dev libsnmp-dev mpi-default-dev libssl-dev
+
 To build it, unpack it and do 
   ./configure --enable-dist --disable-server --enable-client
 then add the debian packages in a "debs" directory. 
