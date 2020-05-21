@@ -41,7 +41,7 @@ add entries to /etc/fstab (get them from another server).
   192.168.0.210@o2ib:/nvme        /lustre/nvme    lustre  rw,flock,retry=10000    0 0
   192.168.0.210@o2ib:/hdd         /lustre/hdd     lustre  rw,flock,retry=10000    0 0
 
-On some systems, I had to add
+edit lnet.service file and add the below to the top of the ExecStart list
   vi /lib/systemd/system/lnet.service 
     ExecStart=/sbin/modprobe lustre
   systemctl enable lnet
