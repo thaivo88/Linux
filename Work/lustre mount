@@ -6,6 +6,8 @@ That version will work until we find a kernel that it no longer works for.
 
 copy file over to node
   scp /root/lustre-2.12.4.tar.gz \root@[hostname]:/
+for rpm distro only:
+  scp /home/hpcd/letsche/libyaml-devel-0.1.4-11.el7_0.x86_64.rpm \root@[hostname]:/ 
   
 create directory for lustre
   mkdir -p /lustre/ssd /lustre/nvme /lustre/hdd
@@ -21,9 +23,10 @@ To build it, unpack it and do
 if it fail on the next step just run
   ./configure
   
-then add the debian packages in a "debs" directory. 
+then add the debian packages in a "debs" directory. or for rpm
   make debs
-
+  make rpms
+  
 install them with 
   dpkg -i lustre-client-modules-4.15.0-91-generic_2.12.4-1_amd64.deb lustre-client-utils_2.12.4-1_amd64.deb lustre-dev_2.12.4-1_amd64.deb lustre-iokit_2.12.4-1_amd64.deb
 
