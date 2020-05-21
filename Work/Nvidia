@@ -11,6 +11,9 @@
 #using Bus ID to indecate phyical slot location
   lspci -vs [bus_ID] | grep -i slot
 
+#list number of GPU | name | UUID | PCI busID
+  nvidia-xconfig --query-gpu-info
+  
 #show cuda version
   cat /usr/local/cuda/version.txt 
 
