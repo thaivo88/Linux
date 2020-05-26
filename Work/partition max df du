@@ -1,0 +1,33 @@
+Hpcgate’s /home directory at Max Capacity
+
+ 
+All,
+
+Please help clearing out space for hpcgate:/home partition, as it is at 100% capacity.
+         /dev/sdd1                  2146434048  2133210748     13223300 100% /home
+
+Top 10 users taking up resources:
+# du -sh * | sort -h -r | head -10
+	718G    jbassey
+	260G    ssarkar
+	150G    nfleisch
+	118G    nilesh
+	91G     hiroshi
+	68G     jindala
+	62G     rrawat
+	52G     pankaj
+	47G     sfleisch
+	38G     manju
+
+Top 10 data taking up resources:
+# du -h | sort -r | head -10  9.9M    
+	99M     ./hpcd/ssarkar/stan/hs
+	9.9M    ./hpcd/ssarkar/anaconda3/pkgs/cython-0.29.15-py37he6710b0_0/lib/python3.7/site-packages
+	9.9M    ./hpcd/ssarkar/anaconda3/pkgs/cython-0.29.15-py37he6710b0_0/lib/python3.7
+	9.9M    ./hpcd/ssarkar/anaconda3/pkgs/cython-0.29.15-py37he6710b0_0/lib
+	9.9M    ./hpcd/ssarkar/anaconda3/pkgs/anaconda-navigator-1.9.12-py37_0/lib/python3.7/site-packages/anaconda_navigator
+	9.9M    ./hpcd/smruti/res/result/pt
+	9.9M    ./hpcd/smruti/NGC_xl190r/NGC.Ready.xl190r/cu/cutlass/build/examples/04_tile_iterator
+	99M     ./hpcd/smruti/NGC_xl190r/NGC_Max
+	9.9M    ./hpcd/smruti/NGC.Ready.xl190r/cu/cutlass/build/examples/04_tile_iterator
+	99M     ./hpcd/shithal/intel_2018/vtune_amplifier_2018.2.0.551022/uninstall/32/qt
