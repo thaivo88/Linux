@@ -1,0 +1,52 @@
+#!bin/bash
+# new AI ubuntu 18.04 installation script
+# thai.vo@hpe.com
+
+# copy group,hosts,sudoers,nsswitch.conf,fstab from hpcgate into your root's home dirctory 
+# 
+scp \root@10.100.0.5:/etc/\{group,hosts,sudoers,nsswitch.conf,fstab} /root
+
+# saving the orgianl group,hosts,sudoers,nsswitch.conf,fstab as backup
+#
+mv /etc/group /etc/group.old
+mv /etc/hosts /etc/hosts.old
+mv /etc/nsswitch.conf /etc/nsswitch.conf.old
+mv /etc/sudoers /etc/sudoers.old
+mv /etc/fstab /etc/fstab.old
+
+# copying over the orginal fstab into the new fstab
+#
+cat /etc/fstab.old >> /etc/fstab
+
+# removing unwanted entry in fstab from hpcgate version
+#
+sed -i 's/UUID=0c48e174-f76a-47e1-8472-89f2b80df190 /                       xfs     defaults        0 0/ /' /etc/fstab
+sed -i 's/UUID=741545ea-fd09-49eb-85a5-de411a60be30 /boot                   xfs     defaults        0 0/ /' /etc/fstab
+sed -i 's/UUID=94917f16-d92b-49e5-8801-5d03867a5dd4 /opt                    xfs     defaults        0 0/ /' /etc/fstab
+sed -i 's/UUID=8c71c7f4-a12d-4981-b1d2-84f9115a46e3 swap                    swap    defaults        0 0/ /' /etc/fstab
+sed -i 's//dev/sdb1       /mops           xfs logbufs=8,noatime,nodiratime 0 0/ /' /etc/fstab
+sed -i 's//dev/sdc1       /apps           xfs logbufs=8,noatime,nodiratime 0 0/ /' /etc/fstab
+sed -i 's//dev/sdd1       /home           xfs logbufs=8,noatime,nodiratime 0 0/ /' /etc/fstab
+sed -i 's//dev/sde1       /scratch        xfs logbufs=8,noatime,nodiratime 0 0/ /' /etc/fstab
+sed -i 's//dev/sdf1       /ml             xfs logbufs=8,noatime,nodiratime 0 0/ /' /etc/fstab
+
+# remove statoverride which affect installing packages
+#
+yes | rm /var/lib/dpkg/statoverride
+
+# create new mount point directories
+#
+mkdir /apps /home /scratch /mops /ml
+
+# install nfs for mount point above
+#
+sudo apt-get install nfs-common
+
+# mounting all in fstab entry
+#
+mount -a
+
+# disable auto update
+#
+sed -i 's/APT::Periodic::Unattended-Upgrade "1";/ APT::Periodic::Unattended-Upgrade "0";/' /etc/apt/apt.conf.d/20auto-upgrades && sed -i 's/APT::Periodic::Update-Package-Lists "1";/APT::Periodic::Update-Package-Lists "0";/' /etc/apt/apt.conf.d/20auto-upgrades
+
