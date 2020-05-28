@@ -63,7 +63,28 @@ echo completed installation of nfs
 mount -a
 echo completed mounting entry of fstab
 
+# enable root login and restart ssh daemon
+#
+sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config 
+systemctl restart sshd
+
 # disable auto update
 #
 sed -i 's/APT::Periodic::Unattended-Upgrade "1";/ APT::Periodic::Unattended-Upgrade "0";/' /etc/apt/apt.conf.d/20auto-upgrades && sed -i 's/APT::Periodic::Update-Package-Lists "1";/APT::Periodic::Update-Package-Lists "0";/' /etc/apt/apt.conf.d/20auto-upgrades
 echo completed disable auto
+
+# blacklist nouveau driver for nvidia driver to be installed
+#
+echo "blacklist nouveau" >> /etc/modprobe.d/blacklist-nouveau.conf
+echo "options nouveau modeset=0" >> /etc/modprobe.d/blacklist-nouveau.conf
+echo completed blacklist of nouveau
+
+# Regenerate the kernel initramfs
+#
+update-initramfs -u
+
+# Install GNU Compiler Collection for Nvidia driver
+#
+yes | apt-get install gcc
+
+
