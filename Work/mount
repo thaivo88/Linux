@@ -1,3 +1,6 @@
+if /etc/fstab is incorrect and you cant boot the node up
+  mount -o  remount,rw UUID=[correct UUID]
+
 check or edit /etc/fstab for all network file system mounting point
 
   mount [mount_point] [mount_directory]
