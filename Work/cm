@@ -715,3 +715,54 @@ new label = "lvol"
 # From here we will copy the houston file to a group of hosts in parallel.
 	[root@hpchost3 group]# pdcp -g [group_node] /etc/sudoers.d/houston /etc/sudoers.d/houston
 ###############################################################
+
+
+
+
+
+########################## Removing node from LR0 to LR4 ####################################
+For future reference, here are some steps to keep DBs, PBS, and array services up to date when moving nodes. These steps use kratosn04/05 as an example:
+
+ssh hpchou-login;
+pbsnodes -o kratosn04 -C "Moving to PLAB"
+pbsnodes -o kratosn05 -C "Moving to PLAB"
+ssh kratosn04 ; shutdown -h now
+ssh kratosn05 ; shutdown -h now
+ssh hpchpcm;
+cadmin --db-purge --node kratosn04
+cadmin --db-purge --node kratosn05
+ssh hpchou-login;
+qmgr -c "delete node kratosn04"
+qmgr -c "delete node kratosn05"
+cd /etc/array
+cp arrayd.conf arrayd-backups/arrayd.conf.06042020
+vi arrayd.conf # and update node list
+cp arrayd.conf /admin/pkh/
+
+-- steps to copy the updated arrayd.conf everywhere pdsh  -w apollon[034-041] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd.conf'
+pdsh  -w artemisn[001-004,007,009-014] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd.conf' 
+pdsh  -w harmonian[001-005,007-010] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd.conf'
+pdsh  -w kratosn[01-03] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd.conf'
+pdsh  -w leton[001-002] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd.conf'
+pdsh  -w rhean[025-045,047-048] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd.conf' 
+pdsh  -w tibern[01-08] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd.conf' 
+pdsh  -w zeusn[039-042] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd.conf' 
+
+-- steps to restart array.service
+systemctl restart array.service  # on hpchou-login pdsh  -w apollon[034-041] 'systemctl restart array.service'
+pdsh  -w artemisn[001-004,007,009-014] 'systemctl restart array.service'
+pdsh  -w harmonian[001-005,007-010] 'systemctl restart array.service'
+pdsh  -w kratosn[01-03] 'systemctl restart array.service'
+pdsh  -w leton[001-002] 'systemctl restart array.service'
+pdsh  -w rhean[025-045,047-048] 'systemctl restart array.service'
+pdsh  -w tibern[01-08] 'systemctl restart array.service'
+pdsh  -w zeusn[039-042] 'systemctl restart array.service'
+
+-- tired yet? now copy arrayd.conf to all the images used unalias cp cp /admin/pkh/arrayd.conf /opt/clmgr/image/images/rhel7.6-mlnx-apollo-hpc/etc/array/
+cp /admin/pkh/arrayd.conf /opt/clmgr/image/images/rhel7.6-mlnx-gen9-hpc/etc/array/
+cp /admin/pkh/arrayd.conf /opt/clmgr/image/images/rhel76-aarch-hpc/etc/array/
+cp /admin/pkh/arrayd.conf /opt/clmgr/image/images/rhel7.6-mlnx-kratos-hpc/etc/array/
+cp /admin/pkh/arrayd.conf /opt/clmgr/image/images/rhel7.6-mlnx-AMD-hpc/etc/array/
+cp /admin/pkh/arrayd.conf /opt/clmgr/image/images/rhel7.6-mlnx-rhea-hpc/etc/array/
+cp /admin/pkh/arrayd.conf /opt/clmgr/image/images/rhel7.6-mlnx-zeus-hpc/etc/array/
+#################################################################
