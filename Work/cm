@@ -774,6 +774,7 @@ cp /admin/pkh/arrayd.conf /opt/clmgr/image/images/rhel7.6-mlnx-kratos-hpc/etc/ar
 cp /admin/pkh/arrayd.conf /opt/clmgr/image/images/rhel7.6-mlnx-AMD-hpc/etc/array/
 cp /admin/pkh/arrayd.conf /opt/clmgr/image/images/rhel7.6-mlnx-rhea-hpc/etc/array/
 cp /admin/pkh/arrayd.conf /opt/clmgr/image/images/rhel7.6-mlnx-zeus-hpc/etc/array/
+cp /admin/pkh/arrayd.conf /opt/clmgr/image/images/rhel7.6-hpchou-hpc/etc/array/
 
 # restart namd on hpchou-login
 systemctl restart named
