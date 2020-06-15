@@ -739,10 +739,11 @@ cp arrayd.conf arrayd-backups/arrayd.conf.06042020
 vi arrayd.conf # and update node list
 cp arrayd.conf /admin/pkh/
 
--- steps to copy the updated arrayd.conf everywhere pdsh  -w apollon[034-041] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd.conf'
+-- steps to copy the updated arrayd.conf everywhere 
+pdsh  -w apollon[034-041] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd.conf'
 pdsh  -w artemisn[001-004,007,009-014] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd.conf' 
 pdsh  -w harmonian[001-005,007-010] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd.conf'
-pdsh  -w kratosn[01-03] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd.conf'
+pdsh  -w kratosn[01-05] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd.conf'
 pdsh  -w leton[001-002] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd.conf'
 pdsh  -w rhean[025-045,047-048] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd.conf' 
 pdsh  -w tibern[01-08] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd.conf' 
