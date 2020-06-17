@@ -89,8 +89,7 @@ hpchpcm /thai_notes
 
 # Add node to array (mpi crosstalk) before discovering them:
 # on hpchpcm
-	cd /opt/clmgr/image/images
-	cd generic-customizations
+	cd /opt/clmgr/image/images/etc/generic-customizations/arrayd/
 	vi arrayd.conf
 # add node to file
 
