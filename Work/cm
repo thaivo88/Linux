@@ -106,10 +106,17 @@ hpchpcm /thai_notes
 # Check to see if the nodes show up
 
 # Copying array file to all the nodes
-	pdcp -w zeusn0[40-42] /etc/array/arrayd.conf /etc/array/arrayd.conf 
+	pdcp  -w apollon[034-041] /etc/array/arrayd.conf /etc/array/arrayd.conf 
+	pdcp  -w artemisn[001-004,007,009-014] /etc/array/arrayd.conf /etc/array/arrayd.conf 
+	pdcp  -w harmonian[001-005,007-010] /etc/array/arrayd.conf /etc/array/arrayd.conf 
+	pdcp  -w kratosn[01-05] /etc/array/arrayd.conf /etc/array/arrayd.conf 
+	pdcp  -w leton[001-002] /etc/array/arrayd.conf /etc/array/arrayd.conf 
+	pdcp  -w rhean[025-045,047-048] /etc/array/arrayd.conf /etc/array/arrayd.conf 
+	pdcp  -w tibern[01-08] /etc/array/arrayd.conf /etc/array/arrayd.conf 
+	pdcp  -w zeusn[039-042] /etc/array/arrayd.conf /etc/array/arrayd.conf 
 
 # on hpchpcm
-ipmiwrapper kratosn01 power off
+ipmiwrapper [hostname] power off
 
 # discover by node by default it will install rhel7.6
 
