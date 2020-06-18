@@ -1,11 +1,25 @@
 #!bin/bash
-# new AI software stack ubuntu 18.04 installation script
+#
+# AI software stack ubuntu 18.04 installation script
+# installing/configuring:
+# Nvidia driver, docker, Nvidia-docker, Mellanox OFED, nv_peer_memory, cuda 10, cudnn, nccl, lustre, mellanox interface, NIS, NFS
+#
 # thai.vo@hpe.com
+#
+# DO NOT run this script on hpcgate
+# Copy file to the system you're going to configure
+# scp  /admin/scripts/auto_config_AI-SWstack_ubuntu18 \root@[hostname]:/root
+echo "Initizing script"
 
-# copy group,hosts,sudoers,nsswitch.conf,fstab from hpcgate into your root's home dirctory 
-# 
+# copy group, hosts, sudoers, nsswitch.conf, fstab from hpcgate into your root's home dirctory
+#
 scp \root@10.100.0.5:/etc/\{group,hosts,sudoers,nsswitch.conf,fstab} /root
-echo completed copying over hpcgate files
+echo "Completed: copying over hpcgate files (group, hosts, sudoers, nsswitch.conf, fstab)"
+
+# copy cudnn, cuda, ofed, nv-peer, nvidia-driver, nccl from hpcgate:/home/hpcd/voth into your root's home dirctory
+#
+scp \root@10.100.0.5:/home/hpcd/voth/\{libcudnn7_7.5.0.56-1+cuda10.1_amd64.deb,libcudnn7-dev_7.5.0.56-1+cuda10.1_amd64.deb,cuda_10.2.89_440.33.01_linux.run,MLNX_OFED_LINUX-5.0-2.1.8.0-ubuntu18.04-x86_64.tgz,nccl-repo-ubuntu1804-2.4.8-ga-cuda10.1_1-1_amd64.deb,nvidia-driver-local-repo-ubuntu1804-440.33.01_1.0-1_amd64.deb,nv_peer_memory-master.zip,lustre-2.12.4.tar.gz} /root
+echo "Completed: copying over cudnn, cuda, ofed, nv-peer, nvidia-driver, nccl, lustre"
 
 # saving the orgianl group,hosts,sudoers,nsswitch.conf,fstab as backup
 #
@@ -14,7 +28,8 @@ mv /etc/hosts /etc/hosts.old
 mv /etc/nsswitch.conf /etc/nsswitch.conf.old
 mv /etc/sudoers /etc/sudoers.old
 mv /etc/fstab /etc/fstab.old
-echo completed backing up /etc files
+echo "Completed: backing up /etc files"
+sleep 5
 
 # move hpcgate file to /etc/
 #
@@ -23,68 +38,237 @@ mv /root/hosts /etc/
 mv /root/nsswitch.conf /etc/
 mv /root/sudoers /etc/
 mv /root/fstab /etc/
-echo completed moving hpcgate files to /etc
+echo "Completed: moving hpcgate files to /etc"
+sleep 5
 
 # copying over the orginal fstab into the new fstab
 #
 cat /etc/fstab.old >> /etc/fstab
-echo copying over the old fstab into the new fstab
+echo "Completed: copying over the old fstab into the new fstab"
+sleep 5
 
 # removing unwanted entry in fstab from hpcgate version
 #
-sed "/UUID=0c48e174-f76a-47e1-8472-89f2b80df190/d" /etc/fstab
-sed "/UUID=741545ea-fd09-49eb-85a5-de411a60be30/d" /etc/fstab
-sed "/UUID=94917f16-d92b-49e5-8801-5d03867a5dd4/d"  /etc/fstab
-sed "/UUID=8c71c7f4-a12d-4981-b1d2-84f9115a46e3/d" /etc/fstab
-sed "//dev/sdb1/d" /etc/fstab
-sed "//dev/sdc1/d" /etc/fstab
-sed "//dev/sdd1/d" /etc/fstab
-sed "//dev/sde1/d" /etc/fstab
-sed "//dev/sdf1/d" /etc/fstab
-echo completed of removal of hpcgate mounts and UUID in fstab
+sed '9,17d' /etc/fstab >> /etc/fstab1
+mv /etc/fstab1 /etc/fstab
+echo "Completed: removal of hpcgate mounts and UUID in fstab"
+sleep 5
 
 # remove statoverride which affect installing packages
 #
 yes | rm /var/lib/dpkg/statoverride
-echo completed removed of statoverride
+echo "Completed: removal of statoverride"
+sleep 5
 
 # create new mount point directories
 #
 mkdir /apps /home /scratch /mops /ml
-echo completed creating mount point
+echo "Completed: creating mount point"
+sleep 5
 
 # install nfs for mount point above
 #
-sudo apt-get install nfs-common
-echo completed installation of nfs
+yes | apt-get install nfs-common
+echo "Completed: installation of nfs"
+sleep 5
+
+# configure NIS
+#
+yes | apt-get install nis
+echo "ypserver 10.100.0.5" >> /etc/yp.conf
+systecmtl ypbind restart
+domainname partner
+echo "Completed: NIS"
+sleep 5
 
 # mounting all in fstab entry
 #
 mount -a
-echo completed mounting entry of fstab
+echo "Completed: mounting entry of fstab; lustre error is okay as it has not been configure yet"
+sleep 5
 
 # enable root login and restart ssh daemon
 #
-sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config 
+sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 systemctl restart sshd
+echo "Completed: enabled root login and restart ssh daemon"
+sleep 5
 
 # disable auto update
 #
 sed -i 's/APT::Periodic::Unattended-Upgrade "1";/ APT::Periodic::Unattended-Upgrade "0";/' /etc/apt/apt.conf.d/20auto-upgrades && sed -i 's/APT::Periodic::Update-Package-Lists "1";/APT::Periodic::Update-Package-Lists "0";/' /etc/apt/apt.conf.d/20auto-upgrades
-echo completed disable auto
+echo "Completed: disable auto update"
+sleep 5
 
 # blacklist nouveau driver for nvidia driver to be installed
 #
 echo "blacklist nouveau" >> /etc/modprobe.d/blacklist-nouveau.conf
 echo "options nouveau modeset=0" >> /etc/modprobe.d/blacklist-nouveau.conf
-echo completed blacklist of nouveau
+echo "Completed: blacklist of nouveau driver"
+sleep 5
 
 # Regenerate the kernel initramfs
 #
 update-initramfs -u
+echo "Completed: kernel regenerate"
+sleep 5
 
 # Install GNU Compiler Collection for Nvidia driver
 #
 yes | apt-get install gcc
+echo "Completed: installation of GNU Compiler"
+sleep 5
 
+# Install unzip
+#
+yes | apt-get install unzip
+echo "Completed: installation of unzip"
+sleep 5
 
+# cuda runfile now install the driver - commenting out
+#
+# install nvidia-driver
+#
+#chmod +x /root/nvidia-driver-local-repo-ubuntu1804-440.33.01_1.0-1_amd64.deb
+#dpkg -i /root/nvidia-driver-local-repo-ubuntu1804-440.33.01_1.0-1_amd64.deb
+#apt-key add /var/nvidia-diag-driver-local-repo-418.40.04/7fa2af80.pub
+#apt-get update
+#apt-get install cuda-drivers
+#echo "Completed: installation of nvidia driver"
+#sleep 5
+
+# installing docker
+#
+yes | apt-get install apt-transport-https  ca-certificates  curl  gnupg-agent   software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+apt-key fingerprint 0EBFCD88
+add-apt-repository    "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable nightly test"
+yes | apt-get install docker-ce docker-ce-cli containerd.io
+echo "Completed: installation of Docker"
+sleep 5
+
+# Install Nvidia-Docker
+#
+#curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey |   sudo apt-key add -
+#distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+#curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list |  sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+yes | apt-get update
+#apt-get install nvidia-docker2
+#echo "Completed: installation of nvidia-docker"
+#sleep 5
+
+# install dependancies for MLNX ofed
+#
+yes | apt-get install autotools-dev m4 pkg-config autoconf libltdl-dev bison libnl-route-3-200 gfortran graphviz swig dkms tk chrpath dpatch tcl automake flex debhelper libgfortran4 make quilt libnl-3-dev libnl-route-3-dev
+
+echo "Completed: installation of dependancies for MLNX OFED"
+sleep 5
+
+# Install MLNX_OFED_LINUX
+#
+yes | apt install infiniband-diags
+tar -zxvf MLNX_OFED_LINUX-5.0-2.1.8.0-ubuntu18.04-x86_64.tgz
+cd MLNX_OFED_LINUX-5.0-2.1.8.0-ubuntu18.04-x86_64
+./mlnxofedinstall --without-fw-update --without-mlnx-fw-updater --without-neohost-backend
+cd ..
+/etc/init.d/openibd restart
+echo "Completed: installation of ofed"
+sleep 5
+
+ # install cuda
+#
+./cuda_10.2.89_440.33.01_linux.run
+echo "Completed: installation of cuda"
+sleep 5
+
+# install cudnn
+#
+dpkg -i libcudnn7_7.5.0.56-1+cuda10.1_amd64.deb
+dpkg -i libcudnn7-dev_7.5.0.56-1+cuda10.1_amd64.deb
+echo "Completed: installation of cudnn lib"
+sleep 5
+
+# Install nv_peer_memory
+#
+unzip nv_peer_memory-master.zip
+tar cvfz nvidia-peer-memory_1.0.orig.tar.gz nv_peer_memory-master --owner=1000 --group=1000
+cd nv_peer_memory-master/
+dpkg-buildpackage -us -uc
+cd ..
+dpkg -i nvidia-peer-memory-dkms_1.0-8_all.deb
+echo "Completed: installation of nv peer memory"
+sleep 5
+
+# install nccl
+dpkg -i nccl-repo-ubuntu1804-2.4.8-ga-cuda10.1_1-1_amd64.deb
+apt-key add /var/nccl-repo-2.4.8-ga-cuda10.1/7fa2af80.pub
+echo "Completed: installation of nccl lib"
+sleep 5
+
+# configuring IB interface for lustre
+# indention matter for netplan yaml file
+#
+echo "Enter IB IP Address and netmask, example: 10.10.10.10/16"
+read ib0_address
+sed "/version/d" /etc/netplan/50-cloud-init.yaml >> /etc/netplan/50-cloud-init.yaml1
+mv /etc/netplan/50-cloud-init.yaml1 /etc/netplan/50-cloud-init.yaml
+echo "        ib0:" >> /etc/netplan/50-cloud-init.yaml
+echo "            addresses:" >> /etc/netplan/50-cloud-init.yaml
+echo "            - $ib0_address" >> /etc/netplan/50-cloud-init.yaml
+echo "    version: 2" >> /etc/netplan/50-cloud-init.yaml
+netplan try
+netplan apply
+echo "Completed: IB interface"
+sleep 5
+
+# Lustre configuration
+#
+# commentout 06/17/2020 thai.vo@hpe.com
+#
+#mkdir -p /lustre/ssd /lustre/nvme /lustre/hdd
+#tar zxvf lustre-2.12.4.tar.gz
+#yes | apt install libsnmp-base libsnmp30 lustre-client-utils lustre-dev module-assistant libreadline-dev libyaml-dev libselinux-dev libsnmp-dev mpi-default-dev libssl-dev
+#cd lustre-2.12.4/
+#./configure --disable-server --enable-client
+#make debs
+#cd debs
+#dpkg -i lustre-client-modules-4.15.0-101-generic_2.12.4-1_amd64.deb lustre-client-utils_2.12.4-1_amd64.deb lustre-dev_2.12.4-1_amd64.deb lustre-iokit_2.12.4-1_amd64.deb
+#echo "options lnet networks=o2ib(ib0)" > /etc/modprobe.d/lustre.conf
+#modprobe lustre
+#systemctl enable lnet
+#depmod -a
+#mount -a
+#echo "Completed: lustre installation and configuration"
+#sleep 5
+
+# new lustre installation
+#
+# added 06/17/2020 thai.vo@hpe.com
+#
+mkdir -p /lustre/ssd /lustre/nvme /lustre/hdd
+scp \root@10.100.0.5:/root/lustre-2.12.4-client-dkms.tar.gz /root
+cd /root/lustre-2.12.4-client-dkms/lustre-2.12.4-dkms-debs
+dpkg -i *.deb
+yes | apt install libsnmp-base libsnmp30 lustre-client-utils lustre-dev module-assistant libreadline-dev libyaml-dev libselinux-dev libsnmp-dev mpi-default-dev libssl-dev
+yes | apt update
+yes | apt install dkms libyaml-dev
+echo "options lnet networks=o2ib(ib0)" > /etc/modprobe.d/lustre.conf
+# Run depmod because Ubuntu includes lustre client modules with the distribution.
+# If you don't do depmod, it tries to use the modules that came with the distribution rather than the ones you just built.
+lustre_rmmod; depmod -a
+modprobe lustre
+systemctl enable lnet
+mount -a
+echo "Completed: lustre installation and configuration"
+sleep 5
+
+echo "AI Software Stack Completed. Rebooting Host Node for application can take affect."
+echo " Rebooting in 5 seconds"
+sleep 5
+reboot
+
+# need to add a line to hold kernel version
+# apt-mark hold linux-image-[verison]-generic
+# uname -r | awk
+
+# need to get kernel version from uname and add a veriable to lustre client
