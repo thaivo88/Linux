@@ -258,8 +258,8 @@ exit 0
 # Copy /etc/slurm-llnl/slurm.conf from another node:
   scp znode39:/etc/slurm-llnl/slurm.conf /etc/slurm-llnl/
 
-# Edit /etc/systemd/system/multi-user.target.wants/slurmd.service and change
-  vi /etc/systemd/system/multi-user.target.wants/slurmd.service
+# Edit /lib/systemd/system/slurmd.service and change
+  vi /lib/systemd/system/slurmd.service
   
     PIDFile=/var/run/slurm-llnl/slurmd.pid
         to
