@@ -196,20 +196,22 @@ commands "/etc/init.d/slurm stop" and then "/etc/init.d/slurm start").
   which adduser
   which useradd
   mv /usr/sbin/adduser /usr/sbin/adduser.bak
+  mv /usr/sbin/useradd /usr/sbin/useradd.bak
   mv /usr/sbin/deluser /usr/sbin/deluser.bak
-
+  mv /usr/sbin/userdel /usr/sbin/userdel.bak 
+ 
 # create new useradd and userdel to return 0
   vi /usr/sbin/useradd
-        #################  
-          #!/bin/bash
-          exit 0
-        #################
+#################  
+#!/bin/bash
+exit 0
+#################
 
 # changing permission bit and copying a userdel
   chmod u+x /usr/sbin/useradd
   cp /usr/sbin/useradd /usr/sbin/userdel
-
-
+  cp /usr/sbin/useradd /usr/sbin/deluser
+  cp /usr/sbin/useradd /usr/sbin/adduser
 
 # For whatever reason, the nodes have a munge user, but no munge group.
 # Make sure there's a munge group and corresponding user:
@@ -248,8 +250,10 @@ commands "/etc/init.d/slurm stop" and then "/etc/init.d/slurm start").
   apt install slurm slurm-client slurmd
 
 # Move adduser userdel back into place:
+  mv /usr/sbin/useradd.bak /usr/sbin/useradd
   mv /usr/sbin/adduser.bak /usr/sbin/adduser
   mv /usr/sbin/userdel.bak /usr/sbin/userdel
+  mv /usr/sbin/deluser.bak /usr/sbin/deluser
   
 # Copy /etc/slurm-llnl/slurm.conf from another node:
   scp znode39:/etc/slurm-llnl/slurm.conf /etc/slurm-llnl/
