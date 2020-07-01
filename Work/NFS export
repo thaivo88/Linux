@@ -1,0 +1,13 @@
+For NFS exporting:
+
+Connect to the system you want to export FS from
+connect to hpchost3/4 edit the file below to add the line: 172.23.0.12 is hpchost2 interface
+no_root_squash does not let other to get root
+
+/etc/export
+
+172.23.0.12(fsid=1001,rw,no_root_squash,insecure,sync,no_subtree_check)
+
+exportfs -v (list all export)
+exportfs -au (unexport)
+exportfs -a (export all)
