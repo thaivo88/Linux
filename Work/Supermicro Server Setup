@@ -125,6 +125,12 @@ Cuda compilation tools, release 10.1, V10.1.168
 then restart the nvidia-fabricmanager 
 # service nvidia-fabricmanager start
  
+if DCGM fabric installation fail run cmd below then install again.
+ apt-get -o Dpkg::Options::="--force-overwrite" install --fix-broken
+
+install the following befor running make cmd
+ apt install build-essential (this will install g++)
+ apt-get install -y numactl
  
 11.	Additionally, the samples can be compiled, for example navigating to ~/NVIDIA_CUDA-8.0_Samples/1_Utilities/deviceQuery (if the default path for the samples was used) and then:
  
