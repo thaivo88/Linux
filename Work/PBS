@@ -15,6 +15,10 @@
  
 # will list all node
   pbsnodes -a
+  
+# check list of jobs then kill job in pbs
+  qstat -an
+  qdel  <job id> 
 
 # to display queue information:
   qstat [option]
