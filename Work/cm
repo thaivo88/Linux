@@ -732,8 +732,10 @@ For future reference, here are some steps to keep DBs, PBS, and array services u
 ssh hpchou-login;
 pbsnodes -o kratosn04 -C "Moving to PLAB"
 pbsnodes -o kratosn05 -C "Moving to PLAB"
-ssh kratosn04 ; shutdown -h now
-ssh kratosn05 ; shutdown -h now
+ssh kratosn04
+shutdown -h now
+ssh kratosn05
+shutdown -h now
 
 ssh hpchpcm;
 cadmin --db-purge --node kratosn04
