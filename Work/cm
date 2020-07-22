@@ -190,7 +190,7 @@ cinstallman --next-boot image --node kratosn02
 
 # on hpchou-log
 # creating node for pbs using qmgr
-for NODE in 'seq 1 4' ; do qmgr -c 'create node kratosn0${NODE}" ; done
+for NODE in 'seq 1 4' ; do qmgr -c "create node kratosn0${NODE}" ; done
 pbsnodes -av | egrep '^kratos'
 
 # define sales_op and cluster
