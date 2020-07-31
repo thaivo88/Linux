@@ -1,0 +1,36 @@
+I have created the new hook check_sales_op_queuejob that can be used to restrict the use of the zeus nodes to bskim and pravesh and myself.
+So here are the instructions to remove check_sales_op_queuejob and install.
+All the commands below are on hpchou-login since it is the PBS server.
+#Remove the existing hook first
+qmgr -c "d h check_sales_op_queuejob"
+
+#Now we install the restrictive hook
+cd /root/pbs/zeus
+qmgr -c "create hook check_sales_op_queuejob"
+qmgr -c "set hook check_sales_op_queuejob type = site"
+qmgr -c "set hook check_sales_op_queuejob event = queuejob"
+qmgr -c "import hook check_sales_op_queuejob application/x-python default check_sales_op_queuejob.py"
+
+# you should see no errors with the qmgr commands 
+#Then check that the hook is in place.
+qmgr -c "l h"
+
+#To test that hte hook is working properly
+su - garyf
+qsub zeus.sh              #The job should run successful
+
+#Then copy zeus.sh to your home directory and submit the job as yourself.
+#The job should fail with this message qsub: Job was rejected because access denied Check motd then contact Thai Vo!
+
+# Should also verify with bskim and pravesh on Monday that the hook works for them as well before live demo.
+
+#To return the hook to the standard one.
+#Remove the existing hook first
+qmgr -c "d h check_sales_op_queuejob"
+
+#Now we install the standard hook
+cd /root/pbs/standard
+qmgr -c "create hook check_sales_op_queuejob"
+qmgr -c "set hook check_sales_op_queuejob type = site"
+qmgr -c "set hook check_sales_op_queuejob event = queuejob"
+qmgr -c "import hook check_sales_op_queuejob application/x-python default check_sales_op_queuejob.py"
