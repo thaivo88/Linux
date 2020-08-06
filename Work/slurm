@@ -1,6 +1,7 @@
 #edit slurm.conf when updating proc or ram
   /admin/slurm/etc/slurm.conf
-
+  /apps/aislurm/etc/slurm.conf
+  
 #reconfig slurm
   systemctl stop slurmd
   systemctl status slurmd
