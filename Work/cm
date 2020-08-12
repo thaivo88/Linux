@@ -787,3 +787,7 @@ cp /admin/pkh/arrayd.conf /opt/clmgr/image/images/rhel7.6-hpchou-hpc/etc/array/
 # restart namd on hpchou-login
 systemctl restart named
 #################################################################
+
+
+# For standalone on hpchpcm, discover the node but do not assign an image using skip provision then install the ISO
+discover --node 266 --skip-provision --configfile /root/hpchpcm.config
