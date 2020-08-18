@@ -791,3 +791,14 @@ systemctl restart named
 
 # For standalone on hpchpcm, discover the node but do not assign an image using skip provision then install the ISO
 discover --node 266 --skip-provision --configfile /root/hpchpcm.config
+
+
+################################################################
+qstat looking up cpu frequencies
+
+[root@hpchou-login ~]# qstat -Q | grep f29 | sort
+f2900                0     0 yes yes     0     0     0     0     0     0 Exec
+f2900noHT            0     0 yes yes     0     0     0     0     0     0 Exec
+f2900THP             0     0 yes yes     0     0     0     0     0     0 Exec
+f2900THPnoHT         0     0 yes yes     0     0     0     0     0     0 Exec
+
