@@ -1,3 +1,5 @@
+ilorest manual https://support.hpe.com/hpesc/public/docDisplay?docId=c04423965
+
 # Log into the node you wish to copy the bios setting.
 # Make sure ilorest is installed: 
   which ilorest
