@@ -1,0 +1,76 @@
+# install numa control
+  dnf install numactl
+
+# Show inventory of available nodes on the system
+  numactl --hardware
+# or  
+  numactl -H
+# or  
+  ssh [hostname] numactl --hardware
+##########Output##########
+available: 2 nodes (0-1)
+node 0 cpus: 0 1 2 3 4 5
+node 0 size: 16383 MB
+node 0 free: 9762 MB
+node 1 cpus: 6 7 8 9 10 11
+node 1 size: 16384 MB
+node 1 free: 4575 MB
+node distances:
+node   0   1 
+  0:  10  13 
+  1:  13  10 
+###########End###########
+
+
+# Show NUMA policy settings of the current process
+  numactl -show
+##########Output##########  
+policy: default
+preferred node: current
+physcpubind: 0 1 2 3 4 5 6 7 8 9 10 11 
+cpubind: 0 1 
+nodebind: 0 1 
+membind: 0 1 
+###########End###########
+
+# Show how much memory is free on each node
+ numactl -H | grep free
+##########Output##########  
+node 0 free: 9769 MB
+node 1 free: 4566 MB
+###########End###########
+
+# Control application use particular CPU node
+# You can use numactl to control how your program uses CPU node, controlling which CPUs are used to execute a program.
+  numactl --cpunodebind=<node> ls
+# or
+  numactl -N node
+  
+# Control application use particular CPU
+# You can use numactl to control how your program uses CPU, controlling which CPU are used to execute a program 
+  numactl --physcpubind=<cpu> ls
+# or
+  numactl -C <cpu>  
+# This accepts cpu numbers as shown in the processor fields of /proc/cpuinfo. Thus, if hyper threading is enabled, the virtual cores representing a hyper thread, 
+# not a hardware thread will show up as well.
+# You can also specify range of CPUs for an application, the following command runs  myapp  on  cpus 0-4 and 8-12 of the current cpuset.
+  numactl  --physcpubind=+0-4,8-12  myapp  arguments    
+  
+# Control application use local memory
+# You can use numactl to control how your program uses memory quite precisely, simply using numactl to require that the program uses only local memory can result 
+# in much improved performance. This can be achieved by using numactl with flag -l
+  numactl --physcpubind=0 --localalloc ls
+# The program can use only local memory, which is less than the total memory, and will fail if it tries to allocate more memory when the local memory is already full.
+  
+# Control application use preferred node and memory
+# Preferably allocate memory on node, but if memory cannot be allocated  there  fall  back  to  other nodes.  This option takes only a single node number.
+  numactl --preferred=<node> ls
+  
+# Interleave memory for some application
+# Run big database with its memory interleaved on all CPUs.
+  numactl --interleave=all bigdatabase arguments
+  
+# Run network server on specified network device with its memory in the same node
+# The command below run network-server on the node of network device eth0 with its memory also in the same node.
+  numactl  --cpunodebind=netdev:eth0  --membind=netdev:eth0   
+  
