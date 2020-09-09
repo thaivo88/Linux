@@ -27,7 +27,7 @@ name=CentOS Linux 8 - BaseOS
 metadata_expire=-1
 gpgcheck=1
 enabled=1
-baseurl=file:///opt/BaseOS/
+baseurl=file:///mnt/centos8/BaseOS/
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial
 
 [InstallMedia-AppStream]
@@ -35,7 +35,7 @@ name=CentOS Linux 8 - AppStream
 metadata_expire=-1
 gpgcheck=1
 enabled=1
-baseurl=file:///opt/AppStream/
+baseurl=file:///mnt/centos8/AppStream/
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial
 
 # Save the repo file and exit the editor.
