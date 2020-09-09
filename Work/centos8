@@ -5,7 +5,7 @@ mount CentOS-8-x86_64-1905-dvd1.iso /mnt/centos8
 # Mount CentOS 8 ISO File
 # Step 2: Create a CentOS 8 Local Yum Repository
 # In the mounted directory where your ISO is mounted, copy the media.repo file to the /etc/yum.repos.d/ directory as shown.
-cp -v /mnt/media.repo  /etc/yum.repos.d/centos8.repo
+cp -v /mnt/centos8/media.repo  /etc/yum.repos.d/centos8.repo
 
 # Create CentOS 8 Local Yum Repository
 # Next, assign file permissions as shown to prevent modification or alteration by other users.
