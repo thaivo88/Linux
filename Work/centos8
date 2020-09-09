@@ -14,7 +14,7 @@ ls -l /etc/yum.repos.d/centos8.repo
 
 # Set Permission On Yum Repository File
 # We need to configure the default repository file residing on the system. To check the configurations, use the cat command as shown.
-cat etc/yum.repos.d/centos8.repo
+cat /etc/yum.repos.d/centos8.repo
 
 # Check Yum Repository File
 # We need to modify the configuration lines using a text editor of your choice.
