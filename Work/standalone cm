@@ -1,0 +1,165 @@
+Pre-install Steps: 
+•	Assemble hardware 
+•	Flash firmware 
+•	discover --node 249 --skip-provision --configfile /root/hpchpcm.config 
+  o	Confirmation of sorts 'cinstallman --show-node|grep kratosn05' 
+ 
+Install steps: 
+•	Locate the required ISO 
+•	Start the install 
+•	Configure network interface with assigned IP address from discover cmd 
+•	Select 'server' or 'infrastructure' 
+•	Software selection: everything beside  
+  o	Smart Card 
+  o	Visualization 
+  o	.Net Core Development 
+•	Install destination 
+  o	Choose /dev/sda 
+  o	Remove all partitions 
+  o	Create new partions 
+    	/boot/efi 500MB 
+    	/boot 500MB ext4 
+    	/ ext4 
+ 
+Post-install steps: 
+•	Set timezone (may have to remove symlink first) 
+  o	Cd /etc; ln -s /usr/share/zoneinfo/America/Chicago localtime 
+• Change Boot Order 
+•	Kernel Params – to implement (careful and make sure selecting correct kernel): 
+  o	grubby --info=ALL 
+  o	grubby --remove-args "rhgb quiet" --update-kernel /boot/vmlinuz-4.18.0-147.el8.x86_64 
+  o	grubby --args "selinux=0 biosdevname=0 numa_balancing=disable cgroup_disable=memory iommu=pt console=ttyS0,115200n8" --update-kernel /boot/vmlinuz-4.18.0-147.el8.x86_64 
+  o	(for only GPU only below) grubby --args "modprobe.blacklist=nouveau" --update-kernel /boot/vmlinuz-4.18.0-147.el8.x86_64  
+  o	grubby --info=ALL 
+• Modules 
+  o	 dnf install environment-modules 
+  o	 echo "/sw/com/modulefiles" >> /usr/share/Modules/init/.modulespath 
+•	Turn DNS 'none' in NetworkManager.conf  
+  o	vi /etc/NetworkManager/NetworkManager.conf 
+    	Search for [main] line and insert below the [main] line 
+•	dns=none  #(You can look at maia for example) 
+•	Resolv.conf - turned off dns in /etc/NetworkManager/NetworkManager.conf 
+  o	Now edit resolv.conf with following lines (look at maia for example)  
+    	search cm-default.us.rdlabs.hpecorp.net head.cm-default.us.rdlabs.hpecorp.net head-bmc.cm-default.us.rdlabs.hpecorp.net us.rdlabs.hpecorp.net 
+    	nameserver 172.23.0.231 
+    	nameserver 172.23.0.1 
+  o	systemctl restart NetworkManager 
+•	Proxy cp /etc/environment from established node 
+  o	    http_proxy="http://proxy.houston.hpecorp.net:8080/" 
+  o	    https_proxy="http://proxy.houston.hpecorp.net:8080/" 
+  o	    ftp_proxy="http://proxy.houston.hpecorp.net:8080/ 
+  o	no_proxy="localhost,127.0.0.1,.chf.rdlabs.hpecorp.net,.eag.rdlabs.hpecorp.net,.milp.rdlabs.hpecorp.net,admin" 
+  o	    #Dupicate upper case variables 
+  o	    HTTP_PROXY="http://proxy.houston.hpecorp.net:8080/" 
+  o	    HTTPS_PROXY="http://proxy.houston.hpecorp.net:8080/" 
+  o	    FTP_PROXY="http://proxy.houston.hpecorp.net:8080/" 
+  o	 NO_PROXY="localhost,127.0.0.1,.chf.rdlabs.hpecorp.net,.eag.rdlabs.hpecorp.net,.milp.rdlabs.hpecorp.net,.us.rdlabs.hpecorp.net,admin" 
+•	PBS client 
+  o	Log into hpchou-login; cd /root . Look for the tar.gz file to copy. 
+    	scp /root/PBSPro_19.2.6-RHEL8_x86_64.tar.gz kratosn05:/root 
+  o	Log into kratosn05  
+    	rpm -ivh pbspro-execution-19.2.6.20200311140837-0.el8.x86_64.rpm 
+  o	On kratosn05 update /etc/pbs.conf PBS_SERVER line 
+    	PBS_SERVER=hpchou-login  
+  o	Edit /var/spool/pbs/mom_priv/config 
+    	Basically observe/copy from another kratos 
+  o	Populate /var/spool/pbs/mom_priv/ (chk_node.pl, epilogue, prologue) 
+    	sync kratosn05 to /admin/gbc/maian/cy007 files 
+  o	Edit /opt/pbs/libexec/pbs_habitat 
+    	Scp the file from maia, as maia is running same OS 
+  o	systemctl enable pbs.service; systemctl start pbs.service; systemctl status\ pbs.service 
+  o	Pbsnodes –av  
+•	chrony – edited /etc/chrony.conf and restarted chronyd 
+  o	Vi /etc/chrony.conf 
+    	pool 2.centos.pool.ntp.org iburst [removed] 
+    	server 0.rhel.pool.ntp.org iburst 
+    	server 1.rhel.pool.ntp.org iburst 
+    	server 2.rhel.pool.ntp.org iburst 
+    	server 3.rhel.pool.ntp.org iburst 
+  o	systemctl restart chronyd.service 
+ 
+•	ISO Repo  
+  o	Mkdir /mnt/iso 
+  o	Add following line to /etc/fstab 
+    	/root/do-not-delete/CentOS-8.1.1911-x86_64-dvd1.iso /mnt/iso iso9660 defaults 0 0 
+  o	mount /mnt/iso 
+  o	Create appropriate /etc/yum.repos.d/centos8.1.repo 
+  o	To check repo 'dnf repolist' 
+•	/etc/hosts - added the following line 
+  o	172.23.0.1      admin.head.cm-default.us.rdlabs.hpecorp.net admin oscar_server hosten 
+•	MLNX OFED 
+  o	Uncompressing tar file 
+    	 tar zxvf MLNX_OFED_LINUX-* 
+  o	Installing dependencies 
+    	 dnf install tcsh gcc-gfortran tk 
+  o	Removing package causing OFED installation issue 
+    	 dnf remove opa-address-resolution opa-libopamgt pcp-pmda-infiniband 
+  o	Adding without option as the HCA IB cards have HPE firmware; not mellanox and will cause installation error without the correct option used. 
+    	 ./mlnxofedinstall --without-fw-update --without-mlnx-fw-updater  
+  o	Unload modules to load OFED driver 
+    	 rmmod ib_srpt ib_sert rpcrdma rdma_cm 
+  o	To load the new drivers 
+    	 /etc/init.d/openibd restart  
+•	Ypbind (works as long as same login name) 
+  o	add the following data for nsswitch.conf 
+    	vi /etc/nsswitch 
+    	    passwd:     compat files nis 
+    	    shadow:     compat files nis 
+    	    group:      files nis 
+    	    hosts:      files dns nis 
+    	    bootparams: nisplus [NOTFOUND=return] files 
+    	    ethers:     files 
+    	    netmasks:   files 
+    	    networks:   files 
+    	    protocols:  files nis     
+    	    rpc:        files 
+    	    services:   files 
+    	    netgroup:   files nis 
+    	    publickey:  nisplus 
+    	    automount:  files nis 
+    	    aliases:    files nis 
+  o	dnf install ypbind 
+  o	domainname HPCHOU 
+  o	echo "domain HPCHOU server 172.23.0.15" >> /etc/yp.conf 
+  o	systemctl enable ypbind 
+  o	systemctl restart ypbind 
+  o	ypwhich 
+    	should output 'hpchost3.head.cm-default.us.rdlabs.hpecorp.net' 
+•	Disable SELinux (will be disabled via kernel params) 
+  o	To check 'getenforce' 
+•	NFS 
+  o	add the following NFS mount points to fstab: 
+    	vi /etc/fstab# NFS Mounts 
+    	    172.23.0.15:/sw /sw nfs rw,hard,intr,nfsvers=3,defaults 0 0 
+    	    172.23.0.15:/admin /admin nfs rw,hard,intr,nfsvers=3,defaults 0 0 
+    	    172.23.0.15:/hpcsw /hpcsw nfs rw,hard,intr,nfsvers=3,defaults 0 0 
+    	    172.23.0.16:/usr1 /usr1 nfs rw,hard,intr,nfsvers=3,defaults 0 0 
+    	    172.23.0.16:/usr2 /usr2 nfs rw,hard,intr,nfsvers=3,defaults 0 0 
+    	    172.23.0.16:/usr3 /usr3 nfs rw,hard,intr,nfsvers=3,defaults 0 0 
+    	    172.23.0.16:/usr4 /usr4 nfs rw,hard,intr,nfsvers=3,defaults 0 0 
+    	    172.23.0.15:/usr5 /usr5 nfs rw,hard,intr,nfsvers=3,defaults 0 0 
+    	    172.23.0.15:/usr6 /usr6 nfs rw,hard,intr,nfsvers=3,defaults 0 0 
+    	    172.31.50.101@o2ib0:172.31.50.100@o2ib0:/hpc-mlnx /hpelustre lustre  rw,noauto,_netdev,flock 0 0 
+  o	mkdir /sw /admin/ hpcsw /usr1 /usr2 /usr3 /usr4 /usr5 /usr6 
+  o	mount -a 
+•	Arrayd  – do hpe-mpi step first 
+  o	Systemctl disable firewalld.service ; systemctl stop firewalld.service; 
+  o	Copy over from maian01:/etc/array/* to kratosn05 
+  o	 systemctl restart array.service 
+  o	Test by running 'array uptime' on hpchou-login 
+•	Hpe-mpi (checkmpt-plugin-1.0-sgi720r49.rhel76.x86_64 did not install) 
+  o	Ssh hpchou-login; scp /root/hpe-mpi-1.6-cd1-media-rhel81-x86_64.iso 
+  o	Drop hpe-mpi-1.6-cd1-media-rhel81-x86_64.iso into /root/do-not-delete 
+  o	Mkdir /mnt/hpe-mpi-iso 
+  o	Mount –o loop /root/do-not-delete/hpe-mpi-1.6-cd1-media-rhel81-x86_64.iso /mnt/hpe-mpi-iso 
+  o	Create a /etc/yum.repos.d/hpe-mpi-8.1.repo (copy from maia) 
+  o	Add the repo 
+    	dnf config-manager --add-repo="file:///mnt/hpe-mpi-iso/" 
+  o	dnf install --skip-broken --nogpgcheck checkmpt-plugin cpuset-utils hpe-mpi-docs hpe-mpi-release kmod-numatools kmod-xpmem libbitmask libcpuset munge munge-libs numatools perfboost perfcatcher sgi-arraysvcs sgi-mpt sgi-mpt-f08 sgi-mpt-fs sgi-mpt-hmpt sgi-mpt-hmpt-fs sgi-mpt-shmem sgi-mpt-shmem-hmpt sgi-procset xpmem 
+•	SSH keys  
+  o	ssh maian01; cd /root/.ssh 
+  o	Scp * root@kratosn05:/root/.ssh 
+•	multi-user.target to set -> 'systemctl set-default multi-user.target' 
+ 
+ #################### With GPU ####################
+
