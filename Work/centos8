@@ -18,7 +18,7 @@ cat /etc/yum.repos.d/centos8.repo
 
 # Check Yum Repository File
 # We need to modify the configuration lines using a text editor of your choice.
-vi etc/yum.repos.d/centos8.repo
+vi /etc/yum.repos.d/centos8.repo
 
 #Delete all the configuration, and copy & paste the configuration below.
 
