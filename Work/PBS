@@ -19,6 +19,10 @@
 # check list of jobs then kill job in pbs
   qstat -an
   qdel  <job id> 
+  
+# check frequency queues  
+  qstat -Q
+  qstat -Q | grep f3 | sort
 
 # to display queue information:
   qstat [option]
