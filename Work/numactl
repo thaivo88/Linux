@@ -112,4 +112,9 @@ numactl -s [-l policy] [-m domain] [-c domain] [-p pid] [-t tid]
 # Run network server on specified network device with its memory in the same node
 # The command below run network-server on the node of network device eth0 with its memory also in the same node.
   numactl  --cpunodebind=netdev:eth0  --membind=netdev:eth0   
-  
+
+# set zone_reclaim_mode 
+[root@kratosn05 /]# sysctl -w vm.zone_reclaim_mode=3
+vm.zone_reclaim_mode = 3
+[root@kratosn05 /]# cat /proc/sys/vm/zone_reclaim_mode
+3
