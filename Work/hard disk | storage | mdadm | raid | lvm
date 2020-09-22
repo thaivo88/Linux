@@ -80,6 +80,8 @@ cat /proc/partitions
 # Here's how to zero the superblocks.
 #Just do that for each drive in the array.
   mdadm --zero-superblock /dev/sd[a1]
+# failure of raid
+  mdadm --fail /dev/md0 /dev/nvme0n1 ; mdadm --remove /dev/md0 /dev/nvme0n1
 #######################################################
 
 
@@ -212,9 +214,11 @@ Glossary:
 pv: physical device (e.g. /dev/md0 or /dev/sda1)
 vg: volume group (consists of 1 or more pvs, contains lvs); has a name (e.g. lvm)
 lv: logical volume (has a name which defines its path, e.g. /dev/lvm/root which equals dev/mapper/lvm-root)
+
 command	description
 pvcreate /dev/md0	initializes /dev/md0 as phys device for a volume group
 vgcreate lvm /dev/md0	create volume group lvm with phys device /dev/md0
+vgdisplay display lvm
 lvcreate -L30G -nroot lvm ; mkfs.ext4 /dev/lvm/root	create logical volume root, sized 30G in volume group lvm; format with ext4
 lvextend -L60G -nroot lvm ; resize2fs /dev/lvm/root	extend /dev/lvm/root to 60G; also resize file system to new size
 pvs, vgs, lvs	show short info about pv, vg and lv
@@ -222,4 +226,13 @@ pvdisplay, vgdisplay, lvdisplay	show long info
 pvscan /dev/md0	scan disks for physical volumes (e.g. when running live system)
 vgextend lvm /dev/md1	add phys device /dev/md1 to volume group lvm (need pvcreate first!)
 pvmove /dev/md0 ; vgreduce lvm /dev/md0	move all logical volumes from /dev/md0 and remove phys device from volume group
+
+list the max and min of lvm
+  dmsetup info -c | grep vol_grp1-lvol
+    vol_grp1-lvol    253   0 L--w    0    1      0 LVM-s1KVI461lCdPBTYBVYbdXLC2ZbyRaiCkj8GPhffXvo8dB8L8SpGwFv1eoS7CrzTc
+# list of files used by lvm
+  lsof | grep "253,0"  
+# remove lvm  
+  lvremove /dev/[devicename]
+
 #################################################################3
