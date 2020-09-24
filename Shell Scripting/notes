@@ -1,0 +1,4 @@
+You can run multiple commands from the shell by separating them with semi colons (;),
+  ls ; pwd
+  
+  
