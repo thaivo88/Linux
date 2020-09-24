@@ -1,0 +1,15 @@
+Linux will check for executables in the 'PATH' environment only when the full or relative path to the program is supplied. 
+In general, the current directory is not searched unless it is in the 'PATH'.
+It is possible to include our current directory within the 'PATH' by adding the directory to the 'PATH' variable.
+Command example:
+  $ export PATH=$PATH:.
+  
+This appends the current directory to the value of the 'PATH' variable; each item in the 'PATH' is separated using colon.
+Now your 'PATH' has been updated to include the current working, directory and, each time you change directories, the scripts can be executed easily.
+Consider creating a subdirectory called 'bin' within your home directory and add the scripts into that folder. 
+Adding $HOME/bin to your 'PATH' variable will enable you to find the scripts by name and without the file path.
+
+The command below will only create the directory if it does not already exist:
+  $ test -d $HOME/bin || mkdir $HOME/bin
+  
+  
