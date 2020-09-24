@@ -1,0 +1,16 @@
+Setting up useful options in the vi or vim editor file: $HOME/.vimrc
+
+Ensures we see when we are in insert mode
+  set showmode
+Does not highlight the words that we have searched for
+  set nohlsearch
+We indent our code often; this allows us to return to the last indent level rather than the start of a new line on each line break
+  set autoindent
+Sets a tab to be four spaces
+  set tabstop=4
+Converts tabs to spaces, which is useful when the file moves to other systems
+  set expandtab
+Note that this does not use the 'set' command and is used to turn on syntax highlighting
+  syntax on
+  
+  
