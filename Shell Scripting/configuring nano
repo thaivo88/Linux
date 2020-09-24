@@ -1,0 +1,8 @@
+$HOME/.nanorc
+
+auto indent/tab
+  set autoindent
+tab size per space  
+  set tabsize 4
+enables syntax highlighting
+  include /usr/share/nano/sh.nanorc
