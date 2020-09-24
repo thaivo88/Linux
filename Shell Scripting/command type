@@ -1,0 +1,25 @@
+Aliases exist in memory as a shortcut to commands or commands with option; these aliases are used before we even check for the file.
+The 'type' command will display the type of command for a given word entered at the command line. 
+The types of command are listed as follows:
+  Alias
+  Function
+  Shell built-in
+  Keyword
+  File
+  
+Demonstrates the simple use of 'type':  
+  $ type ls
+    ls is aliased to 'ls --color=auto'
+Demonstrates the all information for the use of 'type':   
+  $ type -a ls
+    ls is aliased to 'ls --color=auto'
+    ls is /bin/ls
+Demonstrates the type the command is: 
+  $ type -t ls
+    alias
+  
+Using multiple arguments with type:
+  $ type ls pwd id
+    ls is aliased to 'ls --color=auto'
+    pwd is a shell builtin
+    id is /usr/bin/id
