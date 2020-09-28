@@ -1,0 +1,20 @@
+As we have seen, using double quotes in 'echo' "hello $1" will result in 'Hello fred' or whatever the supplied value is. 
+Whereas, if we use single quotes in 'echo 'Hello $1', the printed output on the screen will be 'Hello $1'; that is, we see the variable name and not its value.
+
+The idea of the quotes is to protect special characters, such as a space between the two words; both quotes protect the space from being misinterpreted. 
+The space in normally read as a default field, separated by the shell. All characters are read by the shell al literals with no special meaning. 
+This has the knock-on effect of the '$' symbol printing its literal format rather than allowing bash to expand its value. 
+The bash shell is prevented from expanding the variable's value as it is protected by the single qutoes.
+
+This is where the double quote comes to our rescue. The double quote will protect all the characters execpt the '$', allowing bash to expand the stored value.
+
+If we ever need to use aliteral '$' within the quoted string, along with variables that need to be expanded, 
+we can use double quotes, but escape the desired '$' with the backslash (\).
+
+In this example this $4 is not a position agrument but meaning 4 dollars.
+$ echo "$USER earns $4"
+  voth earns
+$ echo '$USER earns $4'
+  voth earns $4
+$ echo "$USER earns \$4"
+  voth earns $4
