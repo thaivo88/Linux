@@ -12,6 +12,43 @@ $#                      The argument conut is especially usedful when we need to
 $*                      Refers to all arguments.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+              Printing the script name:
+              
+The '$0' variable represents the script name, and this is often used in usage statements.
+example:
+#############
+#!/bin/bash
+echo "You are using $0"
+echo "Hello $*"
+exit 0
+#############
+
+output:
+$ ./hello2.sh voth
+#############
+You are using /home/voth/bin/hello2.sh
+Hello voth
+#############
+
+If we prefer not to print the path and only want the name of the script to show, we can usee the 'basename' command, which extracts the name from the path.
+#############
+#!/bin/bash
+echo " you are using $(basename $0)
+#############
+
+output:
+$ ./hello2.sh voth
+#############
+You are using hello2.sh
+Hello voth
+#############
+
+back quotes `` or $() are the same but harder to read.
+$(basename $0)
+`basename $0`
+
+
+############################
 cat homedirect.sh
     # First parameter $1 = usr[1-6]
     # Second parameter $2 = $username
@@ -24,3 +61,4 @@ cat homedirect.sh
     cp /etc/skel/.* /usr$1/$2/
     chown $2:users /usr$1/$2
     chown $2:users /usr$1/$2/.*
+############################
