@@ -1,3 +1,84 @@
+A shell script's first line identifies the shell that should be used to run the script.
+  #!/bin/bash
+The first two characters are a special code that tells the Linux kernel that this is a script.
+This line is sometimes called the shebang, hashbang, hashpling, or pound bang line.
+After the first line, shell scripting languages consider a hash mark (#) as a comment character. The script utility ignores characters
+on a script line after the hash mark.
+
+              Different way to run a shell script
+              
+When you're done writing the shell script, you can modify it so that it's executable. You do this with the chmod command, you use the
++x option to add execute permissions.
+  chmod u+x my_script.sh
+  
+Typing the script's name, preceded by bash
+This method does not require execution permission to run the script. However, it does create a subshell.
+  chmod u+x my_script.sh
+  bash my_script.sh
+  
+Typing the script's name, preceded by ./
+This method does require execution permission. It also creates a subshell to run the script.
+  chmod u+x my_script.sh
+  ./my_script.sh
+  
+Just typing in the script's full path and name is needed.
+This method also requires the execution permission to be set on the script. It creates a subshell to run the script as well
+  chmod u+x my_script.sh
+  /directory-location/my_script.sh
+  
+Just typing in the script's name requires the shell script to be moved to a directory on your path, such as /usr/local/bin
+This is the preferred method for scripts that will be used by others.
+This method requires the appropriate execution permission to be set. Since it will be used by all system users, the chmod a+x command
+is used to grant execute permission to everyone. Note that the $PATH environment variable contains the directory /usr/local/bin
+where the my-script.sh file was moved. Also note that this method creates a subshell when the script is run.
+  mv my_script.sh /usr/local/bin/
+  my_script.sh
+  
+Typing the script's name, preceded by sh, is nearly identical to preceding it with the bash command.
+This method does not require execution permission to run the script, and it creates a subshell to run the script.
+  sh my_script.sh == bash my_script.sh
+  
+Typing the keyword source before the script name tells the bash shell to use a method type called sourcing. 
+When you source a script, a subshell is not created to run the script. This method also does not require execute permissions.
+  source my_script.sh
+  
+Typing a dot (.) and then a space before the script name also tells the bash shell to use the sourcing method type.
+This method also does not create a subshell. This method does not need execute permission permission.
+  . my_script.sh == source my_script.sh
+  
+The last method for executing script uses the exec command. This method does need execute permission set on the file.
+exec command will exit the current bash shell when it is doen running the script.
+Notice that the ./ execution method has to be placed before the script's name. This is because exec is not truly a script execution
+method. It does not create a subshell but instead replaces the current shell with an executable image environment to run the script.
+A script execution method must be included in the exec command line in order to run a script. Cannot source a script using exec,
+however. Only execution methods that create a subshell will work with the exec command.
+  exec ./my_script.sh
+  exec bash my_script.sh
+      exec source my_script.sh == not found
+      exec . my_script.sh == not found
+      
+The exec program's primary value is not in running scripts. Instead, it is often used to run a program from within a script.
+
+There are only two methods listed previously that are considered sourcing methods:
+  -The source command
+  -The dot (.)
+  
+Using a sourcing method that causes a script to run in the current shell, as opposed to launching a new instance of the shell 
+(subshell), has some important implications:
+  - When you source a script, it will have access to environment variables set in the calling shell. This is true even if you haven't
+  exported them. Without scourcing, only environment variables that you explicitly export become available to scripts you run.
+  - If you source a script and if that script sets an environment variable, that variable will become available (or will be changed)
+  in the calling shell's environment. If you run the script without using a sourcing method, any environment variables it sets will
+  remain local to it and to the programs that it calls. This is true even if the script exports the variables.
+  - Running a script without sourcing imposes overhead costs associated with launching the new shell instance (subshell). These costs
+  are normally negligible, but if a script calls itself recursively or calls many other scripts, sourcing those scripts within the first
+  script may improve performance.
+  - Sourcing a script causes it to execute in the calling shell's language, whereas running a script normally causes it to use the shell
+  language specified on the shebang line.
+  
+Variables' values can be passed as parameters to scripts, generated internally to te scripts, or extracted from the script's environment.
+
+
 You can run multiple commands from the shell by separating them with semi colons (;),
   ls ; pwd
   
