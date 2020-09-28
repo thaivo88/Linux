@@ -1,0 +1,57 @@
+User-Defined Variables
+                                            
+A user-defined variable is a variable defined by a user for various purposes, such as temprarily storing data. It can be used within a
+script or at the command lin.
+  example:
+    ]$ My_Var="Hello World"
+    ]$ echo $My_Var
+    Hello World
+    
+Once the variable has been set, various programs or other commands can use it, such as the echo command. There is no dollar sign ($) in
+the variable's name. However, when used with the echo command, the dollar sign must be included.
+
+Doing thing WITH the varible, use the dollar sign.
+Doing anything TO the variable, such as assigning a value to it, don't use the dollar sign.
+
+                   unset command:
+
+You can remove both environment and user-defined variables. The unset command accoplishes this task.
+
+Variables are often assigned within scripts. They may hold data pertinent for a script's execution. Script variables can also be set 
+from a command's output, which is useful! You can then use these variables' values in conjunction with normal commands as if they were
+command parameters.
+
+Be careful when creating new variable names. It is best to use either all lowercase names or mixed-case names. Remember that most
+environment variable names are all uppercase letters.
+
+                  Command Substitiution
+                  
+You can capture a command's results by placing the command between two parentheses and preceding it with a dollar sign. Instead of its
+output going to the display (STDOUT), it is redirected to the User_Record variable. This method of storing a command's results in a 
+variable is sometimes called "command substitution".
+  User_Record=$(grep $Username /etc/passwd)
+The variable User_Record is now set to grep $Username /etc/passwd
+
+There is an older method for storing a command's results in a variable using back-tick (`) characters. Back-tick characters are not
+single quotes ('). The back-tick key is typically shared with the tilde (~) character on the keyboard.
+  `grep $Username /etc/passwd`  ==  $(grep $Username /etc/passwd)
+                  
+                  Read Command
+                  
+In addition to assigning variables with the assignment operator (=), you can read variables from standard input using the read command,
+as in read response_variable, to read input. The script user's response is stored in the response_variable for later access as
+$response_variable. The read command accepts the user's input and stores it in the variable.
+
+                  echo command 
+                  
+The -e option enables the interpretation of backslash escapes
+The \c option will stop output from echo command.
+  echo -e Hello World \c >> hi.txt
+
+                  Environment Variables in Scripts
+                  
+Environment variables are assigned and accessed just like other shell script variables. The difference is that the script or command
+that sets an environment variable uses the export command. Suppose you set an environment variable in Script-A and Script-A starts 
+Script-B in a manner that creates a subshell. Script-B can use the environment variable too.
+Remember, most environment variable names are all uppercase, whereas non-environment shell script variables should all be lowercase 
+or mixed case.
