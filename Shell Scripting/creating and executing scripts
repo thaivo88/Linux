@@ -1,1 +1,30 @@
+Hello World example:
 
+##########
+#!/bin/bash 
+echo "hello world"
+exit 0
+##########
+
+#!/bin/bash : is always the fist line of the script and is known as the shebang. the shebang starts with a comment (#), but the system still uses this line. 
+A comment in a shell script has the (#) symbol.
+The 'echo' command will be picked up in a built-in shell and can be used to write a standard output. 'STDOUT'; this defaults to the screen.
+The 'exit' command is a built-in shell, and is used to leave or exit the script. The 'exit' code is supplied as an integer argument. 
+A value of anything other than '0' will indicate some type of error in the script's execution.
+
+Checking the exit status:
+
+            Boolean
+Boolean OR:            
+'command2' is executed only if 'command1' fails in some way. To be specific, 'command2' will run if 'command1' exits with a status code other than 0.
+  $ command1 || command2
+Boolean AND:
+Will only execute 'command2' if 'command1' succeeds and issues and exit code of 0.
+  $ command1 && command2
+
+To read the exit code from our script explicitly, we can view the '$?' variable:
+  $ hello1.sh
+  $ echo $?
+The expected output is '0'
+
+In linux where we do not use file extensions, the suffix is part of the filename. This helps you to provide a unique identity to your script.
