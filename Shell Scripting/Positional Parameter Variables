@@ -2,6 +2,16 @@ Variables that are passed to the script are frequently called positional paramet
 dollar sign ($) followed by a number from 0 to 9. $0 stands for the name of the script, $1 is the first parameter to the script,
 $2 is the second parameter, and so on.
 
+Argument Identifier     Description
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+$0                      The name of the script itself, which is often used in usage statments.
+$1                      A positional argument, which is the first argument passed to the script.
+${10}                   Where two or more digits are needed to represent the argument position. Brace brackets are used to delimit the variable name from any other content. 
+                        Single value digits are expected.
+$#                      The argument conut is especially usedful when we need to set the amount of arugments needed for correct script execution.
+$*                      Refers to all arguments.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 cat homedirect.sh
     # First parameter $1 = usr[1-6]
     # Second parameter $2 = $username
