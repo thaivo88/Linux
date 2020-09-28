@@ -1,3 +1,10 @@
+# checking if hyperthreading is enable or disable; if silbling count is equal to cpu core count then HT is disable. if double HT is enable.
+  grep -E "cpu cores|siblings|physical id" /proc/cpuinfo |xargs -n 11 echo |sort |uniq
+    physical id : 0 siblings : 24 cpu cores : 24
+    physical id : 1 siblings : 24 cpu cores : 24
+
+
+
 ############## AMD cpu frequency for CM ##############
 
 #[root@kratosn05 ~]# cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
