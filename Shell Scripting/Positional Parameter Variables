@@ -1,0 +1,16 @@
+Variables that are passed to the script are frequently called positional parameters. The individual parameters are represented by a
+dollar sign ($) followed by a number from 0 to 9. $0 stands for the name of the script, $1 is the first parameter to the script,
+$2 is the second parameter, and so on.
+
+cat homedirect.sh
+    # First parameter $1 = usr[1-6]
+    # Second parameter $2 = $username
+    #
+    # ./homedirect.sh [first_parameter] [second_parameter]
+    # example:      ./homedirect.sh 2 sally
+    #
+    usermod -d /usr$1/$2 $2
+    mkdir /usr$1/$2
+    cp /etc/skel/.* /usr$1/$2/
+    chown $2:users /usr$1/$2
+    chown $2:users /usr$1/$2/.*
