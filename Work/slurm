@@ -2,6 +2,13 @@
   /admin/slurm/etc/slurm.conf
   /apps/aislurm/etc/slurm.conf
   
+# adding or removing nodes
+# backup /apps/aislurm/etc/slurm.conf
+  /apps/aislurm/etc/slurm.conf /apps/aislurm/etc/slurm.conf.[date]
+  vi /apps/aislurm/etc/slurm.conf
+# edit both 'COMPUTE NODES' and 'Partition'  
+  systemctl restart slurmctl.service
+ 
 #reconfig slurm
   systemctl stop slurmd
   systemctl status slurmd
