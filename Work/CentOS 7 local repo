@@ -24,13 +24,13 @@ mount: /dev/loop0 is write-protected, mounting read-only
 
 Now, RHEL 7 ISO has been persistently mounted at /mnt/iso. Let’s add Local Yum Repository now.
 
-[root@server1 ~]# cat >> /etc/yum.repos.d/localyum.repo << EOF
-> [localyum]
-> name=localyum
-> baseurl=file:///mnt/iso
-> enabled=1
-> gpgcheck=0
-> EOF
+vi /etc/yum.repos.d/localyum.repo
+[localyum]
+name=localyum
+baseurl=file:///mnt/iso
+enabled=1
+gpgcheck=0
+
 
 Build cache of our yum server.
 
