@@ -1,0 +1,116 @@
+# download nvidia driver runfile to hpchpcm:/admin/zeus
+# copy sgi-package-nvidia script to the directory then run the script with nvidia runfile
+cp /root/sgi-package-nvidia .
+
+# sgi-package-nvidia create a runfile into a rpm
+./sgi-package-nvidia [nvidia.runfile]
+# then copy of the runfile to the node
+scp [nvidia.runfile] \root@[hostname]:/root/
+# run the nvidia runfile
+sh [nvidia.runfile]
+
+# Just a check not need to do
+# check to see what rpm of nvidia are on the node
+rpm -qa | grep nvidia
+# check to see if that package is installed
+rpm -e [nvidia package]
+
+# if nvidia driver runfile fail check if any nvidia module is loaded and remove them
+lsmod | grep nvidia
+rmmod [nvidia.module]
+
+# rerun nvidia runfile and check if it installed
+sh [nvidia.runfile]
+nvidia-smi
+
+# 
+cd /usr/src/[nvidia.verison]
+tar cvPf nvidia-450.80.02.tar nvidia-450.80.02
+
+# checking if the gdr is installed (graphic driver)
+rpm -qa | grep gdr
+lsmod | grep gdr
+modprobe gdrdrv
+
+# if gdr is not installed copy the file and install on the node
+exit off node go back to hpchpcm
+cinstallman --yum-node --node zeusn039 --repo-group zeuus install gdrcopy gdrcopy-devel gdrcopy-kmo
+
+# check to see if gdr is installed now
+ssh zeusn039
+modprobe gdrdrv
+lsmod | grep gdr
+
+# check to see all the nvidia dependencies on another node
+[root@zeusn040 ~]# rpm -qa | grep -i nvidia
+nvidia-container-runtime-2.0.0-3.docker18.09.6.x86_64
+libnvidia-container-tools-1.0.2-1.x86_64
+libnvidia-container1-debuginfo-1.0.2-1.x86_64
+libnvidia-container-devel-1.0.2-1.x86_64
+libnvidia-container-static-1.0.2-1.x86_64
+nvidia-418.87.01-rhel7.x86_64
+libnvidia-container1-1.0.2-1.x86_64
+nvidia-docker2-2.0.3-3.docker18.09.6.ce.noarch
+nvidia_peer_memory-1.0-8.x86_64
+nvidia-container-runtime-hook-1.4.0-2.x86_64
+
+# exit to hpchpcm install nvidia package
+cinstallman --yum-node --node zeusn039 --repo-group zeuus install nvidia_peer_memory-1.0-8.x86_64
+
+# ssh back into the node check if nvidia_peer_memory is loaded
+lsmod | grep nv
+modprobe nv_peer_mem
+lsmod | grep nv
+
+# now that the image is where we want it to be, we can start to modifiy the image
+# creating repo
+
+# 
+cd /usr/src/
+scp nvidia-450.80.02.tar root@hpchpcm:/root
+
+cd /opt/clmgr/repos
+mkdir nvidia-450.80.rpm
+cd nvidia-450.80.rpm
+cp /admin/zeus/nvidia-450.80.02-rhel7.x86_64.rpm .
+
+crepo --add /opt/clmgr/repos/nvidia-450.80.rpm --custom nvidia-450.80
+
+crepo --show | grep nvidia
+
+crepo --show-groups
+# add the rpm package to zeuus group
+crepo --add-group zeuus nvidia-450.80
+# to see if that rpm was added to the group 
+crepo --show-groups zeuus
+
+cinstallman --show-nodes | grep zeusn039
+
+# removing an rpm off an image | removing old nvidia driver
+cinstallman --yum-image --image rhel7.6-mlnx-zeus-hpc --repo-group zeuus erase nvidia-418.87.01-rhel7.x86_64
+# installing the new nvidia driver rpm
+cinstallman --yum-image --image rhel7.6-mlnx-zeus-hpc --repo-group zeuus  install nvidia-450.80.02-rhel7.x86_64
+
+# copy that tar file into this directory 
+cd /opt/clmgr/image/images/rhel7.6-mlnx-zeus-hpc/usr/src
+cp /root/nvidia-450.80.02.tar .
+tar xvf nvidia-450.80.02.tar
+rm nvidia-450.80.02.tar
+cd nvidia-450.80.02/nvidia
+
+# ssh into the node to check the boot order first PXE then Slot chooser
+ssh zeusn039
+efibootmgr
+efibootmgr -o "[1stboot, 2ndboot]
+exit
+
+# on hpchpcm run cinstallman so that the node reimage it to the new modifiy  image
+cinstall --next-boot image --node zeusn039
+ipmiwrapper zeusn039 power reset
+console zeusn039
+once install complete login and check driver/gdr/nvidia
+nvidia-smi
+lsmod | grep gdr
+lsmod | grep nvidia
+
+(need to replace failed drive on zeusn039 Box 1 Bay 2)
