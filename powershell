@@ -22,3 +22,6 @@ Write-Host "Ip-Adress Renewed" -ForegroundColor Green
 # Register the DNS 
   ipconfig /registerdns | Out-Null 
 Write-Host "DNS Regsitered" -ForegroundColor Green 
+
+# Find out which process is listening on a port on Windows
+  netstat -a -b
