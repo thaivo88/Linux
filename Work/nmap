@@ -1,0 +1,11 @@
+# searching port 5900 on hpcg3
+  nmap -PN -p5900 hpcg3
+  Starting Nmap 6.40 ( http://nmap.org ) at 2021-01-13 15:55 CST
+  Nmap scan report for hpcg3 (16.85.161.61)
+  Host is up (0.00016s latency).
+  rDNS record for 16.85.161.61: hpcg3.us.rdlabs.hpecorp.net
+  PORT     STATE  SERVICE
+  5900/tcp closed vnc
+  MAC Address: 40:A8:F0:32:B1:9C (Unknown)
+
+  Nmap done: 1 IP address (1 host up) scanned in 0.47 seconds
