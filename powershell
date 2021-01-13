@@ -25,3 +25,7 @@ Write-Host "DNS Regsitered" -ForegroundColor Green
 
 # Find out which process is listening on a port on Windows
   netstat -a -b
+
+# Find and kill a process currently using a port
+  netstat -ano | findstr :[portnumber]
+  taskkill /PID [PID] /F
