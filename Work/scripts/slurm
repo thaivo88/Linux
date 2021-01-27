@@ -1,0 +1,116 @@
+####################### Confiuring Slurm ##########################
+
+# Slurm configuration:
+
+# NIS already has a slurm users, it will cause an error so moving useradd or adduser and userdel or deluser temporary
+# check to see which add and del bin file you have
+  which adduser
+  which useradd
+  mv /usr/sbin/adduser /usr/sbin/adduser.bak
+  mv /usr/sbin/useradd /usr/sbin/useradd.bak
+  mv /usr/sbin/deluser /usr/sbin/deluser.bak
+  mv /usr/sbin/userdel /usr/sbin/userdel.bak 
+ 
+# create new useradd and userdel to return 0
+  vi /usr/sbin/useradd
+#################  
+#!/bin/bash
+exit 0
+#################
+
+# changing permission bit and copying a userdel
+  chmod u+x /usr/sbin/useradd
+  cp /usr/sbin/useradd /usr/sbin/userdel
+  cp /usr/sbin/useradd /usr/sbin/deluser
+  cp /usr/sbin/useradd /usr/sbin/adduser
+
+# For whatever reason, the nodes have a munge user, but no munge group.
+# Make sure there's a munge group and corresponding user:
+  grep munge /etc/passwd
+    munge:x:1002:1002::/nonexistent:/bin/sh
+  grep munge /etc/group
+
+# If there isn't a munge group, add a munge group by editing /etc/group and inserting:
+  munge:x:1002:
+
+# Install munge:
+  apt install munge
+
+# Copy /etc/munge/munge.key from another node:
+  scp znode39:/etc/munge/munge.key /etc/munge
+
+# Restart munge and make sure it's OK:
+  systemctl restart munge
+
+   root@znode40:~# systemctl status munge
+   ● munge.service - MUNGE authentication service
+      Loaded: loaded (/lib/systemd/system/munge.service; enabled; vendor preset: en
+      Active: active (running) since Thu 2020-02-06 18:43:03 UTC; 3s ago
+        Docs: man:munged(8)
+     Process: 61545 ExecStart=/usr/sbin/munged (code=exited, status=0/SUCCESS)
+    Main PID: 61554 (munged)
+       Tasks: 4 (limit: 12287)
+      CGroup: /system.slice/munge.service
+              └─61554 /usr/sbin/munged
+
+   Feb 06 18:43:03 znode40 systemd[1]: Starting MUNGE authentication service...
+   Feb 06 18:43:03 znode40 systemd[1]: Started MUNGE authentication service.
+
+
+# Install slurm:
+  apt install slurm slurm-client slurmd
+
+# Move adduser userdel back into place:
+  mv /usr/sbin/useradd.bak /usr/sbin/useradd
+  mv /usr/sbin/adduser.bak /usr/sbin/adduser
+  mv /usr/sbin/userdel.bak /usr/sbin/userdel
+  mv /usr/sbin/deluser.bak /usr/sbin/deluser
+  
+# Copy /etc/slurm-llnl/slurm.conf from another node:
+  scp znode39:/etc/slurm-llnl/slurm.conf /etc/slurm-llnl/
+
+# Edit /lib/systemd/system/slurmd.service and change
+  vi /lib/systemd/system/slurmd.service
+  
+    PIDFile=/var/run/slurm-llnl/slurmd.pid
+        to
+    PIDFile=/var/run/slurmd.pid
+
+# Reload & Restart slurmd and make sure it's OK:
+  systemctl daemon-reload
+  systemctl restart slurmd
+
+  root@znode40:/usr/sbin# systemctl status slurmd
+   ● slurmd.service - Slurm node daemon
+      Loaded: loaded (/lib/systemd/system/slurmd.service; enabled; vendor preset: enabled)
+      Active: active (running) since Thu 2020-02-06 19:06:31 UTC; 12s ago
+        Docs: man:slurmd(8)
+     Process: 68865 ExecStart=/usr/sbin/slurmd $SLURMD_OPTIONS (code=exited, status=0/SUCCESS)
+    Main PID: 68867 (slurmd)
+       Tasks: 1 (limit: 12287)
+      CGroup: /system.slice/slurmd.service
+              └─68867 /usr/sbin/slurmd
+
+   Feb 06 19:06:31 znode40 systemd[1]: Starting Slurm node daemon...
+   Feb 06 19:06:31 znode40 systemd[1]: slurmd.service: Can't open PID file /var/run/slurmd.pid (yet?) after sta
+   Feb 06 19:06:31 znode40 systemd[1]: Started Slurm node daemon.
+
+
+# Put the node online and make sure it's online:
+  scontrol update node=znode40 state=idle
+
+  sinfo
+   PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST
+   short*       up    4:00:00      8 drain* znode[42,47-53]
+   short*       up    4:00:00      2  down* znode[41,56]
+   short*       up    4:00:00      2  alloc znode[44-45]
+   short*       up    4:00:00      6   idle znode[39-40,43,46,54-55]
+   normal       up 1-00:00:00      8 drain* znode[42,47-53]
+   normal       up 1-00:00:00      2  down* znode[41,56]
+   normal       up 1-00:00:00      2  alloc znode[44-45]
+   normal       up 1-00:00:00      6   idle znode[39-40,43,46,54-55]
+   long         up 7-00:00:00      8 drain* znode[42,47-53]
+   long         up 7-00:00:00      2  down* znode[41,56]
+   long         up 7-00:00:00      2  alloc znode[44-45]
+   long         up 7-00:00:00      6   idle znode[39-40,43,46,54-55]
+##############################################################################
