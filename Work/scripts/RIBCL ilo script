@@ -265,3 +265,19 @@ exit 0
 
 echo `dmidecode|grep -A5 "System Info"|grep "Serial"|awk '{print $NF}'`
 ########################## End ##############################
+
+
+
+
+
+########################## reset password ##################
+<RIBCL VERSION="2.0">
+  <LOGIN USER_LOGIN="x" PASSWORD="x">
+  <USER_INFO MODE="write">
+    <MOD_USER USER_LOGIN="Administrator">
+      <PASSWORD value="pa$$word"/>
+    </MOD_USER>
+  </USER_INFO>
+  </LOGIN>
+</RIBCL>
+########################## End ##############################
