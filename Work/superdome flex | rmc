@@ -21,3 +21,9 @@ Power On the server with the RMC:
 bootopt=shell will force the console to stop at the UEFI Shell prompt.
 Access the console either by launching the KVM from the webpage or opening a text console from RMC.
   RMC cli> connect npar pnum=p1
+
+# to test eUPI cable connection:
+  test upi
+  
+# to test fan
+  fanspeed -v
