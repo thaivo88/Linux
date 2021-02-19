@@ -24,3 +24,148 @@ ilorest manual https://support.hpe.com/hpesc/public/docDisplay?docId=c04423965
   ilorest serverlogs --url=w.x.y.z -u username -p password --selectlog=AHS
 # AHS log From the host itself
   ilorest serverlogs --selectlog=AHS
+
+
+
+######################### ILO Types ##################################
+# You can run ‘ilorest’ to login to ilorest then run ‘types’ to find the list of the different types. When you want to find the type use ‘select [type]’ then ‘get’ cmd.
+See example below:
+
+[root@zeusn040 ~]# ilorest
+iLOrest : RESTful Interface Tool version 3.1.1
+Copyright (c) 2014-2020 Hewlett Packard Enterprise Development LP
+------------------------------------------------------------------------------------------------------------------
+
+iLOrest > types
+Discovering data...Done
+Type options:
+AccountService.v1_3_0
+CertificateCollection
+Chassis.v1_6_0
+ChassisCollection
+ComputerSystem.v1_4_0
+ComputerSystemCollection
+Drive.v1_0_0
+EthernetInterface.v1_4_1
+EthernetInterfaceCollection
+EventDestinationCollection
+EventService.v1_0_8
+HostInterface.v1_1_1
+HostInterfaceCollection
+HpeBaseNetworkAdapter.v2_0_0
+HpeBaseNetworkAdapterCollection
+HpeCertAuth.v1_1_0
+HpeCertificateCollection
+HpeComponent.v1_0_1
+HpeComponentCollection
+HpeComponentInstallSet.v1_0_3
+HpeComponentInstallSetCollection
+HpeComponentUpdateTaskQueueCollection
+HpeDirectoryTest.v1_0_0
+HpeESKM.v2_0_0
+HpeHttpsCert.v2_0_0
+HpeInvalidImageCollection
+HpeMaintenanceWindowCollection
+HpePowerMeter.v2_0_1
+HpeRemoteSupport.v2_3_0
+HpeSNMPAlertDestinationCollection
+HpeSNMPUsersCollection
+HpeSecurityService.v2_2_0
+HpeServerDevice.v2_0_0
+HpeServerDeviceCollection
+HpeServerPCISlot.v2_1_0
+HpeServerPCISlotCollection
+HpeServerPciDevice.v2_0_0
+HpeServerPciDeviceCollection
+HpeSmartStorage.v2_0_0
+HpeSmartStorageArrayControllerCollection
+HpeSmartStorageHostBusAdapterCollection
+HpeUSBDevicesCollection
+HpeUSBPort.v2_0_0
+HpeUSBPortsCollection
+HpeWorkloadPerformanceAdvisor.v1_0_0
+HpeWorkloadPerformanceAdvisorCollection
+HpeiLOAccountCertificateMap.v1_0_1
+HpeiLOAccountCertificateMapCollection
+HpeiLOActiveHealthSystem.v2_3_0
+HpeiLOBackupFileCollection
+HpeiLOBackupRestoreService.v2_2_0
+HpeiLODateTime.v2_0_0
+HpeiLOEmbeddedMedia.v2_0_0
+HpeiLOFederatedGroupCapping.v2_0_0
+HpeiLOFederationGroup.v2_0_0
+HpeiLOFederationGroupCollection
+HpeiLOFederationPeers.v2_0_0
+HpeiLOFederationPeersCollection
+HpeiLOGUIService.v1_0_0
+HpeiLOLicense.v2_1_1
+HpeiLOLicenseCollection
+HpeiLOSSO.v2_0_0
+HpeiLOSecurityDashboard.v1_0_0
+HpeiLOSecurityParam.v1_0_0
+HpeiLOSecurityParamCollection
+HpeiLOSnmpService.v2_2_0
+LogEntryCollection
+LogService.v1_0_0
+LogServiceCollection
+Manager.v1_3_3
+ManagerAccount.v1_1_3
+ManagerAccountCollection
+ManagerCollection
+ManagerNetworkProtocol.v1_0_0
+Memory.v1_7_0
+MemoryCollection
+MemoryDomainCollection
+MetricDefinition.v1_0_0
+MetricDefinitionCollection
+MetricReport.v1_0_0
+MetricReportCollection
+MetricReportDefinition.v1_0_0
+MetricReportDefinitionCollection
+Power.v1_3_0
+Processor.v1_0_0
+ProcessorCollection
+Role.v1_2_1
+RoleCollection
+SecureBoot.v1_0_0
+ServiceRoot.v1_5_0
+Session.v1_0_0
+SessionCollection
+SessionService.v1_0_0
+SoftwareInventory.v1_0_0
+SoftwareInventoryCollection
+Storage.v1_1_0
+StorageCollection
+TaskCollection
+TaskService.v1_1_1
+TelemetryService.v1_0_0
+Thermal.v1_1_0
+Triggers.v1_0_0
+TriggersCollection
+UpdateService.v1_1_0
+VirtualMedia.v1_2_0
+VirtualMediaCollection
+
+iLOrest > select ComputerSystem
+iLOrest > get
+
+
+AssetTag=""
+BiosVersion=U45 v2.10 (05/21/2019)
+Boot=
+      BootSourceOverrideTarget=None
+      BootSourceOverrideTarget@Redfish.AllowableValues=None
+                                                        Cd
+                                                        Hdd
+                                                        Usb
+                                                        Utilities
+                                                        Diags
+                                                        BiosSetup
+                                                        Pxe
+                                                        UefiShell
+                                                        UefiHttp
+                                                        UefiTarget
+      BootSourceOverrideEnabled=Disabled
+      BootSourceOverrideMode=UEFI
+      UefiTargetBootSourceOverride=None
+#################################################################
