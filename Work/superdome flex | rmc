@@ -27,3 +27,7 @@ Access the console either by launching the KVM from the webpage or opening a tex
   
 # to test fan
   fanspeed -v
+
+# enter manufactory mode
+# it will give you a lockcode that you will need to match up to the passcode (do not have the list)
+  enable mfg_mode
