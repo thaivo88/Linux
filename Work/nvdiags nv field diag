@@ -1,0 +1,16 @@
+download 629-INT15-UNIV-ALL.tgz (NV field diag/nvdiags)
+
+# unload any nvidia module and nvidia fabric manager
+  lsmod | grep nv
+  rmmod [nvidia_modules]
+  systemctl stop nvidia-fabricmanager.service
+  systemctl stop nvidia-persistenced
+  
+#  disable X
+  update-rc.d -f gdm remove
+  
+# tar the file and install
+  tar zxvf 629-INT15-UNIV-ALL.tgz
+  cd 629-INT15-UNIV-ALL
+  ./install_module.sh --install
+  ./fieldiag
