@@ -1,0 +1,20 @@
+SETTING COMMANDS FOR OA
+
+Need to scan password for OA first
+
+Create admin user with admin credential
+
+#set oa name pack19
+#add user admin iloadmin
+#set user access admin ADMINISTRATOR
+#assign oa admin
+
+Set IP addresses for ILOs:
+
+Set ebipa server 10.1.219.1 255.255.0.0 1a-16a
+Enable ebipa server 1a-16a,1b-16b
+
+Set IP addresses for interconnect bays
+
+#set ebipa interconnect 10.1.19.191 255.255.0.0 1-2
+#enable ebipa interconnect 1-2
