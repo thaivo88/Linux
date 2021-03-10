@@ -1,0 +1,15 @@
+# list IB ID
+  ibstat -p
+
+# run subnet manager
+  /usr/sbin/opensm -g [IB_ID] -B
+
+# check subnet  manager
+  cat /sys/class/infiniband/mlx5_0/ports/1/state
+  4: ACTIVE
+
+  grep "SUBNET UP" /var/log/opensm.log
+  Mar 10 12:52:25 891594 [81C29700] 0x02 -> SUBNET UP
+  Mar 10 12:52:26 154220 [81C29700] 0x02 -> SUBNET UP
+  Mar 10 12:52:26 232162 [81C29700] 0x02 -> SUBNET UP
+  Mar 10 12:53:13 741883 [E8A85700] 0x02 -> SUBNET UP
