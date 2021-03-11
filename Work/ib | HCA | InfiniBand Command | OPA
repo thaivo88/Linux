@@ -137,3 +137,19 @@ query the HCA card
 upgrade firmware of the HCA card
   mstflint -d [pci_bus_id] -i [file] burn
   mstflint -d 37:00.0 -i /tmp/fw-ConnectX5-rel-16_23_1020-872725-B21_Ax-UEFI-14.16.17-FlexBoot-3.5.504.signed.bin burn
+
+
+#################################
+
+
+
+########### HDR Switch ############
+    enable
+    configure terminal
+# enable subnet manager
+    ib smnode my-sm enable
+# selecting port interface 1-40    
+    interface ib 1/1-1/40
+# setting speed to hdr/200 (fdr/edr/hdr)   
+    speed hdr
+################################
