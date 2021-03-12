@@ -153,3 +153,30 @@ upgrade firmware of the HCA card
 # setting speed to hdr/200 (fdr/edr/hdr)   
     speed hdr
 ################################
+
+
+see switch connected to the node
+	mlxlink -d <switch lid> -p <port number> -m
+to get the switch lids
+	ibswitches  
+start and show status
+	mst start 
+	mlxlink -d /dev/mst/mt4123_pciconf0 -m	 (1 port card)
+	mlxlink -d /dev/mst/mt4123_pciconf0.1 -m (2 port card)
+to see nodes you trying to ping	
+	ibnodes
+	
+find the port that the EDR cable on the EDR swtich for port connection
+	mlxlink -d lid-115 -p <port connected to the lustre node> -m
+ 
+
+
+
+start mellanox sw tool
+mst start
+
+display devices
+mst status -v
+
+mlxlink -d [MST_device]
+mlxlink -d /dev/mst/mt4123_pciconf1 --port_type PCIE [-c | -e]
