@@ -1,0 +1,4 @@
+# like badblocks cmd testing partition for errors
+  smartctl /dev[sdx] -t offline
+# see output result of the debug of badblocks
+  smartctl -a /dev/[sdx]
