@@ -46,7 +46,9 @@ nvidia-smi -q | grep Driver
   systemctl reload nvidia-persistenced
   
 # Enabled persistence mode for GPU <target gpu>.  
+# to enable all GPU
   nvidia-smi -i <target gpu> -pm ENABLED
+  nvidia-smi -pm 1
 
 # To view current persistence mode using nvidia-smi:
   nvidia-smi -i <target gpu> - q
