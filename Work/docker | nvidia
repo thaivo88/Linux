@@ -92,3 +92,24 @@ curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.li
 yes | apt-get update
 yes | apt-get install nvidia-docker2
 ###################################
+
+# nvidia fabric manager
+#
+# bzip2 make automake gcc gcc-c++ pciutils elfutils-libelf-devel libglvnd-devel
+#Enable the PowerTools repo and set up the external dependency on EPEL for DKMS.
+ sudo dnf config-manager --set-enabled PowerTools
+ sudo dnf install -y epel-release
+# Install the CUDA repository public GPG key.
+ distribution=rhel8
+# Setup the CUDA network repository.
+ ARCH=$( /bin/arch )
+ sudo dnf config-manager --add-repo http://developer.download.nvidia.com/compute/cuda/repos/$distribution/${ARCH}/cuda-$distribution.repo
+# The NVIDIA driver requires that the kernel headers and development packages for the running version of the kernel be installed at the time of the driver installation, as well whenever the driver is rebuilt. For example, if your system is running kernel version 4.4.0, the 4.4.0 kernel headers and development packages must also be installed.
+# For CentOS 8, ensure that the system has the correct Linux kernel sources from the CentOS repositories:
+ sudo dnf install -y kernel-devel-$(uname -r) kernel-headers-$(uname -r)
+# Note that in some cases, you may have to update the running kernel as a pre-requisite:
+  sudo dnf install -y kernel kernel-core kernel-modules
+# The choice of the driver package depends on the stream and profile to be used as shown below:
+ sudo dnf module install nvidia-driver
+ dnf install nvidia-fabric[]
+ dnf install nvidia-fabric-devel[]
