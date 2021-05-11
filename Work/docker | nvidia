@@ -56,13 +56,22 @@ nvidia-docker run -ti --rm nvcr.io/nvidia/tensorflow-18.09-py3 /bin/bash
 exit
 
 ############## rhel 8 ##############
+# Install Docker
+#
 dnf install https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.6-3.3.el7.x86_64.rpm
-sudo dnf install docker-ce
-
+dnf install docker-ce
 dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
 dnf repolist -v
 dnf list docker-ce --showduplicates | sort -r
 dnf install docker-ce-3:19.03.13-3.el8 
+
+# Install Nvidia-Docker
+#
+dnf install -y tar bzip2 make automake gcc gcc-c++ vim pciutils elfutils-libelf-devel libglvnd-devel iptables
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.repo | sudo tee /etc/yum.repos.d/nvidia-docker.repo
+dnf clean expire-cache --refresh
+dnf install -y nvidia-docker2
 ####################################
 
 
