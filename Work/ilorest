@@ -1,5 +1,9 @@
 ilorest manual https://support.hpe.com/hpesc/public/docDisplay?docId=c04423965
 
+# bios flash with ilorest
+  ilorest flashfwpkg [flash_file_location]  --forceupload -u [username] -p [password] --url [IP_of_Hostname]
+  ilorest flashfwpkg /tmp/pkh/A47_2.44_04_29_2021.full.fwpkg  --forceupload -u admin -p admin123 --url 10.100.1.18
+
 # Log into the node you wish to copy the bios setting.
 # Make sure ilorest is installed: 
   which ilorest
