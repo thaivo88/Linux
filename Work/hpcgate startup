@@ -1,0 +1,3 @@
+iptables -t nat -A POSTROUTING -o eth1 -j MASQUERADE
+systemctl status dhcpd.service
+systemctl status nfs
