@@ -130,3 +130,6 @@ then edit the file “/etc/yum/pluginconf.d/subscription-manager.conf”, change
 save and exit the file.	
 ##############################################################	
 
+# enabled the codeready-builder repo
+dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+dnf config-manager --enable epel
