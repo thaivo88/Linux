@@ -131,5 +131,10 @@ save and exit the file.
 ##############################################################	
 
 # enabled the codeready-builder repo
-dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-dnf config-manager --enable epel
+  dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+  dnf config-manager --enable epel
+# You can enable the powertools repository to solve this issue,
+  sudo yum install dnf-plugins-core
+  sudo yum config-manager --set-enabled powertools
+# Now you can install the gdal by following code,
+  sudo yum install gdal-devel
