@@ -1,0 +1,2 @@
+# Missing modules (cat /proc/modules; ls /dev) and UUID doesn't exist in BusyBox
+  modprobe ahci
