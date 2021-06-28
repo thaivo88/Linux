@@ -1,5 +1,5 @@
-NIS Tools
-To work better with the Linux NIS server, there are some useful tools that can help you manage the information in the database.
+# NIS Tools
+# To work better with the Linux NIS server, there are some useful tools that can help you manage the information in the database.
 
 ypcat: This tool is used to get data from the NIS server by extracting it from NIS map.
 
@@ -7,5 +7,9 @@ ypwhich: gets the name of the Linux NIS server that is responding to your reques
 
 ypmatch: rather than grabbing the entire map, or you can search by key to get a specific entry.
 
-if NIS fail to let user access run:
+# if NIS fail to let user access run:
 authselect select nis --force
+
+# start ypbind during boot
+chkconfig ypbind on
+Note: Forwarding request to 'systemctl enable ypbind.service'.
