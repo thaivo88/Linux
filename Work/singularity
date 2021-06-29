@@ -45,3 +45,78 @@ COMMAND GROUPS:
 
 CONTAINER USAGE OPTIONS:
     see singularity help <command>
+#####################################################################
+
+
+
+
+
+
+
+
+installation
+
+#####################################################################
+# rhel singularity
+
+# install golang 
+yum update
+wget https://dl.google.com/go/go1.16.4.linux-amd64.tar.gz
+tar -xzf go1.16.4.linux-amd64.tar.gz 
+mv go /usr/local 
+
+# Now you need to set up Go language environment variables for your project. Commonly you need to set 3 environment variables as GOROOT, GOPATH and PATH.
+# GOROOT is the location where Go package is installed on your system.
+# GOPATH is the location of your work directory. For example my project directory is ~/Projects/Proj1 .
+# Now set the PATH variable to access go binary system wide.
+export GOROOT=/usr/local/go 
+export GOPATH=$HOME/Projects/Proj1 
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH 
+go version 
+
+yum -y update 
+yum -y groupinstall 'Development Tools'
+yum -y install wget epel-release
+yum -y install debootstrap.noarch squashfs-tools openssl-devel libuuid-devel gpgme-devel libseccomp-devel cryptsetup-luks
+yum -y install openssl-devel libuuid-devel
+wget https://github.com/singularityware/singularity/releases/download/v3.5.3/singularity-3.5.3.tar.gz
+tar -xzvf singularity-3.5.3.tar.gz
+cd singularity
+./mconfig
+cd builddir
+make
+make install
+
+
+################### End ########################
+
+
+################# ubuntu #############
+#########################################################
+#install singularity
+#singularity needs go language to install
+  export VERSION=1.11.4 OS=linux 
+  apt-get install golang
+  sudo apt-get update &&   sudo apt-get install -y build-essential libssl-dev uuid-dev libgpgme11-dev libseccomp-dev pkg-config squashfs-tools
+  git clone https://github.com/singularityware/singularity.git
+  echo 'export GOPATH=${HOME}/go' >> ~/.bashrc &&  echo 'export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin' >> ~/.bashrc &&   source ~/.bashrc
+  mkdir -p ${GOPATH}/src/github.com/sylabs &&  cd ${GOPATH}/src/github.com/sylabs &&  git clone https://github.com/sylabs/singularity.git &&   cd singularity
+  apt install libssl-dev uuid-dev
+  cd ${GOPATH}/src/github.com/sylabs/singularity &&  ./mconfig &&  cd ./builddir &&   make &&   make install
+  #if above fails use apt-get install singularity singularity-container
+  
+###############################################################
+
+singularity 3
+export VERSION=1.11.4 OS=linux ARCH=x86_64
+wget -O /tmp/go${VERSION}.${OS}-${ARCH}.tar.gz https://dl.google.com/go/go${VERSION}.${OS}-${ARCH}.tar.gz && sudo tar -C /usr/local -xzf /tmp/go${VERSION}.${OS}-${ARCH}.tar.gz
+apt-get update && sudo apt-get install -y  build-essential   libssl-dev   uuid-dev   libgpgme11-dev   squashfs-tools   libseccomp-dev    pkg-config
+export VERSION=1.11 OS=linux ARCH=amd64 &&    wget https://dl.google.com/go/go$VERSION.$OS-$ARCH.tar.gz &&    sudo tar -C /usr/local -xzvf go$VERSION.$OS-$ARCH.tar.gz &&   rm go$VERSION.$OS-$ARCH.tar.gz
+echo 'export GOPATH=${HOME}/go' >> ~/.bashrc &&  echo 'export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin' >> ~/.bashrc &&  source ~/.bashrc
+go get -d github.com/sylabs/singularity
+export VERSION=v3.0.3 &&  cd $GOPATH/src/github.com/sylabs/singularity &&   git fetch &&   git checkout $VERSION 
+export VERSION=3.0.3 &&  mkdir -p $GOPATH/src/github.com/sylabs &&  cd $GOPATH/src/github.com/sylabs &&  wget https://github.com/sylabs/singularity/releases/download/v${VERSION}/singularity-${VERSION}.tar.gz &&  tar -xzf singularity-${VERSION}.tar.gz &&   cd ./singularity &&  ./mconfig
+ ./mconfig &&  make -C ./builddir &&  sudo make -C ./builddir install
+ export VERSION=v3.1.0  &&  cd $GOPATH/src/github.com/sylabs/singularity &&   git fetch &&   git checkout $VERSION 
+ export VERSION=3.1.0 &&    mkdir -p $GOPATH/src/github.com/sylabs &&   cd $GOPATH/src/github.com/sylabs &&   wget https://github.com/sylabs/singularity/releases/download/v${VERSION}/singularity-${VERSION}.tar.gz &&   tar -xzf singularity-${VERSION}.tar.gz &&    cd ./singularity &&     ./mconfig
+ ./mconfig &&     make -C ./builddir &&    sudo make -C ./builddir install
