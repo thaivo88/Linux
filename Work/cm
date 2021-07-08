@@ -756,7 +756,7 @@ pdsh  -w harmonian[001-005,007-010] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd
 pdsh  -w kratosn[01-05] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd.conf'
 pdsh  -w leton[001-002] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd.conf'
 pdsh  -w rhean[025-045,047-048] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd.conf' 
-pdsh  -w tibern[01-08] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd.conf' 
+pdsh  -w tibern[01-16] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd.conf' 
 pdsh  -w zeusn[039-042] 'cp /admin/pkh/arrayd.conf /etc/array/arrayd.conf' 
 
 # on hpchou-login 
@@ -768,7 +768,7 @@ pdsh  -w harmonian[001-005,007-010] 'systemctl restart array.service'
 pdsh  -w kratosn[01-05] 'systemctl restart array.service'
 pdsh  -w leton[001-002] 'systemctl restart array.service'
 pdsh  -w rhean[025-045,047-048] 'systemctl restart array.service'
-pdsh  -w tibern[01-08] 'systemctl restart array.service'
+pdsh  -w tibern[01-16] 'systemctl restart array.service'
 pdsh  -w zeusn[039-042] 'systemctl restart array.service'
 
 
