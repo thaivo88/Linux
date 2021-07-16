@@ -1,3 +1,8 @@
+# setting HCA to force relax ordering
+    lspci | grep -i mell				# finding HCA bus lane ID
+    mlxconfig -d [bus_lane_id] set PCI_WR_ORDERING=1
+    mlxconfig -d 45:00.0 set PCI_WR_ORDERING=1
+
 # hpchpcm switch OPA to IB but cronusn does not boot correctly run cmd below:
     pdsh -w cronusn[001-144] /admin/gbc/cronusfixme
 
