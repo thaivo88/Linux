@@ -1,3 +1,21 @@
+################### For RMC ######################
+# On each system run:
+
+  set factory initialize  # < this will remove the configurations that you’ve already set.
+
+# Connect to the RMC via micro USB and run
+
+  set network addressing=static ipaddress=10.0.211.101 netmask=255.255.0.0 hostname=[hostname] gateway=10.0.0.10 
+
+  add location module=bmc bmc_id=0 upos=1
+  add location module=bmc bmc_id=1 upos=6
+
+##################################################
+
+
+
+
+################## For eRMC ######################
 # connect mini usb to superdome flex and install the driver per device management for the serial card via mini usb
 
 # there should be 3COM for SDFX280 but for SDFX there is only one COM for BMC
@@ -7,7 +25,7 @@
 
 # set ip configuration and hostname for RMC
 # reboot rmc to save all changes
-  set network addressing=static ipaddress=10.0.211.101 netmask=255.255.0.0 hostname=[hostname gateway=10.0.0.10 
+  set network addressing=static ipaddress=10.0.211.101 netmask=255.255.0.0 hostname=[hostname] gateway=10.0.0.10 
   reboot rmc
 
 
