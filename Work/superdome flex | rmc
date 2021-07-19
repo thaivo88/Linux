@@ -3,12 +3,30 @@
 
   set factory initialize  # < this will remove the configurations that you’ve already set.
 
-# Connect to the RMC via micro USB and run
+# Connect to the RMC system via micro USB and run
 
   set network addressing=static ipaddress=10.0.211.101 netmask=255.255.0.0 hostname=[hostname] gateway=10.0.0.10 
 
   add location module=bmc bmc_id=0 upos=1
   add location module=bmc bmc_id=1 upos=6
+  
+# change factory password
+  set password
+
+# setup bmc for both chassis
+# check the bmc "r" name:
+  config -v
+  
+##########################################  
+  BMCs:            2
+        r001i06b IP147-BASEIO    P000
+        r001i11b IP147-BASEIO    P002
+##########################################  
+  
+# set IP address for the two BMC  
+  set network baseio=r001i06b addressing=static ipaddress=10.100.1.55 netmask=255.255.0.0 gateway=10.100.0.5 hostname=sdfxn03t
+  set network baseio=r001i11b addressing=static ipaddress=10.100.1.56 netmask=255.255.0.0 gateway=10.100.0.5 hostname=sdfxn03b
+
 
 ##################################################
 
