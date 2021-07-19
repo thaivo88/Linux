@@ -1,4 +1,4 @@
-################### For RMC ######################
+########### For RMC 1U switch/server #############
 # On each system run:
 
   set factory initialize  # < this will remove the configurations that you’ve already set.
