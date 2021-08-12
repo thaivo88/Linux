@@ -54,3 +54,29 @@ in order to load the lustre modules on boot.  I'm not sure why I needed to do th
   depmod -a
   reboot
 Make sure all three lustre file systems mount on boot.
+
+
+########## lustre 2.12.7 #############
+mkdir lustre-2.12.7
+wget https://downloads.whamcloud.com/public/lustre/lustre-2.12.7/el8/client/RPMS/x86_64/kmod-lustre-client-2.12.7-1.el8.x86_64.rpm
+wget  https://downloads.whamcloud.com/public/lustre/lustre-2.12.7/el8/client/RPMS/x86_64/lustre-client-2.12.7-1.el8.x86_64.rpm
+
+wget http://mirror.centos.org/centos/8/PowerTools/x86_64/os/Packages/libyaml-devel-0.1.7-5.el8.x86_64.rpm
+wget http://mirror.centos.org/centos/8/BaseOS/x86_64/os/Packages/libyaml-0.1.7-5.el8.x86_64.rpm
+wget https://downloads.whamcloud.com/public/lustre/lustre-2.12.7/el8/client/SRPMS/lustre-2.12.7-1.src.rpm
+wget http://mirror.centos.org/centos/8/BaseOS/x86_64/os/Packages/libselinux-devel-2.9-5.el8.x86_64.rpm
+wget http://mirror.centos.org/centos/8/AppStream/x86_64/os/Packages/kernel-rpm-macros-125-1.el8.noarch.rpm
+wget http://mirror.centos.org/centos/8/BaseOS/x86_64/os/Packages/libselinux-2.9-5.el8.x86_64.rpm
+wget http://mirror.centos.org/centos/8/BaseOS/x86_64/os/Packages/libsepol-2.9-2.el8.x86_64.rpm
+wget https://download-ib01.fedoraproject.org/pub/epel/8/Everything/aarch64/Packages/p/perl-ExtUtils-PkgConfig-1.16-10.el8.noarch.rpm
+rpm -ivh *.rpm
+
+yum install libsepol.i686
+yum install libsepol-devel.x86_64
+
+rpm2cpio lustre-2.12.7-1.src.rpm | cpio -ivd
+tar zxvf lustre-2.12.7.tar.gz
+cd lustre-2.12.7/
+./configure --disable-server
+make rpms
+#########################################
