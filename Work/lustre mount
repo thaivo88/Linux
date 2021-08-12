@@ -79,4 +79,6 @@ tar zxvf lustre-2.12.7.tar.gz
 cd lustre-2.12.7/
 ./configure --disable-server
 make rpms
+cd /root/lustre-2.12.7/lustre-2.12.7/
+rpm -Uvh kmod-lustre-client-2.12.7-1.el8.x86_64.rpm lustre-client-2.12.7-1.el8.x86_64.rpm
 #########################################
