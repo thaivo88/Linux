@@ -12,3 +12,54 @@ cat /etc/fstab
 #hpcgate-ib:/mops /mops nfs rsize=131072,wsize=131072,intr,vers=3 0 0
 #hpcgate-ib:/ml /ml nfs rsize=131072,wsize=131072,intr,bg,vers=3 0 0
 #hpcgate-ib:/scratch /scratch nfs rsize=131072,wsize=131072,intr,bg,vers=3 0 0
+
+
+
+
+
+
+
+###########################
+setting up NFS service & client
+
+on ai385n06:
+
+yum install nfs-utils
+mkdir /media/data1
+chmod -R 755 /media/data1
+chown nfsnobody:nfsnobody /media/data1
+systemctl enable rpcbind
+systemctl enable nfs-server
+systemctl enable nfs-lock
+systemctl enable nfs-idmap
+systemctl start rpcbind
+systemctl start nfs-server
+systemctl start nfs-lock
+systemctl start nfs-idmap
+
+vi /etc/exports
+# added:
+/media/data1 192.168.0.70(rw,sync,no_root_squash,no_all_squash)  # ai385n02 IB interface
+/media/data1 172.17.81.70(rw,sync,no_root_squash,no_all_squash)  # ai385n02 10GB interface
+
+systemctl restart nfs-server
+firewall-cmd --permanent --zone=public --add-service=nfs
+firewall-cmd --permanent --zone=public --add-service=mountd
+firewall-cmd --permanent --zone=public --add-service=rpc-bind
+firewall-cmd --reload
+
+
+on ai385n02:
+
+yum install nfs-utils
+mkdir -p /media/data1
+mount -t nfs 172.17.81.236:/media/data1 /media/data1
+mount -t nfs 192.168.0.236:/media/data1 /media/data1
+
+[root@ai385n02 ~]# mount -t nfs 172.17.81.236:/media/data1 /media/data1
+[root@ai385n02 ~]# mount -t nfs 192.168.0.236:/media/data1 /media/data1
+mount.nfs: /media/data1 is busy or already mounted
+
+[root@ai385n02 ~]# df | grep media
+172.17.81.236:/media/data1 1952559104      32768 1952526336   1% /media/data1
+###########################################
