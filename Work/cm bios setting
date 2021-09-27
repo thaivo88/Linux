@@ -1,0 +1,1 @@
+cm node bios set -a "{'ThermalConfig':MaxCooling'}" -n kratosn04 
