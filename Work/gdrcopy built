@@ -85,3 +85,22 @@ read BW: 397.854MB/s
 unmapping buffer
 unpinning buffer
 closing gdrdrv
+
+
+###################################################
+
+Installing gdrcopy:
+
+Link: https://github.com/NVIDIA/gdrcopy
+
+cd /root
+git clone https://github.com/NVIDIA/gdrcopy.git
+cd gdrcopy/packages
+dnf module install nvidia-driver:latest-dkms
+yum groupinstall 'Development Tools'
+yum install dkms rpm-build make check check-devel subunit subunit-devel
+
+CUDA=<cuda-install-top-dir> ./build-rpm-packages.sh
+rpm -Uvh gdrcopy-kmod-<version>dkms.noarch.<platform>.rpm
+rpm -Uvh gdrcopy-<version>.<arch>.<platform>.rpm
+rpm -Uvh gdrcopy-devel-<version>.noarch.<platform>.rpm
