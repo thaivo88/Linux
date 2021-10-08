@@ -25,6 +25,9 @@ ilorest manual https://support.hpe.com/hpesc/public/docDisplay?docId=c04423965
   ilorest load -f [Filename.json]
   ilorest load --selector=Bios. -f  [Filename.json]
   ilorest serverclone load -f [Filename.jason]
+  
+# after loading the bios the servername is changed to the hostnode bios json, to change it to the correct hostname:  
+  ilorest set ServerName=[hostname] --select Bios. --commit
 
 # AHS log From a nearby headnode
   ilorest serverlogs --url=w.x.y.z -u username -p password --selectlog=AHS
