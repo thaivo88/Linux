@@ -13,6 +13,7 @@ ilorest manual https://support.hpe.com/hpesc/public/docDisplay?docId=c04423965
   rpm -i ilorest-3.0.1-7.x86_64.rpm
   
 # Then run the utility and save the bios configuration into a file: 
+  ilorest save --selector=Bios. -f [Filename.json]
   ilorest --nocache save --selector=Bios. -f  [Filename.json]
   ilorest serverclone save --ilossa --quiet -f [Filename.json]
   ilorest serverclone save -f [Filename.json]
@@ -21,6 +22,7 @@ ilorest manual https://support.hpe.com/hpesc/public/docDisplay?docId=c04423965
   scp [filename.json] \root@[hostname]:/[directory]
   
 # Then load the file: 
+  ilorest load -f [Filename.json]
   ilorest load --selector=Bios. -f  [Filename.json]
   ilorest serverclone load -f [Filename.jason]
 
