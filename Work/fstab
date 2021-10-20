@@ -1,0 +1,2 @@
+# if lustre doesn't mount doing boot add _netdev
+192.168.0.210@o2ib:/hdd         /lustre/hdd     lustre  rw,flock,retry=10000,_netdev    0 0
