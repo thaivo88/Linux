@@ -522,3 +522,481 @@ systemctl status slurmctld
 # To troubleshoot, review the slurmctld log:
 /apps/aislurm/log/slurmctld.log
 #################################################################################3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#################################################################################
+--------------------
+Server
+--------------------
+
+hpcgate.us.rdlabs.hpecorp.net / 15.226.54.11
+
+
+
+--------------------
+Previous Slurm versions
+--------------------
+
+[root@hpcgate]# sinfo -V
+slurm 17.11.3-2
+
+[root@hpcgate]# /optlocal/aislurm/bin/sinfo -V
+slurm 17.11.3-2
+
+[root@hpcgate]# /optlocal/slurm/bin/sinfo -V
+slurm 16.05.5
+
+
+
+--------------------
+References
+--------------------
+
+Munge install guide:
+https://github.com/dun/munge/wiki/Installation-Guide
+
+Slurm install guide:
+https://slurm.schedmd.com/quickstart_admin.html
+
+Slurm.conf reference:
+https://slurm.schedmd.com/slurm.conf.html
+
+Slurm downloads:
+https://www.schedmd.com/archives.php
+
+hpcgate's slurm.conf:
+/apps/aislurm/etc/slurm.conf
+
+hpcgate's slurmctld log:
+/apps/aislurm/log/slurmctld.log
+
+Launch slurmctld manually on hpcgate:
+/optlocal/aislurm/sbin/slurmctld -f /apps/aislurm/etc/slurm.conf
+
+
+
+--------------------
+Backups before beginning
+--------------------
+
+[root@hpcgate]# mkdir /tmp/slurm_backups
+
+[root@hpcgate]# grep StateSaveLocation /apps/aislurm/etc/slurm.conf
+StateSaveLocation=/var/tmp
+
+[root@hpcgate]# cp -a /var/tmp /tmp/slurm_backups
+
+
+
+--------------------
+Install munge, must be done first
+--------------------
+
+[root@hpcgate apps]# mkdir /apps/mungerpmbuild
+
+[root@hpcgate apps]# cd /apps/mungerpmbuild
+
+[root@hpcgate mungerpmbuild]# wget https://github.com/dun/munge/releases/download/munge-0.5.14/munge-0.5.14.tar.xz
+
+[root@hpcgate mungerpmbuild]# yum install bzip2-devel # required for next step
+
+[root@hpcgate mungerpmbuild]# rpmbuild -tb --without verify munge-0.5.14.tar.xz
+...
+Wrote: /root/rpmbuild/RPMS/x86_64/munge-0.5.14-1.el7.x86_64.rpm
+Wrote: /root/rpmbuild/RPMS/x86_64/munge-devel-0.5.14-1.el7.x86_64.rpm
+Wrote: /root/rpmbuild/RPMS/x86_64/munge-libs-0.5.14-1.el7.x86_64.rpm
+Wrote: /root/rpmbuild/RPMS/x86_64/munge-debuginfo-0.5.14-1.el7.x86_64.rpm
+...
+
+[root@hpcgate]# rpm -ivh /root/rpmbuild/RPMS/x86_64/munge-0.5.14-1.el7.x86_64.rpm /root/rpmbuild/RPMS/x86_64/munge-devel-0.5.14-1.el7.x86_64.rpm /root/rpmbuild/RPMS/x86_64/munge-libs-0.5.14-1.el7.x86_64.rpm
+
+
+# Create munge key
+sudo -u munge /usr/sbin/mungekey -v
+
+# Start munge
+systemctl enable munge
+systemctl start munge
+systemctl status munge
+
+
+# To troubleshoot, review the munge log:
+/var/log/munge/munged.log
+
+
+
+The following are additional steps that may or may not be needed. These were from my first attempt at installing munge, but I'm not sure if they are actually required using the method documented above. However, "just in case" I wanted to be sure to document them:
+
+vi /etc/sysconfig/munge
+OPTIONS="--num-threads=10"
+
+mkdir /etc/munge
+chmod 0700 /etc/munge
+
+mkdir /var/lib/munge
+chmod 0700 /var/lib/munge
+
+mkdir /var/log/munge
+chmod 0700 /var/log/munge
+
+mkdir /run/munge
+chmod 0755 /run/munge
+
+chown munge:munge /usr/local/etc/munge/
+chown munge:munge /usr/local/var/lib/munge
+chown munge:munge /usr/local/var/log/munge/munged.log
+chown munge:munge /usr/local/var/run/munge/
+
+# Create munge user
+groupadd -g 1001 munge
+useradd  -m -c "MUNGE" -d /var/lib/munge -u 1001 -g munge  -s /sbin/nologin munge
+
+
+
+
+--------------------
+Install SLURM 19.05.8
+--------------------
+
+Newer versions of slurm (20.11.5 and 20.02.6) require python3, which is not available on hpcgate. Therefore, I've installed 19.05.8.
+
+[root@hpcgate]# python -V
+Python 2.7.5
+
+
+[root@hpcgate apps]# cd /apps
+
+[root@hpcgate apps]# wget https://download.schedmd.com/slurm/slurm-19.05.8.tar.bz2
+
+[root@hpcgate apps]# tar -xaf slurm-19.05.8.tar.bz2
+
+[root@hpcgate apps]# cd /apps/slurm-19.05.8
+
+[root@hpcgate slurm-20.11.5]# ./configure --prefix=/apps/aislurm --with-munge=/usr/local/bin/munge
+
+[root@hpcgate slurm-19.05.8]# make
+
+
+# Stop the running slurm and move it's directories aside
+[root@hpcgate slurm-19.05.8]# systemctl stop slurmctld
+
+[root@hpcgate slurm-19.05.8]# mv /apps/aislurm /apps/aislurm-17.11.3-2
+
+[root@hpcgate slurm-19.05.8]# cp -a /optlocal/aislurm /optlocal/aislurm-17.11.3-2
+
+
+# Install the new slurm
+[root@hpcgate slurm-19.05.8]# make install
+
+
+# Copy config files from the old slurm to the new one
+[root@hpcgate slurm-19.05.8]# cd /apps/aislurm
+[root@hpcgate aislurm]# cp -pr ../aislurm-17.11.3-2/etc/ .
+[root@hpcgate aislurm]# cp -pr ../aislurm-17.11.3-2/log/ .
+[root@hpcgate aislurm]# cp -pr ../aislurm-17.11.3-2/custom/ .
+
+
+# Overwrite some symlinks in the 19.05.8 version of /optlocal/aislurm
+[root@hpcgate]# cd /optlocal/aislurm
+[root@hpcgate aislurm]# ln -sf /apps/aislurm/bin bin
+[root@hpcgate aislurm]# ln -sf /apps/aislurm/lib lib
+[root@hpcgate aislurm]# ln -sf /apps/aislurm/sbin sbin
+
+
+
+# Modify slurm.conf
+[root@hpcgate aislurm]# vi /apps/aislurm/etc/slurm.conf
+
+# Comment out this line:
+#CryptoType=crypto/openssl
+
+# Add this line:
+CredType=cred/munge
+
+# Change this line:
+AuthType=auth/none
+# to:
+AuthType=auth/munge
+
+
+# Start slurmctld
+ldconfig -n /apps/aislurm/lib
+systemctl enable slurmctld
+systemctl start slurmctld
+systemctl status slurmctld
+
+
+
+# To troubleshoot, review the slurmctld log:
+/apps/aislurm/log/slurmctld.log
+
+
+
+--------------------
+Installing on a compute node - THE WRONG WAY
+--------------------
+
+# On the head node, copy munge rpms to a location accessible on the computes
+[root@hpcgate]# cp -p /root/rpmbuild/RPMS/x86_64/munge*rpm /apps/mungerpmbuild
+
+
+# On the compute node, install munge
+root@ainode05# cd /apps/mungerpmbuild
+root@ainode05# rpm -ivh munge-0.5.14-1.el7.x86_64.rpm munge-devel-0.5.14-1.el7.x86_64.rpm munge-libs-0.5.14-1.el7.x86_64.rpm
+
+# NOTE: Thai, apparently "rpm" isn't available on the compute nodes? I get an error that says use "Alien" instead. So, I'm unable to complete the rest of these steps, but, here are the steps I would take, once you can install the rpms.
+
+
+#  Copy the munge key from the head node to the compute node
+scp -p root@hpcgate:/etc/munge/munge.key /etc/munge/munge.key
+# or:
+[root@hpcgate ~]# cp -p /etc/munge/munge.key /apps/mungerpmbuild
+root@ainode01:~# cp -p /apps/mungerpmbuild/munge.key /etc/munge/munge.key
+
+
+
+# Start munge
+systemctl enable munge
+systemctl start munge
+systemctl status munge
+
+
+# To troubleshoot, review the munge log:
+/var/log/munge/munged.log
+
+
+
+# Build slurm rpms
+# For easier installation on the computes, we'll build slurm rpms on the management node
+[root@hpcgate]# cd /apps ; mkdir slurmrpmbuild
+[root@hpcgate apps]# cp -p slurm-19.05.8.tar.bz2 slurmrpmbuild
+[root@hpcgate apps]# cd slurmrpmbuild
+[root@hpcgate slurmrpmbuild]# yum install readline-devel pam-devel mariadb-server mariadb-devel # Needed for next command
+
+[root@hpcgate slurmrpmbuild]# rpmbuild -D "_prefix /apps/aislurm" -D "with_munge /usr/local/bin/munge" -D "_sysconfdir /apps/aislurm/etc/" -ta slurm-19.05.8.tar.bz2
+
+# This produces these rpms:
+
+Wrote: /root/rpmbuild/SRPMS/slurm-19.05.8-1.el7.src.rpm
+Wrote: /root/rpmbuild/RPMS/x86_64/slurm-19.05.8-1.el7.x86_64.rpm
+Wrote: /root/rpmbuild/RPMS/x86_64/slurm-perlapi-19.05.8-1.el7.x86_64.rpm
+Wrote: /root/rpmbuild/RPMS/x86_64/slurm-devel-19.05.8-1.el7.x86_64.rpm
+Wrote: /root/rpmbuild/RPMS/x86_64/slurm-example-configs-19.05.8-1.el7.x86_64.rpm
+Wrote: /root/rpmbuild/RPMS/x86_64/slurm-slurmctld-19.05.8-1.el7.x86_64.rpm
+Wrote: /root/rpmbuild/RPMS/x86_64/slurm-slurmd-19.05.8-1.el7.x86_64.rpm
+Wrote: /root/rpmbuild/RPMS/x86_64/slurm-slurmdbd-19.05.8-1.el7.x86_64.rpm
+Wrote: /root/rpmbuild/RPMS/x86_64/slurm-libpmi-19.05.8-1.el7.x86_64.rpm
+Wrote: /root/rpmbuild/RPMS/x86_64/slurm-torque-19.05.8-1.el7.x86_64.rpm
+Wrote: /root/rpmbuild/RPMS/x86_64/slurm-openlava-19.05.8-1.el7.x86_64.rpm
+Wrote: /root/rpmbuild/RPMS/x86_64/slurm-contribs-19.05.8-1.el7.x86_64.rpm
+Wrote: /root/rpmbuild/RPMS/x86_64/slurm-pam_slurm-19.05.8-1.el7.x86_64.rpm
+
+
+# On the head node, copy slurm rpms to a location accessible on the computes
+[root@hpcgate]# cp -p /root/rpmbuild/RPMS/x86_64/slurm*rpm /apps/slurmrpmbuild
+
+
+# On the compute node, install and start slurmd (and possibly pam_slurm?)
+root@ainode05# cd /apps/slurmrpmbuild
+root@ainode05# rpm -ivh slurm-slurmd-19.05.8-1.el7.x86_64.rpm slurm-pam_slurm-19.05.8-1.el7.x86_64.rpm
+root@ainode05# systemctl enable slurmd
+root@ainode05# systemctl start slurmd
+root@ainode05# systemctl status slurmd
+
+
+# To troubleshoot, review the slurmd log:
+/var/log/slurmd.log
+
+
+
+--------------------
+More WRONG way notes:
+--------------------
+
+root@ainode01#
+
+apt-get install alien
+apt-get install openssl
+apt-get install libssl1.0.0 libssl-dev
+
+ln -s /usr/lib/x86_64-linux-gnu/libssl.so.1.0.0 /usr/lib/libssl.so.10
+ln -s /usr/lib/x86_64-linux-gnu/libcrypto.so.1.0.0 /usr/lib/libcrypto.so.10
+
+apt-get install --reinstall libmunge-dev libmunge2 munge
+
+apt-get install libgcrypt20
+
+--
+Maybe not needed:
+cd /apps/mungerpmbuild
+alien -k --scripts munge-0.5.14-1.el7.x86_64.rpm munge-devel-0.5.14-1.el7.x86_64.rpm munge-libs-0.5.14-1.el7.x86_64.rpm
+dpkg -i munge_0.5.14-1.el7_amd64.deb munge-devel_0.5.14-1.el7_amd64.deb munge-libs_0.5.14-1.el7_amd64.deb
+
+This will throw some errors, I'm honestly not sure if they matter or not...
+--
+
+May not be needed, either:
+--
+alien -k --scripts slurm-slurmd-19.05.8-1.el7.x86_64.rpm slurm-pam_slurm-19.05.8-1.el7.x86_64.rpm
+dpkg -i slurm-slurmd_19.05.8-1.el7_amd64.deb slurm-pam-slurm_19.05.8-1.el7_amd64.deb
+--
+
+
+To un-install the above versions of munge:
+dpkg -l|grep munge
+dpkg -r munge munge-libs
+dpkg --force-depends -r munge
+dpkg -l|grep munge
+
+
+
+--------------------
+Installing on a compute node - THE RIGHT WAY
+--------------------
+
+# On hpcgate: (because the compute nodes mount /apps and run slurmd from within there)
+[root@hpcgate slurmrpmbuild]# cd /apps/slurmrpmbuild/ ; rpm -ivh slurm-slurmd-19.05.8-1.el7.x86_64.rpm slurm-19.05.8-1.el7.x86_64.rpm
+
+
+# On the compute nodes:
+root@ainode02:~# 
+apt-get install --reinstall libmunge-dev libmunge2 munge
+
+# On RHEL8.3 / aixl675dn0[1-4], use:
+# dnf install munge
+
+# On aixl645dn03 where "dnf" and "apt-get" don't work, and "yum install munge" doesn't find anything:
+cd /apps/mungerpmbuild
+rpm -ivh munge-0.5.14-1.el7.x86_64.rpm munge-devel-0.5.14-1.el7.x86_64.rpm munge-libs-0.5.14-1.el7.x86_64.rpm
+
+# Copy new munge key:
+cp -p /apps/mungerpmbuild/munge.key /etc/munge/munge.key
+chown 1001 /etc/munge/munge.key
+chmod 400 /etc/munge/munge.key
+
+# Note that the munge user ID must match between the head node and the computes
+# In this case, id 1001 and gid 1001
+# If the compute has something else (grep munge /etc/passwd; grep munge /etc/group), then it must be modified:
+
+# Check current UID/GIDs:
+grep munge /etc/group
+grep munge /etc/passwd
+
+# Make sure there's not already a 1001 user/group:
+grep 1001 /etc/passwd
+grep 1001 /etc/group
+grep 1001 /etc/shadow
+
+# This is the "right" way but it fails:
+# usermod -u 1001 munge
+
+# So, vi instead, changing munge 1002 to 1001:
+vi /etc/group
+vi /etc/passwd
+
+# Fix permissions and restart munge on the compute:
+systemctl stop munge
+rm /run/munge/munge.socket.2.lock
+chown 1001:1001 /etc/munge
+chown 1001:1001 /etc/munge/munge.key
+chown 1001:1001 /var/lib/munge
+chown 1001:1001 /var/log/munge
+chown 1001:1001 /var/log/munge/munged.log*
+chown 1001:1001 /run/munge
+
+# In some instances, the next two lines are also required:
+mkdir /var/run/munge
+chown 1001:1001 /var/run/munge
+
+systemctl restart munge
+systemctl status munge
+
+
+# Point to new slurmd, shared out from the management node (so doesn't require rpm/alien-deb installation onto the compute nodes themselves)
+update-alternatives --install /usr/sbin/slurmd slurmd /apps/aislurm/sbin/slurmd 1
+update-alternatives --set slurmd /apps/aislurm/sbin/slurmd
+
+vi /lib/systemd/system/slurmd.service
+# (If /lib/systemd/system/slurmd.service doesn't exist, see below for complete copy)
+
+# change
+ConditionPathExists=/etc/slurm-llnl/slurm.conf
+# to
+#ConditionPathExists=/apps/aislurm/etc/slurm.conf
+RequiresMountsFor=/apps
+
+# and change
+ExecStart=/usr/sbin/slurmd $SLURMD_OPTIONS
+# to
+ExecStart=/usr/sbin/slurmd -f /apps/aislurm/etc/slurm.conf $SLURMD_OPTIONS
+
+# Reload daemon files
+systemctl daemon-reload
+
+
+# Create symlink on both mgmt and compute nodes:
+ln -s  /apps/aislurm/etc/ /etc/slurm
+
+
+# Start the services
+systemctl start munge
+systemctl status munge
+munge -V
+systemctl start slurmd
+systemctl status slurmd
+
+systemctl enable slurmd
+systemctl enable munge
+
+# If needed:
+journalctl -xe
+
+
+
+--------------------
+cat /lib/systemd/system/slurmd.service
+
+[Unit]
+Description=Slurm node daemon
+After=munge.service network.target remote-fs.target
+#ConditionPathExists=/apps/aislurm/etc/slurm.conf
+RequiresMountsFor=/apps
+Documentation=man:slurmd(8)
+
+[Service]
+Type=forking
+EnvironmentFile=-/etc/default/slurmd
+ExecStart=/usr/sbin/slurmd -f /apps/aislurm/etc/slurm.conf $SLURMD_OPTIONS
+ExecReload=/bin/kill -HUP $MAINPID
+PIDFile=/var/run/slurmd.pid
+KillMode=process
+LimitNOFILE=131072
+LimitMEMLOCK=infinity
+LimitSTACK=infinity
+Delegate=yes
+TasksMax=infinity
+
+[Install]
+WantedBy=multi-user.target
+
+--------------------
+
+
+
+
+vi  /lib/systemd/system/slurmd.service
+systemctl daemon-reload
