@@ -1,3 +1,9 @@
+(base) root@znode45:/etc/netplan# lctl ping 192.168.0.210@o2ib
+12345-0@lo
+12345-192.168.0.210@o2ib
+
+
+####################################
 Install MOFED and make sure there's an IP address set on the ib* interface
 Make sure you can ping another server over IB
 
