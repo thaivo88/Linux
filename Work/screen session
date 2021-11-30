@@ -1,0 +1,17 @@
+# cheek the version of screen
+screen --version
+
+# isntall screen session
+apt install screen
+dnf install screen
+
+# start screen session (-S) and naming the session
+screen -S [name of session]
+# ctrl+a    d (detact window)
+
+# list all session
+screen -ls
+
+# to resume a screen session
+screen -r [session_id]
+screen -r 80629.fstrim
