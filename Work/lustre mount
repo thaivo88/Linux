@@ -121,3 +121,50 @@ mount -a
 
 
 
+#########################################
+https://wiki.whamcloud.com/display/PUB/Build+Lustre+MASTER+client+on+Debian+10.1.0+from+Git
+
+
+
+Installing the build dependency packages
+apt install -y build-dep linux-headers-$(uname -r)
+
+apt install -y libtool libyaml-dev ed libreadline-dev dpatch libsnmp-dev mpi-default-dev libselinux-dev libncurses5-dev libncurses-dev
+
+apt install -y bison flex gnupg libelf-dev gcc libssl-dev bc wget bzip2 build-essential udev kmod cpio module-assistant
+
+apt install -y libkeyutils* libnl-genl-3* mpi-default-bin
+
+List all kernel version directory and list the location of each kernel version
+dpkg -S compiler-gcc.h kconfig.h
+
+ls -l /usr/src/
+
+Download lustre sources from whamcloud git repo
+mkdir /root/lustre-whamcloud
+
+cd /root/lustre-whamcloud
+
+git clone git://git.whamcloud.com/fs/lustre-release.git
+
+cd lustre-release
+
+Building Lustre Client Packages
+replace [kernel-version] with the current kernel version by using uname -r
+sh autogen.sh && ./configure --disable-server --with-linux=/usr/src/linux-headers-[kernel_version]-generic && make debs -j $(nproc)
+
+If above failed for make use the blow:
+make dkms-debs -j $(nproc)
+
+Installing Lustre Clients
+cd debs
+
+dpkg -i *.deb
+
+Loading module and daemon
+systemctl stop lnet
+lustre_rmmod; depmod -a
+modprobe lustre
+systemctl enable lnet
+systemctl start lnet
+mount -a
