@@ -34,6 +34,8 @@ ilorest manual https://support.hpe.com/hpesc/public/docDisplay?docId=c04423965
 # AHS log From the host itself
   ilorest serverlogs --selectlog=AHS
 
+  ilorest select Bios.v1_0_4
+  ilorest get | sort > [output_file]
 
 
 ######################### ILO Types ##################################
