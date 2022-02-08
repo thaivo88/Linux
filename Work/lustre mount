@@ -1,3 +1,7 @@
+ubuntu 20.04 using lustre master
+https://wiki.whamcloud.com/display/PUB/Build+Lustre+MASTER+with+Ldiskfs+on+Ubuntu+20.04.1+from+Git
+
+
 (base) root@znode45:/etc/netplan# lctl ping 192.168.0.210@o2ib
 12345-0@lo
 12345-192.168.0.210@o2ib
