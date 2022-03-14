@@ -30,3 +30,16 @@ else
 echo no changes
 fi
 ```
+
+The read command with syntax using the -p option is shown as follows:
+```
+read -p <prompt> <variable name>
+```
+We can edit the script so that it appears similar to the following extract from hello3.sh:
+```
+#!/bin/bash
+read -p "May I ask your name: " name
+echo "Hello $name"
+exit 0
+```
+The read prompt cannot evaluate commands within the message string, such as those we used before.
