@@ -33,7 +33,7 @@ fi
 
 
 
-<b>Read Prompts</b>
+***Read Prompts***
 
 The read command with syntax using the -p option is shown as follows:
 ```
@@ -49,7 +49,7 @@ exit 0
 The read prompt cannot evaluate commands within the message string, such as those we used before.
 
 
-
+***Read -n***
 We have not needed this functionality in the scripts we have used so far, but we may need to ask users to hit any key to continue. At the moment, we have set it up in such a way that the variable is not populated until we hit the <i>Enter</i> key. Users have to hit <i>Enter</i> to continue. If we use the <i>-n</i> option followed by an integer, we can specify the number of characters to accept before continuing; we will set 1 in this case. Take a look at the following code extract:
 ```
 #!/bin/bash
