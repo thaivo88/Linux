@@ -34,6 +34,6 @@ done
 The shift command shifts the options one step to the left.
 So, if we have three options or parameters and we use the shift command:
 
--$3 becomes $2
--$2 becomes $1
--$1 is dropped
+- $3 becomes $2
+- $2 becomes $1
+- $1 is dropped
