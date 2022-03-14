@@ -1,3 +1,4 @@
+**Passing Options**
 Options are characters with a single dash before them.
 Check out this example:
 ```$ ./script1.sh -a```
@@ -39,3 +40,37 @@ So, if we have three options or parameters and we use the shift command:
 - $1 is dropped
 
 It's like an action to move forward while iterating over the options using the while loop. So, in the first loop cycle, *$1* will be the first option. After shifting the options, *$1* will be the second option and so on.
+
+
+**Passing parameters with options**
+
+Using the previous technique, we can iterate over the options till we reach the double dash,
+then we will iterate over the parameters:
+```
+#!/bin/bash
+while [ -n "$1" ]
+do
+case "$1" in
+-a) echo "-a option found" ;;
+-b) echo "-b option found";;
+-c) echo "-c option found" ;;
+--) shift
+break ;;
+*) echo "Option $1 not an option";;
+esac
+shift
+done
+#iteration over options is finished here.
+#iteration over parameters started.
+num=1
+for param in $@
+do
+echo "#$num: $param"
+num=$(( $num + 1 ))
+done
+```
+Now if we run it with parameters and options combined, we should see a list of options and
+another list of parameters:
+$ ./script1.sh -a -b -c -- p1 p2 p3
+
+![image](https://user-images.githubusercontent.com/15881158/158231409-821bc098-e3b2-4056-a9db-6cdbabb7cc21.png)
