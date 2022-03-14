@@ -47,3 +47,16 @@ echo "Hello $name"
 exit 0
 ```
 The read prompt cannot evaluate commands within the message string, such as those we used before.
+
+
+
+We have not needed this functionality in the scripts we have used so far, but we may need to ask users to hit any key to continue. At the moment, we have set it up in such a way that the variable is not populated until we hit the <i>Enter</i> key. Users have to hit <i>Enter</i> to continue. If we use the <i>-n</i> option followed by an integer, we can specify the number of characters to accept before continuing; we will set 1 in this case. Take a look at the following code extract:
+```
+#!/bin/bash
+read -p "May I ask your name: " name
+echo "Hello $name"
+read -n1 -p "Press any key to exit"
+echo
+exit 0
+```
+Now the script will pause after displaying the name until we press any key; we can literally press any key before continuing, as we accept just 1 key stroke, whereas earlier we were required to leave the default behavior in place, as we could not know how long an entered name would be. We have to wait for the user to hit Enter. 
