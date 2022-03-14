@@ -31,6 +31,10 @@ echo no changes
 fi
 ```
 
+
+
+<b>read prompts</b>
+
 The read command with syntax using the -p option is shown as follows:
 ```
 read -p <prompt> <variable name>
