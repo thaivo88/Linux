@@ -45,8 +45,10 @@ $response_variable. The read command accepts the user's input and stores it in t
                   echo command 
                   
 The -e option enables the interpretation of backslash escapes
-The \c option will stop output from echo command.
-  echo -e Hello World \c >> hi.txt
+The \c option will continue on the same line.
+  echo -e "Which directory do you want to use? \c"
+The -n option will suppress the new line
+  echo -n "Which directory do you want to use? "
 
                   Environment Variables in Scripts
                   
