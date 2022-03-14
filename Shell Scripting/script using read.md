@@ -33,7 +33,7 @@ fi
 
 
 
-<b>read prompts</b>
+<b>Read Prompts</b>
 
 The read command with syntax using the -p option is shown as follows:
 ```
