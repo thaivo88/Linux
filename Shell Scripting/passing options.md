@@ -37,3 +37,5 @@ So, if we have three options or parameters and we use the shift command:
 - $3 becomes $2
 - $2 becomes $1
 - $1 is dropped
+
+It's like an action to move forward while iterating over the options using the while loop. So, in the first loop cycle, *$1* will be the first option. After shifting the options, *$1* will be the second option and so on.
