@@ -36,3 +36,9 @@ Write-Host "DNS Regsitered" -ForegroundColor Green
   net accounts /minpwage:[#]
 # set the account min password length
   net accounts /minpwlen:[#]
+  
+# Fixing corrupted files via Command Prompt
+# re-register a series of required DLL files that might have got corrupted during the updating process
+  cd %WINDIR%\System32
+  for /f %s in ('dir /b *.dll') do regsvr32 /s %s
+# reboot the computer
