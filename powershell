@@ -29,3 +29,10 @@ Write-Host "DNS Regsitered" -ForegroundColor Green
 # Find and kill a process currently using a port
   netstat -ano | findstr :[portnumber]
   taskkill /PID [PID] /F
+
+# set the account max password aging date
+  net accounts /maxpwage:[#]
+# set the account min password aging
+  net accounts /minpwage:[#]
+# set the account min password length
+  net accounts /minpwlen:[#]
