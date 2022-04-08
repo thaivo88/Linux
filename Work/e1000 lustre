@@ -29,7 +29,7 @@ stop_xyraid nodename_md65-group
 ssh aiholus1n00
 
 # Power off the diskless nodes:
-cli power_manage -n aiholus1n[02-07] --power-off
+cscli power_manage -n aiholus1n[02-07] --power-off
 
 # Check the power-off status of the diskless nodes: (disskless nodes aiholus1n[02-07])
 crm_mon -1r
