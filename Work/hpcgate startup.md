@@ -21,7 +21,7 @@ cp /etc/fstab /etc/fstab.back
 vi /etc/fstab
 ```
 remove the partition mount points for NFS
-``
+```
 vi /etc/export
 ```
 comment out each partitions
