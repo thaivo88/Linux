@@ -3,3 +3,4 @@ systemctl status dhcpd.service
 systemctl restart nfs
 systemctl restart ypserv.service
 mount -a
+
