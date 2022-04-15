@@ -66,3 +66,44 @@ or use 'pm' command if cscli failed to power off nodes
 ```
 pm -0 aiholus1n0[0-1]
 ```
+
+# Start Up
+
+SSH into aiholus1n00
+Check that the shared storage targets are available for the management nodes:
+```
+pdsh -g mgmt cat /proc/mdstat
+```
+example:
+![image](https://user-images.githubusercontent.com/15881158/163588656-4717d59e-5869-4a37-9932-f310cf913b20.png)
+
+Check HA status once the node is completely up and HA configuration has been established:
+```
+sudo crm_mon -1r
+```
+
+Power on the MGS and MDS nodes:
+```
+cscli power_manage -n aiholus1n0[2-3] --power-on
+```
+
+Power on the OSS nodes:
+```
+cscli power_manage -n aiholus1n0[4-7] --power-on
+```
+
+To check if the nodes are powered on:
+```
+cscli show_nodes
+```
+
+Check the status of the nodes:
+```
+pdsh -a date
+aiholus1n03: Thu Aug 7 01:29:28 PDT 2014
+aiholus1n04: Thu Aug 7 01:29:28 PDT 2014
+aiholus1n05: Thu Aug 7 01:29:28 PDT 2014
+aiholus1n06: Thu Aug 7 01:29:28 PDT 2014
+aiholus1n07: Thu Aug 7 01:29:28 PDT 2014
+```
+
