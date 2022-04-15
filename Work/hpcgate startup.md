@@ -16,15 +16,16 @@ systemd[1]:Found dependency on apps-FileServer.mount/start
 ```
 
 Do the following:
+remove the partition mount points for NFS
 ```
 cp /etc/fstab /etc/fstab.back
 vi /etc/fstab
 ```
-remove the partition mount points for NFS
+comment out each partitions
 ```
 vi /etc/export
 ```
-comment out each partitions
+restart daemon
 ```
 systemctl daemon-reload
 systemctl start nfs-server
