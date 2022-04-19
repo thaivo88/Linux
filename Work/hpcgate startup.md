@@ -1,7 +1,7 @@
 When hpcgate reboot or startup run the following:
 ```
 iptables -t nat -A POSTROUTING -o eth1 -j MASQUERADE
-systemctl status dhcpd.service
+systemctl stop dhcpd.service
 systemctl restart nfs
 systemctl restart ypserv.service
 mount -a
