@@ -107,3 +107,7 @@ aiholus1n06: Thu Aug 7 01:29:28 PDT 2014
 aiholus1n07: Thu Aug 7 01:29:28 PDT 2014
 ```
 
+Start MGS
+```
+cscli mount -f aiholus1
+```
