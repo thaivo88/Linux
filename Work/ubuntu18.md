@@ -63,7 +63,8 @@ sed -i 's/APT::Periodic::Update-Package-Lists "1";/APT::Periodic::Update-Package
 sed -i 's/APT::Periodic::Unattended-Upgrade "1";/ APT::Periodic::Unattended-Upgrade "0";/' /etc/apt/apt.conf.d/20auto-upgrades 
 ```   
 
-# disable kernel update by pining down the kernel as the kernel still update when using apt update command.
+# disable kernel update 
+by pining down the kernel as the kernel still update when using apt update command.
 ```
 echo linux-image-4.15.0-99-generic hold | dpkg --set-selections
 apt-mark hold linux-image-4.15.0-99-generic
