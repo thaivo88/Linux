@@ -1,5 +1,5 @@
 Below are steps on how to locate the bad NVMe drive:
-For example, we need to locate /dev/nvme7n1
+For example, we need to locate /dev/nvme0n1
 Locating drive PCI slot and drive details:
 
 Show output of all nvme drives
@@ -11,7 +11,7 @@ ls -1 /dev/nvme*
 How to find the bus id of the drive
 
 ```
-find /sys/devices|egrep ‘nvme7n1?$’
+find /sys/devices|egrep 'nvme0n1?$'
 ```
 
 output:
