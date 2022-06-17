@@ -52,23 +52,23 @@ Output:
 Locating slot #
 
 ```
-grep '3a' /sys/bus/pci/slots/*/address
+grep '4d' /sys/bus/pci/slots/*/address
 ```
 
 output:
 
 ```
-/sys/bus/pci/slots/8/address:0000:3a:00
+/sys/bus/pci/slots/4-1/address:0000:4d:00
 ```
 
 Powering down slot
 
 ```
-echo 0 > /sys/bus/pci/slots/8/power
+echo 0 > /sys/bus/pci/slots/4-1/power
 ```
 
 Powering on slot
 
 ```
-echo 1 > /sys/bus/pci/slots/8/power
+echo 1 > /sys/bus/pci/slots/4-1/power
 ```
