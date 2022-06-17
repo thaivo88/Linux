@@ -17,13 +17,13 @@ find /sys/devices|egrep 'nvme0n1?$'
 output:
 
 ```
-/sys/devices/pci0000:40/0000:40:01.1/0000:43:00.0/0000:44:03.0/0000:4d:00.0/nvme/nvme0/nvme0n1
+/sys/devices/pci0000:40/0000:40:01.1/0000:43:00.0/0000:44:03.0/0000:<b>4d:00.0</b>/nvme/nvme0/nvme0n1
 ```
 
 Query drive details (in this case I only wanted the SN/WWN)
 
 ```
-lspci –s 12:00.0 –v|grep ‘Serial Number’
+lspci -s 4d:00.0 -v|grep -i Serial
 ```
 
 output:
