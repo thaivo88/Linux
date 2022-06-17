@@ -1,4 +1,4 @@
-Below are steps on how to locate the bad NVMe drive:
+# Below are steps on how to locate the bad NVMe drive: #
 For example, we need to locate /dev/nvme0n1
 Locating drive PCI slot and drive details:
 
