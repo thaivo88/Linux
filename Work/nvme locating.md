@@ -47,7 +47,7 @@ Output:
 
 ```
 /sys/devices/pci0000:40/0000:40:01.1/0000:43:00.0/0000:44:03.0/0000:4d:00.0/nvme/nvme0/nvme0n1
-``
+```
 
 Locating slot #
 
