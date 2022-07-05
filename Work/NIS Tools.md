@@ -7,6 +7,9 @@ ypwhich: gets the name of the Linux NIS server that is responding to your reques
 
 ypmatch: rather than grabbing the entire map, or you can search by key to get a specific entry.
 
+
+
+
 if NIS fail to let user access run:
 ```
 authselect select nis --force
@@ -18,7 +21,10 @@ chkconfig ypbind on
 ```
 Note: Forwarding request to 'systemctl enable ypbind.service'.
 
+---
 
+you can issue ypcat hosts to see the mapping of all the host list of /etc/hosts on hpcgate to the compute nodes running NIS.
+configuration file located at /etc/nsswitch
 
 
 you can check a list of all the NIS map by doing a 
@@ -36,7 +42,11 @@ Use "networks"  for map "networks.byaddr"
 Use "group"     for map "group.byname"
 Use "passwd"    for map "passwd.byname"
 ```
-you can issue ypcat hosts to see the mapping of all the host list of /etc/hosts on hpcgate to the compute nodes running NIS.
+to update all compute node host file
+```
+cd /etc/yp
+make
+```
 
 
-configuration file located at /etc/nsswitch
+
