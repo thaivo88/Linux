@@ -44,7 +44,7 @@ Use "passwd"    for map "passwd.byname"
 ```
 to update all compute node host file
 ```
-cd /etc/yp
+cd /var/yp
 make
 ```
 
