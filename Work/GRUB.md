@@ -5,3 +5,10 @@ choice the OS and hit esc to get to GRUB.
 ```
 systemd.mask=name.service
 ```
+
+
+you can boot directly into a shell with 
+
+```
+init=/bin/sh
+```
