@@ -1,3 +1,6 @@
+#diagnostic test
+  dcgmi diag -r 1
+
 #lx270D Gen10 GPU slot location for Nvidia Tesla v100 SXM2
 #b2:00.0 - slot 1
 #b3:00.0 - slot 3
