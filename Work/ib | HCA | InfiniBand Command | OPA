@@ -1,3 +1,7 @@
+# check speed width error
+    ibdiagnet 
+    ibdiagnet --ls 50
+
 # setting HCA to force relax ordering
     lspci | grep -i mell				# finding HCA bus lane ID
     mlxconfig -d [bus_lane_id] set PCI_WR_ORDERING=1
