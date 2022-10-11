@@ -1,3 +1,14 @@
+Get to the root of your machine by running cd /
+Run 
+```
+sudo du -h --max-depth=1
+```
+Note which directories are using a lot of disk space.
+cd into one of the big directories.
+Run ls -l to see which files are using a lot of space. Delete any you don’t need.
+Repeat steps 2 to 5.
+
+
 directories taking the most space
 ```
 du -Sh | sort -rh | head -5
