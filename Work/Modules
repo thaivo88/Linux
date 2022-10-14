@@ -33,3 +33,9 @@ MODULEPATH="/usr/share/Modules/modulefiles:/etc/modulefiles:/usr/share/modulefil
  module use [directory]
  module use /sw/com/modulefiles
 ############################### end #############################
+
+
+dnf install environment-modules
+ln -s /apps/sw /sw
+echo 'MODULEPATH="/usr/share/Modules/modulefiles:/etc/modulefiles:/usr/share/modulefiles:/sw/com/modulefiles"' >> /etc/environment
+reboot
