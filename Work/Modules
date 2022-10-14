@@ -25,4 +25,8 @@
 # other distro may have the directory in a different location:
 # /usr/share/Modules/init/.modulespath
  echo '/sw/com/modulefiles' >> /usr/share/modules/init/.modulespath
+ 
+# for hpcgate change the module path
+ module use [directory]
+ module use /sw/com/modulefiles
 ############################### end #############################
