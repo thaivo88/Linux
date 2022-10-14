@@ -27,6 +27,9 @@
  echo '/sw/com/modulefiles' >> /usr/share/modules/init/.modulespath
  
 # for hpcgate change the module path
+vi /etc/environment
+MODULEPATH="/usr/share/Modules/modulefiles:/etc/modulefiles:/usr/share/modulefiles:/sw/com/modulefiles"
+
  module use [directory]
  module use /sw/com/modulefiles
 ############################### end #############################
