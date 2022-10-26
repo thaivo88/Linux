@@ -81,6 +81,7 @@ wget http://mirror.centos.org/centos/8-stream/BaseOS/x86_64/os/Packages/libselin
 wget http://mirror.centos.org/centos/8-stream/BaseOS/x86_64/os/Packages/libsepol-2.9-2.el8.x86_64.rpm
 wget https://download-ib01.fedoraproject.org/pub/epel/8/Everything/aarch64/Packages/p/perl-ExtUtils-PkgConfig-1.16-10.el8.noarch.rpm
 
+dnf install elfutils-libelf-devel
 yum install libsepol.i686
 yum install libsepol-devel.x86_64
 rpm -ivh libsepol-2.9-2.el8.x86_64.rpm
