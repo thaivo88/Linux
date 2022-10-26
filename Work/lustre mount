@@ -105,6 +105,8 @@ mkdir -p /lus/aiholus1
 echo 10.10.100.4@o2ib:10.10.100.5@o2ib:/aiholus1 /lus/aiholus1 lustre rw,flock,lazystatfs 0 0 >> /etc/fstab
 echo "options lnet networks=o2ib(ib0)" > /etc/modprobe.d/lustre.conf
 echo "ExecStart=/sbin/modprobe lustre" >> /lib/systemd/system/lnet.service
+systemctl enable lnet
+systemctl start lnet
 lustre_rmmod; depmod -a
 modprobe lustre
 systemctl enable lnet
