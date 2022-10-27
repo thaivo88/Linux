@@ -109,7 +109,6 @@ systemctl enable lnet
 systemctl start lnet
 lustre_rmmod; depmod -a
 modprobe lustre
-systemctl enable lnet
 mount -a
 #########################################
 
