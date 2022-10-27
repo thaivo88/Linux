@@ -1,0 +1,73 @@
+Installing and Removing Files
+
+```
+rpm -i --install (install new RPM; error if already installed)
+rpm -U --upgrade (delete existing RPM, if any; install new)
+rpm -F --freshen (update RPM only if package already installed)
+rpm -e --erase (remove, delete, expunge)
+```
+
+Use a query for information about installed packages. You may query against all installed packages, or a single installed package. You may also find out which RPM supplies a particular file.
+
+```
+rpm -q [packages] [information]
+rpm -qa (all installed packages)
+rpm -q package_name
+rpm -qf (filename)
+rpm -qp (package filename)
+```
+
+Information
+default (package name)
+
+```
+-i: general information
+-l: file list
+```
+
+Examples:
+
+```
+rpm -qa
+rpm -q kernel -i (information)
+rpm -q kernel -l (files contained in package)
+rpm -q kernel --requires (prereqs)
+rpm -q kernel --provides (capabilities provided by package)
+rpm -q kernel --scripts (scripts run during installation and removal)
+rpm -q kernel --changelog (revision history)
+rpm -q kernel -queryformat format (rpm --querytags for list of options)
+```
+
+```
+rpm -qa | grep foo
+```
+
+
+
+Queries – Verification (Files)
+The RPM database contains many attributes about each and every file installed by an RPM. You may verify the current status of the file against the information cataloged by RPM when the package was installed.
+
+```
+rpm -V package_name
+rpm -Va (verify all)
+rpm -Vf (filename)
+rpm -Vp (package filename)
+```
+
+Queries – Verification (Packages)
+
+```
+rpm -import /mnt/cdrom/RPM-GPG-KEY
+rpm -q gpg-pubkey
+rpm --checksig m4-1.4.1-11.i386.rpm
+```
+
+Examples:
+
+```
+rpm -qf /path/filename (what package owns filename)
+rpm -qf /path/filename -i (what does it do)
+rpm -qp m4-1.4.1-11.i386.rpm -l (files in m4)
+rpm -qp m4-1.4.1-11.i386.rpm --requires (prereqs needed to install m4)
+```
+# rpm -q --whatprovides glibc.so (what package provides requisite library)
