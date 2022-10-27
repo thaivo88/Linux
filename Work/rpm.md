@@ -69,5 +69,5 @@ rpm -qf /path/filename (what package owns filename)
 rpm -qf /path/filename -i (what does it do)
 rpm -qp m4-1.4.1-11.i386.rpm -l (files in m4)
 rpm -qp m4-1.4.1-11.i386.rpm --requires (prereqs needed to install m4)
+rpm -q --whatprovides glibc.so (what package provides requisite library)
 ```
-# rpm -q --whatprovides glibc.so (what package provides requisite library)
