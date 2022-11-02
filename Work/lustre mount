@@ -1,3 +1,9 @@
+# run on compute node to provide infor about CPU, SocketsPerBoard, CoresPerSockets, ThreadsPerCore, RealMemory
+slurmd -C
+
+
+##################################
+
 ubuntu 20.04 using lustre master
 https://wiki.whamcloud.com/display/PUB/Build+Lustre+MASTER+with+Ldiskfs+on+Ubuntu+20.04.1+from+Git
 
