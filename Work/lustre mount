@@ -1,16 +1,4 @@
-# run on compute node to provide infor about CPU, SocketsPerBoard, CoresPerSockets, ThreadsPerCore, RealMemory
-slurmd -C
 
-# ran on slurm server to list node's realmemory
-scontrol show node | tr ' ' '\n' | grep -Ei "nodename|realmemory"
-
-# list nodes state CPU Memory Partition Available
-sinfo -N -o "%N %T %C %m %P %a" -p normal
-NODELIST STATE CPUS(A/I/O/T) MEMORY PARTITION AVAIL
-gnode25 down* 0/0/1/1 1 normal up
-gnode26 idle 0/1/0/1 1 normal up
-gnode28 idle 0/1/0/1 1 normal up
-gnode29 idle 0/1/0/1 1 normal up
 ##################################
 
 ubuntu 20.04 using lustre master
