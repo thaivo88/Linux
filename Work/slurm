@@ -1,6 +1,22 @@
+# run on compute node to provide infor about CPU, SocketsPerBoard, CoresPerSockets, ThreadsPerCore, RealMemory
+slurmd -C
+
+# ran on slurm server to list node's realmemory
+scontrol show node | tr ' ' '\n' | grep -Ei "nodename|realmemory"
+
+# list nodes state CPU Memory Partition Available
+sinfo -N -o "%N %T %C %m %P %a" -p normal
+NODELIST STATE CPUS(A/I/O/T) MEMORY PARTITION AVAIL
+gnode25 down* 0/0/1/1 1 normal up
+gnode26 idle 0/1/0/1 1 normal up
+gnode28 idle 0/1/0/1 1 normal up
+gnode29 idle 0/1/0/1 1 normal up
+
+##############################
+
 #edit slurm.conf when updating proc or ram
-  /admin/slurm/etc/slurm.conf
-  /apps/aislurm/etc/slurm.conf
+  /apps/slurm-21.08.4-hpcslurm108/slurm-21.08.4/etc   # hpcslurm108
+  /apps/slurm-21.08.4/slurm-21.08.4/etc               # hpcslurm
   
 # adding or removing nodes
 # backup /apps/aislurm/etc/slurm.conf
