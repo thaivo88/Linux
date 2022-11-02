@@ -6,11 +6,26 @@ scontrol show node | tr ' ' '\n' | grep -Ei "nodename|realmemory"
 
 # list nodes state CPU Memory Partition Available
 sinfo -N -o "%N %T %C %m %P %a" -p normal
+
 NODELIST STATE CPUS(A/I/O/T) MEMORY PARTITION AVAIL
 gnode25 down* 0/0/1/1 1 normal up
 gnode26 idle 0/1/0/1 1 normal up
 gnode28 idle 0/1/0/1 1 normal up
 gnode29 idle 0/1/0/1 1 normal up
+
+#  list NODELIST    NODES PARTITION  STATE      REASON               CPUS    S:C:T CPU_LOAD MEMORY FREE_MEM   WEIGHT    AVAIL_FEATURES
+sinfo --Node --format="%10N %.6D %10P %10T %20E %.4c %.8z %8O %.6m %10e %.6w %.60f
+
+NODELIST    NODES PARTITION  STATE      REASON               CPUS    S:C:T CPU_LOAD MEMORY FREE_MEM   WEIGHT                                               AVAIL_FEATURES
+gnode25         1 short*     down*      Not responding          1    1:1:1 N/A           1 N/A             1                                                       (null)
+gnode25         1 normal     down*      Not responding          1    1:1:1 N/A           1 N/A             1                                                       (null)
+gnode25         1 long       down*      Not responding          1    1:1:1 N/A           1 N/A             1                                                       (null)
+gnode26         1 short*     idle       none                    1    1:1:1 0.00          1 93720           1                                                       (null)
+gnode26         1 normal     idle       none                    1    1:1:1 0.00          1 93720           1                                                       (null)
+gnode26         1 long       idle       none                    1    1:1:1 0.00          1 93720           1                                                       (null)
+gnode28         1 short*     idle       none                    1    1:1:1 0.00          1 93437           1                                                       (null)
+gnode28         1 normal     idle       none                    1    1:1:1 0.00          1 93437           1                                                       (null)
+gnode28         1 long       idle       none                    1    1:1:1 0.00          1 93437           1                                                       (null)
 
 ##############################
 
