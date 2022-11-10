@@ -60,8 +60,8 @@ dnf repolist
 List Yum Repositories
 Now set ‘enabled’ parameter from 1 to 0 in CentOS-AppStream.repo and CentOS-Base.repo files.
 ```
-sed -i 's/enabled=1/enabled=0/' /etc/yum.repo.d/CentOS-AppStream.repo
-sed -i 's/enabled=1/enabled=0/' /etc/yum.repo.d/CentOS-Base.repo
+sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/CentOS-AppStream.repo
+sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/CentOS-Base.repo
 ```
 
 Step 3: Install Packages Using Local DNF or Yum Repository
