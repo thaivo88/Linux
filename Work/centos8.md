@@ -7,6 +7,7 @@ mount CentOS-8-x86_64-1905-dvd1.iso /mnt/centos8
 Mount CentOS 8 ISO File
 Step 2: Create a CentOS 8 Local Yum Repository
 In the mounted directory where your ISO is mounted, copy the media.repo file to the /etc/yum.repos.d/ directory as shown.
+
 ```cp -v /mnt/centos8/media.repo  /etc/yum.repos.d/centos8.repo```
 
 Create CentOS 8 Local Yum Repository
@@ -18,10 +19,12 @@ ls -l /etc/yum.repos.d/centos8.repo
 
 Set Permission On Yum Repository File
 We need to configure the default repository file residing on the system. To check the configurations, use the cat command as shown.
+
 ```cat /etc/yum.repos.d/centos8.repo```
 
 Check Yum Repository File
 We need to modify the configuration lines using a text editor of your choice.
+
 ```vi /etc/yum.repos.d/centos8.repo```
 
 Delete all the configuration, and copy & paste the configuration below.
@@ -47,15 +50,11 @@ Save the repo file and exit the editor.
 After modifying the repository file with new entries, proceed and clear the DNF / YUM cache as shown.
 ``
 dnf clean all
-# OR
-yum clean all
 ```
 
 To confirm that the system will get packages from the locally defined repositories, run the command:
 ```
 dnf repolist
-# OR
-yum repolist
 ```
 
 List Yum Repositories
@@ -69,6 +68,4 @@ Step 3: Install Packages Using Local DNF or Yum Repository
 Now, let’s give it a try and install any package. In this example, we are going to install NodeJS on the system.
 ```
 dnf install nodejs
-# OR
-yum install nodejs
 ```
