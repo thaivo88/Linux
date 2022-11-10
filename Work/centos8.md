@@ -48,7 +48,7 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial
 
 Save the repo file and exit the editor.
 After modifying the repository file with new entries, proceed and clear the DNF / YUM cache as shown.
-``
+```
 dnf clean all
 ```
 
