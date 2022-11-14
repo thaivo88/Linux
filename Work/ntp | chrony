@@ -4,7 +4,8 @@ Chrony is a flexible implementation of the Network Time Protocol (NTP). It is us
 NTP servers, reference clocks or via manual input.
 
 hpchost does not internet facing so hpchost will be the ntp server use ntpq -p to find the list of ip
-hpcgate please use https://www.ntppool.org/en/use.html to find the server ip/url
+#hpcgate please use https://www.ntppool.org/en/use.html to find the server ip/url
+hpcgate please use: pool hpcgate-e iburst
 
 install chrony
   dnf install chrony
