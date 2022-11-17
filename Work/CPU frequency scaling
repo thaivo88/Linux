@@ -3,6 +3,8 @@
     physical id : 0 siblings : 24 cpu cores : 24
     physical id : 1 siblings : 24 cpu cores : 24
 
+# Controls the turbo boost setting for the whole system. You can read and write the below file with either "0" (boosting disabled) or "1" (boosting allowed).
+/sys/devices/system/cpu/cpufreq/boost
 
 
 ############## AMD cpu frequency for CM ##############
