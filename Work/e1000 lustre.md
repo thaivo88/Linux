@@ -111,3 +111,29 @@ Start MGS
 ```
 cscli mount -f aiholus1
 ```
+
+Check status of the service state
+```
+cscli show_nodes
+```
+
+Output:
+```
+-----------------------------------------------------------------------------------------
+ Hostname     Role       Power State  Service State  Targets  HA Partner   HA Resources
+-----------------------------------------------------------------------------------------
+ aiholus1n00  MGMT       On           N/a            0 / 0    aiholus1n01  None
+ aiholus1n01  (MGMT)     On           N/a            0 / 0    aiholus1n00  None
+ aiholus1n02  MDS,MGS    On           Started        1 / 1    aiholus1n03  Local
+ aiholus1n03  MDS,(MGS)  On           Started        1 / 1    aiholus1n02  Local
+ aiholus1n04  (OSS)      On           Stopped        0 / 1    aiholus1n05  None
+ aiholus1n05  OSS        On           Started        2 / 1    aiholus1n04  All
+ aiholus1n06  OSS        On           Started        2 / 2    aiholus1n07  Local
+ aiholus1n07  OSS        On           Started        2 / 2    aiholus1n06  Local
+-----------------------------------------------------------------------------------------
+```
+
+If one of the nodes failed to start the service run the following fallback command:
+```
+cscli failback -n aiholus1n04
+```
