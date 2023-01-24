@@ -1,4 +1,6 @@
 # https://support.hpe.com/hpsc/doc/public/display?docId=c03334058
+# https://downloads.linux.hpe.com/SDR/repo/mcp/
+
 
 # install hponcfg
 # copy file to node then run
