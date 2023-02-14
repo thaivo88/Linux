@@ -71,3 +71,28 @@ rpm -qp m4-1.4.1-11.i386.rpm -l (files in m4)
 rpm -qp m4-1.4.1-11.i386.rpm --requires (prereqs needed to install m4)
 rpm -q --whatprovides glibc.so (what package provides requisite library)
 ```
+
+
+In a terminal you can search for packages with : 
+
+```
+sudo yum list <package-name>
+```
+
+To check for available software (not installed), execute : 
+
+```
+sudo yum list available
+```
+
+To check for software being already installed, execute : 
+
+```
+sudo yum list installed
+```
+
+To check for all software (available and installed), execute : 
+
+```
+sudo yum list all
+```
