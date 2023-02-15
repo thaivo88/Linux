@@ -29,7 +29,7 @@ module unload [module]
 
 # install and config envirnoment module
 
-``
+```
  apt-get install environment-modules #ubuntu
  yum install environment-modules     #rhel
 
