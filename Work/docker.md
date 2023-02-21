@@ -32,8 +32,11 @@ exit
 
 Creating a container image
 There are 3 ways to create a container image:
+
   1:  Via Docker Hub
+  
   2:  Create an inmage from Docker File
+  
   3:  Create an image from existing container
 
 
