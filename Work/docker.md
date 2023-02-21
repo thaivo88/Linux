@@ -56,6 +56,39 @@ Now we can check the images available by running:
 docker images
 ```
 
+
+Creating an image from docker file:
+  1:  Create a docker file; naming "Dockerfile"
+  
+  2:  Add instructions in the file
+  
+  3:  Build "Dockerfile" to create the image
+  
+  4:  Rum the image to create the container by typing the bewlow command:
+  
+```
+vi Dockerfile
+# add the following to the file
+FROM ubuntu
+RUN ECHO "Samle" > /temp/testfile
+# save and exit vi
+```
+
+To create the time out of the "Dockerfile" 
+```
+docker build -t [name_of_image]
+docker build -t myimg.
+docker ps -a
+docker images
+```
+
+Create new container from the image
+```
+docker run -it --name [Container_name] [distro] /bin/bash
+docker run -it --name thaiubuntu myimg /bin/bash
+```
+
+
 Commands needed to create a Docker File:  
 ```
 FROM – This command is for base image. This command must be on top of the Docker File
