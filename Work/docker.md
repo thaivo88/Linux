@@ -70,8 +70,8 @@ Creating an image from docker file:
 vi Dockerfile
 # add the following to the file
 FROM ubuntu
-RUN ECHO "Samle" > /temp/testfile
-# save and exit vi
+RUN ECHO "Sample" > /temp/testfile
+# save and exit vi: (esc :x!)
 ```
 
 To create the time out of the "Dockerfile" 
