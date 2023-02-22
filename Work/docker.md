@@ -161,3 +161,26 @@ docker container exec b45 ls
 
 ![image](https://user-images.githubusercontent.com/15881158/220755472-b32aa57d-f523-4ad4-ad82-0e6ee4104b3b.png)
 
+
+# Create a Docker volume
+
+to display all volumes
+```
+docker volume ls
+```
+
+creating a volume called lvol
+```
+docker volume create [named_volume]
+docker volume create lvol
+```
+
+to inspect the volume
+```
+docker volume inspect [named_volume]
+docker volume inspect lvol
+```
+
+output of inspect:
+
+![image](https://user-images.githubusercontent.com/15881158/220756701-6112cf4c-4a8a-46bc-bee6-83feca6f8f43.png)
