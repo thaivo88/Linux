@@ -123,6 +123,9 @@ image (custom virtual file system for a given application) >> run >> container
 ![image](https://user-images.githubusercontent.com/15881158/220742250-46d4d480-1610-4f92-b2ce-b1f1b090d262.png)
 
 
+
+# Container Isolation
+
 Pull image
 ```
 docker image pull [image_name]
@@ -149,3 +152,8 @@ using the container ID you can run the container with exec
 docker container exec [container_ID] [command]
 docker container exec b45 ls
 ```
+
+
+# Build an image with a dockfile
+
+
