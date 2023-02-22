@@ -194,3 +194,12 @@ docker run -it --name container1 –v vol1:/lab4 alpine
 The -it tag tells the host to open the container within an interactive terminal. 
 The name of the container is container1. 
 The -v tag attaches the previously created volume, vol1 and creates a directory within the volume named lab4.
+
+
+# Delete the container
+Listing the available containers first then delete the selected container.
+The created volume is still intact and can be used for other containers. 
+```
+docker container ls -a
+docker rm [container_name]
+```
