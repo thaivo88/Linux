@@ -1,3 +1,13 @@
+# configuring NIS RHEL
+domainname partner
+echo domain partner server 10.100.0.5 >> /etc/yp.conf
+echo +:::::: >> /etc/passwd
+authselect select nis --force
+systemctl enable ypbind
+systemctl restart ypbind
+
+
+
 systemctl status nfs-server.service
 systemctl restart nfs-config
 
@@ -7,11 +17,11 @@ cat /var/logs/message | grep NFS
 cat /etc/fstab
 # List of NFS  Mounts
 #
-#hpcgate-ib:/apps /apps nfs rsize=131072,wsize=131072,intr,bg,vers=3 0 0
-#hpcgate-ib:/home /home nfs rsize=131072,wsize=131072,intr,bg,vers=3 0 0
-#hpcgate-ib:/mops /mops nfs rsize=131072,wsize=131072,intr,vers=3 0 0
-#hpcgate-ib:/ml /ml nfs rsize=131072,wsize=131072,intr,bg,vers=3 0 0
-#hpcgate-ib:/scratch /scratch nfs rsize=131072,wsize=131072,intr,bg,vers=3 0 0
+#hpcgate-e:/apps /apps nfs rsize=131072,wsize=131072,intr,bg,vers=3 0 0
+#hpcgate-e:/home /home nfs rsize=131072,wsize=131072,intr,bg,vers=3 0 0
+#hpcgate-e:/mops /mops nfs rsize=131072,wsize=131072,intr,vers=3 0 0
+#hpcgate-e:/ml /ml nfs rsize=131072,wsize=131072,intr,bg,vers=3 0 0
+#hpcgate-e:/scratch /scratch nfs rsize=131072,wsize=131072,intr,bg,vers=3 0 0
 
 
 
