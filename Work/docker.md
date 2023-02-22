@@ -184,3 +184,13 @@ docker volume inspect vol1
 output of inspect:
 
 ![image](https://user-images.githubusercontent.com/15881158/220756701-6112cf4c-4a8a-46bc-bee6-83feca6f8f43.png)
+
+
+Create the container using the following command:
+```
+docker run -it --name [container_name] –v [named_volume]:/[directory] [image]
+docker run -it --name container1 –v vol1:/lab4 alpine
+```
+The -it tag tells the host to open the container within an interactive terminal. 
+The name of the container is container1. 
+The -v tag attaches the previously created volume, vol1 and creates a directory within the volume named lab4.
