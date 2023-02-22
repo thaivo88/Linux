@@ -211,5 +211,6 @@ docker rm [container_name]
 
 
 
-The -P flag tells Docker to map a random port to the local hos
+The -P flag tells Docker to map a random port to the local host
+
 The -d flag tells the container to run detached, or in the background. 
