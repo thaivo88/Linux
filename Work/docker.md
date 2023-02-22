@@ -203,3 +203,13 @@ The created volume is still intact and can be used for other containers.
 docker container ls -a
 docker rm [container_name]
 ```
+
+
+
+![image](https://user-images.githubusercontent.com/15881158/220760291-8e55aabb-70ad-403a-b8eb-673756744076.png)
+
+
+
+
+The -P flag tells Docker to map a random port to the local hos
+The -d flag tells the container to run detached, or in the background. 
