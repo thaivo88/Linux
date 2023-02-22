@@ -103,3 +103,22 @@ ENTRYPOINT – Similar to CMD but has high priority.
 ENV – Environment variables.
 ```
 
+
+
+Private registry of the docker hub
+```
+docker login [server]
+username:******
+password:******
+docker push   # to place an image to the registry
+docker pull   # to retrieve an image from the registy
+```
+
+Docker Objects:
+
+image (custom virtual file system for a given application) >> run >> container
+
+![image](https://user-images.githubusercontent.com/15881158/220741840-07499a79-c768-4b57-8875-cc5a053ae973.png)
+
+![image](https://user-images.githubusercontent.com/15881158/220742250-46d4d480-1610-4f92-b2ce-b1f1b090d262.png)
+
