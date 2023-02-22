@@ -169,16 +169,16 @@ to display all volumes
 docker volume ls
 ```
 
-creating a volume called lvol
+creating a volume called vol1
 ```
 docker volume create [named_volume]
-docker volume create lvol
+docker volume create vol1
 ```
 
 to inspect the volume
 ```
 docker volume inspect [named_volume]
-docker volume inspect lvol
+docker volume inspect vol1
 ```
 
 output of inspect:
