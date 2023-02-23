@@ -1,14 +1,19 @@
-# checking if hyperthreading is enable or disable; if silbling count is equal to cpu core count then HT is disable. if double HT is enable.
-  grep -E "cpu cores|siblings|physical id" /proc/cpuinfo |xargs -n 11 echo |sort |uniq
+# CPU Frequency Scaling
+
+Checking if hyperthreading is enable or disable; if silbling count is equal to cpu core count then HT is disable. if double HT is enable.
+```
+grep -E "cpu cores|siblings|physical id" /proc/cpuinfo |xargs -n 11 echo |sort |uniq
     physical id : 0 siblings : 24 cpu cores : 24
     physical id : 1 siblings : 24 cpu cores : 24
+```
 
-# Controls the turbo boost setting for the whole system. You can read and write the below file with either "0" (boosting disabled) or "1" (boosting allowed).
-/sys/devices/system/cpu/cpufreq/boost
+Controls the turbo boost setting for the whole system. You can read and write the below file with either "0" (boosting disabled) or "1" (boosting allowed).
+```
+echo "[0|1]" > /sys/devices/system/cpu/cpufreq/boost
+```
 
-
-############## AMD cpu frequency for CM ##############
-
+AMD CPU frequency for CM
+```
 #[root@kratosn05 ~]# cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
 #2350000 2000000 1500000
 #add 1 for the last digit
@@ -29,11 +34,11 @@ qmgr -c "set queue f2351THP queue_type = Execution "
 qmgr -c "set queue f2351THP enabled = True "
 qmgr -c "set queue f2351THP started = True "
 #Then run this to check that the queue was created  ..... qstat -Q
-########################################################
+```
 
+turbo status
 
-
-##############################################################
+```
 /bin/turbostat
 ################# output ################  
 Package Core    CPU     Avg_MHz Busy%   Bzy_MHz TSC_MHz
@@ -43,9 +48,11 @@ Package Core    CPU     Avg_MHz Busy%   Bzy_MHz TSC_MHz
 0       2       2       1016    100.00  1000    2541
                 :               :               :
 ################ end #####################
+```
 
-# The usage is 100% but the CPU frequency has been low.
+The usage is 100% but the CPU frequency has been low.
 
+```
 % cat marirun.o7326
 Start Prologue v3.6 Sun Aug  4 22:09:35 CDT 2019
 cat: /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies: No such file or directory
@@ -71,61 +78,81 @@ Start Epilogue v3.6 Sun Aug  4 22:49:33 CDT 2019
 cat: /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies: No such file or directory
 cat: /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies: No such file or directory
 cat: /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies: No such file or directory
+```
 
 Go into bios and change the 'Workload Profile' to 'HPC' then save then change to 'Custom'.
 Head to 'Power and Performance Options' change 'Power Regulator' to 'OS control Mode'
 install conrep to the hostname
+```
 conrep -s -f [file path]
+```
 
 then run the xml file to the rest of the nodes
+```
 pdsh -w [nodes] conrep -l -f [file path]
-####################################################################################
+```
 
 
 
+# CPU Frequency 
+
+install linux-tools-common for cpupower command
+information about cpu power frequency
+
+```
+cpupower frequency-info
+```
+
+Setting maximum and minimum frequencies
+In rare cases, it may be necessary to manually set maximum and minimum frequencies.
+
+To set the maximum clock frequency (clock_freq is a clock frequency with units: GHz, MHz):
+
+```
+cpupower frequency-set -u clock_freq
+```
+
+To set the minimum clock frequency:
+
+```
+cpupower frequency-set -d clock_freq
+```
+
+To set the CPU to run at a specified frequency:
+
+```
+cpupower frequency-set -f clock_freq
+```
 
 
-################## CPU Frequency #######################
-# install linux-tools-common for cpupower command
-# information about cpu power frequency
-  cpupower frequency-info
-  
-# Setting maximum and minimum frequencies
-# In rare cases, it may be necessary to manually set maximum and minimum frequencies.
 
-# To set the maximum clock frequency (clock_freq is a clock frequency with units: GHz, MHz):
-  cpupower frequency-set -u clock_freq
+# CPU Governor
+Setting Governor CPU frequency
+Governor	Description
+performance	: Run the CPU at the maximum frequency.
+powersave	: Run the CPU at the minimum frequency.
+userspace	: Run the CPU at user specified frequencies.
+ondemand	: Scales the frequency dynamically according to current load. Jumps to the highest frequency and then possibly back off as the idle time increases.
+conservative	: Scales the frequency dynamically according to current load. Scales the frequency more gradually than ondemand.
+schedutil	: Scheduler-driven CPU frequency selection
 
-#To set the minimum clock frequency:
-  cpupower frequency-set -d clock_freq
+```  
+echo performance > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+# (note you have to do this for each logical cpu)
+```
 
-#To set the CPU to run at a specified frequency:
-  cpupower frequency-set -f clock_freq
+or install linux-tools-common for cpupower command
+```
+cpupower frequency-set -g [governor]
+```
 
-######################################
+To monitor cpu speed in real time, run:
+
+```
+watch grep \"cpu MHz\" /proc/cpuinfo
+```
 
 
-################# CPU Governor#####################
-# Setting Governor CPU frequency
-# Governor	Description
-# performance	: Run the CPU at the maximum frequency.
-# powersave	: Run the CPU at the minimum frequency.
-# userspace	: Run the CPU at user specified frequencies.
-# ondemand	: Scales the frequency dynamically according to current load. Jumps to the highest frequency and then possibly back off as the idle time increases.
-# conservative	: Scales the frequency dynamically according to current load. Scales the frequency more gradually than ondemand.
-# schedutil	: Scheduler-driven CPU frequency selection
-
-  echo performance > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-(note you have to do this for each logical cpu)
-
-# or install linux-tools-common for cpupower command
-  cpupower frequency-set -g [governor]
-######################################
-
-# To monitor cpu speed in real time, run:
-  watch grep \"cpu MHz\" /proc/cpuinfo
-
-######################################
 
 
 
