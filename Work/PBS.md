@@ -8,8 +8,10 @@ give you a listing of offline nodes
 
 Replinish	
 First remove comments: leaving comments blank
-```  pbsnodes -o  [hostname] -C "" 
-pbsnodes -r [hostname]   ```
+```
+pbsnodes -o  [hostname] -C "" 
+pbsnodes -r [hostname]   
+```
   	 	 
 Offline the node
 ```
