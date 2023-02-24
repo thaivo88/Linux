@@ -1,7 +1,9 @@
 # PBS Job Scheduler
 
-Create pbsdata account  that will never expire 
-```groupadd  -g 700 -r pbsdata useradd -u 700 -g 700 -m -r -d /usr6/pbsdata -c "PBS Data Service User" -s /bin/bash pbsdata```
+Create pbsdata account  that will never expire: 
+```
+groupadd  -g 700 -r pbsdata useradd -u 700 -g 700 -m -r -d /usr6/pbsdata -c "PBS Data Service User" -s /bin/bash pbsdata
+```
 
 give you a listing of offline nodes
 ```pbsnodes -l```
