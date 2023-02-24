@@ -1,18 +1,22 @@
-# Create pbsdata account  that will never expire 
-  groupadd  -g 700 -r pbsdata useradd -u 700 -g 700 -m -r -d /usr6/pbsdata -c "PBS Data Service User" -s /bin/bash pbsdata
+# PBS Job Scheduler
 
-# give you a listing of offline nodes
-  pbsnodes -l	 
+Create pbsdata account  that will never expire 
+```groupadd  -g 700 -r pbsdata useradd -u 700 -g 700 -m -r -d /usr6/pbsdata -c "PBS Data Service User" -s /bin/bash pbsdata```
 
-# will replinish	
-# First remove comments: leaving comments blank
-  pbsnodes -o  [hostname] -C ""
-  pbsnodes -r [hostname]   
+give you a listing of offline nodes
+```pbsnodes -l```
+
+Replinish	
+First remove comments: leaving comments blank
+```  pbsnodes -o  [hostname] -C "" 
+pbsnodes -r [hostname]   ```
   	 	 
-# Will offline the node
+Offline the node
+```
   pbsnodes -o  [hostname] -C "[comment]"
   pbsnodes -o apollon001 -C "hardware maintain"
- 
+```
+
 # will list all node
   pbsnodes -a
   
