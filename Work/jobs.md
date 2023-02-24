@@ -1,8 +1,8 @@
 # Jobs
 
 to run jobs add & after the command to run in the background
-example
-``dnf update &```
+example: 
+```dnf update &```
 
 to list all the jobs
 ```jobs -l```
