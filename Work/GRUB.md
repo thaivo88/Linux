@@ -29,4 +29,7 @@ nomodeset text
 ```
 
 
+nvme_load=Yes 
+pci=realloc=off
+
 
