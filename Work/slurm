@@ -1,3 +1,23 @@
+hpcm slurm:
+[root@aihst-admin news]# sacctmgr -i list user
+User Def Acct Admin
+---------- ---------- ---------
+amat amat None
+himmelfp himmelfp None
+minagawa minagawa None
+root root Administ+
+takamura takamura None
+
+sacctmgr -i create account name=takamura
+sacctmgr -i add user takamura DefaultAccount=takamura
+sacctmgr -i create account name=minagawa
+sacctmgr -i add user minagawa DefaultAccount=minagawa
+
+This is in a file on the admin node aihst-admin:/var/news/create-slurm-accounts
+
+==================================================================================
+
+
 # run on compute node to provide infor about CPU, SocketsPerBoard, CoresPerSockets, ThreadsPerCore, RealMemory
 slurmd -C
 
