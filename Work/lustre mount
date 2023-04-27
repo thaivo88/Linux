@@ -118,7 +118,16 @@ mount -a
 
 
 
-
+# remove any interface not being use of lustre won't mount
+[root@aixl675dn03 aiholus1]# cat /etc/lustre/lnetctl.conf
+net:
+    - net type: o2ib
+      local NI(s):
+        - interfaces:
+              0: ib0
+              1: ib1
+              2: ib2
+              3: ib3
 
 
 
