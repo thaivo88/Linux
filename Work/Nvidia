@@ -98,8 +98,21 @@ nvidia-smi -q | grep Driver
 # To Turn back on ECC RAM, just do
   nvidia-smi -g 0 --ecc-config=1
 # (repeat with -g x for each GPU ID)  
-  
-  
+
+# to reset ECC errors to 0 for all GPUs
+nvidia-smi --reset-ecc-errors=0
+##########
+nvidia-smi --reset-ecc-errors=0
+Reset volatile ECC errors to zero for GPU 00000000:1B:00.0.
+Reset volatile ECC errors to zero for GPU 00000000:29:00.0.
+Reset volatile ECC errors to zero for GPU 00000000:45:00.0.
+Reset volatile ECC errors to zero for GPU 00000000:4E:00.0.
+Reset volatile ECC errors to zero for GPU 00000001:1B:00.0.
+Reset volatile ECC errors to zero for GPU 00000001:24:00.0.
+Reset volatile ECC errors to zero for GPU 00000001:45:00.0.
+Reset volatile ECC errors to zero for GPU 00000001:4E:00.0.
+All done.
+##########
   
 #quitting nvidia cuda
   nvidia-cuda-mps-control -quit
