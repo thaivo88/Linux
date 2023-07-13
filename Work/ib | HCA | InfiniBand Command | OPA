@@ -1,3 +1,8 @@
+#  Infiniband adapters have PCI relaxed ordering enabled to allow for full network performance
+#  1 = enable | 0 = disable
+	mlxconfig -d net-ib0 set PCI_WR_ORDERING=1
+	mlxconfig -d net-ib[0|1|2|3] set PCI_WR_ORDERING=[0|1]
+
 # check speed width error
     ibdiagnet 
     ibdiagnet --ls 50
