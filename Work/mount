@@ -19,3 +19,6 @@ install exfat to mount exfat files
 
 To mount a device with certain rights:
   mount -t [deviceFileFormat] -o umask=[filePermissions],gid=[ownerGroupID],uid=[ownerID] /[device] /[mountpoint]
+
+to mount a directory to another directory
+  mount --bind /lus/aiholus1/voth /home/hpcd/voth/
