@@ -7,6 +7,36 @@ grep -E "cpu cores|siblings|physical id" /proc/cpuinfo |xargs -n 11 echo |sort |
     physical id : 1 siblings : 24 cpu cores : 24
 ```
 
+```
+ /sys/devices/system/cpu/smt/control:
+```
+     This file allows to read out the SMT control state and provides the
+     ability to disable or (re)enable SMT. The possible states are:
+
+        ==============  ===================================================
+        on              SMT is supported by the CPU and enabled. All
+                        logical CPUs can be onlined and offlined without
+                        restrictions.
+
+        off             SMT is supported by the CPU and disabled. Only
+                        the so called primary SMT threads can be onlined
+                        and offlined without restrictions. An attempt to
+                        online a non-primary sibling is rejected
+
+        forceoff        Same as 'off' but the state cannot be controlled.
+                        Attempts to write to the control file are rejected.
+
+        notsupported    The processor does not support SMT. It's therefore
+                        not affected by the SMT implications of L1TF.
+                        Attempts to write to the control file are rejected.
+        ==============  ===================================================
+
+The possible states which can be written into this file to control SMT state are:
+- on
+- off
+- forceoff
+---
+
 Controls the turbo boost setting for the whole system. You can read and write the below file with either "0" (boosting disabled) or "1" (boosting allowed).
 ```
 echo "[0|1]" > /sys/devices/system/cpu/cpufreq/boost
