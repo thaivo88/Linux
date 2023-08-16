@@ -6,7 +6,7 @@ grep -E "cpu cores|siblings|physical id" /proc/cpuinfo |xargs -n 11 echo |sort |
     physical id : 0 siblings : 24 cpu cores : 24
     physical id : 1 siblings : 24 cpu cores : 24
 ```
-
+ 
 ```
  /sys/devices/system/cpu/smt/control:
 ```
