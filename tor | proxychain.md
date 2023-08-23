@@ -1,11 +1,15 @@
-# install tor and proxychain to be anonymous on the network
+ install tor and proxychain to be anonymous on the network
+```
   sudo apt-get install tor -y
   sudo apt-get install proxychain -y
+```
   
-# Edit proxychains.conf file
+ Edit proxychains.conf file
+```
   sudo nano /etc/proxychains.conf
+```
   
-####################################################################################
+```
 # proxychains.conf  VER 3.1
 #
 #        HTTP, SOCKS4, SOCKS5 tunneling proxifier with DNS.
@@ -48,7 +52,8 @@
 # Some timeouts in milliseconds
 tcp_read_time_out 15000
 tcp_connect_time_out 8000
-
+```
+```
 # ProxyList format
 #       type  host  port [user pass]
 #       (values separated by 'tab' or 'blank')
@@ -70,15 +75,17 @@ tcp_connect_time_out 8000
 # meanwile
 # defaults set to "tor"
 socks4 	127.0.0.1 9050
-###########################################################################
+```
 
-# enable dynamic chains
-# disable strict chain
-# enable proxy_dns
-# add tor socks5 at the end of the file
-  socks5 127.0.0.1 9050
+```
+ enable dynamic chains
+ disable strict chain
+ enable proxy_dns
+```
+ add tor socks5 at the end of the file
+```  socks5 127.0.0.1 9050```
   
-# check the status of tor service
-  service tor status
-# if tor isn't running then start tor service
-  service tor start
+ check the status of tor service
+```  service tor status```
+ if tor isn't running then start tor service
+```  service tor start```
