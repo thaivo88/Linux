@@ -1,3 +1,4 @@
+```
 //connect to ilo cli
 ssh [ilo_ip_address] -l [username]
 exampe: ssh 10.100.1.148 -l admin
@@ -67,4 +68,68 @@ example: set /system1/bootconfig1/bootsource3 bootsource1
 //view CPU info
 show /system1/[cpu#] 
 example: show /system1/cpu2
+```
+
+
+
+Work around**
+Mounting ISO with hpilo cli
+mounting a URL for an ISO file
+
+```bash
+</map1/oemHPE_vm1/cddr1>hpiLO-> set /map1/oemhp_vm1/cddr1 oemhp_image=http://dist.milp.rdlabs.hpecorp.net/test/stout726///latest-rhel86-x86_64/ISO/cm-admin-install-1.8-rhel86-x86_64.iso
+
+status=0
+status_tag=COMMAND COMPLETED
+Wed Oct  4 14:34:50 2023
+```
+
+show the status of virtual cd if the url mount was successful
+
+```bash
+</map1/oemHPE_vm1/cddr1>hpiLO-> show /map1/oemhp_vm1/cddr1                                                        
+status=0
+status_tag=COMMAND COMPLETED
+Wed Oct  4 14:34:59 2023
+
+/map1/oemHPE_vm1/cddr1
+  Targets
+  Properties
+    oemHPE_image=http://dist.milp.rdlabs.hpecorp.net/test/stout726///latest-rhel86-x86_64/ISO/cm-admin-install-1.8-rhel86-x86_64.iso
+    oemHPE_connect=No
+    oemHPE_boot=No_Boot
+    oemHPE_wp=Yes
+    vm_applet=No
+  Verbs
+    cd version exit show set
+```
+
+booting once to virtual cd
+
+```bash
+</map1/oemHPE_vm1/cddr1>hpiLO-> set /map1/oemhp_vm1/cddr1 oemhp_boot=Once
+
+status=0
+status_tag=COMMAND COMPLETED
+Wed Oct  4 14:42:57 2023
+```
+
+Show boot status of boot order 1
+
+```bash
+</map1/oemHPE_vm1/cddr1>hpiLO-> show /system1/bootconfig1/oemHPE_uefibootsource1
+
+status=0
+status_tag=COMMAND COMPLETED
+Wed Oct  4 14:45:32 2023
+
+/system1/bootconfig1/oemHPE_uefibootsource1
+  Targets
+  Properties
+    bootorder=1
+    oemHPE_description=iLO Virtual USB 3 : iLO Virtual CD-ROM
+  Verbs
+    cd version exit show set
+```
+
 
