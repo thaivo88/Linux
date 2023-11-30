@@ -1,3 +1,72 @@
+############################################
+# node failing for counter check on CA #0
+
+[root@n01 ~]# cd /usr/bin/
+[root@n01 bin]# ./hca_self_test.ofed
+
+---- Performing Adapter Device Self Test ----
+Number of CAs Detected ................. 8
+PCI Device Check ....................... PASS
+Kernel Arch ............................ x86_64
+Host Driver Version .................... MLNX_OFED_LINUX-5.6-2.0.9.0.202303061847 (OFED-5.6-2.0.9): 4.18.0-372.9.1.el8.x86_64
+Host Driver RPM Check .................. PASS
+Firmware on CA #0 HCA .................. v20.38.1002
+Firmware on CA #1 HCA .................. v20.38.1002
+Firmware on CA #2 HCA .................. v20.38.1002
+Firmware on CA #3 HCA .................. v20.38.1002
+Firmware on CA #4 HCA .................. v20.38.1002
+Firmware on CA #5 HCA .................. v20.38.1002
+Firmware on CA #6 HCA .................. v20.38.1002
+Firmware on CA #7 HCA .................. v20.38.1002
+Host Driver Initialization ............. PASS
+Number of CA Ports Active .............. 8
+Port State of Port #1 on CA #0 (HCA)..... UP 4X HDR (InfiniBand)
+Port State of Port #1 on CA #1 (HCA)..... UP 4X HDR (InfiniBand)
+Port State of Port #1 on CA #2 (HCA)..... UP 4X HDR (InfiniBand)
+Port State of Port #1 on CA #3 (HCA)..... UP 4X HDR (InfiniBand)
+Port State of Port #1 on CA #4 (HCA)..... UP 4X HDR (InfiniBand)
+Port State of Port #1 on CA #5 (HCA)..... UP 4X HDR (InfiniBand)
+Port State of Port #1 on CA #6 (HCA)..... UP 4X HDR (InfiniBand)
+Port State of Port #1 on CA #7 (HCA)..... UP 4X HDR (InfiniBand)
+Error Counter Check on CA #0 (HCA)...... FAIL
+    REASON: found errors in the following counters
+      Errors in /sys/class/infiniband/mlx5_0/ports/1/counters
+         port_rcv_errors: 5666
+         port_rcv_switch_relay_errors: 5710
+Error Counter Check on CA #1 (HCA)...... PASS
+Error Counter Check on CA #2 (HCA)...... PASS
+Error Counter Check on CA #3 (HCA)...... PASS
+Error Counter Check on CA #4 (HCA)...... PASS
+Error Counter Check on CA #5 (HCA)...... PASS
+Error Counter Check on CA #6 (HCA)...... PASS
+Error Counter Check on CA #7 (HCA)...... PASS
+Kernel Syslog Check .................... PASS
+Node GUID on CA #0 (HCA) ............... 88:e9:a4:ff:ff:8e:a6:4e
+Node GUID on CA #1 (HCA) ............... 88:e9:a4:ff:ff:8e:76:26
+Node GUID on CA #2 (HCA) ............... 88:e9:a4:ff:ff:8e:66:ea
+Node GUID on CA #3 (HCA) ............... 88:e9:a4:ff:ff:ca:42:8e
+Node GUID on CA #4 (HCA) ............... 88:e9:a4:ff:ff:8e:76:32
+Node GUID on CA #5 (HCA) ............... 88:e9:a4:ff:ff:8e:76:46
+Node GUID on CA #6 (HCA) ............... 88:e9:a4:ff:ff:ca:42:86
+Node GUID on CA #7 (HCA) ............... 88:e9:a4:ff:ff:8e:a6:6a
+------------------ DONE ---------------------
+
+# check ibstatus to find CA #0 which will be mlx5_0
+[root@n01 ~]# ibstatus
+Infiniband device 'mlx5_0' port 1 status:
+        default gid:     fe80:0000:0000:0000:88e9:a4ff:ff8e:a64e
+        base lid:        0x1
+        sm lid:          0x1
+        state:           4: ACTIVE
+        phys state:      5: LinkUp
+        rate:            200 Gb/sec (4X HDR)
+        link_layer:      InfiniBand
+
+# clear the counter on the device and rerun the self-test
+perfquery -R 1 1
+perfquery -R [base_lid] [sm_lid]
+###########################################
+
 #  Infiniband adapters have PCI relaxed ordering enabled to allow for full network performance
 #  1 = enable | 0 = disable
 	mlxconfig -d net-ib0 set PCI_WR_ORDERING=1
