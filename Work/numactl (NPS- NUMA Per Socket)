@@ -113,8 +113,17 @@ numactl -s [-l policy] [-m domain] [-c domain] [-p pid] [-t tid]
 # The command below run network-server on the node of network device eth0 with its memory also in the same node.
   numactl  --cpunodebind=netdev:eth0  --membind=netdev:eth0   
 
+#################
+# Using the vm.zone_reclaim_mode kernel parameter to control node overflow
+# The vm.zone_reclaim_mode kernel parameter controls allocation behavior when a memory allocation request is about to overflow to
+# another node. When vm.zone_reclaim_mode is disabled or zero, the kernel simply overflows to the next node in the target node’s zone list.
+
+# When vm.zone_reclaim_mode is enabled, the kernel attempts to free up or reclaim pages from the target node’s memory before going
+# off-node for the allocation
+
 # set zone_reclaim_mode 
 [root@kratosn05 /]# sysctl -w vm.zone_reclaim_mode=3
 vm.zone_reclaim_mode = 3
 [root@kratosn05 /]# cat /proc/sys/vm/zone_reclaim_mode
 3
+#################
