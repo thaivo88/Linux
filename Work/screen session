@@ -15,3 +15,6 @@ screen -ls
 # to resume a screen session
 screen -r [session_id]
 screen -r 80629.fstrim
+
+# quit screen session
+screen -XS <session-id> quit
