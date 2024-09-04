@@ -9,3 +9,6 @@
 or
     apt-mark hold linux-image-4.15.0-99-generic
 ############## End ###################
+
+
+systemctl disable --now unattended-upgrades
