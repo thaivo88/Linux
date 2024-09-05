@@ -527,7 +527,7 @@ sr1      11:1    1  1024M  0 rom
     parted /dev/sda p
     parted /dev/sdc p
 # Setup image to be forced on /dev/sdb *use this command on hpchpcm not on the computing node*
-    cinstallman --next-boot image --node {NODE} --force-disk /dev/sdb
+    cinstallman --next-boot image --node {NODE} --force-disk /dev/sda
     reboot
 
 # Shows boot order
