@@ -1,3 +1,17 @@
+
+pdsh -w [hostname] cat /etc/*release | grep -i pretty_name | sort    
+
+cm node provision -n  [hostname]      --force-disk /dev/sda --wipe-disk
+cinstallman --assign-image --image ubuntu2204-Golden-perf4 --kernel 5.15.0-94-generic --node [hostname]
+cinstallman --next-boot image --force-disk /dev/sda --node [hostname]
+cm power reset -t node [hostname]
+
+
+
+
+
+
+
 # you can virutally console to a node using either the two commands.
 	tail -F /var/log/consoles/hostname
 	console [hostname]
