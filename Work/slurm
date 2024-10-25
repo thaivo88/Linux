@@ -1,3 +1,10 @@
+
+# add user to res
+scontrol update reservation=[revname] user+=[username] Reservation updated
+
+
+================================================================================
+
 hpcm slurm:
 [root@aihst-admin news]# sacctmgr -i list user
 User Def Acct Admin
