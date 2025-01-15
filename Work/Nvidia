@@ -1,3 +1,6 @@
+#mellanox card topology | NUMA ID GPU to NIC
+  nvidia-smi topo -m
+
 #diagnostic test
   dcgmi diag -r 1
 
