@@ -1,3 +1,11 @@
+# Compute Mode
+The compute mode flag indicates whether individual or multiple compute applications may run on the GPU.
+"Default" means multiple contexts are allowed per device.
+"Exclusive Process" means only one context is allowed per device, usable from multiple threads at a time.
+"Prohibited" means no contexts are allowed per device (no compute apps).
+"EXCLUSIVE_PROCESS" was added in CUDA 4.0. Prior CUDA releases supported only one exclusive mode, which is equivalent to "EXCLUSIVE_THREAD" in CUDA 4.0 and beyond
+
+
 #mellanox card topology | NUMA ID GPU to NIC
   nvidia-smi topo -m
 
