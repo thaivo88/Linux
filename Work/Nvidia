@@ -5,6 +5,9 @@ The compute mode flag indicates whether individual or multiple compute applicati
 "Prohibited" means no contexts are allowed per device (no compute apps).
 "EXCLUSIVE_PROCESS" was added in CUDA 4.0. Prior CUDA releases supported only one exclusive mode, which is equivalent to "EXCLUSIVE_THREAD" in CUDA 4.0 and beyond
 
+# change compute mode
+# changing all GPU to default mode
+nvidia-smi -c 0
 
 #mellanox card topology | NUMA ID GPU to NIC
   nvidia-smi topo -m
